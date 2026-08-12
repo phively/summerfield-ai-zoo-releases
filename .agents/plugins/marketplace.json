@@ -1,0 +1,44 @@
+{
+  "name": "summerfield-ai-zoo",
+  "interface": {
+    "displayName": "Summerfield AI Zoo"
+  },
+  "plugins": [
+    {
+      "name": "meal-planner",
+      "source": {
+        "source": "local",
+        "path": "./plugins/meal-planner"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "research-briefing",
+      "source": {
+        "source": "local",
+        "path": "./plugins/research-briefing"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "career-coach",
+      "source": {
+        "source": "local",
+        "path": "./plugins/career-coach"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

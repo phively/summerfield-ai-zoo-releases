@@ -1,0 +1,8 @@
+interface:
+  display_name: "Personal Shopper"
+  short_description: "Build store-prioritized grocery lists and costs"
+  default_prompt: "Use $personal-shopper to consolidate this meal plan into a store-prioritized grocery list with estimated costs."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true

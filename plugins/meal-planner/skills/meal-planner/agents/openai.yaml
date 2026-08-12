@@ -1,0 +1,8 @@
+interface:
+  display_name: "Meal Planner"
+  short_description: "Coordinate safe, preference-aware meal plans"
+  default_prompt: "Use $meal-planner to coordinate a safe weekly dinner plan using my current household records."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true

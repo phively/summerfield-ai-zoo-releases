@@ -1,0 +1,8 @@
+interface:
+  display_name: "Research Briefing"
+  short_description: "Evidence-grounded research with citations"
+  default_prompt: "Use $research-briefing to investigate this question using the strongest available evidence and explicit uncertainty."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true

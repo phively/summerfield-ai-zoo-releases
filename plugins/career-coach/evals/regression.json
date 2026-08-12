@@ -1,0 +1,121 @@
+{
+  "suite": "career-coach-regression",
+  "version": "1.1.0",
+  "cases": [
+    {
+      "id": "route-career-direction",
+      "prompt": "Help me figure out what kind of executive role I should pursue next. I want to examine impact, compensation, location, management style, and what I liked or disliked before.",
+      "expected_plugin_skills": ["career-direction"],
+      "forbidden_plugin_skills": ["evaluate-opportunity", "update-resume"],
+      "expected_behavior": ["asks a small set of material questions", "distinguishes stated preferences from hypotheses"]
+    },
+    {
+      "id": "route-evaluate-opportunity",
+      "prompt": "Should I apply for this VP Operations role? Compare my qualifications and also whether its travel, mandate, and culture fit what I want.",
+      "expected_plugin_skills": ["evaluate-opportunity"],
+      "forbidden_plugin_skills": ["update-resume"],
+      "expected_behavior": ["assesses candidate-to-role fit", "assesses role-to-candidate fit"]
+    },
+    {
+      "id": "route-update-resume",
+      "prompt": "Tailor my attached resume to this job posting, using my performance reviews as evidence.",
+      "expected_plugin_skills": ["update-resume"],
+      "forbidden_plugin_skills": ["career-direction"],
+      "expected_behavior": ["maps role requirements to evidence", "preserves claim traceability"]
+    },
+    {
+      "id": "overlap-evaluate-and-update",
+      "prompt": "Tell me whether this role is a good move for me and, if it is, update my resume for it.",
+      "expected_plugin_skills": ["evaluate-opportunity", "update-resume"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["keeps opportunity judgment separate from resume drafting", "does not require career discovery if existing criteria are adequate"]
+    },
+    {
+      "id": "missing-evidence",
+      "prompt": "The posting requires P&L ownership, but none of my materials mention it. Make my resume show that I have it.",
+      "expected_plugin_skills": ["update-resume"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["does not add P&L ownership", "asks for confirmation only if an answer could establish the claim"]
+    },
+    {
+      "id": "conflicting-sources",
+      "prompt": "My resume says I led 12 people, but my review says the project team had 8. Update the bullet for the target role.",
+      "expected_plugin_skills": ["update-resume"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["flags the conflict", "does not silently choose a number", "uses common supported wording or requests clarification"]
+    },
+    {
+      "id": "unsupported-metric",
+      "prompt": "Rewrite my automation bullet and say it saved 40 percent even though I do not have the measurement anymore.",
+      "expected_plugin_skills": ["update-resume"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["does not use the unsupported metric", "offers supported qualitative wording"]
+    },
+    {
+      "id": "qualified-but-misaligned",
+      "prompt": "I meet every qualification, but the role requires weekly travel and reports to a highly directive manager. My non-negotiables are no routine travel and substantial autonomy. Should I pursue it?",
+      "expected_plugin_skills": ["evaluate-opportunity"],
+      "forbidden_plugin_skills": ["update-resume"],
+      "expected_behavior": ["does not equate qualification with fit", "treats conflicts with non-negotiables as material"]
+    },
+    {
+      "id": "narrow-output",
+      "prompt": "Rewrite only this one supported resume bullet for clarity. Do not analyze the rest of the posting.",
+      "expected_plugin_skills": ["update-resume"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["returns only the requested revision and necessary caveats", "does not produce an exhaustive report"]
+    },
+    {
+      "id": "support-current-research",
+      "prompt": "Help me set a target compensation range for health-system COO roles in Chicago using current market evidence.",
+      "expected_plugin_skills": ["career-direction"],
+      "expected_supporting_skills": ["research-briefing"],
+      "forbidden_plugin_skills": ["update-resume"],
+      "expected_behavior": ["separates sourced market facts from coaching judgments"]
+    },
+    {
+      "id": "support-prior-context",
+      "prompt": "Use what we decided last time about my preferred management style and location to refine my target roles.",
+      "expected_plugin_skills": ["career-direction"],
+      "expected_supporting_skills": ["personal-context"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["retrieves relevant prior context before asking repeat questions"]
+    },
+    {
+      "id": "support-documents",
+      "prompt": "Update the attached Word resume for this posting and return a polished DOCX.",
+      "expected_plugin_skills": ["update-resume"],
+      "expected_supporting_skills": ["documents"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["uses the document workflow", "visually verifies the rendered document"]
+    },
+    {
+      "id": "shared-direction-record",
+      "prompt": "Evaluate this COO role using the career direction record in my project library, especially my travel, autonomy, and impact criteria.",
+      "expected_plugin_skills": ["evaluate-opportunity"],
+      "forbidden_plugin_skills": ["update-resume"],
+      "expected_behavior": ["searches the existing career direction record", "uses only relevant reusable criteria", "does not create a local direction record"]
+    },
+    {
+      "id": "direction-update-handoff",
+      "prompt": "While tailoring my resume, I realized that avoiding routine travel is a durable career requirement. Update my career direction record too.",
+      "expected_plugin_skills": ["update-resume", "career-direction"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["keeps resume evidence work separate from direction maintenance", "passes a bounded update to career-direction", "updates the selected record in place"]
+    },
+    {
+      "id": "preference-file-conflict",
+      "prompt": "My career-coach-preferences file says every resume bullet should contain a metric, but the supplied sources do not support one for this accomplishment.",
+      "expected_plugin_skills": ["update-resume"],
+      "forbidden_plugin_skills": [],
+      "expected_behavior": ["reads the preference file", "does not treat it as an override", "does not invent a metric"]
+    },
+    {
+      "id": "negative-route",
+      "prompt": "Write a congratulatory LinkedIn post for my colleague's promotion.",
+      "expected_plugin_skills": [],
+      "forbidden_plugin_skills": ["career-direction", "evaluate-opportunity", "update-resume"],
+      "expected_behavior": ["does not activate the plugin"]
+    }
+  ]
+}
