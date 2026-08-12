@@ -1,0 +1,10 @@
+components:
+  - name: meal-planner
+    type: plugin
+    path: plugins/meal-planner
+  - name: research-briefing
+    type: plugin
+    path: plugins/research-briefing
+  - name: career-coach
+    type: plugin
+    path: plugins/career-coach

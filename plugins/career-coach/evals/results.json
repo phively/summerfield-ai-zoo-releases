@@ -1,0 +1,39 @@
+{
+  "suite": "career-coach-regression",
+  "plugin_version": "1.0.0",
+  "run_date": "2026-08-09",
+  "structural_checks": {
+    "plugin_validator": "passed",
+    "skill_validators": {
+      "career-direction": "passed",
+      "evaluate-opportunity": "passed",
+      "update-resume": "passed"
+    },
+    "static_integrity": "passed"
+  },
+  "forward_tests": [
+    {
+      "id": "forward-career-direction",
+      "status": "passed_after_revision",
+      "initial_issue": "Presented current compensation plausibility without research.",
+      "revision": "Required current market assertions to use research-briefing or remain explicitly unknown.",
+      "retest_result": "Kept compensation and Chicago availability as unknowns while producing a useful direction profile."
+    },
+    {
+      "id": "forward-evaluate-opportunity",
+      "status": "passed",
+      "result": "Separated qualification strength from role alignment, preserved the P&L gap, and treated conflicts with non-negotiables as decisive."
+    },
+    {
+      "id": "forward-update-resume",
+      "status": "passed_after_revision",
+      "initial_issue": "Selected one of two conflicting metrics without adequate basis.",
+      "revision": "Required disputed values to remain unresolved unless one source explicitly supersedes or validates the other.",
+      "retest_result": "Omitted the percentage, retained supported qualitative impact, and explained the conflict concisely."
+    }
+  ],
+  "not_run": [
+    "End-to-end automatic activation across all 16 cases in an installed local marketplace",
+    "Runtime invocation of personal-context, research-briefing, and documents from a newly installed plugin"
+  ]
+}

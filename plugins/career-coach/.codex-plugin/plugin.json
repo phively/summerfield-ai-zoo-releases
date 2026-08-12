@@ -1,0 +1,28 @@
+{
+  "name": "career-coach",
+  "version": "1.1.2",
+  "description": "Evidence-grounded executive career direction, opportunity evaluation, and resume tailoring.",
+  "author": {
+    "name": "Paul Hively"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Career Coach",
+    "shortDescription": "Executive career decisions and resume tailoring",
+    "longDescription": "Clarify career direction, evaluate specific opportunities from both sides, and tailor resumes without inventing or overstating evidence.",
+    "developerName": "Paul Hively",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "brandColor": "#5B4BDB",
+    "composerIcon": "./assets/icon-small.svg",
+    "logo": "./assets/logo.svg",
+    "defaultPrompt": [
+      "Help me clarify what I should target next in my career.",
+      "Evaluate whether this opportunity fits me and whether I fit it.",
+      "Tailor my resume to this role using only supported facts."
+    ]
+  }
+}

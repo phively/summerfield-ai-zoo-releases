@@ -1,0 +1,8 @@
+interface:
+  display_name: "Personal Chef"
+  short_description: "Select recipes and maintain food preferences"
+  default_prompt: "Use $personal-chef to select recipes that fit my household preferences and update my recipe records."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true
