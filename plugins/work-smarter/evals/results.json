@@ -1,0 +1,42 @@
+{
+  "suite": "work-smarter-regression",
+  "plugin_version": "1.4.0",
+  "run_date": "2026-08-16",
+  "structural_checks": {
+    "remember_me_skill_validator": "passed",
+    "superb_skills_skill_validator": "passed",
+    "research_briefing_skill_validator": "passed",
+    "plugin_validator": "passed",
+    "contract_and_behavior_tests": "18 passed",
+    "regression_case_schema": "39 cases passed"
+  },
+  "forward_test_run_date": "2026-08-16",
+  "forward_tests": [
+    {
+      "id": "forward-superb-skills-prompt-routing",
+      "status": "passed",
+      "result": "Loaded only instruction-design.md, improved the one-time prompt, and did not propose a skill, plugin, evaluation workflow, or persistent memory."
+    },
+    {
+      "id": "forward-superb-skills-plugin-routing",
+      "status": "passed",
+      "result": "Loaded plugin-architecture.md and evaluation.md, invoked skill-creator as the implementation authority, compared split and combined architectures, and specified canonical handoffs and performance tests."
+    },
+    {
+      "id": "forward-superb-skills-memory-routing",
+      "status": "passed",
+      "result": "Loaded only working-memory.md, defined one authoritative current record and one subordinate audit record, and preserved conditional retrieval and coherent-update rules."
+    },
+    {
+      "id": "forward-superb-skills-memory-audit",
+      "status": "passed",
+      "result": "Recognized the 8 KiB and 180-day review triggers, kept trigger conditions separate from lifecycle decisions, staged the rewrite, required complete before/after inventories and a bidirectional semantic ledger, and left canonical files unchanged until validation passed."
+    }
+  ],
+  "not_run": [
+    "Clean-context forward tests for remember-me activation, library writes, and cross-plugin handoffs",
+    "Automatic activation testing after installation in a live ChatGPT plugin marketplace",
+    "A live maintenance audit against the user's personal memory records",
+    "Marketplace installation or publication"
+  ]
+}

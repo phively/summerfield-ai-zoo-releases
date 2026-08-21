@@ -1,7 +1,7 @@
 {
   "suite": "career-coach-regression",
-  "plugin_version": "1.0.0",
-  "run_date": "2026-08-09",
+  "plugin_version": "1.2.0",
+  "run_date": "2026-08-13",
   "structural_checks": {
     "plugin_validator": "passed",
     "skill_validators": {
@@ -9,7 +9,8 @@
       "evaluate-opportunity": "passed",
       "update-resume": "passed"
     },
-    "static_integrity": "passed"
+    "static_integrity": "passed",
+    "record_management_contracts": "12 cases structurally validated"
   },
   "forward_tests": [
     {
@@ -34,6 +35,8 @@
   ],
   "not_run": [
     "End-to-end automatic activation across all 16 cases in an installed local marketplace",
-    "Runtime invocation of personal-context, research-briefing, and documents from a newly installed plugin"
+    "Runtime invocation of personal-context, research-briefing, and documents from a newly installed plugin",
+    "Clean-context behavioral execution of the 12 record-management cases",
+    "Migration of any user career-direction record"
   ]
 }

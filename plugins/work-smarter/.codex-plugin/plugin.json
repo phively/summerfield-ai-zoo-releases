@@ -1,0 +1,30 @@
+{
+  "name": "work-smarter",
+  "version": "1.4.0",
+  "description": "Evidence-grounded research, reliable instruction design, and durable personal-context indexing with authoritative record routing.",
+  "author": {
+    "name": "Paul Hively"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Work Smarter",
+    "shortDescription": "Research, skill design, and personal context",
+    "longDescription": "Investigate substantive questions with current, high-quality evidence and explicit uncertainty. Design, refine, and test prompts, instructions, skills, plugins, contracts, evaluations, and working-memory systems. Maintain a durable personal-context index that routes topics to their authoritative records.",
+    "developerName": "Paul Hively",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Web"
+    ],
+    "brandColor": "#315C73",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/logo.svg",
+    "defaultPrompt": [
+      "Design and test a reliable skill or plugin for this workflow.",
+      "Review these instructions for ambiguity, duplication, and misplaced content.",
+      "Research the current conventions, then improve this instruction package.",
+      "Remember this reusable preference and keep its canonical source easy to find."
+    ]
+  }
+}

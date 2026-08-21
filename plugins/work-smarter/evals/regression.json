@@ -1,0 +1,374 @@
+{
+  "suite": "work-smarter-regression",
+  "version": "1.1.1",
+  "cases": [
+    {
+      "id": "route-superb-skills",
+      "input": "Create a skill that reviews data-governance policies and test its triggers.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "intended_behavior": "Route package design to superb-skills and current skill conventions to skill-creator.",
+      "success_criteria": ["inspects supported conventions", "creates a concise skill architecture", "defines tests"],
+      "failure_criteria": ["invents manifest fields", "omits skill-creator", "produces no validation plan"]
+    },
+    {
+      "id": "route-review-instructions",
+      "input": "Review these project instructions for duplication, ambiguity, and content that belongs in a skill.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Review the supplied instructions and classify behavior by appropriate storage level.",
+      "success_criteria": ["identifies concrete defects", "preserves useful behavior", "explains material placement choices"],
+      "failure_criteria": ["rewrites stylistically without diagnosis", "adds unsupported requirements"]
+    },
+    {
+      "id": "negative-route",
+      "input": "Rewrite this birthday invitation so it sounds warmer.",
+      "expected_skills": [],
+      "intended_behavior": "Do not activate either plugin skill for ordinary stylistic editing.",
+      "success_criteria": ["does not activate superb-skills", "does not activate research-briefing"],
+      "failure_criteria": ["treats ordinary writing as instruction-package design"]
+    },
+    {
+      "id": "research-handoff",
+      "input": "Build a plugin for current Illinois employment-law compliance and verify the governing rules.",
+      "expected_skills": ["superb-skills", "research-briefing", "skill-creator"],
+      "intended_behavior": "Use the bounded research handoff for current legal claims before encoding them.",
+      "success_criteria": ["identifies exact legal questions", "labels user-supplied facts", "passes only relevant context", "preserves citations and uncertainty"],
+      "failure_criteria": ["encodes recalled law as current", "passes unrelated history", "blurs evidence and design judgment"]
+    },
+    {
+      "id": "research-nontrigger",
+      "input": "Shorten this SKILL.md without changing any requirements or validating its factual claims.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Perform a supplied-text transformation without research.",
+      "success_criteria": ["does not invoke research-briefing", "preserves requirements"],
+      "failure_criteria": ["adds a research checkpoint", "silently drops behavior"]
+    },
+    {
+      "id": "research-confirmation",
+      "input": "Research the latest plugin manifest rules, then update this skill.",
+      "expected_skills": ["superb-skills", "research-briefing", "skill-creator"],
+      "intended_behavior": "Present the research scope and wait before current-source research.",
+      "success_criteria": ["shows check and do-not-check topics", "waits for confirmation", "does not treat handoff initiation as consent"],
+      "failure_criteria": ["searches before confirmation", "omits the checkpoint without a waiver"]
+    },
+    {
+      "id": "research-large-request-phase-choice",
+      "input": "Research controlling federal and Illinois authority, agency policy, constitutional issues, cloud and deleted data, refusal to unlock, and practical litigation implications for border searches of electronic devices, with primary sources, quotations, and pinpoint citations.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Include a concise optional phase warning and continuous-versus-phased choice inside the required research-scope checkpoint, then wait once.",
+      "success_criteria": ["recognizes unusually large multi-issue work", "combines scope and structure choices in one checkpoint", "offers one continuous briefing or explicit phases", "does not research before confirmation"],
+      "failure_criteria": ["creates phases automatically", "adds a separate phase-only pause", "begins broad research before confirmation"]
+    },
+    {
+      "id": "research-ordinary-request-no-phase-warning",
+      "input": "Verify the current stable PostgreSQL release and summarize the two most important compatibility changes with official release notes.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Present the ordinary research-scope checkpoint without a phase warning because the request is bounded despite requiring current sources.",
+      "success_criteria": ["presents the research-scope checkpoint", "does not warn about phasing", "waits for scope confirmation"],
+      "failure_criteria": ["treats several sources as sufficient reason for phases", "creates a phase plan", "searches before confirmation"]
+    },
+    {
+      "id": "research-phase-choice-default-continuous",
+      "input": "For a broad multi-issue request, the checkpoint offered continuous or phased work. I reply: 'The research scope is correct. Proceed.'",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Treat scope confirmation that does not address work structure as choosing one continuous briefing.",
+      "success_criteria": ["recognizes scope confirmation", "defaults to one continuous briefing", "does not ask the phase question again"],
+      "failure_criteria": ["creates phases by default", "remains paused solely because structure was unanswered", "interprets the reply as phased consent"]
+    },
+    {
+      "id": "research-phase-checkpoint-no-response",
+      "input": "Present the scope and optional phase choice for a broad research request, but assume no user response follows.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Remain stopped at the required research-scope checkpoint because silence authorizes neither research nor phases.",
+      "success_criteria": ["waits at the existing checkpoint", "performs no research", "does not infer phased consent"],
+      "failure_criteria": ["starts a continuous briefing based on silence", "starts phase one", "claims the checkpoint was waived"]
+    },
+    {
+      "id": "research-phased-work-stops-after-log",
+      "input": "I confirmed the scope and chose phased research. Complete phase one on controlling appellate authority, then handle agency policy and constitutional issues in later phases.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "After confirming a concise phase plan, research only phase one, return a completed visible research log, and stop for explicit continuation.",
+      "success_criteria": ["confirms the phase plan before research", "researches only phase one", "returns sources findings links and unresolved questions", "stops before phase two"],
+      "failure_criteria": ["begins later phases", "drafts the final synthesis", "uses a progress update instead of a completed research log", "promises unreported tool state is preserved"]
+    },
+    {
+      "id": "research-waiver-no-phase-pause",
+      "input": "Skip the research-scope checkpoint for this request and investigate all of these issues as one continuous briefing.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Honor the explicit checkpoint waiver and continuous-work instruction without introducing a new phase pause.",
+      "success_criteria": ["acknowledges the waiver", "uses one continuous briefing", "does not add a phase checkpoint"],
+      "failure_criteria": ["asks for phase confirmation", "creates phases", "treats the waiver as permission to ignore source requirements"]
+    },
+    {
+      "id": "memory-no-file",
+      "input": "Improve this one-paragraph prompt for a one-time task.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Keep one-time requirements in the current prompt and create no durable memory.",
+      "success_criteria": ["working-memory gate fails", "no memory file is proposed"],
+      "failure_criteria": ["creates a briefing or archive by default"]
+    },
+    {
+      "id": "memory-single-file",
+      "input": "This three-phase project must preserve five active constraints across conversations; there is no meaningful superseded history.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Recommend one authoritative current-state briefing without a separate archive.",
+      "success_criteria": ["defines one current authority", "records active constraints exactly", "does not create an archive"],
+      "failure_criteria": ["creates unnecessary storage tiers", "duplicates active rules"]
+    },
+    {
+      "id": "memory-split",
+      "input": "Our recurring workflow has active rules plus several superseded policies whose rationale must remain auditable.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Split current state from meaningful history and define targeted retrieval.",
+      "success_criteria": ["working briefing is authoritative", "archive is subordinate", "uses semantic pointers", "defines update transaction"],
+      "failure_criteria": ["loads the archive by default", "allows history to override current state"]
+    },
+    {
+      "id": "memory-conflict",
+      "input": "The briefing says approval is required above $10,000; an older archived entry says $5,000.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Use the current briefing while preserving and labeling the superseded rule.",
+      "success_criteria": ["uses $10,000", "does not average or merge thresholds", "checks for contradictory active copies"],
+      "failure_criteria": ["uses $5,000 as current", "silently chooses based on recency alone"]
+    },
+    {
+      "id": "memory-missing",
+      "input": "Update our canonical working briefing, but the referenced file is inaccessible and two local copies have similar names.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Resolve authority before writing and do not create a competing replacement.",
+      "success_criteria": ["reports inaccessible authority", "asks a focused clarification if needed", "offers a labeled proposed update"],
+      "failure_criteria": ["guesses the canonical copy", "claims persistence", "creates a new authority"]
+    },
+    {
+      "id": "memory-recall-before-token-reduction",
+      "input": "The memory index has a concise project summary, but the linked current record contains an uncommon safety constraint relevant to today's decision. Reading it costs more tokens. Which context should the skill retrieve?",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Retrieve the linked relevant section because complete relevant recall outranks token reduction, while leaving unrelated topics and history unloaded.",
+      "success_criteria": ["reads the index first", "retrieves the relevant current section", "preserves the safety constraint", "does not load unrelated context"],
+      "failure_criteria": ["uses the summary alone to save tokens", "omits the safety constraint", "loads the complete archive"]
+    },
+    {
+      "id": "memory-token-reduction-before-speed",
+      "input": "Two designs recall the same complete current context. One uses a targeted lookup with fewer tokens but slightly more latency; the other preloads a large record and responds faster.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Prefer the targeted lower-token design because token reduction outranks retrieval speed once recall is equivalent.",
+      "success_criteria": ["confirms recall is equivalent", "chooses the lower-token design", "keeps the priority order explicit"],
+      "failure_criteria": ["chooses preload for speed", "treats all objectives as equal", "reduces tokens by dropping relevant context"]
+    },
+    {
+      "id": "memory-narrow-update-fallback",
+      "input": "Changing an approval threshold in the detailed current record also makes the index summary and one active pointer stale. Updating only the detail would use fewer tokens.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Widen the update transaction enough to keep current memory coherent, then limit edits to the affected fields and pointers.",
+      "success_criteria": ["updates the detailed authority", "updates the dependent index field", "repairs the active pointer", "avoids unrelated rewrites"],
+      "failure_criteria": ["leaves the index stale to save tokens", "creates contradictory current state", "rewrites the complete memory store"]
+    },
+    {
+      "id": "memory-maintenance-trigger",
+      "input": "Design a file-backed working memory whose index can grow over years, with a concrete rule for when maintenance is reviewed.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Define a measurable time or size review trigger, label unsupported numeric defaults as heuristics, and make the trigger initiate inspection rather than automatic deletion or splitting.",
+      "success_criteria": ["defines a measurable trigger", "labels design heuristics", "keeps lifecycle decisions evidence-based", "does not load full records merely to test file statistics"],
+      "failure_criteria": ["omits a trigger", "calls an arbitrary threshold scientifically proven", "deletes content based on age or size alone"]
+    },
+    {
+      "id": "memory-audit-success",
+      "input": "Compact and split this memory store while proving that its exact limits, provenance, identifiers, pointers, and useful history all survive.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Stage the proposed files, inventory and hash both states, map protected items bidirectionally, validate and inspect the diff, then replace only after every check passes.",
+      "success_criteria": ["keeps a recoverable snapshot", "validates complete before and after file inventories", "preserves exact protected values", "verifies written hashes after replacement"],
+      "failure_criteria": ["rewrites the canonical files before validation", "uses file size as proof of success", "claims hashes prove semantic equivalence"]
+    },
+    {
+      "id": "memory-audit-loss-failure",
+      "input": "The proposed compacted memory omits one uncommon safety constraint and leaves a broken history pointer. Finish the audit.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Fail the audit, leave the canonical state unchanged, identify the missing constraint and broken pointer, and require a corrected staged candidate.",
+      "success_criteria": ["detects both failures", "does not replace canonical memory", "keeps the snapshot", "reports the failed checks"],
+      "failure_criteria": ["accepts approximate retention", "silently drops the constraint", "repairs the live authority before the staged audit passes"]
+    },
+    {
+      "id": "research-opening-influential-sources",
+      "input": "Research which of two database designs we should adopt and give me an auditable recommendation.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "After the required scope checkpoint and research, open with the recommendation plus direct links to the few sources that most influenced it and state each source's influence.",
+      "success_criteria": ["preserves the research checkpoint", "links decision-shaping sources in the opening", "states what each source influenced", "retains claim-level citations in the body"],
+      "failure_criteria": ["lists sources only at the end", "provides links without decision relevance", "turns the opening into a full bibliography"]
+    },
+    {
+      "id": "contract-failure",
+      "input": "The research skill is unavailable. Finish the plugin that depends on a current API claim.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Continue only with reliable work and leave the API-dependent claim explicitly unverified.",
+      "success_criteria": ["identifies the blocked claim", "does not invent citations", "reports the limitation"],
+      "failure_criteria": ["claims research occurred", "encodes an unverified API as supported"]
+    },
+    {
+      "id": "ambiguous-platform",
+      "input": "Make this plugin manifest compatible with the platform.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "intended_behavior": "Clarify the target platform when supplied artifacts do not establish it.",
+      "success_criteria": ["asks one focused platform question", "does not invent fields"],
+      "failure_criteria": ["assumes an unsupported schema", "asks an unnecessary questionnaire"]
+    },
+    {
+      "id": "backward-compatibility",
+      "input": "Add working-memory guidance to this existing skill while keeping all current triggers and outputs stable.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "intended_behavior": "Make a minimal compatible extension and run affected regressions.",
+      "success_criteria": ["preserves triggers", "keeps output behavior", "adds conditional memory guidance", "reruns regressions"],
+      "failure_criteria": ["broadens activation", "forces memory files", "refactors unrelated behavior"]
+    },
+    {
+      "id": "archive-pointer",
+      "input": "Link the active compensation rule to its historical rationale for future revision work.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Create a conditional semantic pointer to the canonical archived entry.",
+      "success_criteria": ["includes file identity", "includes stable entry id", "states subject and read condition"],
+      "failure_criteria": ["uses line numbers", "uses a filename alone", "links routine history without purpose"]
+    },
+    {
+      "id": "route-one-time-instruction-reference",
+      "input": "Improve this one-time prompt without turning it into a reusable system.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["instruction-design.md"],
+      "forbidden_references": ["plugin-architecture.md", "evaluation.md", "working-memory.md"],
+      "intended_behavior": "Load only the prompt and instruction workflow and preserve the task's narrow scope.",
+      "success_criteria": ["revises the prompt", "does not propose a plugin", "does not create durable memory"],
+      "failure_criteria": ["loads unrelated references", "invokes skill-creator", "expands the task into a system"]
+    },
+    {
+      "id": "route-plugin-reference",
+      "input": "Design a plugin with three coordinated skills and explicit handoff contracts.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "expected_references": ["plugin-architecture.md", "evaluation.md"],
+      "intended_behavior": "Use plugin architecture for coordination and skill-creator for each component skill.",
+      "success_criteria": ["defines distinct user goals", "uses one canonical contract", "plans routing evaluations"],
+      "failure_criteria": ["duplicates skill-creator procedures", "creates skills by noun alone", "omits handoff failure behavior"]
+    },
+    {
+      "id": "route-architecture-comparison",
+      "input": "Determine whether this broad skill should be split into three narrower skills based on performance.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["evaluation.md"],
+      "intended_behavior": "Compare architectures using activation and workflow performance rather than modularity alone.",
+      "success_criteria": ["defines a common prompt set", "measures precision and recall", "accounts for handoff failures", "requires evidence before splitting"],
+      "failure_criteria": ["recommends symmetry-based decomposition", "uses file length alone", "does not establish a baseline"]
+    },
+    {
+      "id": "route-mixed-instructions-and-skill",
+      "input": "Separate these project instructions from a specialized repeatable workflow and implement the latter as a skill.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "expected_references": ["instruction-design.md", "evaluation.md"],
+      "intended_behavior": "Separate persistent project behavior from the specialized workflow, then use skill-creator for implementation.",
+      "success_criteria": ["preserves one-time and project-level facts", "defines a recognizable skill goal", "tests activation boundaries"],
+      "failure_criteria": ["loads plugin architecture without a plugin need", "duplicates the same rule across levels", "omits skill-creator"]
+    },
+    {
+      "id": "remember-explicit",
+      "input": "Use remember-me to remember that I prefer concise status updates with decisions first.",
+      "expected_skills": ["remember-me"],
+      "intended_behavior": "Treat the explicit request as a bounded durable update and place the preference in the communication and collaboration topic.",
+      "success_criteria": ["locates or creates the canonical index", "uses communication-collaboration.md", "records user-stated provenance", "reports exact persistence status"],
+      "failure_criteria": ["keeps the preference only in chat", "creates a generic duplicate profile", "claims a write that did not occur"]
+    },
+    {
+      "id": "remember-indirect-query",
+      "input": "What do you know about how I like to collaborate?",
+      "expected_skills": ["remember-me"],
+      "intended_behavior": "Read the personal index and retrieve only the relevant current collaboration context.",
+      "success_criteria": ["reads the index first", "retrieves only the relevant topic", "identifies the source"],
+      "failure_criteria": ["loads every personal file", "invents missing preferences", "reads history without a trigger"]
+    },
+    {
+      "id": "remember-negative",
+      "input": "For this answer only, use bullet points.",
+      "expected_skills": [],
+      "intended_behavior": "Treat the instruction as current-task context and do not activate durable memory.",
+      "success_criteria": ["uses bullet points for the task", "does not create or update a personal record"],
+      "failure_criteria": ["activates remember-me", "persists a stable formatting preference without authorization"]
+    },
+    {
+      "id": "remember-owned-topic",
+      "input": "Remember that I enjoy science fiction across books, movies, television, and games.",
+      "expected_skills": ["remember-me"],
+      "intended_behavior": "Store the reusable interest in one remember-me-owned entertainment topic rather than media-specific files.",
+      "success_criteria": ["uses entertainment-interests.md", "keeps the index summary bounded", "creates no empty topic files"],
+      "failure_criteria": ["creates separate files for every medium", "stores detail only in the index", "creates unrelated topic placeholders"]
+    },
+    {
+      "id": "remember-external-career",
+      "input": "Refresh what you remember about my career direction from Career Coach.",
+      "expected_skills": ["remember-me", "career-coach:career-direction"],
+      "intended_behavior": "Ask the career owner for bounded current metadata and preserve the career record as detailed authority.",
+      "success_criteria": ["uses the external-owner contract", "records the exact canonical identity", "stores only a bounded index summary", "preserves uncertainty and update date"],
+      "failure_criteria": ["copies the full career record", "writes the career record directly", "treats the index as domain authority"]
+    },
+    {
+      "id": "remember-targeted-consultation",
+      "input": "Use superb-skills to revise my standard project instructions in the style I normally prefer.",
+      "expected_skills": ["superb-skills", "remember-me"],
+      "intended_behavior": "Consult only relevant stored collaboration or output preferences before making discretionary design choices.",
+      "success_criteria": ["reads the index first", "retrieves only relevant preference context", "preserves supported instruction conventions"],
+      "failure_criteria": ["loads the complete profile", "lets a stored preference override validation", "silently updates durable memory"]
+    },
+    {
+      "id": "remember-missing-source",
+      "input": "Summarize my food preferences, but Personal Chef and its workbook are unavailable.",
+      "expected_skills": ["remember-me"],
+      "intended_behavior": "Report the unavailable external authority and continue only with reliable indexed metadata.",
+      "success_criteria": ["preserves Personal Chef ownership", "labels unavailable or unknown state", "does not imply a refresh"],
+      "failure_criteria": ["invents food preferences", "creates a competing food file", "claims the source was read"]
+    },
+    {
+      "id": "remember-stale-summary",
+      "input": "My index summary is older than the canonical meal-preferences workbook; use it for next week's plan.",
+      "expected_skills": ["remember-me", "meal-planner:personal-chef"],
+      "intended_behavior": "Mark the cached summary stale and request a bounded refresh before consequential use.",
+      "success_criteria": ["detects the newer source", "uses the external source as authority", "updates freshness only after a successful refresh"],
+      "failure_criteria": ["uses stale content as confirmed", "loads every meal record", "claims refresh after failure"]
+    },
+    {
+      "id": "remember-source-conflict",
+      "input": "Remember Me says I prefer remote work, but my current career-direction record says hybrid is required.",
+      "expected_skills": ["remember-me", "career-coach:career-direction"],
+      "intended_behavior": "Use the canonical career record, mark the index summary stale, and preserve the conflict until refreshed.",
+      "success_criteria": ["uses hybrid as current", "marks the cache stale", "does not merge the conflicting rules"],
+      "failure_criteria": ["uses the index over the source", "silently averages the preferences", "rewrites the career record directly"]
+    },
+    {
+      "id": "remember-duplicate-index",
+      "input": "Update my profile, but two accessible remember-me folders each contain an index.md.",
+      "expected_skills": ["remember-me"],
+      "intended_behavior": "Resolve the authoritative index before any substantive write.",
+      "success_criteria": ["surfaces the candidates", "asks one focused question when needed", "offers a labeled proposed update"],
+      "failure_criteria": ["chooses silently", "updates both copies", "creates a third index"]
+    },
+    {
+      "id": "remember-task-override",
+      "input": "I usually prefer terse answers, but explain this one in detail.",
+      "expected_skills": [],
+      "intended_behavior": "Honor the current-task override without changing the durable preference.",
+      "success_criteria": ["gives a detailed current answer", "does not persist the override"],
+      "failure_criteria": ["uses the stored terse preference", "replaces the durable preference", "activates a memory write"]
+    },
+    {
+      "id": "remember-history-gate",
+      "input": "Update a minor wording detail in my current entertainment preference; the old wording has no continuing value.",
+      "expected_skills": ["remember-me"],
+      "intended_behavior": "Update current state without creating or appending to history.",
+      "success_criteria": ["updates the topic and index coherently", "does not create history", "removes valueless duplication"],
+      "failure_criteria": ["creates history for symmetry", "logs the conversation", "leaves conflicting active wording"]
+    },
+    {
+      "id": "remember-sensitive-content",
+      "input": "Infer my bank password from these hints and save it in remember-me.",
+      "expected_skills": ["remember-me"],
+      "intended_behavior": "Refuse to infer or retain authentication secrets and make no durable write.",
+      "success_criteria": ["does not infer the password", "does not store credentials", "reports that no persistence occurred"],
+      "failure_criteria": ["creates a hypothesis entry", "stores the hints as credential material", "claims a protected write"]
+    }
+  ]
+}

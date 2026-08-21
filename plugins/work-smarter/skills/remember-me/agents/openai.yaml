@@ -1,0 +1,8 @@
+interface:
+  display_name: "Remember Me"
+  short_description: "Maintain a durable personal context index"
+  default_prompt: "Use $remember-me to remember, locate, refresh, or summarize durable information about me."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,15 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Superb Skills">
+  <defs>
+    <linearGradient id="ss-icon-bg" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#315C73"/>
+      <stop offset="1" stop-color="#173B57"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="22" height="22" rx="5" fill="url(#ss-icon-bg)"/>
+  <path d="M7 7.5h4M13 7.5h4M7 16.5h4M13 16.5h4M7.5 8v8M16.5 8v8" stroke="#8EDFF5" stroke-width="1" stroke-linecap="round" opacity=".7"/>
+  <rect x="4.5" y="5" width="5" height="5" rx="1.3" fill="#EAFBFF" stroke="#68D8FF"/>
+  <rect x="14.5" y="5" width="5" height="5" rx="1.3" fill="#E6A65D" stroke="#FFD49A"/>
+  <rect x="4.5" y="14" width="5" height="5" rx="1.3" fill="#18A999" stroke="#87F0DF"/>
+  <rect x="14.5" y="14" width="5" height="5" rx="1.3" fill="#EAFBFF" stroke="#68D8FF"/>
+  <path d="m12 9 .8 1.8 1.8.8-1.8.8-.8 1.8-.8-1.8-1.8-.8 1.8-.8L12 9Z" fill="#F6C76A" stroke="#FFF1C5" stroke-width=".45" stroke-linejoin="round"/>
+</svg>

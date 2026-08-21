@@ -1,0 +1,18 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Remember Me">
+  <defs>
+    <linearGradient id="rm-large-bg" x1="6" y1="5" x2="58" y2="59" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#315C73"/>
+      <stop offset="1" stop-color="#102A43"/>
+    </linearGradient>
+    <linearGradient id="rm-large-card" x1="31" y1="15" x2="52" y2="50" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4FCFF"/>
+      <stop offset="1" stop-color="#CBEFF8"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#rm-large-bg)"/>
+  <circle cx="22" cy="22" r="7" fill="#EAFBFF" stroke="#68D8FF" stroke-width="2"/>
+  <path d="M12 43c1.9-6.4 5.2-9.6 10-9.6S30.1 36.6 32 43" stroke="#EAFBFF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M37 14h15v34H37l-5 5V19l5-5Z" fill="url(#rm-large-card)" stroke="#77DDF5" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M40 23h8M40 30h8M40 37h6" stroke="#177E89" stroke-width="2.5" stroke-linecap="round"/>
+  <path d="m45 42 1.2 2.6 2.6 1.2-2.6 1.2-1.2 2.6-1.2-2.6-2.6-1.2 2.6-1.2L45 42Z" fill="#E6A65D" stroke="#B8782F" stroke-width=".8" stroke-linejoin="round"/>
+</svg>
