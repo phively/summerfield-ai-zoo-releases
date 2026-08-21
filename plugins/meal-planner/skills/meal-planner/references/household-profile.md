@@ -6,14 +6,29 @@ Collect only information relevant to the request. Prefer one focused checkpoint 
 
 Use a workbook or Google Sheet titled `Household Preferences` or a clearly equivalent title such as `Household Profile` or `Family Preferences`. When creating a new workbook, use `Household Preferences`. Reuse an accessible equivalent workbook instead of creating a competing copy.
 
+For a new workbook, also create the workbook-local `Record Index` defined in shared record management. For an existing workbook, use its native table, named range, or stable-key metadata and add the routing worksheet only with authorization when it materially improves retrieval or auditability.
+
 Use these canonical tabs, accepting clearly equivalent existing tab names without forcing a migration:
 
 - `Household Profile`: household members, age groups, serving multipliers, region, and stable household context.
 - `Safety Constraints`: allergies, affected people, severity, cross-contact sensitivity, medical restrictions, intolerances, confirmed limits, source, and updated date.
 - `Planning Preferences`: standard servings, equipment, active and total time limits, leftover targets, shopping frequency, budget tier, and recurring schedule constraints.
 - `Pantry Inventory`: item, quantity, unit, status, location, and updated date when the user maintains pantry data in this workbook.
+- `Household History`: material superseded or restored household, safety, and planning state with continuing provenance, audit, or restoration value. Do not use it for routine pantry churn.
 
 Treat exact workbook title, link or file identity, and tab names as part of source provenance. Report missing canonical tabs; create or rename tabs only with authorization, and do not copy their contents into skill-local files.
+
+Use a `Record ID` column as the stable row key for new records. Prefer structured tables or named ranges named for their canonical worksheets. Preserve a clearly equivalent existing unique key, but document it in `Record Index` instead of identifying rows by position. Use these logical uniqueness rules to detect accidental duplicates:
+
+- `Household Profile`: household member identity;
+- `Safety Constraints`: affected member, constraint type, normalized constraint, and material context;
+- `Planning Preferences`: preference category and material context;
+- `Pantry Inventory`: normalized item and storage location; and
+- `Household History`: stable `MH-...` history ID.
+
+Keep source, updated date, status or uncertainty, and relevant history pointer columns with the owning row when applicable. A pointer must target the workbook resource ID, worksheet, stable record ID, and retrieval condition.
+
+Read [the shared record-management contract](../../../shared/record-management.md) before changing household state, retrieving history, following a pointer, or resolving duplicates or partial writes. Current tabs govern over history. Read only a targeted historical entry when a defined retrieval condition applies.
 
 ## Household and safety fields
 

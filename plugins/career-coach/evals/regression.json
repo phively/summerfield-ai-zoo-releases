@@ -1,6 +1,6 @@
 {
   "suite": "career-coach-regression",
-  "version": "1.1.0",
+  "version": "1.6.0",
   "cases": [
     {
       "id": "route-career-direction",
@@ -94,7 +94,7 @@
       "prompt": "Evaluate this COO role using the career direction record in my project library, especially my travel, autonomy, and impact criteria.",
       "expected_plugin_skills": ["evaluate-opportunity"],
       "forbidden_plugin_skills": ["update-resume"],
-      "expected_behavior": ["searches the existing career direction record", "uses only relevant reusable criteria", "does not create a local direction record"]
+      "expected_behavior": ["reads the working career direction record first", "uses only relevant current reusable criteria", "does not read history without a retrieval condition", "does not create a local direction record"]
     },
     {
       "id": "direction-update-handoff",
@@ -109,6 +109,27 @@
       "expected_plugin_skills": ["update-resume"],
       "forbidden_plugin_skills": [],
       "expected_behavior": ["reads the preference file", "does not treat it as an override", "does not invent a metric"]
+    },
+    {
+      "id": "shared-open-opportunity-record",
+      "prompt": "Evaluate this tracked role using its current opportunity entry and my career direction. No prior outcome is relevant.",
+      "expected_plugin_skills": ["evaluate-opportunity"],
+      "forbidden_plugin_skills": ["update-resume"],
+      "expected_behavior": ["reads the relevant open opportunity entry", "reads relevant current career direction", "does not read opportunity history without a retrieval condition", "preserves source identities"]
+    },
+    {
+      "id": "tracked-posting-and-comparison",
+      "prompt": "Track this supplied job posting, save its full text, and add it to my current opportunity comparison without inventing a rank.",
+      "expected_plugin_skills": ["evaluate-opportunity"],
+      "forbidden_plugin_skills": ["update-resume"],
+      "expected_behavior": ["creates one canonical posting file using ASCII double-hyphen filename separators", "records its filename and exact location in the current record without duplicating full text", "keeps personal and candidate-specific context out of the posting file", "uses Unranked until ranking is confirmed", "keeps candidate-to-role and role-to-candidate fit separate"]
+    },
+    {
+      "id": "resume-opportunity-update-handoff",
+      "prompt": "Tailor my resume for this tracked role and note that I have not submitted the application yet.",
+      "expected_plugin_skills": ["update-resume"],
+      "forbidden_plugin_skills": ["career-direction"],
+      "expected_behavior": ["uses current opportunity context only", "does not treat resume completion as application submission", "requests any material opportunity update through evaluate-opportunity"]
     },
     {
       "id": "negative-route",

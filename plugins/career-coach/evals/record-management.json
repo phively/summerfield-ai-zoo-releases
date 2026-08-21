@@ -1,0 +1,114 @@
+{
+  "suite": "career-direction-record-management",
+  "version": "1.6.0",
+  "cases": [
+    {
+      "id": "routine-working-only",
+      "prompt": "Refine my current target-role hypotheses using my career direction record.",
+      "expected_files_read": ["career_direction_record.md"],
+      "forbidden_files_read": ["career_direction_history.md"],
+      "authoritative_result": "Current state comes only from the working record.",
+      "permitted_writes": ["career_direction_record.md when the user confirms a durable change"],
+      "failure_criteria": ["history is loaded without a retrieval condition", "historical content overrides current state"]
+    },
+    {
+      "id": "opportunity-current-context-only",
+      "prompt": "Evaluate this role against my current criteria; no prior employer decisions are relevant.",
+      "expected_files_read": ["career_direction_record.md"],
+      "forbidden_files_read": ["career_direction_history.md"],
+      "authoritative_result": "The assessment receives relevant current criteria without archived noise.",
+      "permitted_writes": [],
+      "failure_criteria": ["evaluate-opportunity writes a direction record", "irrelevant archived opportunities enter the handoff"]
+    },
+    {
+      "id": "targeted-historical-question",
+      "prompt": "Why did I replace my prior routine-travel boundary? Follow the working-record pointer to H-2026-08-13-02.",
+      "expected_files_read": ["career_direction_record.md", "career_direction_history.md entry H-2026-08-13-02 only"],
+      "forbidden_files_read": ["unrelated historical entries"],
+      "authoritative_result": "The specified entry explains prior state; the working record remains current authority.",
+      "permitted_writes": [],
+      "failure_criteria": ["the complete archive is loaded", "the superseded travel rule is presented as current"]
+    },
+    {
+      "id": "working-overrides-superseded",
+      "prompt": "The working record says up to 10 percent travel; history says no travel and marks it superseded. Which governs?",
+      "expected_files_read": ["career_direction_record.md", "career_direction_history.md relevant superseded entry"],
+      "forbidden_files_read": [],
+      "authoritative_result": "The working-record 10 percent boundary governs unless the user corrects it or requests reconstruction.",
+      "permitted_writes": [],
+      "failure_criteria": ["keyword similarity is treated as precedence", "the superseded rule overrides the working record"]
+    },
+    {
+      "id": "material-criterion-change",
+      "prompt": "Effective today, change my minimum base compensation from $200,000 to $225,000 and retain the prior threshold for audit.",
+      "expected_files_read": ["career_direction_record.md", "career_direction_history.md relevant compensation entries only"],
+      "forbidden_files_read": ["unrelated historical entries"],
+      "authoritative_result": "The working record contains exactly $225,000; history preserves $200,000 as superseded with dates and replacement relationship.",
+      "permitted_writes": ["career_direction_record.md", "career_direction_history.md"],
+      "failure_criteria": ["either required write is omitted", "both thresholds remain active", "persistence is claimed after a partial write"]
+    },
+    {
+      "id": "restore-archived-criterion",
+      "prompt": "Restore my archived no-routine-travel criterion as current effective today.",
+      "expected_files_read": ["career_direction_record.md", "career_direction_history.md relevant travel entry only"],
+      "forbidden_files_read": ["unrelated historical entries"],
+      "authoritative_result": "No routine travel is promoted to current state and history records restoration without deleting intervening history.",
+      "permitted_writes": ["career_direction_record.md", "career_direction_history.md"],
+      "failure_criteria": ["intervening history is deleted", "the restoration lacks an effective date", "a consumer skill writes the records"]
+    },
+    {
+      "id": "broken-historical-pointer",
+      "prompt": "Explain the autonomy rule using pointer H-2025-01-03-01, but that entry cannot be found.",
+      "expected_files_read": ["career_direction_record.md", "targeted lookup for career_direction_history.md entry H-2025-01-03-01"],
+      "forbidden_files_read": ["complete archive fallback"],
+      "authoritative_result": "Current autonomy state remains usable within its authority; historical rationale is explicitly unresolved.",
+      "permitted_writes": ["pointer repair only after a canonical target is verified"],
+      "failure_criteria": ["missing history is treated as nonexistent", "historical rationale is invented", "an unverified pointer is rewritten"]
+    },
+    {
+      "id": "duplicate-candidate-records",
+      "prompt": "Two project files both appear to be my career direction record and disagree about commute limits.",
+      "expected_files_read": ["candidate metadata and enough content to identify the plausible records"],
+      "forbidden_files_read": [],
+      "authoritative_result": "The authoritative working and historical pair is resolved before substantive use or writing.",
+      "permitted_writes": [],
+      "failure_criteria": ["one candidate is selected silently", "either candidate is modified before authority resolution"]
+    },
+    {
+      "id": "historical-retrieval-miss",
+      "prompt": "An archived employer may have changed my location rule, but targeted history retrieval returns no result.",
+      "expected_files_read": ["career_direction_record.md", "targeted historical lookup for the employer or location subject"],
+      "forbidden_files_read": ["complete archive without a narrower basis"],
+      "authoritative_result": "The current working rule remains authoritative while potentially material historical evidence is labeled unavailable.",
+      "permitted_writes": [],
+      "failure_criteria": ["retrieval failure is treated as proof no history exists", "uncertainty is omitted"]
+    },
+    {
+      "id": "partial-write-access",
+      "prompt": "Update my location boundary, but the history file is inaccessible and the prior rule must be retained.",
+      "expected_files_read": ["career_direction_record.md", "attempted access to career_direction_history.md"],
+      "forbidden_files_read": [],
+      "authoritative_result": "The intended update is reported as incomplete and persistence is not claimed.",
+      "permitted_writes": ["neither file, or a recoverable proposed update outside the canonical pair"],
+      "failure_criteria": ["only the working record is changed", "the pair is described as coherent", "success is claimed"]
+    },
+    {
+      "id": "downstream-history-exclusion",
+      "prompt": "Tailor my resume using my current target impact and strengths; archived opportunity rejections are irrelevant.",
+      "expected_files_read": ["career_direction_record.md"],
+      "forbidden_files_read": ["career_direction_history.md"],
+      "authoritative_result": "Update Resume receives only relevant current positioning context and evidence limitations.",
+      "permitted_writes": [],
+      "failure_criteria": ["archived rejections enter positioning context", "career direction is treated as resume evidence", "update-resume writes a direction record"]
+    },
+    {
+      "id": "existing-behavior-regression",
+      "prompt": "Run the established Career Coach routing, evidence-integrity, preference-conflict, research, personal-context, and document cases.",
+      "expected_files_read": ["evals/regression.json and resources selected by each case"],
+      "forbidden_files_read": ["career_direction_history.md unless a case meets a retrieval condition"],
+      "authoritative_result": "Existing skill boundaries, evidence safeguards, preference precedence, and supporting-capability routing remain intact.",
+      "permitted_writes": ["only writes already authorized by the individual regression case"],
+      "failure_criteria": ["an existing regression expectation is weakened", "history is loaded by default", "skill responsibilities merge"]
+    }
+  ]
+}

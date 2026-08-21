@@ -1,0 +1,21 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Work Smarter">
+  <defs>
+    <radialGradient id="ws-logo-bg" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(33 23) rotate(90) scale(41)">
+      <stop stop-color="#174E74"/>
+      <stop offset="1" stop-color="#071A30"/>
+    </radialGradient>
+    <linearGradient id="ws-logo-brain" x1="20" y1="12" x2="44" y2="36" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F2FCFF"/>
+      <stop offset=".42" stop-color="#79DEFF"/>
+      <stop offset="1" stop-color="#18A999"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#ws-logo-bg)"/>
+  <circle cx="32" cy="24" r="19" fill="#38BDF8" opacity=".08"/>
+  <circle cx="32" cy="24" r="15" stroke="#68D8FF" stroke-opacity=".18"/>
+  <path d="M23.8 29.4a6.8 6.8 0 0 1 2.1-12.8 7.3 7.3 0 0 1 13.9 0 6.8 6.8 0 0 1 2.2 12.8 5.8 5.8 0 0 1-4.5 9.4h-10a5.8 5.8 0 0 1-3.7-9.4Z" fill="url(#ws-logo-brain)" stroke="#DDF8FF" stroke-width="1.5" stroke-linejoin="round"/>
+  <path d="M32 15.3v23.5M24.9 21.5c2.7.2 4.4 1.7 4.4 4m9.8-4c-2.7.2-4.4 1.7-4.4 4M24.3 29.7c2.9-.3 5 1 5.5 3.4m10-3.4c-2.9-.3-5 1-5.5 3.4" stroke="#176B91" stroke-width="1.5" stroke-linecap="round"/>
+  <path d="M27.4 38.8v6.1c0 3.3-2.6 5.9-5.9 5.9h-2M37.5 38.8v12h7" stroke="#71DFFF" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="17.8" cy="50.8" r="2.4" fill="#E6A65D"/>
+  <circle cx="47.2" cy="50.8" r="2.4" fill="#E6A65D"/>
+</svg>

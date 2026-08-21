@@ -1,0 +1,24 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Superb Skills">
+  <defs>
+    <linearGradient id="ss-logo-bg" x1="6" y1="5" x2="58" y2="59" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#315C73"/>
+      <stop offset="1" stop-color="#102A43"/>
+    </linearGradient>
+    <linearGradient id="ss-logo-card" x1="15" y1="14" x2="49" y2="50" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4FCFF"/>
+      <stop offset="1" stop-color="#CBEFF8"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#ss-logo-bg)"/>
+  <path d="M20 20h9M35 20h9M20 44h9M35 44h9M20 21v22M44 21v22" stroke="#78DDF2" stroke-width="2.5" stroke-linecap="round" opacity=".62"/>
+  <rect x="13" y="13" width="14" height="14" rx="3.5" fill="url(#ss-logo-card)" stroke="#77DDF5" stroke-width="1.5"/>
+  <path d="m17 20 2 2 4-5" stroke="#177E89" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="37" y="13" width="14" height="14" rx="3.5" fill="#E6A65D" stroke="#FFD79F" stroke-width="1.5"/>
+  <path d="M41 18h6M41 22h4" stroke="#5E3A19" stroke-width="1.8" stroke-linecap="round"/>
+  <rect x="13" y="37" width="14" height="14" rx="3.5" fill="#18A999" stroke="#8AF0DE" stroke-width="1.5"/>
+  <path d="M17 44h6M20 41v6" stroke="#E9FFFA" stroke-width="1.8" stroke-linecap="round"/>
+  <rect x="37" y="37" width="14" height="14" rx="3.5" fill="url(#ss-logo-card)" stroke="#77DDF5" stroke-width="1.5"/>
+  <path d="m44 40.5 1.4 3.1 3.1 1.4-3.1 1.4-1.4 3.1-1.4-3.1-3.1-1.4 3.1-1.4 1.4-3.1Z" fill="#E6A65D" stroke="#B8782F" stroke-width=".8" stroke-linejoin="round"/>
+  <circle cx="32" cy="32" r="5" fill="#0F2940" stroke="#F6C76A" stroke-width="1.5"/>
+  <path d="m32 27.8 1.2 2.8 2.8 1.2-2.8 1.2-1.2 2.8-1.2-2.8-2.8-1.2 2.8-1.2 1.2-2.8Z" fill="#F6C76A"/>
+</svg>

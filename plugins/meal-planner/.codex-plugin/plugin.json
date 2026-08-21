@@ -1,15 +1,15 @@
 {
   "name": "meal-planner",
-  "version": "1.0.2",
-  "description": "Safe household meal planning, recipe selection, preference memory, grocery consolidation, and cost estimation.",
+  "version": "1.2.0",
+  "description": "Safe household meal planning with durable plan history, recipe ratings, preference memory, grocery consolidation, and cost estimation.",
   "author": {
     "name": "Paul Hively"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Meal Planner",
-    "shortDescription": "Plan meals, recipes, groceries, and costs",
-    "longDescription": "Coordinate safe household meal plans, select and adapt recipes from durable preference records, and produce package-aware grocery lists and cost estimates.",
+    "shortDescription": "Plan and track meals, recipes, groceries, and costs",
+    "longDescription": "Coordinate safe household meal plans, preserve current and historical plans, maintain recipe ratings and preferences, and produce package-aware grocery lists and cost estimates.",
     "developerName": "Paul Hively",
     "category": "Productivity",
     "capabilities": [
@@ -18,7 +18,7 @@
       "Web"
     ],
     "brandColor": "#14866D",
-    "composerIcon": "./assets/icon-small.svg",
+    "composerIcon": "./assets/icon.png",
     "logo": "./assets/logo.svg",
     "defaultPrompt": [
       "Plan a safe week of dinners for my household.",

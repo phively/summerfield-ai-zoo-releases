@@ -22,10 +22,11 @@ Never silently relax a higher-priority constraint. Treat the current prompt as n
 ## Run the intake checkpoint
 
 1. Establish dates, requested meals, region, servings, equipment, time, budget, and leftover needs. Default to seven dinners only for an otherwise unspecified weekly plan.
-2. Look for an accessible spreadsheet titled `Household Preferences` or a clearly equivalent title, then identify available household, allergy, pantry, schedule, and other planning records. Use the canonical tabs in [references/household-profile.md](references/household-profile.md); accept equivalent existing tab names without creating a competing workbook. Do not claim access to an unavailable source.
+2. Look for an accessible spreadsheet titled `Household Preferences` or a clearly equivalent title, then identify available household, allergy, pantry, schedule, and other planning records. Use the canonical tabs in [references/household-profile.md](references/household-profile.md); accept equivalent existing tab names without creating a competing workbook. Resolve the provider and workbook resource ID or canonical path, then use `Record Index`, a structured table or named range, or the worksheet's stable key definition for bounded retrieval. Do not identify a record by workbook title, worksheet title, or row number alone, and do not claim access to an unavailable source.
 3. State concisely which exact records were found, which will be used, and which mentioned records remain unavailable or unconfirmed, including dates or versions when visible. Do not collapse a recipe-history sheet, preference file, and household safety profile into a generic “household record.” Ask whether anything has changed since the relevant records were updated. Do not repeat this checkpoint when the user already confirmed it for the current planning request.
-4. Read [references/household-profile.md](references/household-profile.md) when interpreting household or safety records.
-5. Separate hard constraints from preferences. Ask a focused question before planning when missing or conflicting information could materially affect allergy or medical safety. Handle ordinary gaps with labeled assumptions.
+4. Locate the current and historical meal-plan records defined in [shared record management](../../shared/record-management.md). Preserve one clearly equivalent existing Word document, Google Doc, Markdown pair, or selected durable authority; when creating filesystem records, use `meal-plan-current.md` and `meal-plan-history.md`. Identify it by provider and resource ID or canonical path plus the stable `MP-...` or `MH-...` identifier and heading, bookmark, or named section when supported. Read the current plan only when it could affect this request and do not load history without a targeted retrieval condition.
+5. Read [references/household-profile.md](references/household-profile.md) when interpreting household or safety records, and read [shared record management](../../shared/record-management.md) before any persistent write, historical retrieval, lifecycle change, or access failure.
+6. Separate hard constraints from preferences. Ask a focused question before planning when missing or conflicting information could materially affect allergy or medical safety. Handle ordinary gaps with labeled assumptions.
 
 ## Delegate bounded sub-work
 
@@ -41,6 +42,7 @@ Provide `personal-chef` with:
 - confirmed hard constraints and affected household members;
 - current-week instructions and practical limits;
 - the exact `Meal Preferences` workbook identity and canonical tabs found, or their availability status;
+- the exact current meal-plan identity and plan identifier when relevant;
 - the preference and recipe-history sources it may use;
 - servings, leftover targets, and desired output detail;
 - any evidence conclusions that constrain recipe choice.
@@ -52,6 +54,7 @@ Require it to return:
 - active and total time, yield, leftovers, and ingredient-overlap notes;
 - constraint-sensitive ingredients or labels needing final verification;
 - preference observations and any proposed or completed record changes.
+- confirmed prepared or used status before any post-plan rating request; never infer consumption from plan inclusion.
 
 Do not independently redo recipe selection after a valid handoff. Review and return targeted revision requests when a candidate fails a constraint.
 
@@ -60,6 +63,7 @@ After approving the final recipes, provide `personal-shopper` with:
 - finalized recipe ingredients, yields, planned servings, and leftover uses;
 - confirmed pantry inventory and any `check pantry` items;
 - the exact `Grocery Preferences` workbook identity and canonical tabs found, or their availability status;
+- the exact current meal-plan identity and plan identifier;
 - region, currency, preferred stores, shopping date, budget, and brand or product requirements when known;
 - allergy, medical, label, and substitution constraints that affect purchasing.
 
@@ -75,6 +79,16 @@ Require it to return a grocery list by store section, purchase quantities and pa
 - Present checkout spending separately from allocated meal cost. Preserve pricing date, location, source basis, confidence, ranges, unpriced items, and material exclusions; do not convert estimates into false precision.
 - Use [references/output-format.md](references/output-format.md) for the final response, scaled to the request.
 
+## Finalize and maintain meal-plan records
+
+- Own the single current/history meal-plan pair and update the selected authorities in place. Other Meal Planner skills may read relevant state and request changes but must not create parallel plan records.
+- Persist only a user-confirmed finalized plan. Do not archive drafts, rejected candidates, trivial wording changes, or routine process events.
+- Finalize coherently: archive the previously current plan when present and valuable, replace the current authority, add only useful pointers and relationships, and verify exactly one current plan remains. Do not claim persistence if a required write fails.
+- Keep the current plan operationally complete without history and preserve exact record identities, safety constraints, servings, recipes, adaptations, dates, unresolved questions, and provenance.
+- Check the shared format-aware review triggers at authorized write or consequential-use boundaries. Before compaction, splitting, migration, deduplication, or authority transfer, stage and validate the complete before/after records under the shared audit protocol; do not replace a canonical record after a failed audit.
+- After later confirmation that a planned recipe was actually made or an ingredient used, request a bounded `personal-chef` feedback check only when the shared gate finds an initial rating, material modification, conflicting feedback, or decision-relevant re-rating useful. Elapsed time alone is insufficient.
+- Do not write chef-owned ratings or shopper-owned records directly. Send the exact identities, stable identifiers, source, attribution, confirmation status, effective date, uncertainty, and requested lifecycle action through the shared contract.
+
 ## Final check
 
 Confirm internally that:
@@ -85,5 +99,6 @@ Confirm internally that:
 - grocery and cost work came from `personal-shopper` when available and used only finalized recipes;
 - times, servings, leftovers, grocery quantities, purchase totals, and meal-cost allocations are consistent;
 - sources and record updates are accurately represented;
+- the finalized current plan and any required historical entry were updated coherently, or persistence failure is explicit;
 - health claims have appropriate evidence and citations;
 - assumptions and unresolved limitations are visible.

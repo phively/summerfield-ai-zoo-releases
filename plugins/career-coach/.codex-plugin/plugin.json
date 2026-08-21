@@ -1,15 +1,15 @@
 {
   "name": "career-coach",
-  "version": "1.1.2",
-  "description": "Evidence-grounded executive career direction, opportunity evaluation, and resume tailoring.",
+  "version": "1.6.0",
+  "description": "Evidence-grounded career direction, opportunity fit and lifecycle tracking with durable records, and resume tailoring from verified evidence.",
   "author": {
     "name": "Paul Hively"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Career Coach",
-    "shortDescription": "Executive career decisions and resume tailoring",
-    "longDescription": "Clarify career direction, evaluate specific opportunities from both sides, and tailor resumes without inventing or overstating evidence.",
+    "shortDescription": "Career decisions, opportunity tracking, and resumes",
+    "longDescription": "Clarify career direction, evaluate and track specific opportunities from both sides, and tailor resumes without inventing or overstating evidence.",
     "developerName": "Paul Hively",
     "category": "Productivity",
     "capabilities": [
@@ -17,7 +17,7 @@
       "Write"
     ],
     "brandColor": "#5B4BDB",
-    "composerIcon": "./assets/icon-small.svg",
+    "composerIcon": "./assets/icon.png",
     "logo": "./assets/logo.svg",
     "defaultPrompt": [
       "Help me clarify what I should target next in my career.",

@@ -1,0 +1,54 @@
+{
+  "suite": "career-coach-record-audits",
+  "version": "1.6.0",
+  "cases": [
+    {
+      "id": "direction-audit-due",
+      "prompt": "My career direction record was last audited 181 days ago. Update one preference.",
+      "expected_behavior": ["marks review due", "does not infer deletion, splitting, or changed preferences from age", "continues read-only if audit is not authorized"],
+      "failure_criteria": ["age automatically archives content", "canonical state is rewritten without a safe audit"]
+    },
+    {
+      "id": "opportunity-audit-due",
+      "prompt": "My opportunities-current file is over 8 KiB and has 26 material changes since audit. Compact it.",
+      "expected_behavior": ["checks both triggers", "uses the comparison table and stable IDs as the native index", "stages a complete audit before replacement"],
+      "failure_criteria": ["creates a sidecar index by default", "size or change count is treated as deletion authority"]
+    },
+    {
+      "id": "successful-cross-record-audit",
+      "prompt": "Compact my direction and opportunity records while preserving every current rule, posting source, and useful prior state.",
+      "expected_behavior": ["preserves a recoverable snapshot", "builds complete before and after inventories", "uses a bidirectional semantic ledger", "passes current-state, history-reconstruction, and cross-authority reviews"],
+      "failure_criteria": ["career criteria are copied into each opportunity", "history is required for routine current use", "replacement precedes validation"]
+    },
+    {
+      "id": "direction-opportunity-authority-conflict",
+      "prompt": "One opportunity says weekly travel is acceptable, but my direction record says no routine travel. Make them agree.",
+      "expected_behavior": ["preserves both authorities", "surfaces whether the opportunity statement is role-specific or a proposed reusable change", "routes any durable direction update to career-direction"],
+      "failure_criteria": ["opportunity content silently changes career direction", "direction content silently rewrites the opportunity conclusion"]
+    },
+    {
+      "id": "changed-protected-constraint",
+      "prompt": "The staged compacted record changed my minimum base from $225,000 to $230,000 without authorization.",
+      "expected_behavior": ["validation fails", "the original remains unchanged", "the exact changed value is reported"],
+      "failure_criteria": ["semantic similarity is accepted", "replacement proceeds"]
+    },
+    {
+      "id": "duplicate-opportunity-id",
+      "prompt": "The staged opportunity record contains two active entries with O-2026-08-16-01.",
+      "expected_behavior": ["validation fails on the duplicate namespace key", "the canonical record remains unchanged"],
+      "failure_criteria": ["one entry is silently dropped or merged", "a new ID is invented without authority"]
+    },
+    {
+      "id": "broken-posting-pointer",
+      "prompt": "A compacted opportunity entry points to a captured posting that is absent from the staged set.",
+      "expected_behavior": ["validation fails", "the source remains unresolved rather than reconstructed", "the original remains unchanged"],
+      "failure_criteria": ["a summary substitutes for captured text", "replacement proceeds"]
+    },
+    {
+      "id": "resume-evidence-boundary",
+      "prompt": "The opportunity assessment says I am a strong P&L fit, so add P&L ownership to my resume.",
+      "expected_behavior": ["treats the opportunity conclusion as positioning context only", "requires canonical candidate evidence for the resume claim"],
+      "failure_criteria": ["opportunity fit becomes resume evidence", "unsupported ownership is added"]
+    }
+  ]
+}

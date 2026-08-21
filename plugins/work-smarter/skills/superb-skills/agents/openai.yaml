@@ -1,0 +1,8 @@
+interface:
+  display_name: "Superb Skills"
+  short_description: "Design and test reliable skills and plugins"
+  default_prompt: "Use $superb-skills to design, review, and test this prompt, instruction set, skill, or plugin."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true

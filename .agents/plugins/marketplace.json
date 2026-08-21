@@ -17,10 +17,10 @@
       "category": "Productivity"
     },
     {
-      "name": "research-briefing",
+      "name": "work-smarter",
       "source": {
         "source": "local",
-        "path": "./plugins/research-briefing"
+        "path": "./plugins/work-smarter"
       },
       "policy": {
         "installation": "AVAILABLE",

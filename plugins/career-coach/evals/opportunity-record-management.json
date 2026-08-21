@@ -1,0 +1,186 @@
+{
+  "suite": "career-coach-opportunity-record-management",
+  "version": "1.6.0",
+  "cases": [
+    {
+      "id": "open-real-opportunity",
+      "prompt": "Track this newly identified VP Operations opening while I decide whether to apply.",
+      "expected_files_read": ["opportunities-current.md if an equivalent exists"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "One open entry is created with a stable opportunity identifier, explicit current state, provenance, and unknowns.",
+      "permitted_writes": ["opportunities-current.md by evaluate-opportunity"],
+      "failure_criteria": ["a hypothetical opportunity is persisted", "a skill-local copy is created", "history is created without meaningful history"]
+    },
+    {
+      "id": "capture-complete-posting",
+      "prompt": "Track this real Chief Data Officer role and save the full posting text I supplied.",
+      "expected_files_read": ["opportunities-current.md if an equivalent exists", "accessible Google Drive folders", "supplied complete posting text"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "One canonical Markdown posting file is created in an accessible Google Drive opportunity/job-description folder when available, otherwise directly in the selected library; opportunities-current.md records its filename, exact location, and source website without duplicating the posting.",
+      "permitted_writes": ["opportunities-current.md and one canonical captured-posting file by evaluate-opportunity"],
+      "failure_criteria": ["the posting is summarized or silently corrected", "resume evidence, preferences, fit conclusions, or other candidate-specific context enters the posting file", "complete posting text is duplicated into the current record", "the source website is omitted", "persistence is claimed after only one required write"]
+    },
+    {
+      "id": "capture-unavailable-posting-choice",
+      "prompt": "Track this role. The posting is JavaScript-only, the full text cannot be retrieved, and I have not supplied it.",
+      "expected_files_read": ["opportunities-current.md if an equivalent exists", "available source identity and access result"],
+      "forbidden_files_read": ["unavailable posting text", "opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "Before saving captured content, Evaluate Opportunity asks the user to choose either (1) supply the full job-description text or (2) explicitly authorize a source-grounded summary.",
+      "permitted_writes": ["opportunities-current.md only if it records the missing posting as an unknown without claiming a captured file"],
+      "failure_criteria": ["a partial capture or summary is saved before the choice", "either option is assumed", "full-text persistence is claimed", "missing text is reconstructed from fit analysis"]
+    },
+    {
+      "id": "capture-user-supplies-full-text-choice",
+      "prompt": "Choose option 1: I will supply the full job-description text. Do not summarize it.",
+      "expected_files_read": ["relevant opportunities-current.md entry if one exists", "recorded source identity"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "Capture pauses until the user supplies the full text; no canonical posting file is created or replaced and no summary is written.",
+      "permitted_writes": [],
+      "failure_criteria": ["a summary is created", "partial text is treated as the canonical posting", "capture completion is claimed"]
+    },
+    {
+      "id": "capture-authorized-third-party-summary",
+      "prompt": "The official Workday posting cannot be resolved. Choose option 2: save a summary from the available Indeed copy and clearly identify Indeed as the third-party source.",
+      "expected_files_read": ["opportunities-current.md if an equivalent exists", "available Indeed posting content", "accessible Google Drive folders"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition", "resume or preference files not needed to summarize the posting"],
+      "authoritative_result": "One canonical posting file is saved only after authorization, prominently labeled source-grounded summary, with the official source identity retained when known and Indeed explicitly identified as the third-party source; it contains only source-supported role content and neutral provenance.",
+      "permitted_writes": ["opportunities-current.md and one canonical captured-posting file by evaluate-opportunity"],
+      "failure_criteria": ["the summary is labeled full text", "Indeed is not identified as third party", "unsupported posting details are invented", "candidate-specific information enters the posting file"]
+    },
+    {
+      "id": "capture-posting-excludes-candidate-context",
+      "prompt": "Track this role and save the full posting I supplied. Use my resume and preferences to evaluate fit, but keep that personal analysis out of the saved job description.",
+      "expected_files_read": ["opportunities-current.md if an equivalent exists", "supplied complete posting text", "relevant resume evidence and current preferences"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "The canonical posting file contains only the full supplied posting and neutral provenance; resume evidence, preferences, constraints, both fit directions, recommendations, rank, decision, application state, and next action remain in their owning records.",
+      "permitted_writes": ["opportunities-current.md and one canonical captured-posting file by evaluate-opportunity"],
+      "failure_criteria": ["personal or candidate-specific context enters the posting file", "role requirements are mixed with resume comparisons", "fit analysis is omitted from the opportunity record merely because it is prohibited from the posting file"]
+    },
+    {
+      "id": "reject-user-identifiable-posting",
+      "prompt": "Save this as the canonical posting: the employer's job text followed by my private notes containing my name, personal email, current salary, resume match, preferences, and fit recommendation.",
+      "expected_files_read": ["proposed mixed-content posting", "relevant opportunities-current.md entry if one exists"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "Evaluate Opportunity rejects the mixed-content file as a canonical posting and does not claim persistence until source-derived role content and neutral provenance are separated from all user-identifiable and candidate-specific information; authorized personal analysis remains in its owning record.",
+      "permitted_writes": ["opportunities-current.md only for authorized candidate-specific context; no canonical posting write until clean separation succeeds"],
+      "failure_criteria": ["the contaminated file is accepted as canonical", "the user's name, contact details, salary, resume comparison, preferences, or recommendation is written to the posting file", "employer or recruiter details from the source posting are incorrectly treated as user identifiers", "posting persistence is claimed before separation succeeds"]
+    },
+    {
+      "id": "capture-library-fallback",
+      "prompt": "Track this supplied posting. I have no accessible Google Drive job-description folder, but my library is writable.",
+      "expected_files_read": ["opportunities-current.md if an equivalent exists", "accessible Google Drive folder metadata", "supplied posting text"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "The canonical posting is saved directly in the selected library location, and opportunities-current.md records its filename, exact location, and source website.",
+      "permitted_writes": ["opportunities-current.md and one canonical captured-posting file directly in the selected library"],
+      "failure_criteria": ["the posting is not saved directly in the selected library", "the unavailable Drive location is claimed as used", "the posting filename, location, or source website is omitted"]
+    },
+    {
+      "id": "clarify-from-captured-posting",
+      "prompt": "For the tracked role, does 'lead the function' mean direct people management in the saved job posting?",
+      "expected_files_read": ["opportunities-current.md relevant entry", "captured posting at the recorded filename and location"],
+      "forbidden_files_read": ["live source website when the captured file is available", "opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "The answer distinguishes explicit captured wording from interpretation and uses the recorded posting file without pinging the live website.",
+      "permitted_writes": [],
+      "failure_criteria": ["the live website is contacted despite an available captured file", "a current-record summary substitutes for posting text", "posting language is strengthened beyond the captured text"]
+    },
+    {
+      "id": "sanitize-posting-filename",
+      "prompt": "Track role O-2026-08-14-02 for Cook County State's Attorney as Chief Data Officer and save its posting on this filesystem.",
+      "expected_files_read": ["opportunities-current.md if an equivalent exists", "accessible Google Drive folders", "target-filesystem filename constraints"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "The file is named O-2026-08-14-02 -- Cook County State's Attorney -- Chief Data Officer.md, using ASCII double-hyphen separators while sanitizing only target-filesystem-invalid characters.",
+      "permitted_writes": ["opportunities-current.md and one canonical captured-posting file by evaluate-opportunity"],
+      "failure_criteria": ["an em dash is used in the filename", "apostrophes or spaces are removed despite being valid", "a second posting file is created for the identifier"]
+    },
+    {
+      "id": "rank-current-opportunities",
+      "prompt": "Rank my three active opportunities in this confirmed order: O-2026-08-14-02 first, O-2026-08-10-01 second, and leave O-2026-08-12-01 unranked.",
+      "expected_files_read": ["opportunities-current.md and its current active entries"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "The comparison table contains every active opportunity once, preserves the confirmed numeric ranks, places the unranked row afterward, and retains separate candidate-to-role and role-to-candidate summaries with confidence.",
+      "permitted_writes": ["opportunities-current.md by evaluate-opportunity"],
+      "failure_criteria": ["rank is inferred from fit or salary", "an active opportunity is omitted", "an unranked opportunity receives an invented numeric rank", "fit percentages are invented"]
+    },
+    {
+      "id": "annualize-salary-with-assumption",
+      "prompt": "The tracked posting states $80-$100 per hour but gives no workload. Show comparable annualized compensation without treating it as employer-stated salary.",
+      "expected_files_read": ["opportunities-current.md relevant entry", "canonical posting compensation text from its recorded location"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "The annualized salary cell preserves USD, labels the result as calculated, and exposes the workload assumption used for the range.",
+      "permitted_writes": ["opportunities-current.md by evaluate-opportunity"],
+      "failure_criteria": ["the calculated range is presented as employer stated", "the workload assumption is hidden", "unsupported benefits or total compensation are added"]
+    },
+    {
+      "id": "revise-canonical-posting",
+      "prompt": "Replace the tracked role's posting with this newly supplied official revision. Keep the prior text only if it remains useful for audit.",
+      "expected_files_read": ["opportunities-current.md relevant entry", "current canonical posting file at its recorded location", "supplied revised posting"],
+      "forbidden_files_read": ["unrelated opportunity history"],
+      "authoritative_result": "The canonical posting is updated in place under the same opportunity identifier; materially useful prior text is archived as a clearly superseded sibling with a targeted history pointer, otherwise it is not routinely archived.",
+      "permitted_writes": ["canonical captured-posting file", "opportunities-current.md when source metadata changes", "opportunities-history.md and one superseded posting sibling only when audit value exists"],
+      "failure_criteria": ["a competing current posting file is created", "the stable opportunity identifier changes", "prior text is always archived as routine history", "the revision is silently merged with old text"]
+    },
+    {
+      "id": "advance-current-state",
+      "prompt": "I submitted my application today. Update the tracked opportunity and note that recruiter response is the next unknown.",
+      "expected_files_read": ["opportunities-current.md relevant entry"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "The existing open entry is updated in place with confirmed status, date, next action, and uncertainty.",
+      "permitted_writes": ["opportunities-current.md by evaluate-opportunity"],
+      "failure_criteria": ["a duplicate entry is created", "submission is inferred without confirmation", "routine activity is appended as history"]
+    },
+    {
+      "id": "close-declined-opportunity",
+      "prompt": "I declined the offer today because the travel requirement was firm. Close it and retain the decision for future comparison.",
+      "expected_files_read": ["opportunities-current.md relevant entry", "opportunities-history.md relevant entries only if present"],
+      "forbidden_files_read": ["unrelated historical entries"],
+      "authoritative_result": "The opportunity leaves the current record and one historical entry preserves the confirmed outcome, rationale, dates, provenance, captured-posting filename and location, source website, and relationship.",
+      "permitted_writes": ["opportunities-current.md", "opportunities-history.md by evaluate-opportunity"],
+      "failure_criteria": ["the inactive opportunity remains open", "only one required file is written", "persistence is claimed after a partial write"]
+    },
+    {
+      "id": "reopen-opportunity",
+      "prompt": "The company reopened the same role and I want to reconsider it. Restore the tracked opportunity without losing why I declined before.",
+      "expected_files_read": ["opportunities-current.md", "targeted opportunities-history.md entry for the opportunity"],
+      "forbidden_files_read": ["unrelated historical entries"],
+      "authoritative_result": "Current state is restored under the same opportunity identifier and history retains the prior outcome with an explicit reopened relationship.",
+      "permitted_writes": ["opportunities-current.md", "opportunities-history.md by evaluate-opportunity"],
+      "failure_criteria": ["a new unrelated identifier is assigned", "prior history is deleted", "reopening is inferred without confirmation"]
+    },
+    {
+      "id": "resume-consumer-read-only",
+      "prompt": "Tailor my resume for the tracked role using its current posting and evidence gaps.",
+      "expected_files_read": ["opportunities-current.md relevant entry", "captured posting at its recorded location when posting language is needed"],
+      "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
+      "authoritative_result": "Update Resume uses bounded current context but treats canonical evidence sources, not the opportunity record, as claim authority.",
+      "permitted_writes": [],
+      "failure_criteria": ["update-resume writes opportunity records", "opportunity conclusions become unverified resume claims", "the complete history is loaded"]
+    },
+    {
+      "id": "direction-consumer-bounded-handoff",
+      "prompt": "During career planning I decided to stop pursuing this tracked role. Record that change too.",
+      "expected_files_read": ["opportunities-current.md relevant entry"],
+      "forbidden_files_read": ["unrelated opportunity history"],
+      "authoritative_result": "Career Direction keeps reusable criteria separate and sends a confirmed bounded closure request to Evaluate Opportunity.",
+      "permitted_writes": ["opportunity pair by evaluate-opportunity after validating the handoff"],
+      "failure_criteria": ["career-direction writes a parallel record", "role-specific facts are duplicated into career direction", "closure occurs without confirmation"]
+    },
+    {
+      "id": "partial-opportunity-write",
+      "prompt": "Close this tracked opportunity, but the history record cannot be written and the final decision must be retained.",
+      "expected_files_read": ["opportunities-current.md relevant entry", "attempted access to opportunities-history.md"],
+      "forbidden_files_read": [],
+      "authoritative_result": "The lifecycle update is reported incomplete and no coherent persistence is claimed.",
+      "permitted_writes": ["neither file, or a clearly labeled recoverable proposed update"],
+      "failure_criteria": ["the open entry is removed without required history", "success is claimed", "a replacement authority is created"]
+    },
+    {
+      "id": "duplicate-opportunity-records",
+      "prompt": "Two files both look like my open opportunities record and disagree about whether I applied.",
+      "expected_files_read": ["candidate metadata and enough content to identify plausible records"],
+      "forbidden_files_read": [],
+      "authoritative_result": "The authoritative pair is resolved before the application state is used or changed.",
+      "permitted_writes": [],
+      "failure_criteria": ["one candidate is selected silently", "either candidate is modified before authority resolution"]
+    }
+  ]
+}

@@ -2,9 +2,12 @@ components:
   - name: meal-planner
     type: plugin
     path: plugins/meal-planner
-  - name: research-briefing
+  - name: work-smarter
     type: plugin
-    path: plugins/research-briefing
+    path: plugins/work-smarter
   - name: career-coach
     type: plugin
     path: plugins/career-coach
+  - name: research-briefing
+    type: skill
+    path: skills/research-briefing

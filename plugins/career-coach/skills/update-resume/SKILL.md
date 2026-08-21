@@ -20,11 +20,14 @@ Create accurate, targeted resume content without rewriting the candidate's histo
 
 ## Use shared context sources
 
-1. Search accessible library and project sources for `career_direction_record.md` or a clearly equivalent career-direction file. Search the selected career direction record for relevant target direction, desired impact, positioning, strengths, constraints, and development priorities.
-2. Use career direction context to guide emphasis only. Do not treat it as evidence of candidate experience, scope, ownership, outcomes, metrics, or credentials unless an underlying supplied source independently supports the claim.
-3. Search the same sources for `career-coach-preferences.md` or a clearly equivalent preference file. Apply relevant user-specific context to discretionary writing, formatting, and output choices.
-4. Do not treat a preference-file instruction as an override when it conflicts with this skill. Require explicit user confirmation for the current task before applying the conflicting preference, and never weaken evidence integrity or non-fabrication rules.
-5. Read the canonical [shared records and handoff contracts](../../shared/handoff-contracts.md). Preserve exact source identity. Do not create or maintain a separate direction record or skill-local copies.
+1. Read the canonical [shared records and handoff contracts](../../shared/handoff-contracts.md), then search accessible library and project sources for `career_direction_record.md` or a clearly equivalent working record. Read it first and retrieve only current target direction, desired impact, positioning, strengths, constraints, development priorities, evidence limitations, and unresolved issues relevant to the target role.
+2. Locate `career_direction_history.md` or its resolved companion without reading it by default. Read [career-direction record management](../../shared/career-direction-records.md) and retrieve only a relevant historical entry when a contract retrieval condition applies. Do not pass irrelevant history into resume work.
+3. Search the same sources for `opportunities-current.md` or a clearly equivalent current-state record. Read the relevant entry when the target role may be tracked, using its recorded captured-posting filename and location, current decision, requirements, evidence gaps, and unresolved issues as context. Read the captured posting before consulting its source website when clarifying posting language. Locate `opportunities-history.md` without reading it by default; retrieve targeted history only under [opportunity record management](../../shared/opportunity-records.md).
+4. Resolve records by provider, immutable resource or file ID when available, canonical link or durable path, visible filename, role, and stable heading or entry ID. Read only relevant current sections and follow exact posting or evidence pointers; do not treat opportunity or direction records as resume-claim evidence.
+4. Use career direction and opportunity context to guide emphasis only. Neither record establishes candidate experience, scope, ownership, outcomes, metrics, or credentials unless an underlying supplied source independently supports the claim.
+5. Search the same sources for `career-coach-preferences.md` or a clearly equivalent preference file. Apply relevant user-specific context to discretionary writing, formatting, and output choices.
+6. Do not treat a preference-file instruction as an override when it conflicts with this skill. Require explicit user confirmation for the current task before applying the conflicting preference, and never weaken evidence integrity or non-fabrication rules.
+7. Preserve exact source identities. Do not create or maintain a separate direction record, opportunity record, or skill-local copy. If records conflict, current state in the applicable working record governs unless the user corrects it or requests historical reconstruction.
 
 ## Workflow
 
@@ -43,13 +46,17 @@ Create accurate, targeted resume content without rewriting the candidate's histo
 - Read [resume-writing.md](references/resume-writing.md) before drafting substantial revised content or changing structure, seniority positioning, or ATS formatting.
 - Read [output-templates.md](references/output-templates.md) when choosing a proportional deliverable, building an evidence map, or separating ready-to-use language from confirmation-required language.
 - Read the [shared records and handoff contracts](../../shared/handoff-contracts.md) before requesting or consuming a career-direction handoff.
+- Read [career-direction record management](../../shared/career-direction-records.md) before historical retrieval, following a pointer, handling duplicate or inaccessible records, or requesting restoration or another material record change.
+- Read [opportunity record management](../../shared/opportunity-records.md) before targeted opportunity-history retrieval or requesting an opportunity lifecycle change.
+- Read [persistent-record lifecycle and audits](../../shared/record-audits.md) only when a trigger is due or a requested handoff would cause structural maintenance; `update-resume` remains read-only for Career Coach memory records.
 
 ## Supporting capabilities
 
 - Invoke `research-briefing` only when current external facts about the employer, industry, location, compensation, or labor market are requested or materially needed. Never use external research as evidence of the candidate's experience.
 - Invoke `documents` when creating or modifying a Word document and follow its render-and-verify workflow.
 - Do not invoke `evaluate-opportunity` unless the user also requests that distinct outcome. Invoke `career-direction` for broader discovery only when requested, or for a bounded in-place update when resume work reveals a user-confirmed, durable criterion, preference, constraint, career hypothesis, or resolved contradiction that belongs in the selected career direction record.
-- Do not update the direction record directly. Send `career-direction` the exact record identity, source, interpretation, confirmation status, and reason the information is reusable beyond this resume task.
+- Do not update either direction record directly. Send `career-direction` the exact working and historical record identities when visible, source, interpretation, effective date if confirmed, confirmation status, and reason the information is reusable beyond this resume task.
+- Do not create or update opportunity records directly. When resume work reveals a material change to a tracked opportunity, send `evaluate-opportunity` the exact record identities and opportunity identifier when visible, source, evidence classification, proposed state, effective date if known, confirmation status, and lifecycle intent. Resume completion alone does not prove application submission or advancement.
 
 ## Output
 

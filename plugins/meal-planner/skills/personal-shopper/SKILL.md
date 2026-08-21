@@ -11,9 +11,10 @@ Own grocery consolidation and cost estimation after recipe selection. Preserve t
 
 1. Require finalized recipes with ingredient quantities, yields, planned servings, and leftover use. If material selections remain open, return the missing decision to `meal-planner`; do not choose recipes.
 2. Identify the shopping region, currency, shopping date, confirmed pantry inventory, brand or product requirements, and budget. Ask only for missing details that would materially change the list or price estimate; otherwise state assumptions.
-3. Look for an accessible spreadsheet titled `Grocery Preferences` or a clearly equivalent title. Read [references/store-preferences.md](references/store-preferences.md) whenever store or source choice could affect price research, product selection, cost estimates, or shopping recommendations, and use its canonical `Store Preferences` and `Price Tracker` tabs. Accept equivalent existing workbook or tab names without creating a competing copy. Apply an explicit current-task store order first; otherwise load the saved order from the grocery price tracker. When neither exists, ask for an ordered list of store names with optional preferred website URLs and ask once whether it may be saved.
-4. Treat safety-sensitive product requirements as exact specifications. Never replace an item with a cheaper alternative unless the supplied brief explicitly permits it. Flag labels or availability that `meal-planner` must verify.
-5. Read the canonical [shared handoff contracts](../../shared/handoff-contracts.md) before accepting a shopping packet or returning results to `meal-planner`. Use that plugin-level file directly; do not create a skill-local copy.
+3. Look for an accessible spreadsheet titled `Grocery Preferences` or a clearly equivalent title. Read [references/store-preferences.md](references/store-preferences.md) whenever store or source choice could affect price research, product selection, cost estimates, or shopping recommendations, and use its canonical `Store Preferences` and `Price Tracker` tabs. Accept equivalent existing workbook or tab names without creating a competing copy. Resolve the provider and immutable workbook identity, then use `Record Index`, a table or named range, or stable key columns for bounded retrieval. Apply an explicit current-task store order first; otherwise load the saved order from `Store Preferences`. When neither exists, ask for an ordered list of store names with optional preferred website URLs and ask once whether it may be saved.
+4. Read the finalized current meal-plan record when it is supplied or accessible and relevant. Preserve its exact identity and plan identifier; do not update it or read plan history by default.
+5. Treat safety-sensitive product requirements as exact specifications. Never replace an item with a cheaper alternative unless the supplied brief explicitly permits it. Flag labels or availability that `meal-planner` must verify.
+6. Read the canonical [shared handoff contracts](../../shared/handoff-contracts.md) before accepting a shopping packet or returning results to `meal-planner`. Read [shared record management](../../shared/record-management.md) before changing persistent store records, retrieving history, or handling duplicates or partial writes. Use plugin-level files directly; do not create skill-local copies.
 
 ## Build the grocery list
 
@@ -46,8 +47,13 @@ For delegated meal-plan work, return:
 6. Likely surplus and package-rounding notes
 7. Unresolved availability, product-label, substitution, or pricing questions for `meal-planner`
 8. Exact `Grocery Preferences` workbook identity and canonical tabs read or changed, or their availability status
+9. Exact current meal-plan identity and plan identifier used
 
 Begin a valid `meal-planner` handoff without re-requesting finalized recipe details. Treat preferred stores supplied in that handoff as the current-task order, but do not treat delegation as consent to save or replace persistent preferences unless the handoff explicitly records the user's consent. Do not block grocery work on persistence; return at most one concise persistence question for `meal-planner` to surface when needed.
+
+Do not create or update meal-plan, household, recipe, or rating records directly. Send a bounded request to the owning skill when shopping work reveals a material confirmed change.
+
+For shopper-owned persistent writes, use the workbook-native identities and lifecycle rules in shared record management. Before structural maintenance, validate a staged before/after workbook snapshot and leave the canonical workbook unchanged on any unexplained loss, duplicate key, broken formula, validation, named range, or record reference.
 
 For direct user requests, include only the useful sections.
 
