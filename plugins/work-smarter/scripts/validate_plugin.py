@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ("remember-me", "research-briefing", "superb-skills")
+SKILLS = ("remember-me", "research-briefing", "superb-skills", "teach-me")
 
 
 def require(condition: bool, message: str) -> None:
@@ -81,6 +81,7 @@ def validate_contract() -> None:
         "Expected output", "Authority and provenance", "Uncertainty",
         "Failure behavior", "Information not to pass", "User confirmation",
         "research-scope checkpoint", "`work-smarter` bundles and maintains",
+        "Teach Me to Research Briefing",
         "Bundled Skills to Remember Me: targeted consultation",
         "Bundled Skills to Remember Me: durable update request",
         "Remember Me to External Domain Owner", "No reverse handoff",
@@ -106,6 +107,33 @@ def validate_remember_me() -> None:
         require(phrase in records, f"remember-me records missing: {phrase}")
     require(not (root / "index.md").exists(), "Packaged skill must not contain personal index data")
     require(not (root / "history.md").exists(), "Packaged skill must not contain personal history data")
+
+
+def validate_teach_me() -> None:
+    root = ROOT / "skills" / "teach-me"
+    skill = read(root / "SKILL.md")
+    workflow = read(root / "references" / "teaching-workflow.md")
+    personality = read(root / "references" / "personalities" / "nicer-socrates.md")
+    for phrase in (
+        "Complete the research before substantive teaching begins",
+        "fall back to `nicer-socrates.md`",
+        "Do not persist lesson transcripts",
+        "Correct a consequential false premise",
+    ):
+        require(phrase in skill, f"teach-me missing behavior: {phrase}")
+    for phrase in (
+        "question only when its answer could",
+        "A chain of reasonable answers can still drift",
+        "Do not claim mastery",
+    ):
+        require(phrase in workflow, f"teach-me workflow missing: {phrase}")
+    for phrase in (
+        "resisting reflexive agreement",
+        "Ask one question at a time",
+        "constitutive of the concept",
+        "Skip directly to explanation",
+    ):
+        require(phrase in personality, f"nicer-socrates missing: {phrase}")
 
 
 def validate_memory_priorities() -> None:
@@ -144,8 +172,15 @@ def validate_memory_audit_guidance() -> None:
         ("conservative default design heuristic", memory),
         ("8 KiB", records),
         ("180 days", records),
+        ("25 material changes", records),
+        ("bounded retrieval", records),
+        ("Conversation-context compaction", records),
+        ("immutable resource", records),
+        ("canonical permalink", records),
         ("bidirectional ledger", memory),
         ("A due trigger requires review, not automatic", remember),
+        ("explicit or implicit comparison", research),
+        ("supported absolute property", research),
         ("opening summary name and directly link", research),
         ("what each reference influenced", research),
         ("Do not propose or create phases by default", research),
@@ -179,17 +214,24 @@ def validate_evals() -> None:
         "research-phase-checkpoint-no-response",
         "research-phased-work-stops-after-log",
         "research-waiver-no-phase-pause",
+        "research-unsupported-implicit-comparison",
+        "research-supported-comparison",
+        "research-subjective-comparison",
+        "memory-nonsize-audit-trigger",
+        "memory-context-vs-record-compaction",
+        "memory-conditional-toc",
+        "memory-provider-identity-pointer",
     ):
         require(case_id in ids, f"Missing required eval: {case_id}")
     results = json.loads(read(ROOT / "evals" / "results.json"))
-    require(results["plugin_version"] == "1.4.0", "Unexpected results version")
+    require(results["plugin_version"] == "1.6.0", "Unexpected results version")
     require(len(results["forward_tests"]) >= 4, "Missing forward-test results")
 
 
 def main() -> int:
     checks = (
         validate_manifest, validate_skills, validate_links,
-        validate_contract, validate_remember_me, validate_memory_priorities,
+        validate_contract, validate_remember_me, validate_teach_me, validate_memory_priorities,
         validate_memory_audit_guidance, validate_evals,
     )
     for check in checks:

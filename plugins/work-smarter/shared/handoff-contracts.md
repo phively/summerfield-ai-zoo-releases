@@ -2,6 +2,8 @@
 
 This file is the canonical contract for coordination between bundled skills. Read it directly before initiating or accepting a cross-skill handoff. Do not create skill-local copies or competing contract definitions.
 
+When a contract requests a canonical resource identity, return the provider and library or container scope, immutable resource or object identifier, and canonical permalink when the system exposes them. Treat a visible filename, title, path, and search terms as human recovery fallbacks rather than the primary identity. For a local filesystem without provider identifiers or permalinks, use the resolved durable path and stable internal entry identifier.
+
 ## Bundled research provenance
 
 The plugin format observed during creation supports bundled skills but exposes no supported dependency field for another skill; `agents/openai.yaml` dependencies are limited to MCP tools. Therefore `work-smarter` bundles and maintains the authoritative `research-briefing` skill under `skills/research-briefing`. Treat that bundled behavior as authoritative and update the complete skill directory rather than maintaining a separate copy.
@@ -15,7 +17,7 @@ The plugin format observed during creation supports bundled skills but exposes n
 | Trigger | One or more factual, technical, scientific, historical, legal, medical, programming, economic, statistical, current, niche, disputed, or high-stakes claims require verification, source evaluation, citations, or current documentation and the result could materially affect the package. |
 | Exceptions | Do not hand off purely stylistic editing, deterministic transformations, direct analysis of supplied text without factual validation, stable incidental facts, or work that gains no material value from external evidence. |
 | Required input | State the exact claims or questions to research; the decision they affect; relevant current context only; user-provided facts labeled as supplied; claims requiring verification labeled separately; known jurisdiction, version, date, or scope; and unresolved questions. |
-| Expected output | Return evidence and direct citations near supported claims; quantitative results when useful; competing interpretations; limitations; unresolved questions; and explicit labels for verified facts, source claims, reasonable inferences, unknowns, and recommendations. |
+| Expected output | Return evidence and direct citations near supported claims; quantitative results when useful; competing interpretations; limitations; unresolved questions; and explicit labels for verified facts, source claims, reasonable inferences, unknowns, and recommendations. For factual or evaluative comparisons, identify the reference set and supporting evidence; otherwise return only the supported absolute property and reasons. |
 | Authority and provenance | Preserve source identities and dates. User-provided facts remain attributed to the user unless independently verified. Research evidence may inform package design but cannot silently override the user's stated goals, supplied requirements, or the authoritative current-state record. |
 | Uncertainty | Preserve material uncertainty and conflicts. Do not collapse mixed evidence into a single confident claim. Return any question that prevents a consequential conclusion to `superb-skills` for focused clarification. |
 | Failure behavior | If research, a required source, or the receiving skill is unavailable, identify the affected claims as unverified or unknown, avoid format or factual assertions that depend on them, and continue only with work that remains reliable. Do not fabricate citations or imply that research occurred. |
@@ -24,11 +26,29 @@ The plugin format observed during creation supports bundled skills but exposes n
 
 After the research result returns, `superb-skills` must integrate only supported findings, retain the evidence classifications and unresolved uncertainty, and distinguish evidence from design judgment.
 
+## Teach Me to Research Briefing
+
+| Contract field | Requirement |
+| --- | --- |
+| Invoking skill | `teach-me` |
+| Receiving skill | `research-briefing` |
+| Trigger | Factual, technical, scientific, historical, legal, medical, programming, economic, statistical, current, niche, disputed, unfamiliar, or high-stakes claims require verification and could materially affect what or how the user is taught. |
+| Exceptions | Do not hand off pure reasoning exercises, direct analysis of user-supplied material without factual validation, stable incidental facts, creative practice, or topics for which current research would not materially improve the lesson. |
+| Required input | State the learning objective; the exact claims or questions to research; the learner's relevant current context only; user-provided facts labeled as supplied; known jurisdiction, version, date, or scope; unresolved questions; and what the evidence must clarify before teaching. |
+| Expected output | Return the evidence needed to teach accurately, direct citations near supported claims, decisive source identities, relevant quantitative results, competing interpretations, limitations, unresolved questions, and explicit labels for verified facts, source claims, reasonable inferences, and unknowns. Distinguish defining features of the topic from compatible applications or adjacent concepts when material. |
+| Authority and provenance | Preserve source identities and dates. User-provided facts remain attributed to the user unless independently verified. Research evidence governs external factual claims but cannot silently override the user's learning objective or current instructions. |
+| Uncertainty | Preserve material uncertainty, disagreement, scope limits, and evidence gaps. Do not simplify uncertainty merely to make questioning easier. Return any ambiguity that prevents a reliable lesson to `teach-me` for focused clarification. |
+| Failure behavior | If research, a required source, or the receiving skill is unavailable, identify affected claims as unverified or unknown. `teach-me` may continue only with portions that remain reliable and must not imply that verification occurred. |
+| Information not to pass | Do not pass unrelated conversation history, a complete personal profile, lesson transcripts, secrets, credentials, unnecessary sensitive detail, unsupported conclusions presented as facts, or duplicate copies of canonical records. |
+| User confirmation | Required. `research-briefing` must present its research-scope checkpoint and wait for the user to confirm or revise it before searching or answering, unless the user explicitly waived that checkpoint for the current request or session under the receiving skill's rules. `teach-me` must not begin substantive teaching or treat initiation of the handoff as confirmation. |
+
+After the research result returns, `teach-me` must correct consequential false premises before questioning from them, integrate only supported findings, and keep citations proportionate to the learning interaction while preserving decisive source identities for the conclusion.
+
 ## Bundled Skills to Remember Me: targeted consultation
 
 | Contract field | Requirement |
 | --- | --- |
-| Invoking skill | `superb-skills` or `research-briefing` |
+| Invoking skill | `superb-skills`, `research-briefing`, or `teach-me` |
 | Receiving skill | `remember-me` |
 | Trigger | Stable personal goals, preferences, constraints, prior decisions, or output choices could materially affect the current workflow and the answer is not already supplied in the current request. |
 | Exceptions | Do not consult for incidental personal facts, ordinary one-time instructions, context that cannot change the work, or information outside the user's authorized accessible sources. Do not load the complete profile by default. |
@@ -38,15 +58,15 @@ After the research result returns, `superb-skills` must integrate only supported
 | Uncertainty | Preserve stale, inferred, disputed, missing, and inaccessible states explicitly. Do not convert a pattern or inference into a confirmed preference. |
 | Failure behavior | If `remember-me`, its index, or the identified source is unavailable, continue with neutral defaults when reliable and report a material limitation. Do not fabricate personal context or imply retrieval occurred. |
 | Information not to pass | Do not pass unrelated personal topics, complete profile or history files, secrets, credentials, unnecessary sensitive detail, or unsupported conclusions presented as facts. |
-| User confirmation | No new confirmation is required for a targeted read of an already authorized accessible record. Require confirmation before persisting an inference, replacing an explicit preference, resolving a consequential conflict, or retaining unusually sensitive information. |
+| User confirmation | No new confirmation is required for a targeted read of an already authorized accessible record. Require confirmation before persisting an inference, replacing an explicit preference, resolving a consequential conflict, or retaining information whose sensitivity creates material privacy, safety, or misuse risk. |
 
-The invoking skill must apply only relevant context. `research-briefing` may use it to shape scope, tradeoffs, and presentation, but never as external evidence or as a predetermined conclusion. `superb-skills` may use it for discretionary design and communication choices, but never to override supported conventions or validation evidence.
+The invoking skill must apply only relevant context. `research-briefing` may use it to shape scope, tradeoffs, and presentation, but never as external evidence or as a predetermined conclusion. `superb-skills` may use it for discretionary design and communication choices, but never to override supported conventions or validation evidence. `teach-me` may use it for pacing, examples, accessibility, and learning goals, but never as external evidence or proof of mastery.
 
 ## Bundled Skills to Remember Me: durable update request
 
 | Contract field | Requirement |
 | --- | --- |
-| Invoking skill | `superb-skills` or `research-briefing` |
+| Invoking skill | `superb-skills`, `research-briefing`, or `teach-me` |
 | Receiving skill | `remember-me` |
 | Trigger | The workflow reveals a new or changed personal fact, durable preference, reusable constraint, correction, or explicit forget request that belongs in personal context beyond the current task. |
 | Exceptions | Do not request persistence for task-specific instructions, unconfirmed inferences, external research claims about the user, routine process events, or domain state owned by another specialist. Route specialist-owned changes to that owner. |
@@ -56,7 +76,7 @@ The invoking skill must apply only relevant context. `research-briefing` may use
 | Uncertainty | Keep proposals, hypotheses, and unresolved conflicts labeled. Do not silently reconcile incompatible statements or broaden an observation into a durable rule. |
 | Failure behavior | If authority, access, or writability is unresolved, return a clearly labeled proposed update and identify the failed operation. Never claim persistence after a partial or unavailable write. |
 | Information not to pass | Do not pass unrelated conversation history, complete source documents, secrets, credentials, unnecessary sensitive detail, or an external owner's record for duplication. |
-| User confirmation | The invoking skill must preserve whether the user authorized durable persistence. `remember-me` must obtain confirmation before persisting an inference, replacing an explicit preference, resolving a consequential conflict, retaining unusually sensitive information, or deleting an ambiguously scoped target. |
+| User confirmation | The invoking skill must preserve whether the user authorized durable persistence. `remember-me` must obtain confirmation before persisting an inference, replacing an explicit preference, resolving a consequential conflict, retaining information whose sensitivity creates material privacy, safety, or misuse risk, or deleting an ambiguously scoped target. |
 
 Other bundled skills must not maintain competing personal-profile files. A current-task override remains local to the task unless this update contract completes an authorized durable change.
 
@@ -80,4 +100,4 @@ Use the external owner's canonical contract directly rather than copying its sch
 
 ## No reverse handoff
 
-`research-briefing` remains an independent entry point and has no automatic handoff to `superb-skills`. Use both only when the user's request includes both substantive research and instruction-package design.
+`research-briefing` remains an independent entry point and has no automatic handoff to `superb-skills` or `teach-me`. Use coordinated skills only when the user's request includes their distinct goals; completing research does not automatically begin a lesson or an instruction-design workflow.

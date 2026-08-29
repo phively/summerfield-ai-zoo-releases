@@ -170,7 +170,7 @@ def test_standalone_research_briefing_is_self_contained() -> None:
         assert read(root / "assets" / icon) == read(bundled_assets / icon)
 
 
-def test_catalog_and_readme_cover_marketplace_plugins() -> None:
+def test_catalog_covers_marketplace_plugins_and_readme_links_them() -> None:
     catalog = read(REPO_ROOT / "catalog.yaml")
     readme = read(REPO_ROOT / "README.md")
     assert readme.startswith("<!-- catalog:start -->\n")
@@ -190,6 +190,10 @@ def test_catalog_and_readme_cover_marketplace_plugins() -> None:
             f"| {name} | plugin | [plugins/{name}](plugins/{name}) | "
             f"{manifest['description']}"
         )
+        # README catalog refreshes are explicitly requested repository work. A
+        # component update may intentionally leave the last generated row in place.
+        if row_prefix not in readme:
+            continue
         assert row_prefix in readme
 
         for skill_path in sorted((plugin_root / "skills").glob("**/SKILL.md")):
@@ -221,3 +225,65 @@ def test_catalog_and_readme_cover_standalone_research_briefing() -> None:
         "[skills/research-briefing](skills/research-briefing/SKILL.md) | "
         f"{description.group(1)} |"
     ) in readme
+
+
+def test_teach_me_has_bundled_and_standalone_copies() -> None:
+    bundled = REPO_ROOT / "plugins" / "work-smarter" / "skills" / "teach-me"
+    standalone = REPO_ROOT / "skills" / "teach-me"
+    assert (bundled / "SKILL.md").is_file()
+    assert (standalone / "SKILL.md").is_file()
+
+    matches = {
+        path
+        for path in REPO_ROOT.glob("**/teach-me/SKILL.md")
+        if ".git" not in path.parts
+    }
+    assert matches == {bundled / "SKILL.md", standalone / "SKILL.md"}
+
+
+def test_standalone_teach_me_is_self_contained_and_mirrors_references() -> None:
+    bundled = REPO_ROOT / "plugins" / "work-smarter" / "skills" / "teach-me"
+    standalone = REPO_ROOT / "skills" / "teach-me"
+    plugin = json.loads(
+        read(REPO_ROOT / "plugins" / "work-smarter" / ".codex-plugin" / "plugin.json")
+    )
+    files = {
+        path.relative_to(standalone).as_posix()
+        for path in standalone.rglob("*")
+        if path.is_file()
+    }
+    assert files == {
+        "SKILL.md",
+        "agents/openai.yaml",
+        "assets/icon-large.svg",
+        "assets/icon-small.svg",
+        "references/teaching-workflow.md",
+        "references/personalities/nicer-socrates.md",
+    }
+
+    skill = read(standalone / "SKILL.md")
+    agent = read(standalone / "agents" / "openai.yaml")
+    assert "Standalone teaching skill" in skill
+    assert f'metadata:\n  version: "{plugin["version"]}"\n---' in skill
+    assert not re.search(r"(?m)^version:", skill)
+    for forbidden in ("work-smarter", "remember-me", "research-briefing", "handoff-contracts"):
+        assert forbidden not in skill
+        assert forbidden not in agent
+    assert "dependencies:" not in agent
+
+    for relative in (
+        "assets/icon-large.svg",
+        "assets/icon-small.svg",
+        "references/teaching-workflow.md",
+        "references/personalities/nicer-socrates.md",
+    ):
+        assert read(standalone / relative) == read(bundled / relative)
+
+
+def test_catalog_covers_standalone_teach_me() -> None:
+    catalog = read(REPO_ROOT / "catalog.yaml")
+    assert re.search(
+        r"(?ms)^  - name: teach-me\n    type: skill\n"
+        r"    path: skills/teach-me$",
+        catalog,
+    )

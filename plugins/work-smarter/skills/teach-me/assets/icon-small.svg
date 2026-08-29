@@ -1,0 +1,14 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Teach Me">
+  <defs>
+    <linearGradient id="tm-icon-bg" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#315C73"/>
+      <stop offset="1" stop-color="#173B57"/>
+    </linearGradient>
+  </defs>
+  <rect x="1" y="1" width="22" height="22" rx="5" fill="url(#tm-icon-bg)"/>
+  <path d="M5.5 7.5c2.2-.8 4.2-.5 6 .9v9c-1.8-1.4-3.8-1.7-6-.9v-9Z" fill="#EAFBFF" stroke="#68D8FF" stroke-linejoin="round"/>
+  <path d="M18.5 7.5c-2.2-.8-4.2-.5-6 .9v9c1.8-1.4 3.8-1.7 6-.9v-9Z" fill="#D9F7F1" stroke="#63D7C4" stroke-linejoin="round"/>
+  <path d="M12 8.5v9" stroke="#F6C76A" stroke-linecap="round"/>
+  <path d="M14.7 10.2c0-1 .7-1.7 1.8-1.7 1 0 1.7.6 1.7 1.5 0 1.3-1.5 1.4-1.5 2.5" stroke="#315C73" stroke-width=".8" stroke-linecap="round"/>
+  <circle cx="16.7" cy="14" r=".55" fill="#315C73"/>
+</svg>

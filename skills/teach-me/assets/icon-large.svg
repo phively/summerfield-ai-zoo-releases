@@ -1,0 +1,23 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Teach Me">
+  <defs>
+    <linearGradient id="tm-logo-bg" x1="6" y1="5" x2="58" y2="59" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#315C73"/>
+      <stop offset="1" stop-color="#102A43"/>
+    </linearGradient>
+    <linearGradient id="tm-page-left" x1="14" y1="18" x2="31" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F4FCFF"/>
+      <stop offset="1" stop-color="#CBEFF8"/>
+    </linearGradient>
+    <linearGradient id="tm-page-right" x1="50" y1="18" x2="33" y2="48" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E9FFFA"/>
+      <stop offset="1" stop-color="#BEEFE5"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#tm-logo-bg)"/>
+  <path d="M12 19c7-2.8 13.6-1.7 20 3.2v28c-6.4-4.9-13-6-20-3.2V19Z" fill="url(#tm-page-left)" stroke="#77DDF5" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M52 19c-7-2.8-13.6-1.7-20 3.2v28c6.4-4.9 13-6 20-3.2V19Z" fill="url(#tm-page-right)" stroke="#72E0CD" stroke-width="1.8" stroke-linejoin="round"/>
+  <path d="M32 22.5v28" stroke="#F6C76A" stroke-width="2" stroke-linecap="round"/>
+  <path d="M17 27c3.5-.8 6.7-.3 9.8 1.4M17 33c3.5-.8 6.7-.3 9.8 1.4M17 39c3.5-.8 6.7-.3 9.8 1.4" stroke="#27758D" stroke-width="1.6" stroke-linecap="round" opacity=".75"/>
+  <path d="M38.5 29.5c0-3.1 2.2-5 5.5-5 3.1 0 5.2 1.8 5.2 4.6 0 3.8-4.6 4.2-4.6 7.3" stroke="#177E89" stroke-width="2.2" stroke-linecap="round"/>
+  <circle cx="44.6" cy="41" r="1.7" fill="#E6A65D" stroke="#B8782F" stroke-width=".7"/>
+</svg>

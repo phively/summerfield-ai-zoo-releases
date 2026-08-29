@@ -49,12 +49,13 @@ Read the working briefing first. Retrieve the smallest relevant historical or su
 - a superseded rule may need restoration or reconsideration; or
 - required evidence or detail was intentionally omitted from the briefing.
 
-Do not load an archive merely because it exists. For large records, support targeted retrieval with descriptive headings, stable identifiers, a table of contents, metadata, or documented search patterns.
+Do not load an archive merely because it exists. For large records, support targeted retrieval with descriptive headings, stable identifiers, metadata, documented search patterns, or a table of contents when it materially improves bounded retrieval. A missing table of contents is not itself an audit trigger; a stale structure aid, repeated bounded-retrieval failure, or routine loading of unrelated content is.
 
 ## Pointers
 
 - Give material historical entries stable identifiers such as `H-YYYY-MM-DD-NN`.
-- Include the canonical file identity, entry identifier, subject, and condition for consulting it.
+- Include the canonical provider and library or container scope, immutable resource or object identifier, canonical permalink, stable internal entry identifier, subject, and condition for consulting it when those identity fields are available.
+- Keep the visible filename, title, path, and search terms as recovery fallbacks. For a local filesystem without provider identifiers or permalinks, use the resolved durable path and stable internal entry identifier.
 - Do not use line numbers or a filename alone as durable pointers.
 - Keep references shallow and link core instructions directly to each potentially needed resource.
 - Resolve pointers to canonical records; never create skill-local copies or parallel authorities.
@@ -62,7 +63,7 @@ Do not load an archive merely because it exists. For large records, support targ
 
 Example:
 
-> For the rationale and superseded alternatives behind the current compensation rule, consult `Career_Direction_History.md`, entry `H-2026-08-12-03`, only when reviewing or changing that rule.
+> For the rationale and superseded alternatives behind the current compensation rule, consult provider `Google Drive`, container `Career records`, resource ID `1AbC...`, canonical permalink `https://drive.google.com/open?id=1AbC...`, visible filename `Career_Direction_History.md` as a recovery fallback, and entry `H-2026-08-12-03`, only when reviewing or changing that rule.
 
 ## Coherent updates
 
@@ -90,22 +91,23 @@ Update only affected sections and justified pointers when that preserves a coher
 
 ## Lifecycle review triggers
 
-Every persistent-memory design must define at least one measurable elapsed-time, byte-size, token-estimate, or material-change-count threshold. Check it at an inexpensive workflow boundary such as an authorized write, explicit audit, or consequential use; do not repeatedly load full records merely to test the trigger. A threshold makes an audit due. It never decides the lifecycle action by itself.
+Every persistent-memory design must define independently observable review triggers in four classes: a measurable elapsed-time, byte-size, token-estimate, growth, or material-change-count threshold; a lifecycle operation; an integrity or coherence failure; and a retrieval or identity failure. Check inexpensive metadata at a workflow boundary such as an authorized write, explicit audit, or consequential use; do not repeatedly load full records merely to test a trigger. Any trigger can make an audit due. No trigger decides the lifecycle action by itself.
 
 When domain evidence supplies no better threshold, use this conservative default design heuristic and label it as a heuristic rather than a research finding:
 
-- review when the routing or current-state file exceeds 8 KiB, any detailed current file exceeds 16 KiB, or 180 days have elapsed since its recorded audit;
-- audit before every compaction, split, merge, archive migration, or authority transfer regardless of size or age; and
+- review when the routing or current-state file exceeds 8 KiB, any detailed current file exceeds 16 KiB, 180 days have elapsed since its recorded audit, 25 material changes have accumulated since audit, or the record has grown by 25 percent since audit when that metadata is inexpensive to maintain;
+- audit before every persistent-record compaction, split, merge, deduplication, archive migration, schema migration, or authority transfer regardless of size or age;
+- audit when current authorities conflict or duplicate each other, current state is contradictory or no longer understandable without history, a required pointer or canonical identity no longer resolves, an index or structure aid is stale, bounded retrieval repeatedly misses relevant current state, or routine retrieval must load substantial unrelated content; and
 - if a due audit is not authorized or cannot run safely, report it as due and continue read-only with explicit uncertainty rather than silently rewriting memory.
 
-Choose the resulting action from retrieval quality, decision relevance, provenance needs, ownership, and observed failure modes. A stable oversized file may remain intact; a smaller file may need repair when it is contradictory or hard to retrieve accurately.
+Choose the resulting action from retrieval quality, decision relevance, provenance needs, ownership, and observed failure modes. A stable oversized file may remain intact; a smaller file may need repair when it is contradictory or hard to retrieve accurately. Conversation-context compaction is different from persistent-record compaction: refresh the conversation's current brief and recheck exact constraints after context compaction, but audit persistent records only when one of their own triggers is met.
 
 ## Loss-controlled audits
 
 Treat a maintenance rewrite as a staged transaction:
 
-1. Resolve the canonical current authority and all dependent indexes, topic files, histories, and pointers.
-2. Preserve a recoverable pre-audit snapshot and record complete file identities, byte sizes, and SHA-256 hashes.
+1. Resolve the canonical current authority and all dependent indexes, topic files, histories, and pointers by provider-scoped identity and permalink when available, using filenames and paths only as recovery fallbacks.
+2. Preserve a recoverable pre-audit snapshot and record complete staged file paths, canonical resource identities, byte sizes, and SHA-256 hashes. Treat the staged path as an audit location, not as the resource's durable authority.
 3. Inventory semantic items before drafting: active facts, exact constraints, numerical rules, provenance, stable identifiers, required pointers, meaningful history, uncertainty, and ownership metadata. Classify disposable formatting, transient text, and valueless duplication separately.
 4. Build the proposed state outside the canonical location. Compare the complete before and after file sets and create a bidirectional ledger mapping every pre-audit item to retained, moved, reworded, updated, archived, or justified removal, and every post-audit item to its origin or an authorized addition.
 5. Preserve exact constraints, numerical values, provenance, and stable identifiers byte-for-byte during compaction or splitting. Preserve pointer targets and entry identifiers; revise a pointer path only in the staged ledger with justification and verified resolution. Require explicit authorization for a factual update and an explicit semantic-equivalence review for rewording other protected information. Never classify protected information as disposable.
@@ -128,7 +130,10 @@ This process proves structural and declared semantic coverage; deterministic has
 
 For each persistent record, define:
 
-- canonical filename or resource identity;
+- provider and library or container scope;
+- immutable provider resource or object identifier and canonical permalink when exposed;
+- visible filename, title, path, and search terms as human recovery fallbacks;
+- stable internal entry identifiers when a pointer targets part of the resource;
 - owning skill or workflow;
 - current-state authority;
 - permitted readers and writers;
@@ -137,7 +142,7 @@ For each persistent record, define:
 - conflict-resolution rule; and
 - behavior when the record is missing, duplicated, ambiguous, or inaccessible.
 
-Preserve an existing canonical file's identity and update it in place. Do not create a replacement or competing copy because access is inconvenient. Resolve the authoritative source before writing when multiple plausible records could change the result. If the authority is missing or inaccessible, do not imply persistence; provide a clearly labeled proposed update when useful.
+Preserve an existing canonical resource's identity and update it in place. A rename changes fallback metadata, not authority. After a move, verify that the provider-scoped identifier still resolves and update the permalink or fallback location when needed. Treat a copy as a new identity unless the provider explicitly preserves identity semantics. If an identifier or permalink fails, try the other canonical field, then use filename, title, path, and search terms only to locate candidates; verify identity before use and never choose among same-named candidates by filename alone. Do not create a replacement or competing copy because access is inconvenient. Resolve the authoritative source before writing when multiple plausible records could change the result. If the authority is missing or inaccessible, do not imply persistence; provide a clearly labeled proposed update when useful.
 
 ## Coherence checks
 

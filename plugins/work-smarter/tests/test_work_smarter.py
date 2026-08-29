@@ -56,7 +56,7 @@ def test_research_checkpoint_is_preserved() -> None:
     assert "must not treat initiation of the handoff as confirmation" in contract
 
 
-def test_research_checkpoint_offers_phases_only_for_unusually_large_work() -> None:
+def test_research_checkpoint_offers_phases_only_for_defined_large_work() -> None:
     research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
     for phrase in (
         "multiple separable issues or research domains",
@@ -91,7 +91,7 @@ def test_svg_assets_are_referenced_and_sized() -> None:
         root = ET.parse(ROOT / relative.removeprefix("./")).getroot()
         assert (root.get("width"), root.get("height"), root.get("viewBox")) == expected
 
-    for skill in ("remember-me", "research-briefing", "superb-skills"):
+    for skill in ("remember-me", "research-briefing", "superb-skills", "teach-me"):
         assets = ROOT / "skills" / skill / "assets"
         for filename, expected in (
             ("icon-small.svg", ("24", "24", "0 0 24 24")),
@@ -138,6 +138,9 @@ def test_bundled_skills_consult_remember_me_selectively() -> None:
         assert "smallest sufficient set of relevant current context" in skill
         assert "Expand retrieval when the bounded context" in skill
         assert "silently changing durable memory" in skill
+    teaching = read(ROOT / "skills" / "teach-me" / "SKILL.md")
+    assert "smallest sufficient set of relevant current context" in teaching
+    assert "silently changing durable memory" in teaching
     research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
     assert "it is not evidence for an external claim" in research
 
@@ -145,6 +148,7 @@ def test_bundled_skills_consult_remember_me_selectively() -> None:
 def test_remember_me_contracts_preserve_authority_and_confirmation() -> None:
     contract = read(ROOT / "shared" / "handoff-contracts.md")
     for heading in (
+        "Teach Me to Research Briefing",
         "Bundled Skills to Remember Me: targeted consultation",
         "Bundled Skills to Remember Me: durable update request",
         "Remember Me to External Domain Owner",
@@ -159,6 +163,7 @@ def test_manifest_represents_all_bundled_skills() -> None:
     manifest = json.loads(read(ROOT / ".codex-plugin" / "plugin.json"))
     description = manifest["description"]
     assert "research" in description
+    assert "interactive teaching" in description
     assert "instruction design" in description
     assert "personal-context indexing" in description
 
@@ -211,8 +216,66 @@ def test_memory_maintenance_triggers_are_measurable_and_non_destructive() -> Non
     for phrase in ("8 KiB", "16 KiB", "180 days", "conservative default design heuristic"):
         assert phrase in memory
         assert phrase in records
-    assert "A threshold makes an audit due. It never decides" in memory
+    assert "Any trigger can make an audit due. No trigger decides" in memory
     assert "A due trigger requires review, not automatic" in remember
+
+
+def test_comparative_claims_require_basis_but_preserve_labeled_opinion() -> None:
+    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
+    instruction = read(ROOT / "skills" / "superb-skills" / "references" / "instruction-design.md")
+    evaluation = read(ROOT / "skills" / "superb-skills" / "references" / "evaluation.md")
+    research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
+    remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
+    contract = read(ROOT / "shared" / "handoff-contracts.md")
+
+    for artifact in (superb, instruction, research, remember):
+        assert "explicit or implicit comparison" in artifact
+        assert "comparison set" in artifact or "reference set" in artifact
+        assert "supported absolute property" in artifact
+        assert "subjective" in artifact
+    assert "unsupported explicit and implicit comparisons" in evaluation
+    assert "reference set and supporting evidence" in contract
+
+
+def test_record_identity_prefers_provider_ids_and_permalinks() -> None:
+    memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
+    remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
+    records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
+    contract = read(ROOT / "shared" / "handoff-contracts.md")
+
+    for artifact in (memory, remember, records, contract):
+        assert "provider" in artifact
+        assert "library or container" in artifact
+        assert "permalink" in artifact
+        assert "fallback" in artifact
+    assert "Treat a copy as a new identity" in records
+    assert "never choose among same-named candidates by filename alone" in memory
+
+
+def test_memory_review_uses_independent_trigger_classes() -> None:
+    memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
+    records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
+
+    for artifact in (memory, records):
+        for phrase in (
+            "25 material changes", "25 percent", "conflict", "pointer",
+            "bounded retrieval", "substantial unrelated content",
+        ):
+            assert phrase in artifact
+    assert "No trigger decides the lifecycle action by itself" in memory
+    assert "table of contents or section map is a conditional retrieval aid" in records
+
+
+def test_context_compaction_is_distinct_from_record_compaction() -> None:
+    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
+    memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
+    records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
+
+    assert "Conversation-context compaction does not by itself" in superb
+    assert "Conversation-context compaction is different from persistent-record compaction" in memory
+    assert "Conversation-context compaction is not persistent-record compaction" in records
+    for artifact in (superb, memory, records):
+        assert "recheck exact" in artifact
 
 
 def test_memory_audit_validates_complete_staged_rewrite_and_rejects_loss() -> None:
@@ -342,6 +405,66 @@ def test_skill_creator_remains_implementation_authority() -> None:
     assert "Treat it as authoritative" in plugin
 
 
+def test_teach_me_researches_before_teaching_and_avoids_reflexive_agreement() -> None:
+    root = ROOT / "skills" / "teach-me"
+    skill = read(root / "SKILL.md")
+    workflow = read(root / "references" / "teaching-workflow.md")
+    personality = read(root / "references" / "personalities" / "nicer-socrates.md")
+
+    assert "Complete the research before substantive teaching begins" in skill
+    assert "must not begin substantive teaching" in read(ROOT / "shared" / "handoff-contracts.md")
+    assert "A chain of reasonable answers can still drift" in workflow
+    assert "resisting reflexive agreement" in personality
+    assert "constitutive of the concept" in personality
+
+
+def test_teach_me_default_personality_is_modular_and_purposeful() -> None:
+    root = ROOT / "skills" / "teach-me"
+    skill = read(root / "SKILL.md")
+    personality = read(root / "references" / "personalities" / "nicer-socrates.md")
+
+    assert "](references/personalities/nicer-socrates.md)" in skill
+    assert "Load only the selected personality" in skill
+    assert "fall back to `nicer-socrates.md`" in skill
+    assert "Ask one question at a time" in personality
+    assert "Do not ask a question merely because" in personality
+    assert "Skip directly to explanation" in personality
+
+
+def test_teach_me_memory_is_targeted_and_does_not_store_session_noise() -> None:
+    skill = read(ROOT / "skills" / "teach-me" / "SKILL.md")
+    contract = read(ROOT / "shared" / "handoff-contracts.md")
+
+    assert "smallest sufficient set of relevant current context" in skill
+    assert "Do not persist lesson transcripts" in skill
+    assert "Never maintain a competing learner profile" in skill
+    assert "`superb-skills`, `research-briefing`, or `teach-me`" in contract
+
+
+def test_teach_me_standalone_mirrors_references_without_plugin_dependencies() -> None:
+    plugin_root = ROOT / "skills" / "teach-me"
+    standalone_root = ROOT.parents[1] / "skills" / "teach-me"
+    plugin = json.loads(read(ROOT / ".codex-plugin" / "plugin.json"))
+
+    for relative in (
+        Path("references/teaching-workflow.md"),
+        Path("references/personalities/nicer-socrates.md"),
+        Path("assets/icon-small.svg"),
+        Path("assets/icon-large.svg"),
+    ):
+        assert read(plugin_root / relative) == read(standalone_root / relative)
+
+    standalone_skill = read(standalone_root / "SKILL.md")
+    standalone_agent = read(standalone_root / "agents" / "openai.yaml")
+    assert "Standalone teaching skill" in standalone_skill
+    assert f'metadata:\n  version: "{plugin["version"]}"\n---' in standalone_skill
+    assert "Ask the user to confirm or revise the scope, then wait" in standalone_skill
+    for forbidden in ("work-smarter", "remember-me", "research-briefing", "handoff-contracts"):
+        assert forbidden not in standalone_skill
+        assert forbidden not in standalone_agent
+    assert "dependencies:" not in standalone_agent
+
+
 def test_eval_suite_covers_required_behaviors() -> None:
     cases = json.loads(read(ROOT / "evals" / "regression.json"))["cases"]
     ids = {case["id"] for case in cases}
@@ -359,6 +482,10 @@ def test_eval_suite_covers_required_behaviors() -> None:
         "research-phase-checkpoint-no-response",
         "research-phased-work-stops-after-log",
         "research-waiver-no-phase-pause",
+        "research-unsupported-implicit-comparison",
+        "research-supported-comparison", "research-subjective-comparison",
+        "memory-nonsize-audit-trigger", "memory-context-vs-record-compaction",
+        "memory-conditional-toc", "memory-provider-identity-pointer",
         "contract-failure", "backward-compatibility",
         "remember-explicit", "remember-indirect-query", "remember-negative",
         "remember-owned-topic", "remember-external-career",
@@ -366,6 +493,11 @@ def test_eval_suite_covers_required_behaviors() -> None:
         "remember-stale-summary", "remember-source-conflict",
         "remember-duplicate-index", "remember-task-override",
         "remember-history-gate", "remember-sensitive-content",
+        "teach-explicit", "teach-indirect", "teach-negative-direct-answer",
+        "teach-research-first", "teach-research-failure",
+        "teach-default-personality", "teach-selected-personality",
+        "teach-stuck-explanation", "teach-premise-challenge",
+        "teach-memory-consultation", "teach-memory-no-session-write",
     }.issubset(ids)
 
 

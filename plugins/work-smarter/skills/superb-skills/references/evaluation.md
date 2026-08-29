@@ -14,6 +14,7 @@ Include representative cases for:
 - mixed workflows that may require coordination;
 - unavailable tools or references;
 - likely fabrication, authority, or compatibility failures; and
+- unsupported explicit and implicit comparisons, supported comparisons with a named reference set, and clearly labeled subjective comparisons; and
 - regressions in existing triggers and outputs.
 
 For every case define the input, intended activation and behavior, observable success criteria, and failure criteria. Do not encode only ideal outputs; evaluate process requirements such as confirmation, source use, file preservation, and prohibited actions.

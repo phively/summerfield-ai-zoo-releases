@@ -1,0 +1,8 @@
+interface:
+  display_name: "Teach Me"
+  short_description: "Learn concepts through adaptive dialogue"
+  default_prompt: "Use $teach-me to help me understand this topic through source-grounded, interactive teaching."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true
