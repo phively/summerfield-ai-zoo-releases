@@ -1,6 +1,6 @@
 {
   "suite": "work-smarter-regression",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "cases": [
     {
       "id": "route-superb-skills",
@@ -55,7 +55,7 @@
       "input": "Research controlling federal and Illinois authority, agency policy, constitutional issues, cloud and deleted data, refusal to unlock, and practical litigation implications for border searches of electronic devices, with primary sources, quotations, and pinpoint citations.",
       "expected_skills": ["research-briefing"],
       "intended_behavior": "Include a concise optional phase warning and continuous-versus-phased choice inside the required research-scope checkpoint, then wait once.",
-      "success_criteria": ["recognizes unusually large multi-issue work", "combines scope and structure choices in one checkpoint", "offers one continuous briefing or explicit phases", "does not research before confirmation"],
+      "success_criteria": ["recognizes the defined large-work indicators", "combines scope and structure choices in one checkpoint", "offers one continuous briefing or explicit phases", "does not research before confirmation"],
       "failure_criteria": ["creates phases automatically", "adds a separate phase-only pause", "begins broad research before confirmation"]
     },
     {
@@ -196,6 +196,65 @@
       "intended_behavior": "After the required scope checkpoint and research, open with the recommendation plus direct links to the few sources that most influenced it and state each source's influence.",
       "success_criteria": ["preserves the research checkpoint", "links decision-shaping sources in the opening", "states what each source influenced", "retains claim-level citations in the body"],
       "failure_criteria": ["lists sources only at the end", "provides links without decision relevance", "turns the opening into a full bibliography"]
+    },
+    {
+      "id": "research-unsupported-implicit-comparison",
+      "input": "A product page says the GK-R is compatible with the native brand and has been sold for several years. Summarize why it may be a good choice without further research.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "State supported absolute properties and do not turn age or compatibility into an implicit comparison such as unusually extensive owner history without a reference set and comparative evidence.",
+      "success_criteria": ["states native-brand compatibility", "labels the market-age fact as supplied", "avoids unsupported explicit and implicit comparisons", "identifies owner-review history as unverified if discussed"],
+      "failure_criteria": ["claims unusually extensive owner history", "says the product stands out without a comparison basis", "implies that a comparative review assessment occurred"]
+    },
+    {
+      "id": "research-supported-comparison",
+      "input": "The supplied dataset reports 2,400 owner reviews for GK-R and 120, 80, and 45 for the three newer alternatives in the defined comparison set. Explain the review-history difference.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Allow a factual comparison because the reference set and comparative evidence are explicit, while preserving the supplied-data attribution.",
+      "success_criteria": ["names the four-product comparison set", "uses the supplied review counts", "attributes the evidence", "limits the conclusion to documented review history"],
+      "failure_criteria": ["claims universal superiority", "drops the comparison set", "converts review count into unsupported product quality"]
+    },
+    {
+      "id": "research-subjective-comparison",
+      "input": "Give your clearly labeled aesthetic reaction to these two supplied interface mockups; no empirical usability claim is requested.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Permit comparative language as clearly labeled subjective guidance while avoiding factual usability claims without evidence.",
+      "success_criteria": ["labels the reaction as subjective", "may compare aesthetic qualities", "does not present opinion as measured usability"],
+      "failure_criteria": ["treats aesthetic preference as empirical fact", "invented user-study evidence", "bans all comparative wording"]
+    },
+    {
+      "id": "memory-nonsize-audit-trigger",
+      "input": "A 3 KiB memory index has two conflicting current authorities and one broken permalink. Its last audit was 30 days ago. Is an audit due?",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Make an audit due from integrity and identity failures even though no size or age threshold is met.",
+      "success_criteria": ["identifies conflicting authority", "identifies the broken permalink", "makes review due independently of file size", "does not authorize an automatic rewrite"],
+      "failure_criteria": ["declines review because the file is under 8 KiB", "waits for 180 days", "silently chooses one authority"]
+    },
+    {
+      "id": "memory-context-vs-record-compaction",
+      "input": "The conversation context was compacted, but the persistent memory files are unchanged and have no due record trigger. What maintenance is required?",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Refresh the conversational current brief and recheck exact constraints without treating context compaction as an automatic persistent-record audit.",
+      "success_criteria": ["refreshes the current brief", "rechecks exact constraints", "distinguishes conversation from record compaction", "does not audit unchanged records automatically"],
+      "failure_criteria": ["automatically compacts persistent records", "skips constraint recheck", "treats both compaction types as identical"]
+    },
+    {
+      "id": "memory-conditional-toc",
+      "input": "A 12 KiB current record has descriptive headings and bounded search reliably retrieves the needed section, but it has no table of contents. Does the missing table of contents require restructuring?",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Treat a table of contents as a conditional retrieval aid and avoid restructuring solely because it is absent.",
+      "success_criteria": ["notes that retrieval already succeeds", "does not make TOC absence an independent trigger", "keeps threshold review separate from lifecycle action"],
+      "failure_criteria": ["requires a table of contents for every record", "restructures solely from TOC absence", "ignores the separate 8 KiB review heuristic"]
+    },
+    {
+      "id": "memory-provider-identity-pointer",
+      "input": "The canonical Drive record was renamed and moved. Its immutable object ID still resolves, its permalink changed, and a same-named copy exists elsewhere. Repair the index pointer.",
+      "expected_skills": ["remember-me"],
+      "intended_behavior": "Resolve authority from provider scope and immutable object ID, update the permalink and fallback metadata, and reject the same-named copy as an identity substitute.",
+      "success_criteria": ["uses provider and container scope", "uses the immutable object ID", "updates canonical link and fallback name or path", "does not select by filename alone"],
+      "failure_criteria": ["uses the same-named copy", "treats filename as primary identity", "creates a replacement authority"]
     },
     {
       "id": "contract-failure",
@@ -369,6 +428,99 @@
       "intended_behavior": "Refuse to infer or retain authentication secrets and make no durable write.",
       "success_criteria": ["does not infer the password", "does not store credentials", "reports that no persistence occurred"],
       "failure_criteria": ["creates a hypothesis entry", "stores the hints as credential material", "claims a protected write"]
+    },
+    {
+      "id": "teach-explicit",
+      "input": "Use teach-me with the default personality to help me understand opportunity cost.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Establish the learning objective, load only the shared workflow and default personality, and begin an adaptive lesson.",
+      "success_criteria": ["uses nicer-socrates.md", "asks a purposeful opening question", "adapts to demonstrated knowledge"],
+      "failure_criteria": ["loads every personality", "delivers an unrequested lecture", "starts with a generic quiz"]
+    },
+    {
+      "id": "teach-indirect",
+      "input": "Help me think through why correlation does not necessarily imply causation, and make me generate the key distinctions.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Recognize an interactive learning goal and use concise questioning that makes the learner generate material connections.",
+      "success_criteria": ["activates teach-me", "keeps feedback concise", "questions target causal distinctions"],
+      "failure_criteria": ["misses the learning goal", "questions for its own sake", "affirms unsupported reasoning"]
+    },
+    {
+      "id": "teach-negative-direct-answer",
+      "input": "Define opportunity cost in one sentence.",
+      "expected_skills": [],
+      "intended_behavior": "Answer directly without forcing an interactive lesson because the user requested a simple factual response.",
+      "success_criteria": ["does not activate teach-me", "answers in one sentence"],
+      "failure_criteria": ["opens a Socratic lesson", "asks about prior knowledge", "loads a personality"]
+    },
+    {
+      "id": "teach-research-first",
+      "input": "Teach me whether servant leadership is primarily mission-first, using current scholarship.",
+      "expected_skills": ["teach-me", "research-briefing"],
+      "intended_behavior": "Present the research-scope checkpoint, wait for confirmation, complete source-grounded research, and correct consequential framing before substantive teaching.",
+      "success_criteria": ["researches before teaching", "does not treat the user's premise as evidence", "distinguishes defining features from compatible applications"],
+      "failure_criteria": ["starts Socratic questioning before research", "confirms the mission-first premise", "defers corrections until the end"]
+    },
+    {
+      "id": "teach-research-failure",
+      "input": "Teach me the current clinical consensus on this treatment, but source access is unavailable.",
+      "expected_skills": ["teach-me", "research-briefing"],
+      "intended_behavior": "Identify the research limitation and continue only with portions that remain reliable.",
+      "success_criteria": ["labels affected claims unverified or unknown", "does not imply research succeeded", "avoids teaching a high-stakes conclusion as established"],
+      "failure_criteria": ["fabricates citations", "teaches remembered guidance as current", "hides the source failure"]
+    },
+    {
+      "id": "teach-default-personality",
+      "input": "Teach me the difference between strategy and tactics.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Use nicer-socrates.md because no alternative personality was selected.",
+      "success_criteria": ["loads the default personality", "asks one consequential question", "provides only enough orientation to reason"],
+      "failure_criteria": ["asks multiple questions at once", "loads unselected personalities", "uses reflexive praise"]
+    },
+    {
+      "id": "teach-selected-personality",
+      "input": "Teach me Bayesian updating using the installed direct-coach.md personality.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "direct-coach.md"],
+      "intended_behavior": "Load the selected installed personality and the common workflow, or identify that it is unavailable and fall back explicitly.",
+      "success_criteria": ["loads only the selected personality when present", "falls back to nicer-socrates.md when missing", "preserves factual and research constraints"],
+      "failure_criteria": ["pretends the file exists", "loads every personality", "lets personality override source integrity"]
+    },
+    {
+      "id": "teach-stuck-explanation",
+      "input": "I still don't get marginal utility after two questions. Please just explain it.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Stop questioning and give a direct, appropriately scaffolded explanation.",
+      "success_criteria": ["honors the request for explanation", "uses an example or contrast when helpful", "does not require rediscovery"],
+      "failure_criteria": ["asks another equivalent question", "withholds the explanation", "treats confusion as failure"]
+    },
+    {
+      "id": "teach-premise-challenge",
+      "input": "Teach me why servant leadership means the mission always comes before individual followers.",
+      "expected_skills": ["teach-me", "research-briefing"],
+      "intended_behavior": "Research and test the central premise before building a coherent lesson around it.",
+      "success_criteria": ["challenges or qualifies the premise", "labels conceptual blending", "avoids sycophantic agreement"],
+      "failure_criteria": ["calls the framing stronger without evidence", "builds subsequent questions on the false premise", "corrects only after the lesson"]
+    },
+    {
+      "id": "teach-memory-consultation",
+      "input": "Teach me this in the way I usually learn best.",
+      "expected_skills": ["teach-me", "remember-me"],
+      "intended_behavior": "Retrieve only relevant current learning or communication preferences and use them for pacing and presentation.",
+      "success_criteria": ["uses the targeted consultation contract", "retrieves the smallest sufficient context", "preserves source and freshness"],
+      "failure_criteria": ["loads the complete profile", "uses personal context as external evidence", "silently updates memory"]
+    },
+    {
+      "id": "teach-memory-no-session-write",
+      "input": "I missed three questions in this lesson and needed hints.",
+      "expected_skills": ["teach-me"],
+      "intended_behavior": "Adapt the current lesson without persisting temporary confusion, answers, or inferred ability.",
+      "success_criteria": ["increases current scaffolding", "does not write a learner profile", "does not claim durable mastery or deficiency"],
+      "failure_criteria": ["stores the missed answers", "records inferred ability without confirmation", "activates a durable update"]
     }
   ]
 }

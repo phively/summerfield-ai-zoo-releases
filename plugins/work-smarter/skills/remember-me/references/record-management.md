@@ -5,6 +5,7 @@ Read this reference before creating or changing the index or a topic file, selec
 ## Contents
 
 - [Canonical records](#canonical-records)
+- [Resource identity](#resource-identity)
 - [Index schema](#index-schema)
 - [Topic ownership and taxonomy](#topic-ownership-and-taxonomy)
 - [Topic-file schema](#topic-file-schema)
@@ -27,6 +28,20 @@ Use a dedicated `remember-me/` folder in the user's selected accessible library.
 
 Do not package or prepopulate these user records in the plugin repository. Create them only at runtime in an authorized library location.
 
+## Resource identity
+
+Identify a library resource with the strongest fields the provider exposes, in this order:
+
+1. provider and library or container scope;
+2. immutable resource or object identifier;
+3. canonical permalink;
+4. visible filename, title, path, and search terms as human recovery fallbacks; and
+5. a stable internal entry identifier when pointing to part of the resource.
+
+For a local filesystem without provider identifiers or permalinks, use the resolved durable path plus a stable internal entry identifier. A rename changes fallback metadata rather than authority. After a move, verify that the provider-scoped identifier still resolves and update the permalink or fallback path when needed. Treat a copy as a new identity unless the provider explicitly preserves identity semantics.
+
+If an identifier or permalink stops resolving, try the other canonical field, then use the fallback metadata to locate candidates and verify the identity before use. Never select among same-named candidates by filename alone. Do not replace the canonical identity with a newly found candidate until authority is verified.
+
 ## Index schema
 
 Keep `index.md` concise and understandable without loading any topic file. Include record owner, exact identity, last-audited date, and one section per populated topic. Record these fields when applicable:
@@ -34,7 +49,8 @@ Keep `index.md` concise and understandable without loading any topic file. Inclu
 - topic name and concise current summary;
 - ownership type: `remember-me` or `external`;
 - owning skill or workflow;
-- exact canonical resource identity or remember-me-relative path;
+- provider and library or container scope, immutable resource or object identifier, and canonical permalink when available;
+- current visible filename, title, path, and search terms as recovery fallbacks, or a remember-me-relative durable path when no provider identity exists;
 - evidence classification and source attribution;
 - last verified or refreshed date;
 - refresh trigger or justified review interval;
@@ -75,7 +91,7 @@ Temporary unavailability does not erase an established external owner's authorit
 
 Keep each current topic file operationally complete without history. Include when applicable:
 
-- title, owner, exact identity, last-updated date, and effective date;
+- title, owner, provider-scoped resource identity and permalink, fallback filename or path, last-updated date, and effective date;
 - current user-stated facts and confirmed preferences;
 - evidence-supported patterns and their supporting examples or source identities;
 - reasonable inferences and working hypotheses under explicit labels;
@@ -88,7 +104,7 @@ Consolidate duplicate active formulations. Do not store complete conversation tr
 
 ## External summaries
 
-Request only what the index needs: topic, bounded current summary, exact canonical identity, owner, last-updated date when visible, evidence classifications, uncertainty, refresh trigger, and retrieval condition. Do not request or pass a complete history.
+Request only what the index needs: topic, bounded current summary, provider and library or container scope, immutable resource or object identifier, canonical permalink, fallback filename or title, owner, last-updated date when visible, evidence classifications, uncertainty, refresh trigger, and retrieval condition. Do not request or pass a complete history.
 
 The external source remains authoritative for domain detail. If the index conflicts with it, use the external source, label the index stale, and request a bounded refresh. A failed retrieval is not evidence that the source does not exist. Never invent an identity, date, summary, or successful handoff.
 
@@ -105,7 +121,7 @@ Do not create `history.md` until meaningful superseded state, rationale, provena
 - replacement or restoration relationship; and
 - unresolved uncertainty.
 
-A current-file pointer must name `history.md`, the stable entry identifier, subject, and condition for consulting it. Do not use line numbers or a filename alone. Never archive trivial edits, transient state, valueless duplication, secrets, or information the user explicitly asked to forget.
+A current-file pointer must record the history resource's provider-scoped identity and canonical permalink when available, visible `history.md` filename as a recovery fallback, stable entry identifier, subject, and condition for consulting it. Do not use line numbers or a filename alone. Never archive trivial edits, transient state, valueless duplication, secrets, or information the user explicitly asked to forget.
 
 ## Lifecycle and coherence
 
@@ -127,10 +143,16 @@ Record `last-audited` in `index.md`. At an authorized write, explicit audit, or 
 
 - `index.md` exceeds 8 KiB;
 - a remember-me-owned current topic file exceeds 16 KiB;
-- 180 days have elapsed since `last-audited` or the date is missing; or
-- a compaction, split, merge, archive migration, or ownership transfer is proposed.
+- 180 days have elapsed since `last-audited` or the date is missing;
+- 25 material changes have accumulated since audit, or a record has grown by 25 percent since audit, when that metadata is inexpensive to maintain;
+- a persistent-record compaction, split, merge, deduplication, archive migration, schema migration, or ownership transfer is proposed;
+- duplicate or conflicting current authorities, contradictory active state, or current content that cannot be understood without history is detected;
+- a required resource identifier, permalink, stable entry identifier, or pointer no longer resolves; or
+- a stale index or structure aid, repeated bounded retrieval miss, or routine need to load substantial unrelated content shows that targeted retrieval is failing.
 
-These numerical thresholds are conservative default design heuristics, not universal research findings. They bound routine context while avoiding constant maintenance. Do not read every topic merely to test them, do not treat elapsed time as evidence that stable content is stale, and do not take a lifecycle action from size or age alone. If an audit is due but no write is authorized, report it and continue read-only when reliable.
+These numerical thresholds are conservative default design heuristics, not universal research findings. They bound routine context while avoiding constant maintenance. A table of contents or section map is a conditional retrieval aid, not a requirement or trigger by itself. Do not read every topic merely to test a trigger, do not treat elapsed time as evidence that stable content is stale, and do not take a lifecycle action from any trigger alone. If an audit is due but no write is authorized, report it and continue read-only when reliable.
+
+Conversation-context compaction is not persistent-record compaction. After conversation compaction, refresh the current conversational brief and recheck exact constraints against their authoritative sources. Audit the persistent remember-me records only when one of the record triggers above is met.
 
 For an authorized audit, use the canonical loss-controlled protocol in [Superb Skills working memory](../../superb-skills/references/working-memory.md#loss-controlled-audits). Inventory the complete remember-me file set plus every protected semantic item before drafting. Stage the candidate outside the canonical folder, map all before and after items bidirectionally, run `../../../scripts/validate_memory_audit.py`, and inspect the full diff. A compaction or split must preserve exact constraints, numerical rules, provenance, stable identifiers, required pointer targets, meaningful history, attribution, uncertainty, and ownership. Rewording a protected non-exact item requires a recorded semantic-equivalence review; factual changes require the applicable confirmation and must remain distinct from maintenance.
 
@@ -140,6 +162,8 @@ Replace the canonical files only after validation succeeds, then verify the writ
 
 - Missing index: create it only when persistence is authorized; otherwise report that no durable index was found.
 - Duplicate candidates: resolve the authoritative record before writing when the result could differ.
+- Renamed or moved source: resolve the provider-scoped identity first and update only the fallback metadata that changed.
+- Copied source: treat it as a separate candidate identity and do not transfer authority without verification.
 - Inaccessible source or broken pointer: preserve uncertainty and offer a labeled proposed repair.
 - Partial access or writability: identify the completed and failed operations; never claim coherent persistence.
 - Unsupported external integration: keep reliable routing metadata only and do not simulate a plugin response.

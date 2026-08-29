@@ -10,7 +10,8 @@ Use this reference for one-time prompts, project or custom instructions, and dir
 4. State observable requirements. For conditional behavior, define the trigger, action, exceptions, priority, and fallback.
 5. Remove redundancy, contradictions, ambiguous referents, unattainable guarantees, and instructions that merely restate higher-priority behavior without adding precision.
 6. Add structure only when it improves execution or verification. Do not prescribe a format that conflicts with the user's requested output.
-7. Check that the revision does not silently change authority, introduce unsupported facts, require unavailable tools, or expand the task.
+7. Check every factual or evaluative explicit or implicit comparison. Require a stated comparison set and supporting evidence, or rewrite it as the supported absolute property and reasons. Preserve clearly labeled subjective guidance and aesthetic opinion as opinion.
+8. Check that the revision does not silently change authority, introduce unsupported facts, require unavailable tools, or expand the task.
 
 ## Output behavior
 

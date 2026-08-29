@@ -1,15 +1,20 @@
 {
   "suite": "work-smarter-regression",
-  "plugin_version": "1.4.0",
-  "run_date": "2026-08-16",
+  "plugin_version": "1.6.0",
+  "run_date": "2026-08-29",
   "structural_checks": {
     "remember_me_skill_validator": "passed",
     "superb_skills_skill_validator": "passed",
     "research_briefing_skill_validator": "passed",
+    "teach_me_plugin_skill_validator": "passed",
+    "teach_me_standalone_skill_validator": "passed",
     "plugin_validator": "passed",
-    "contract_and_behavior_tests": "18 passed",
-    "regression_case_schema": "39 cases passed"
+    "contract_and_behavior_tests": "27 passed",
+    "marketplace_and_catalog_tests": "10 passed",
+    "regression_case_schema": "63 cases passed",
+    "full_repository_tests": "89 passed"
   },
+  "forward_test_plugin_version": "1.4.0",
   "forward_test_run_date": "2026-08-16",
   "forward_tests": [
     {
@@ -34,6 +39,8 @@
     }
   ],
   "not_run": [
+    "Clean-context forward tests for the 1.6.0 teach-me activation, research-first dialogue, personality fallback, and memory handoffs",
+    "Clean-context forward tests for the 1.5.0 comparative-language and expanded maintenance-trigger scenarios",
     "Clean-context forward tests for remember-me activation, library writes, and cross-plugin handoffs",
     "Automatic activation testing after installation in a live ChatGPT plugin marketplace",
     "A live maintenance audit against the user's personal memory records",

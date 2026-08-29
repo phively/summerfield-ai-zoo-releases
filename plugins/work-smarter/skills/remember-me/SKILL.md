@@ -16,7 +16,7 @@ Maintain useful personal context without creating competing copies of authoritat
 
 ## Locate the index first
 
-1. Search accessible library and project sources for `remember-me/index.md` or a clearly equivalent master index. Preserve its exact identity.
+1. Search accessible library and project sources for `remember-me/index.md` or a clearly equivalent master index. Resolve it by provider and library or container scope, immutable resource identifier, and canonical permalink when available; use its visible filename, title, path, and search terms only as recovery fallbacks. Preserve its exact identity.
 2. Treat the index as the authority for topic routing, ownership, source identities, and freshness. Treat the topic's identified current record as the authority for detailed current state.
 3. If several plausible indexes exist and the choice could change the result, resolve the authority before substantive use or writing. Do not create a replacement because access is inconvenient.
 4. If no index exists, create `remember-me/index.md` in the user's selected accessible library only when durable persistence is authorized. Do not create profile data inside the installed skill or plugin directory.
@@ -30,6 +30,7 @@ Maintain useful personal context without creating competing copies of authoritat
 - Apply current explicit instructions to the current task. Do not treat a current-task override as authorization to change durable records.
 - Never let stored preferences weaken factual accuracy, evidence integrity, safety requirements, privacy constraints, or non-fabrication rules.
 - Distinguish user-stated facts, confirmed preferences, evidence-supported patterns, reasonable inferences, working hypotheses, unknowns, and superseded information when material.
+- For a factual or evaluative explicit or implicit comparison about the user or their records, identify the compared observations or reference set and the supporting evidence. Otherwise state only the supported absolute property and reasons. Clearly labeled subjective guidance may compare without empirical comparative evidence.
 
 ## Select the topic owner
 
@@ -52,7 +53,7 @@ For a request to forget information, resolve the exact target before deletion wh
 
 ## Refresh and audit
 
-Refresh a summary when the source is newer, the user reports a change, a contradiction appears, the topic is about to affect a consequential decision and may be stale, or its justified review condition is met. Do not refresh solely because time elapsed when the topic is stable and no decision needs it.
+Refresh a summary when the source is newer, the user reports a change, a contradiction appears, an identity or pointer no longer resolves, bounded retrieval fails, the topic is about to affect a consequential decision and may be stale, or its justified review condition is met. Do not refresh solely because time elapsed when the topic is stable and no decision needs it.
 
 At an authorized write, explicit audit, or consequential use, check the measurable maintenance triggers in [record management](references/record-management.md) without loading unrelated topic contents. A due trigger requires review, not automatic refresh, deletion, compaction, or splitting.
 
@@ -62,7 +63,7 @@ During an audit, apply the general loss-controlled process in [working memory](.
 
 - Retain only information with plausible future value.
 - Never store passwords, authentication secrets, financial credentials, or unnecessary sensitive detail.
-- Require confirmation before persisting an inference, replacing an explicit preference, resolving a consequential conflict, or retaining unusually sensitive information.
+- Require confirmation before persisting an inference, replacing an explicit preference, resolving a consequential conflict, or retaining information whose sensitivity creates material privacy, safety, or misuse risk.
 - Preserve household-member attribution and do not generalize one person's preference to another.
 - If a record is unavailable, ambiguous, or partially writable, preserve uncertainty and provide a clearly labeled proposed update. Never imply that a read, refresh, or write succeeded when it did not.
 

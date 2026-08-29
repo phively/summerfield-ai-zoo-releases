@@ -11,3 +11,6 @@ components:
   - name: research-briefing
     type: skill
     path: skills/research-briefing
+  - name: teach-me
+    type: skill
+    path: skills/teach-me

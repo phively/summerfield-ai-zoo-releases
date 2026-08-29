@@ -51,6 +51,7 @@ Explain a placement decision only when alternatives have material tradeoffs. Nev
 - Consolidate overlap; remove contradictions, ambiguity, unsupported requirements, unnecessary edge cases, and uncontrolled duplicate authority.
 - Match specificity to operational risk. Preserve judgment for variable work; use strict procedures or scripts for fragile repetition.
 - Distinguish user-provided facts, verified facts, source claims, reasonable inferences, hypotheses, unknowns, and recommendations when material.
+- For a factual or evaluative explicit or implicit comparison, identify the relevant comparison set and require evidence that supports the comparison. If either is missing, state only the supported absolute property and its reasons. Clearly labeled subjective guidance or aesthetic opinion may use comparative language without empirical comparative evidence.
 - Never invent requirements, preferences, evidence, platform capabilities, tool results, or missing content.
 - For persistent memory, optimize in strict order: reliable recall of relevant information; fewer tokens to read and update context; then retrieval speed. Never trade a higher-ranked objective for a lower-ranked one.
 - Optimize other design concerns jointly for output quality, reliability, context efficiency, maintainability, and execution speed—not token count or modularity alone.
@@ -65,11 +66,11 @@ Protect recall by keeping all decision-relevant current state discoverable and b
 
 Read [working-memory.md](references/working-memory.md) in full before designing, splitting, updating, auditing, or handing off persistent records. Do not read it when the gate fails.
 
-When creating a persistent-memory system, define a measurable lifecycle-review trigger and a staged before/after audit that fails closed on unexplained information loss. Treat elapsed time or file size as a reason to inspect the record, never as sufficient reason to delete, summarize, or split it.
+When creating a persistent-memory system, define measurable lifecycle-review triggers covering thresholds, lifecycle events, integrity failures, and retrieval failures, plus a staged before/after audit that fails closed on unexplained information loss. Treat elapsed time, file size, or change count as a reason to inspect the record, never as sufficient reason to delete, summarize, or split it.
 
 ## Long-running work
 
-For extended or multi-phase work, maintain a compact current brief containing the objective, authoritative decisions, active constraints and preferences, unresolved questions, and next action. Refresh it after material decisions, phase changes, long detours, detected drift, or compaction. Restate exact consequential constraints before an output when older context creates meaningful risk. Skill invocation does not replace current task state.
+For extended or multi-phase work, maintain a compact current brief containing the objective, authoritative decisions, active constraints and preferences, unresolved questions, and next action. Refresh it after material decisions, phase changes, long detours, detected drift, or conversation-context compaction, then recheck exact consequential constraints against their authoritative source. Conversation-context compaction does not by itself make a persistent-record audit due; run that audit only when a record trigger is met. Restate exact consequential constraints before an output when older context creates meaningful risk. Skill invocation does not replace current task state.
 
 ## Communication
 
