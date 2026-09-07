@@ -1,7 +1,7 @@
 interface:
   display_name: "Teach Me"
-  short_description: "Standalone adaptive concept teaching"
-  default_prompt: "Use $teach-me to help me understand this topic through source-grounded, interactive teaching."
+  short_description: "Standalone durable, adaptive teaching"
+  default_prompt: "Use $teach-me to help me build durable understanding or capability through source-grounded, adaptive teaching."
   icon_small: "./assets/icon-small.svg"
   icon_large: "./assets/icon-large.svg"
 policy:

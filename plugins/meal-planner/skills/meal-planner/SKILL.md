@@ -5,7 +5,7 @@ description: Coordinate safe, practical household meal plans by confirming aller
 
 # Meal Planner
 
-Own intake, safety, delegation, and final plan coherence. Treat recipe selection and preference maintenance as `personal-chef` work.
+Own intake, safety, delegation, and final plan coherence. Treat recipe selection, canonical recipe Google Docs, and preference maintenance as `personal-chef` work.
 
 ## Apply priorities
 
@@ -29,6 +29,8 @@ Never silently relax a higher-priority constraint. Treat the current prompt as n
 6. Separate hard constraints from preferences. Ask a focused question before planning when missing or conflicting information could materially affect allergy or medical safety. Handle ordinary gaps with labeled assumptions.
 
 ## Delegate bounded sub-work
+
+Before selecting recipes for a newly requested plan, complete the pre-planning retrospective in [shared record management](../../shared/record-management.md). Read the previous current plan, ask which recipes were actually made, then collect the affected household members' opinions through `personal-chef`. Apply confirmed reusable feedback to the owning records before making the new plan. If the user declines, already answered, nothing was made, or no prior plan exists, continue without inventing feedback. A request to clean records alone does not start a retrospective or create a new meal plan.
 
 Read the canonical [shared handoff contracts](../../shared/handoff-contracts.md) before delegating or accepting delegated results. Pass the shared file by reference; do not create a skill-local copy.
 
@@ -54,13 +56,15 @@ Require it to return:
 - active and total time, yield, leftovers, and ingredient-overlap notes;
 - constraint-sensitive ingredients or labels needing final verification;
 - preference observations and any proposed or completed record changes.
-- confirmed prepared or used status before any post-plan rating request; never infer consumption from plan inclusion.
+- canonical recipe IDs, Google Doc IDs and links, version/status, and verified or pending publication state;
+- confirmed prepared or used status before asking for ratings; never infer consumption from plan inclusion.
 
 Do not independently redo recipe selection after a valid handoff. Review and return targeted revision requests when a candidate fails a constraint.
 
 After approving the final recipes, provide `personal-shopper` with:
 
 - finalized recipe ingredients, yields, planned servings, and leftover uses;
+- canonical recipe IDs, verified Google Doc links, and the versions used for ingredient quantities;
 - confirmed pantry inventory and any `check pantry` items;
 - the exact `Grocery Preferences` workbook identity and canonical tabs found, or their availability status;
 - the exact current meal-plan identity and plan identifier;
@@ -83,10 +87,12 @@ Require it to return a grocery list by store section, purchase quantities and pa
 
 - Own the single current/history meal-plan pair and update the selected authorities in place. Other Meal Planner skills may read relevant state and request changes but must not create parallel plan records.
 - Persist only a user-confirmed finalized plan. Do not archive drafts, rejected candidates, trivial wording changes, or routine process events.
+- After user approval, have `personal-chef` save new approved recipes and approved adaptations in the selected Recipes folder, update existing canonical Docs in place, and verify the Recipe Catalog pointers. Recipe selection and safety approval alone are not user approval. Persist the new current plan only after every required canonical recipe link resolves and its contents match the approved version. Retry by recipe ID without creating duplicate Docs.
+- Keep meal-planning records within the user's designated Meal Planning folder and recipe documents within its designated recipe folder. Resolve and pass both folder IDs; preserve existing names and organization. Do not search or write similarly named backup folders as current authorities.
 - Finalize coherently: archive the previously current plan when present and valuable, replace the current authority, add only useful pointers and relationships, and verify exactly one current plan remains. Do not claim persistence if a required write fails.
 - Keep the current plan operationally complete without history and preserve exact record identities, safety constraints, servings, recipes, adaptations, dates, unresolved questions, and provenance.
 - Check the shared format-aware review triggers at authorized write or consequential-use boundaries. Before compaction, splitting, migration, deduplication, or authority transfer, stage and validate the complete before/after records under the shared audit protocol; do not replace a canonical record after a failed audit.
-- After later confirmation that a planned recipe was actually made or an ingredient used, request a bounded `personal-chef` feedback check only when the shared gate finds an initial rating, material modification, conflicting feedback, or decision-relevant re-rating useful. Elapsed time alone is insufficient.
+- Run the retrospective before the next plan, rather than after its approval. If feedback changes the current approved plan's recipe ingredients, servings, or safety assumptions, reopen the affected approval and shopping work before publishing changes to that plan.
 - Do not write chef-owned ratings or shopper-owned records directly. Send the exact identities, stable identifiers, source, attribution, confirmation status, effective date, uncertainty, and requested lifecycle action through the shared contract.
 
 ## Final check

@@ -172,6 +172,7 @@ def validate_audit(before: dict[str, Any], after: dict[str, Any], ledger: dict[s
     _require(isinstance(decisions, list), "decisions must be a list")
     by_before: dict[str, dict[str, Any]] = {}
     referenced_after: set[str] = set()
+    record_targets: set[str] = set()
     for decision in decisions:
         _require(isinstance(decision, dict), "Every decision must be an object")
         before_ref = decision.get("before_ref")
@@ -187,6 +188,13 @@ def validate_audit(before: dict[str, Any], after: dict[str, Any], ledger: dict[s
 
         source = before_items[before_ref]
         targets = [after_items[ref] for ref in after_refs]
+        if ledger.get("preserve_data_rows") is True and source["kind"] == "record":
+            _require(disposition != "removed", f"Cleanup cannot remove a data row: {before_ref}")
+            surviving = {ref for ref in after_refs if after_items[ref]["kind"] == "record"}
+            _require(bool(surviving), f"Cleanup row has no surviving data row: {before_ref}")
+            _require(record_targets.isdisjoint(surviving),
+                     f"Cleanup cannot merge source rows into one target: {before_ref}")
+            record_targets.update(surviving)
         justification = decision.get("justification")
         if disposition in {"retained", "moved"}:
             _require(targets, f"{disposition} item has no target: {before_ref}")

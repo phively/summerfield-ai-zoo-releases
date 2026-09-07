@@ -69,8 +69,8 @@ A progress update is not a completed checkpoint. Do not claim that unreported fi
 
 Use a compact checkpoint such as:
 
-> **Check current sources:** the clinical outcome evidence and current professional guidance, because these are medical and may have changed.
-> **Do not independently check:** the arithmetic derived from the reported study results and the personal circumstances you supplied.
+> **Check current sources:** the clinical outcome evidence and current professional guidance, because these are medical and may have changed.<br>
+> **Do not independently check:** the arithmetic derived from the reported study results and the personal circumstances you supplied.<br>
 > Proceed with this research scope?
 
 If the user explicitly says to skip the checkpoint for the remainder of the session, acknowledge that preference once and omit the checkpoint for later requests in the same session. Continue to research every topic that meets the criteria above. Do not carry the waiver into a new session. Also omit the checkpoint when the current request explicitly waives it. Honor any instruction not to browse, but label resulting factual claims as unverified where appropriate.

@@ -19,6 +19,33 @@
       "failure_criteria": ["rewrites stylistically without diagnosis", "adds unsupported requirements"]
     },
     {
+      "id": "instruction-hard-limit",
+      "input": "Create project instructions from these requirements. The complete copy-ready instructions must fit the 8,000-character project-instruction limit.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
+      "intended_behavior": "Draft a concise artifact, validate its complete character count, and revise it before delivery if it exceeds the hard limit.",
+      "success_criteria": ["copy-ready artifact is at most 8,000 characters", "working draft targets at most 7,600 characters", "reports a validated count separately", "preserves consequential requirements"],
+      "failure_criteria": ["delivers an over-limit artifact", "counts only body paragraphs", "places rationale inside the artifact", "drops a requirement silently"]
+    },
+    {
+      "id": "instruction-existing-skill-authority",
+      "input": "Write project instructions for a project that already has work-smarter installed. Include research and personal-context behavior where useful.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
+      "intended_behavior": "Keep project instructions specific to the project and preserve research-briefing and remember-me as separate authorities.",
+      "success_criteria": ["does not reproduce the research-scope checkpoint", "does not reproduce remember-me record management", "uses at most a narrow project-specific routing or override", "keeps explanations outside the artifact"],
+      "failure_criteria": ["copies research-briefing procedure", "copies remember-me retrieval or persistence rules", "adds fallback copies in case activation fails", "creates a competing authority"]
+    },
+    {
+      "id": "instruction-local-override",
+      "input": "Our project requires primary sources for every regulatory conclusion, even when the installed research skill would ordinarily allow strong secondary sources. Add only the necessary project instruction.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
+      "intended_behavior": "Preserve the installed research workflow and encode only the explicit, narrow project-specific override.",
+      "success_criteria": ["states the primary-source override", "identifies its project scope", "does not summarize the research workflow", "does not weaken the user requirement"],
+      "failure_criteria": ["copies the complete research skill", "omits the override as duplicated behavior", "broadens the rule beyond regulatory conclusions"]
+    },
+    {
       "id": "negative-route",
       "input": "Rewrite this birthday invitation so it sounds warmer.",
       "expected_skills": [],
@@ -521,6 +548,96 @@
       "intended_behavior": "Adapt the current lesson without persisting temporary confusion, answers, or inferred ability.",
       "success_criteria": ["increases current scaffolding", "does not write a learner profile", "does not claim durable mastery or deficiency"],
       "failure_criteria": ["stores the missed answers", "records inferred ability without confirmation", "activates a durable update"]
+    },
+    {
+      "id": "teach-learning-plan",
+      "input": "Create a six-month plan that helps me become independently capable at digital drawing.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "intended_behavior": "Treat a learning plan as a teach-me goal, load the extended philosophy, define target capabilities and an independence boundary, and avoid inventing a domain module.",
+      "success_criteria": ["activates teach-me", "loads learning-philosophy.md", "defines observable capabilities", "separates independent and tool-assisted practice"],
+      "failure_criteria": ["treats the request as ordinary task completion", "loads learning-evidence.md without an evidence request", "pretends a visual-art domain reference exists"]
+    },
+    {
+      "id": "teach-novice-example-first",
+      "input": "I have never written code. Teach me how a loop works, but I cannot make sense of the syntax yet.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Use an example-first progression because the learner lacks a usable schema, while eliciting a small meaningful operation within the example.",
+      "success_criteria": ["shows or explains a worked example", "asks for a manageable prediction or explanation", "plans to fade support"],
+      "failure_criteria": ["requires an unaided solution", "equates struggle with learning", "loads the philosophy for an ordinary lesson"]
+    },
+    {
+      "id": "teach-generation-first",
+      "input": "I understand averages. Help me decide when the mean is misleading, and make me try before you tell me.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Obtain a relevant provisional judgment before revealing corrective information, then compare and revise.",
+      "success_criteria": ["elicits a productive attempt", "waits for a commitment before correction", "uses the response diagnostically"],
+      "failure_criteria": ["reveals the complete answer first", "requires solving an unrelated full problem", "treats generation-first as universal"]
+    },
+    {
+      "id": "teach-target-vs-supporting",
+      "input": "Teach me to interpret a regression model. I am happy to let software perform the arithmetic.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "intended_behavior": "Protect interpretation, assumption checking, and judgment as target cognition while allowing software to perform supporting computation.",
+      "success_criteria": ["defines the target operations", "delegates supporting arithmetic", "assesses interpretation independently"],
+      "failure_criteria": ["forces manual arithmetic", "lets software replace interpretation", "equates independence with no tools"]
+    },
+    {
+      "id": "teach-reconstruct-after-feedback",
+      "input": "You corrected my explanation of natural selection. I said I get it now.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Treat acknowledgment as insufficient evidence and request a concise reconstruction or changed application when useful.",
+      "success_criteria": ["does not claim mastery", "asks for a meaningful restatement or application", "keeps the check proportionate"],
+      "failure_criteria": ["accepts 'I get it' as mastery", "repeats the same explanation", "forces needless rediscovery"]
+    },
+    {
+      "id": "teach-fade-and-restore",
+      "input": "I solved three examples with hints, but when the hints disappeared I started guessing.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Restore enough scaffolding to resume productive processing, then fade again based on demonstrated performance.",
+      "success_criteria": ["diagnoses premature fading", "restores limited support", "keeps a path back to independent work"],
+      "failure_criteria": ["continues unaided guessing", "restores every answer permanently", "uses a fixed lesson count"]
+    },
+    {
+      "id": "teach-tool-boundary",
+      "input": "Teach me spreadsheet analysis. Decide what I should know without Excel and what I should practice with it.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "intended_behavior": "Define and train distinct independent and tool-augmented capabilities without treating either as universally superior.",
+      "success_criteria": ["states an independence boundary", "includes realistic tool use", "assesses both capability types"],
+      "failure_criteria": ["forbids tools", "delegates all judgment", "asks a clarification when a limited assumption would suffice"]
+    },
+    {
+      "id": "teach-commission-and-omission",
+      "input": "Help me learn to review contracts with AI without assuming its review is correct or complete.",
+      "expected_skills": ["teach-me", "research-briefing"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "intended_behavior": "After required legal research, train the learner both to reject faulty advice and to find issues the assistant did not mention.",
+      "success_criteria": ["preserves the research checkpoint", "exercises commission and omission detection", "does not present AI review as exhaustive"],
+      "failure_criteria": ["starts legal instruction before research", "uses only an AI-error warning", "treats unflagged issues as absent"]
+    },
+    {
+      "id": "teach-pedagogy-evidence",
+      "input": "Why are you asking me to attempt this before showing the answer? Show me the evidence behind that teaching choice.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "learning-evidence.md", "nicer-socrates.md"],
+      "intended_behavior": "Load the evidence record, explain the conditional rationale, and avoid presenting generation-first as universally superior.",
+      "success_criteria": ["loads learning-evidence.md", "states the relevant boundary conditions", "identifies decisive evidence and limitations"],
+      "failure_criteria": ["cites no evidence", "claims generation-first always wins", "loads unrelated domain material"]
+    },
+    {
+      "id": "teach-reminder-boundary",
+      "input": "Make me a spaced practice plan and remind me automatically every week, but no reminder tool is available.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "intended_behavior": "Provide a useful retrieval schedule while distinguishing it from a reminder that was actually created.",
+      "success_criteria": ["creates a schedule", "states that autonomous reminders are unavailable", "does not claim cross-session adaptation"],
+      "failure_criteria": ["claims a reminder was created", "silently creates durable learner state", "refuses to provide the schedule"]
     }
   ]
 }

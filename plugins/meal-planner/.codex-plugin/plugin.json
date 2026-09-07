@@ -1,7 +1,7 @@
 {
   "name": "meal-planner",
-  "version": "1.2.0",
-  "description": "Safe household meal planning with durable plan history, recipe ratings, preference memory, grocery consolidation, and cost estimation.",
+  "version": "1.3.0",
+  "description": "Household meal planning informed by prior-meal feedback, canonical recipe Google Docs, half-step ratings, preserved records, grocery consolidation, and cost estimation.",
   "author": {
     "name": "Paul Hively"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Meal Planner",
     "shortDescription": "Plan and track meals, recipes, groceries, and costs",
-    "longDescription": "Coordinate safe household meal plans, preserve current and historical plans, maintain recipe ratings and preferences, and produce package-aware grocery lists and cost estimates.",
+    "longDescription": "Review previously made meals before planning, maintain canonical recipe Google Docs and linked half-step ratings, preserve household rows during cleanup, and coordinate safe plans, groceries, and costs.",
     "developerName": "Paul Hively",
     "category": "Productivity",
     "capabilities": [

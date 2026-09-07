@@ -33,6 +33,15 @@ def load_memory_audit_validator():
     return module
 
 
+def load_instruction_length_checker():
+    path = ROOT / "skills" / "superb-skills" / "scripts" / "check_instruction_length.py"
+    spec = importlib.util.spec_from_file_location("check_instruction_length", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
 def test_full_validator() -> None:
     assert load_validator().main() == 0
 
@@ -132,16 +141,19 @@ def test_remember_me_topic_ownership_and_taxonomy() -> None:
 
 
 def test_bundled_skills_consult_remember_me_selectively() -> None:
-    for skill_name in ("research-briefing", "superb-skills"):
-        skill = read(ROOT / "skills" / skill_name / "SKILL.md")
-        assert "remember-me/index.md" in skill
-        assert "smallest sufficient set of relevant current context" in skill
-        assert "Expand retrieval when the bounded context" in skill
-        assert "silently changing durable memory" in skill
+    research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
+    assert "remember-me/index.md" in research
+    assert "smallest sufficient set of relevant current context" in research
+    assert "Expand retrieval when the bounded context" in research
+    assert "silently changing durable memory" in research
+    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
+    assert "Consult `remember-me`" in superb
+    assert "through the same contract" in superb
+    assert "Never copy its retrieval, storage, or lifecycle procedure" in superb
+    assert "remember-me/index.md" not in superb
     teaching = read(ROOT / "skills" / "teach-me" / "SKILL.md")
     assert "smallest sufficient set of relevant current context" in teaching
     assert "silently changing durable memory" in teaching
-    research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
     assert "it is not evidence for an external claim" in research
 
 
@@ -172,14 +184,13 @@ def test_superb_skills_uses_conditional_memory() -> None:
     skill = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
     reference = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
     assert "Do not create persistent working-memory files by default" in skill
-    assert "Use one current-state file" in skill
-    assert "Do not read it when the gate fails" in skill
+    assert "read the reference when this gate fails" in skill
+    assert "Use one current-state file" not in skill
     assert "Designate exactly one source as authoritative" in reference
     assert "Read the working briefing first" in reference
 
 
 def test_memory_guidance_prioritizes_recall_then_tokens_then_speed() -> None:
-    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
     memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
     remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
     records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
@@ -193,10 +204,9 @@ def test_memory_guidance_prioritizes_recall_then_tokens_then_speed() -> None:
     positions = [memory.index(priority) for priority in priorities]
     assert positions == sorted(positions)
     assert "Never improve a lower-ranked objective by weakening a higher-ranked one" in memory
-    assert "Never trade a higher-ranked objective for a lower-ranked one" in superb
     assert "Reliable recall takes priority over reducing context tokens" in remember
 
-    for artifact in (superb, memory, remember, records, contract):
+    for artifact in (memory, remember, records, contract):
         assert "incomplete" in artifact
         assert "stale" in artifact
         assert "ambiguous" in artifact
@@ -208,11 +218,9 @@ def test_memory_guidance_prioritizes_recall_then_tokens_then_speed() -> None:
 
 
 def test_memory_maintenance_triggers_are_measurable_and_non_destructive() -> None:
-    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
     memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
     remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
     records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
-    assert "measurable lifecycle-review trigger" in superb
     for phrase in ("8 KiB", "16 KiB", "180 days", "conservative default design heuristic"):
         assert phrase in memory
         assert phrase in records
@@ -221,14 +229,13 @@ def test_memory_maintenance_triggers_are_measurable_and_non_destructive() -> Non
 
 
 def test_comparative_claims_require_basis_but_preserve_labeled_opinion() -> None:
-    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
     instruction = read(ROOT / "skills" / "superb-skills" / "references" / "instruction-design.md")
     evaluation = read(ROOT / "skills" / "superb-skills" / "references" / "evaluation.md")
     research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
     remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
     contract = read(ROOT / "shared" / "handoff-contracts.md")
 
-    for artifact in (superb, instruction, research, remember):
+    for artifact in (instruction, research, remember):
         assert "explicit or implicit comparison" in artifact
         assert "comparison set" in artifact or "reference set" in artifact
         assert "supported absolute property" in artifact
@@ -267,14 +274,12 @@ def test_memory_review_uses_independent_trigger_classes() -> None:
 
 
 def test_context_compaction_is_distinct_from_record_compaction() -> None:
-    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
     memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
     records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
 
-    assert "Conversation-context compaction does not by itself" in superb
     assert "Conversation-context compaction is different from persistent-record compaction" in memory
     assert "Conversation-context compaction is not persistent-record compaction" in records
-    for artifact in (superb, memory, records):
+    for artifact in (memory, records):
         assert "recheck exact" in artifact
 
 
@@ -386,15 +391,56 @@ def test_superb_skills_routes_conditional_references() -> None:
     skill = read(root / "SKILL.md")
     expected = {
         "instruction-design.md": "one-time prompts",
+        "project-instructions-template.md": "drafting project or custom instructions",
         "plugin-architecture.md": "multiple coordinated skills",
         "evaluation.md": "comparing architectures",
-        "working-memory.md": "working-memory gate",
+        "working-memory.md": "persistent current state",
     }
     for filename, trigger in expected.items():
         assert (root / "references" / filename).is_file()
         assert f"](references/{filename})" in skill
         assert trigger in skill
     assert "load no reference merely because it exists" in skill
+
+
+def test_superb_skills_entrypoint_is_thin_and_keeps_other_skills_authoritative() -> None:
+    root = ROOT / "skills" / "superb-skills"
+    skill = read(root / "SKILL.md")
+    assert len(skill) <= 6000
+    assert "Do not reproduce platform behavior" in skill
+    assert "A routing sentence is not permission" in skill
+    assert "research-scope checkpoint" not in skill
+    assert "remember-me/index.md" not in skill
+    assert "8 KiB" not in skill
+
+
+def test_instruction_design_enforces_budget_and_prevents_authority_leakage() -> None:
+    root = ROOT / "skills" / "superb-skills"
+    instruction = read(root / "references" / "instruction-design.md")
+    template = read(root / "references" / "project-instructions-template.md")
+    for phrase in (
+        "8,000-character limit",
+        "7,600 characters",
+        "Count the complete copy-ready artifact",
+        "Revise any artifact above the hard limit before delivery",
+        "Do not copy the procedures of `research-briefing`, `remember-me`, `skill-creator`",
+        "Keep commentary, rationale, and placement recommendations outside the artifact",
+    ):
+        assert phrase in instruction
+    assert "omit unused headings" in template
+    assert "do not reproduce another skill's procedure" in template
+
+
+def test_instruction_length_checker_enforces_hard_limit_and_preserves_headroom() -> None:
+    checker = load_instruction_length_checker()
+    assert checker.classify(7600, 7600, 8000) == "WITHIN_TARGET"
+    assert checker.classify(7601, 7600, 8000) == "WITHIN_LIMIT_ABOVE_TARGET"
+    assert checker.classify(8001, 7600, 8000) == "OVER_LIMIT"
+    with TemporaryDirectory() as directory:
+        artifact = Path(directory) / "instructions.md"
+        artifact.write_text("x" * 8001, encoding="utf-8", newline="")
+        assert checker.count_characters(artifact) == 8001
+        assert checker.main([str(artifact)]) == 1
 
 
 def test_skill_creator_remains_implementation_authority() -> None:
@@ -416,6 +462,53 @@ def test_teach_me_researches_before_teaching_and_avoids_reflexive_agreement() ->
     assert "A chain of reasonable answers can still drift" in workflow
     assert "resisting reflexive agreement" in personality
     assert "constitutive of the concept" in personality
+
+
+def test_teach_me_separates_philosophy_workflow_evidence_and_style() -> None:
+    root = ROOT / "skills" / "teach-me"
+    skill = read(root / "SKILL.md")
+    philosophy = read(root / "references" / "learning-philosophy.md")
+    workflow = read(root / "references" / "teaching-workflow.md")
+    evidence = read(root / "references" / "learning-evidence.md")
+    personality = read(root / "references" / "personalities" / "nicer-socrates.md")
+
+    assert "Do not load it for an ordinary lesson merely because it exists" in skill
+    assert "conceptual authority" in philosophy
+    assert "operational authority" in workflow
+    assert "current evidence authority" in evidence
+    assert "controls tone, pacing, question presentation, and feedback style" in personality
+    assert "This record supports the philosophy" in skill
+
+
+def test_teach_me_builds_capability_without_overgeneralizing_learning_methods() -> None:
+    root = ROOT / "skills" / "teach-me"
+    skill = read(root / "SKILL.md")
+    philosophy = read(root / "references" / "learning-philosophy.md")
+    workflow = read(root / "references" / "teaching-workflow.md")
+
+    assert "task completion without a learning goal as outside this skill" in skill
+    assert "Neither generation-first nor explanation-first is universally preferable" in philosophy
+    assert "example-first" in workflow
+    assert "generation-first" in workflow
+    assert "least substitutive assistance" in workflow
+    assert "commission" in workflow and "omission" in workflow
+    assert "Do not claim mastery" in workflow
+    assert "do not imply that the skill will return autonomously" in skill
+
+
+def test_teach_me_evidence_has_provenance_intake_and_maintenance_boundaries() -> None:
+    evidence = read(ROOT / "skills" / "teach-me" / "references" / "learning-evidence.md")
+
+    for phrase in (
+        "Initial provenance",
+        "did not independently repeat its web research",
+        "Candidate-source intake",
+        "User-supplied claims remain attributed and `candidate`",
+        "A due date means review is due; it does not authorize research",
+        "LE-001",
+        "LE-025",
+    ):
+        assert phrase in evidence
 
 
 def test_teach_me_default_personality_is_modular_and_purposeful() -> None:
@@ -447,6 +540,8 @@ def test_teach_me_standalone_mirrors_references_without_plugin_dependencies() ->
     plugin = json.loads(read(ROOT / ".codex-plugin" / "plugin.json"))
 
     for relative in (
+        Path("references/learning-evidence.md"),
+        Path("references/learning-philosophy.md"),
         Path("references/teaching-workflow.md"),
         Path("references/personalities/nicer-socrates.md"),
         Path("assets/icon-small.svg"),
@@ -470,6 +565,8 @@ def test_eval_suite_covers_required_behaviors() -> None:
     ids = {case["id"] for case in cases}
     assert {
         "route-superb-skills", "negative-route", "research-handoff",
+        "instruction-hard-limit", "instruction-existing-skill-authority",
+        "instruction-local-override",
         "research-nontrigger", "research-confirmation", "memory-no-file",
         "memory-single-file", "memory-split", "memory-conflict",
         "memory-missing", "memory-recall-before-token-reduction",
@@ -498,6 +595,11 @@ def test_eval_suite_covers_required_behaviors() -> None:
         "teach-default-personality", "teach-selected-personality",
         "teach-stuck-explanation", "teach-premise-challenge",
         "teach-memory-consultation", "teach-memory-no-session-write",
+        "teach-learning-plan", "teach-novice-example-first",
+        "teach-generation-first", "teach-target-vs-supporting",
+        "teach-reconstruct-after-feedback", "teach-fade-and-restore",
+        "teach-tool-boundary", "teach-commission-and-omission",
+        "teach-pedagogy-evidence", "teach-reminder-boundary",
     }.issubset(ids)
 
 

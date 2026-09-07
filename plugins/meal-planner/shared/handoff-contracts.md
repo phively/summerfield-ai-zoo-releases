@@ -9,7 +9,7 @@ Use these canonical workbook titles and tabs. Recognize clearly equivalent exist
 | Owner | Canonical workbook | Canonical tabs |
 | --- | --- | --- |
 | Meal Planner | `Household Preferences` | Workbook-local `Record Index`; `Household Profile`, `Safety Constraints`, `Planning Preferences`, optional `Pantry Inventory`, and `Household History` |
-| Personal Chef | `Meal Preferences` | Workbook-local `Record Index`; `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, and `Recipe History` |
+| Personal Chef | `Meal Preferences` | Workbook-local `Record Index`; `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, `Recipe History`, and `Recipe Catalog` |
 | Personal Shopper | `Grocery Preferences` | Workbook-local `Record Index`; `Store Preferences`, `Store Preferences History`, and `Price Tracker` |
 
 Every handoff must preserve the exact workbook title and link or file identity by identifying the provider, immutable workbook resource ID or canonical link/file path, visible workbook title, exact worksheet, table or named range when present, stable key column and record ID or documented composite key, relevant columns, and any expected workbook structure that was unavailable. A workbook title, worksheet title, or row number alone is insufficient. Pass accessible shared records by identity; never create skill-local static copies.
@@ -20,7 +20,9 @@ Use native workbook routing. When present, read `Record Index` first and then re
 
 `meal-planner` owns the `Household Preferences` workbook and the single current/history meal-plan pair. Use `meal-plan-current.md` and `meal-plan-history.md` when creating new filesystem records, or preserve one clearly equivalent existing Word document, Google Doc, Markdown pair, or other selected durable authority. All skills may read relevant current state; only `meal-planner` creates or updates these records.
 
-`personal-chef` owns the `Meal Preferences` workbook, including current culinary preferences and recipe ratings plus their historical companions. All skills may read relevant current state; only `personal-chef` creates or updates these records.
+`personal-chef` owns the `Meal Preferences` workbook, including current culinary preferences and recipe ratings plus their historical companions, and the canonical recipe Google Docs indexed by `Recipe Catalog`. All skills may read relevant current state; only `personal-chef` creates or updates these records. Use one numeric 1-5 Rating in half steps for culinary, ingredient, and recipe preferences; no separate preference label or strength score.
+
+Every Drive handoff includes the designated Meal Planning and Recipes folder IDs. Keep planning files and migration audits inside Meal Planning and canonical recipe Docs inside Recipes. Preserve existing structure, resource IDs, and sharing. During cleanup, follow [cleanup-migration.md](cleanup-migration.md): updates and additions may change data rows, but no populated source row may be deleted or silently merged.
 
 `personal-shopper` owns the `Grocery Preferences` workbook. All skills may read relevant current state and price evidence; only `personal-shopper` creates or updates these records.
 
@@ -34,6 +36,7 @@ Return a recipe-selection packet containing:
 
 - finalized or proposed status for every recipe;
 - recipe title, source URL or original-recipe label, yield, and planned servings;
+- stable Recipe ID, canonical Google Doc ID/link, current version, publication status, verification result, and designated folder IDs;
 - ingredient quantities, active time, total time, equipment, and leftover yield;
 - material adaptations and reasons;
 - constraint-sensitive ingredients, labels, substitutions, and cross-contact questions requiring safety review;
@@ -48,15 +51,16 @@ For feedback requested after a plan, return only confirmed preparation or use, m
 
 ## Meal Planner to Personal Chef
 
-For recipe selection, send the bounded constraint and preference packet already defined by the skills. For a post-plan feedback request, include the exact current meal-plan identity and plan identifier, recipe or ingredient identities, confirmed prepared or used status, preparation or modification, affected household members, prior current rating and date when visible, why review is decision-relevant now, and whether the user authorized persistence.
+For a new-plan request, first send the previous current plan's exact identity and plan identifier for the pre-planning retrospective. Prepared status may initially be unknown: ask which recipes were made before requesting opinions. Include recipe IDs and Doc links, version made when known, member attribution, existing ratings/dates, answered or declined questions, and persistence authorization. Confirm and apply affected record updates before selecting the new recipes. Then send the bounded constraint and updated preference packet for recipe selection.
 
-Do not request feedback merely because a recipe appeared in a plan or a fixed interval elapsed. `personal-chef` applies the feedback check-in gate and owns every preference or rating write.
+Do not infer feedback merely because a recipe appeared in a plan or a fixed interval elapsed. A newly requested plan triggers the retrospective, with a preparation check first. `personal-chef` applies the shared gate and owns culinary preferences, ratings, Recipe Catalog, and recipe-Doc writes. Return safety or practical planning updates to `meal-planner`, and shopping preferences to `personal-shopper`. After plan approval, explicitly hand off approved recipe publication and require verified links before the new current plan is saved.
 
 ## Meal Planner to Personal Shopper
 
 Send a shopping packet only after recipe selection and safety review are complete. Include:
 
 - final recipe names, ingredient quantities, source yields, planned servings, and leftover uses;
+- canonical Recipe IDs, verified Google Doc links, approved versions, and designated folder IDs;
 - confirmed pantry quantities plus separate `check pantry` items;
 - region, currency, shopping date, budget, and preferred stores in effective order;
 - required brands, products, labels, allergy constraints, medical constraints, and permitted substitutions;

@@ -8,13 +8,14 @@ List only assumptions or warnings that materially affect the plan.
 
 ## Weekly overview
 
-Use a compact table with day, meal, active time, total time, planned leftovers, and new or returning status.
+Use a compact table with day, meal, canonical recipe link, servings, active time, total time, planned leftovers, and new or returning status. In the persisted current plan, every recipe links to its verified canonical Google Doc; leftover-only meals link to the source dinner. Preserve the approved recipe version in plan metadata. For drafts, label an unpublished recipe link pending rather than inventing a URL. Use native Google resource links when supported.
 
 ## Dinner cards
 
 For each dinner, include:
 
 - Recipe name
+- Canonical Google Doc link and approved version, distinct from the original source attribution
 - Servings
 - Prep, cook, active, and total time
 - Protein, vegetables, and starch or approved alternative

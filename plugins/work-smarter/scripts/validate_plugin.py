@@ -112,6 +112,8 @@ def validate_remember_me() -> None:
 def validate_teach_me() -> None:
     root = ROOT / "skills" / "teach-me"
     skill = read(root / "SKILL.md")
+    philosophy = read(root / "references" / "learning-philosophy.md")
+    evidence = read(root / "references" / "learning-evidence.md")
     workflow = read(root / "references" / "teaching-workflow.md")
     personality = read(root / "references" / "personalities" / "nicer-socrates.md")
     for phrase in (
@@ -119,14 +121,36 @@ def validate_teach_me() -> None:
         "fall back to `nicer-socrates.md`",
         "Do not persist lesson transcripts",
         "Correct a consequential false premise",
+        "task completion without a learning goal as outside this skill",
+        "do not imply that the skill will return autonomously",
     ):
         require(phrase in skill, f"teach-me missing behavior: {phrase}")
     for phrase in (
         "question only when its answer could",
         "A chain of reasonable answers can still drift",
         "Do not claim mastery",
+        "example-first",
+        "generation-first",
+        "least substitutive assistance",
+        "commission",
+        "omission",
     ):
         require(phrase in workflow, f"teach-me workflow missing: {phrase}")
+    for phrase in (
+        "Neither generation-first nor explanation-first is universally preferable",
+        "Do not turn tendencies into doctrine",
+        "independent capability",
+        "human-tool capability",
+    ):
+        require(phrase in philosophy, f"teach-me philosophy missing: {phrase}")
+    for phrase in (
+        "Current synthesis",
+        "Initial source register",
+        "Candidate-source intake",
+        "User-supplied claims remain attributed",
+        "A due date means review is due; it does not authorize research",
+    ):
+        require(phrase in evidence, f"teach-me evidence missing: {phrase}")
     for phrase in (
         "resisting reflexive agreement",
         "Ask one question at a time",
@@ -137,7 +161,6 @@ def validate_teach_me() -> None:
 
 
 def validate_memory_priorities() -> None:
-    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
     memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
     remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
     records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
@@ -150,7 +173,6 @@ def validate_memory_priorities() -> None:
     positions = [memory.index(priority) for priority in priorities]
     require(positions == sorted(positions), "Memory priorities are out of order")
     for phrase, artifact in (
-        ("Never trade a higher-ranked objective", superb),
         ("Never improve a lower-ranked objective", memory),
         ("Reliable recall takes priority", remember),
         ("Keep the transaction narrow only when", records),
@@ -160,7 +182,6 @@ def validate_memory_priorities() -> None:
 
 
 def validate_memory_audit_guidance() -> None:
-    superb = read(ROOT / "skills" / "superb-skills" / "SKILL.md")
     memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
     remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
     records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
@@ -168,7 +189,6 @@ def validate_memory_audit_guidance() -> None:
     audit_script = ROOT / "scripts" / "validate_memory_audit.py"
     require(audit_script.is_file(), "Missing deterministic memory audit validator")
     for phrase, artifact in (
-        ("measurable lifecycle-review trigger", superb),
         ("conservative default design heuristic", memory),
         ("8 KiB", records),
         ("180 days", records),
@@ -190,6 +210,27 @@ def validate_memory_audit_guidance() -> None:
         require(phrase in artifact, f"Memory audit or research summary guidance missing: {phrase}")
 
 
+def validate_instruction_design() -> None:
+    root = ROOT / "skills" / "superb-skills"
+    skill = read(root / "SKILL.md")
+    instruction = read(root / "references" / "instruction-design.md")
+    template = read(root / "references" / "project-instructions-template.md")
+    checker = root / "scripts" / "check_instruction_length.py"
+    require(len(skill) <= 6000, "superb-skills entrypoint exceeds the thin-router budget")
+    require("research-scope checkpoint" not in skill, "superb-skills duplicates research procedure")
+    require("remember-me/index.md" not in skill, "superb-skills duplicates memory retrieval procedure")
+    require("8 KiB" not in skill, "superb-skills duplicates working-memory detail")
+    for phrase in (
+        "8,000-character limit",
+        "7,600 characters",
+        "Revise any artifact above the hard limit before delivery",
+        "Do not copy the procedures of `research-briefing`, `remember-me`, `skill-creator`",
+    ):
+        require(phrase in instruction, f"Instruction artifact contract missing: {phrase}")
+    require("omit unused headings" in template, "Project-instruction template is not selective")
+    require(checker.is_file(), "Missing deterministic instruction-length checker")
+
+
 def validate_evals() -> None:
     suite = json.loads(read(ROOT / "evals" / "regression.json"))
     require(suite["suite"] == "work-smarter-regression", "Unexpected eval suite")
@@ -201,6 +242,9 @@ def validate_evals() -> None:
         for field in ("input", "intended_behavior", "success_criteria", "failure_criteria"):
             require(case.get(field), f"{case['id']} missing {field}")
     for case_id in (
+        "instruction-hard-limit",
+        "instruction-existing-skill-authority",
+        "instruction-local-override",
         "memory-recall-before-token-reduction",
         "memory-token-reduction-before-speed",
         "memory-narrow-update-fallback",
@@ -224,7 +268,8 @@ def validate_evals() -> None:
     ):
         require(case_id in ids, f"Missing required eval: {case_id}")
     results = json.loads(read(ROOT / "evals" / "results.json"))
-    require(results["plugin_version"] == "1.6.0", "Unexpected results version")
+    manifest = json.loads(read(ROOT / ".codex-plugin" / "plugin.json"))
+    require(results["plugin_version"] == manifest["version"], "Unexpected results version")
     require(len(results["forward_tests"]) >= 4, "Missing forward-test results")
 
 
@@ -232,7 +277,7 @@ def main() -> int:
     checks = (
         validate_manifest, validate_skills, validate_links,
         validate_contract, validate_remember_me, validate_teach_me, validate_memory_priorities,
-        validate_memory_audit_guidance, validate_evals,
+        validate_memory_audit_guidance, validate_instruction_design, validate_evals,
     )
     for check in checks:
         check()

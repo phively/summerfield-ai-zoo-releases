@@ -39,7 +39,7 @@ def test_canonical_plugin_structure() -> None:
     manifest = json.loads(read(manifest_path))
 
     assert manifest["name"] == PLUGIN_ROOT.name == "meal-planner"
-    assert manifest["version"] == "1.2.0"
+    assert manifest["version"].split("+", 1)[0] == "1.3.0"
     assert manifest["skills"] == "./skills/"
     assert re.fullmatch(r"\d+\.\d+\.\d+(?:\+codex\.[0-9A-Za-z.-]+)?", manifest["version"])
     assert manifest["description"]
@@ -317,7 +317,7 @@ def test_handoffs_include_record_identity_confirmation_and_boundaries() -> None:
         "stable entry identifier",
         "confirmation status",
         "prohibited information",
-        "Do not request feedback merely because a recipe appeared in a plan",
+        "A newly requested plan triggers the retrospective",
     ):
         assert phrase in shared
 
@@ -438,7 +438,7 @@ def test_workbook_audit_completes_and_fails_closed() -> None:
 def test_record_management_eval_has_required_cases() -> None:
     suite = json.loads(read(PLUGIN_ROOT / "evals" / "record-management.json"))
     cases = {case["id"]: case for case in suite["cases"]}
-    assert set(cases) == {
+    assert {
         "finalize-first-plan",
         "replace-current-plan",
         "unmade-recipe-no-rating",
@@ -455,7 +455,7 @@ def test_record_management_eval_has_required_cases() -> None:
         "workbook-audit-success",
         "workbook-audit-loss",
         "workbook-audit-structural-failure",
-    }
+    } <= set(cases)
     for case in cases.values():
         assert case["expected_files_read"]
         assert isinstance(case["forbidden_files_read"], list)

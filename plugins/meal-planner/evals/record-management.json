@@ -1,150 +1,467 @@
 {
   "suite": "meal-planner-record-management",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "cases": [
     {
       "id": "finalize-first-plan",
       "prompt": "This plan is final. Save it as my current meal plan; I do not have a prior plan record.",
-      "expected_files_read": ["household and preference current records", "meal-plan-current.md or equivalent if present"],
-      "forbidden_files_read": ["meal-plan-history.md without a retrieval condition"],
+      "expected_files_read": [
+        "household and preference current records",
+        "meal-plan-current.md or equivalent if present"
+      ],
+      "forbidden_files_read": [
+        "meal-plan-history.md without a retrieval condition"
+      ],
       "authoritative_result": "Meal Planner creates one current finalized plan with stable identity and does not create empty history.",
-      "permitted_writes": ["meal-plan-current.md or selected equivalent by meal-planner"],
-      "failure_criteria": ["a draft is persisted", "an empty archive is created", "another skill owns the write"]
+      "permitted_writes": [
+        "meal-plan-current.md or selected equivalent by meal-planner"
+      ],
+      "failure_criteria": [
+        "a draft is persisted",
+        "an empty archive is created",
+        "another skill owns the write"
+      ]
     },
     {
       "id": "replace-current-plan",
       "prompt": "Finalize this new week and replace last week's current plan while preserving last week's finalized plan.",
-      "expected_files_read": ["current meal plan", "targeted meal-plan history metadata if needed"],
-      "forbidden_files_read": ["complete meal-plan history"],
+      "expected_files_read": [
+        "current meal plan",
+        "targeted meal-plan history metadata if needed"
+      ],
+      "forbidden_files_read": [
+        "complete meal-plan history"
+      ],
       "authoritative_result": "The prior current plan is archived and exactly one new plan becomes current in one coherent operation.",
-      "permitted_writes": ["current and historical meal-plan authorities by meal-planner"],
-      "failure_criteria": ["two plans remain current", "only one required write succeeds", "persistence is claimed after partial failure"]
+      "permitted_writes": [
+        "current and historical meal-plan authorities by meal-planner"
+      ],
+      "failure_criteria": [
+        "two plans remain current",
+        "only one required write succeeds",
+        "persistence is claimed after partial failure"
+      ]
     },
     {
       "id": "unmade-recipe-no-rating",
       "prompt": "The recipe appeared in last week's plan. Add a household rating for it.",
-      "expected_files_read": ["current meal plan or targeted historical plan entry", "current recipe rating if relevant"],
-      "forbidden_files_read": ["complete recipe history"],
+      "expected_files_read": [
+        "current meal plan or targeted historical plan entry",
+        "current recipe rating if relevant"
+      ],
+      "forbidden_files_read": [
+        "complete recipe history"
+      ],
       "authoritative_result": "Personal Chef confirms whether the recipe was actually prepared and records no rating until preparation and attribution are confirmed.",
       "permitted_writes": [],
-      "failure_criteria": ["plan inclusion is treated as consumption", "a household-wide rating is inferred", "an invented date is saved"]
+      "failure_criteria": [
+        "plan inclusion is treated as consumption",
+        "a household-wide rating is inferred",
+        "an invented date is saved"
+      ]
     },
     {
       "id": "initial-recipe-rating",
       "prompt": "We made this recipe yesterday. I rate it 4 out of 5 and would make it again with less salt.",
-      "expected_files_read": ["Recipe Ratings current matches", "targeted Recipe History only if matching ambiguity exists"],
-      "forbidden_files_read": ["complete Recipe History"],
+      "expected_files_read": [
+        "Recipe Ratings current matches",
+        "targeted Recipe History only if matching ambiguity exists"
+      ],
+      "forbidden_files_read": [
+        "complete Recipe History"
+      ],
       "authoritative_result": "Personal Chef creates one current attributed rating with preparation feedback and no unnecessary history entry.",
-      "permitted_writes": ["Recipe Ratings by personal-chef"],
-      "failure_criteria": ["rating is stored only in history", "feedback becomes a general ingredient preference", "duplicate current rows are created"]
+      "permitted_writes": [
+        "Recipe Ratings by personal-chef"
+      ],
+      "failure_criteria": [
+        "rating is stored only in history",
+        "feedback becomes a general ingredient preference",
+        "duplicate current rows are created"
+      ]
     },
     {
       "id": "material-rating-revision",
       "prompt": "After making the modified version several times, change my rating from 3 to 5 and retain why it changed.",
-      "expected_files_read": ["Recipe Ratings matching current row", "targeted Recipe History entries for the recipe and member"],
-      "forbidden_files_read": ["unrelated recipe history"],
+      "expected_files_read": [
+        "Recipe Ratings matching current row",
+        "targeted Recipe History entries for the recipe and member"
+      ],
+      "forbidden_files_read": [
+        "unrelated recipe history"
+      ],
       "authoritative_result": "Personal Chef replaces the current rating and archives the prior material state with modification, dates, provenance, and relationship.",
-      "permitted_writes": ["Recipe Ratings and Recipe History by personal-chef"],
-      "failure_criteria": ["both ratings remain current", "modification context is lost", "only one required write succeeds"]
+      "permitted_writes": [
+        "Recipe Ratings and Recipe History by personal-chef"
+      ],
+      "failure_criteria": [
+        "both ratings remain current",
+        "modification context is lost",
+        "only one required write succeeds"
+      ]
     },
     {
       "id": "elapsed-time-alone",
       "prompt": "This rating is six months old, but nothing about the recipe or our use of it has changed.",
-      "expected_files_read": ["Recipe Ratings matching current row"],
-      "forbidden_files_read": ["Recipe History without another retrieval reason"],
+      "expected_files_read": [
+        "Recipe Ratings matching current row"
+      ],
+      "forbidden_files_read": [
+        "Recipe History without another retrieval reason"
+      ],
       "authoritative_result": "No re-rating check-in is initiated because elapsed time alone is insufficient.",
       "permitted_writes": [],
-      "failure_criteria": ["an arbitrary age threshold forces a question", "the rating is marked stale without decision value"]
+      "failure_criteria": [
+        "an arbitrary age threshold forces a question",
+        "the rating is marked stale without decision value"
+      ]
     },
     {
       "id": "recipe-specific-not-general",
       "prompt": "I disliked the raw onion in this salsa, but I still like cooked onions generally.",
-      "expected_files_read": ["current recipe rating", "relevant current ingredient preference"],
-      "forbidden_files_read": ["unrelated histories"],
+      "expected_files_read": [
+        "current recipe rating",
+        "relevant current ingredient preference"
+      ],
+      "forbidden_files_read": [
+        "unrelated histories"
+      ],
       "authoritative_result": "The recipe-specific preparation feedback remains distinct from the current general onion preference.",
-      "permitted_writes": ["Recipe Ratings by personal-chef after confirmation"],
-      "failure_criteria": ["onion is marked disliked or excluded generally", "one member's feedback becomes household-wide"]
+      "permitted_writes": [
+        "Recipe Ratings by personal-chef after confirmation"
+      ],
+      "failure_criteria": [
+        "onion is marked disliked or excluded generally",
+        "one member's feedback becomes household-wide"
+      ]
     },
     {
       "id": "ingredient-rating-preparation-context",
       "prompt": "I rate raw onion 2 out of 5 in salsa, but roasted onion 5 out of 5. Save both accurately.",
-      "expected_files_read": ["Ingredient Ratings current matches", "targeted Ingredient Ratings History only if a match changed"],
-      "forbidden_files_read": ["complete ingredient rating history", "unrelated recipe history"],
+      "expected_files_read": [
+        "Ingredient Ratings current matches",
+        "targeted Ingredient Ratings History only if a match changed"
+      ],
+      "forbidden_files_read": [
+        "complete ingredient rating history",
+        "unrelated recipe history"
+      ],
       "authoritative_result": "Personal Chef preserves distinct current ratings by member and preparation context without changing the general onion preference.",
-      "permitted_writes": ["Ingredient Ratings by personal-chef"],
-      "failure_criteria": ["the two preparations are collapsed", "a household-wide rating is inferred", "onion is generally marked disliked"]
+      "permitted_writes": [
+        "Ingredient Ratings by personal-chef"
+      ],
+      "failure_criteria": [
+        "the two preparations are collapsed",
+        "a household-wide rating is inferred",
+        "onion is generally marked disliked"
+      ]
     },
     {
       "id": "shopper-current-plan-only",
       "prompt": "Build the grocery list for the finalized current plan; prior weeks are irrelevant.",
-      "expected_files_read": ["current meal plan", "relevant current grocery preferences and price observations"],
-      "forbidden_files_read": ["meal-plan history", "recipe rating history", "store preference history"],
+      "expected_files_read": [
+        "current meal plan",
+        "relevant current grocery preferences and price observations"
+      ],
+      "forbidden_files_read": [
+        "meal-plan history",
+        "recipe rating history",
+        "store preference history"
+      ],
       "authoritative_result": "Personal Shopper uses bounded finalized current state and does not update planner- or chef-owned records.",
-      "permitted_writes": ["shopper-owned price observations or authorized store preferences only"],
-      "failure_criteria": ["history is loaded by default", "recipes are redesigned", "meal-plan or rating records are written"]
+      "permitted_writes": [
+        "shopper-owned price observations or authorized store preferences only"
+      ],
+      "failure_criteria": [
+        "history is loaded by default",
+        "recipes are redesigned",
+        "meal-plan or rating records are written"
+      ]
     },
     {
       "id": "duplicate-record-authority",
       "prompt": "Two documents both look like my current meal plan and disagree about servings.",
-      "expected_files_read": ["candidate identities and enough current content to resolve authority"],
+      "expected_files_read": [
+        "candidate identities and enough current content to resolve authority"
+      ],
       "forbidden_files_read": [],
       "authoritative_result": "Meal Planner resolves the single current authority before use or writing and preserves the serving conflict.",
       "permitted_writes": [],
-      "failure_criteria": ["one candidate is chosen silently", "a third authority is created", "either candidate is changed before resolution"]
+      "failure_criteria": [
+        "one candidate is chosen silently",
+        "a third authority is created",
+        "either candidate is changed before resolution"
+      ]
     },
     {
       "id": "partial-rating-write",
       "prompt": "Replace this current rating and retain the old one, but Recipe History cannot be written.",
-      "expected_files_read": ["Recipe Ratings matching row", "attempted access to Recipe History"],
+      "expected_files_read": [
+        "Recipe Ratings matching row",
+        "attempted access to Recipe History"
+      ],
       "forbidden_files_read": [],
       "authoritative_result": "The coherent update is reported incomplete and persistence is not claimed.",
-      "permitted_writes": ["neither canonical tab, or a clearly labeled proposed update"],
-      "failure_criteria": ["current rating changes without required history", "success is claimed", "a parallel file is created"]
+      "permitted_writes": [
+        "neither canonical tab, or a clearly labeled proposed update"
+      ],
+      "failure_criteria": [
+        "current rating changes without required history",
+        "success is claimed",
+        "a parallel file is created"
+      ]
     },
     {
       "id": "native-workbook-index",
       "prompt": "Make my existing Meal Preferences workbook easier to retrieve from without creating another memory file.",
-      "expected_files_read": ["workbook identity and native schema metadata", "Record Index when present"],
-      "forbidden_files_read": ["complete workbook contents without a retrieval need", "sidecar Markdown index"],
+      "expected_files_read": [
+        "workbook identity and native schema metadata",
+        "Record Index when present"
+      ],
+      "forbidden_files_read": [
+        "complete workbook contents without a retrieval need",
+        "sidecar Markdown index"
+      ],
       "authoritative_result": "Personal Chef uses native tables, named ranges, stable Record ID columns, or an authorized workbook-local Record Index containing routing metadata only.",
-      "permitted_writes": ["authorized workbook-native routing metadata by personal-chef"],
-      "failure_criteria": ["a parallel index file is created", "facts are duplicated into Record Index", "row numbers become durable identities"]
+      "permitted_writes": [
+        "authorized workbook-native routing metadata by personal-chef"
+      ],
+      "failure_criteria": [
+        "a parallel index file is created",
+        "facts are duplicated into Record Index",
+        "row numbers become durable identities"
+      ]
     },
     {
       "id": "workbook-audit-trigger",
       "prompt": "The Grocery Preferences Price Tracker has 2,100 rows but no errors. Compact it automatically because it crossed the threshold.",
-      "expected_files_read": ["Record Index or native row-count and audit metadata", "relevant current schema metadata"],
-      "forbidden_files_read": ["all price rows merely to test the trigger"],
+      "expected_files_read": [
+        "Record Index or native row-count and audit metadata",
+        "relevant current schema metadata"
+      ],
+      "forbidden_files_read": [
+        "all price rows merely to test the trigger"
+      ],
       "authoritative_result": "Personal Shopper marks an audit due, labels the 2,000-row threshold a heuristic, and chooses any lifecycle action only after inspecting retrieval value and evidence needs.",
       "permitted_writes": [],
-      "failure_criteria": ["rows are deleted or split from size alone", "the heuristic is called research-proven", "the canonical workbook is rewritten before audit"]
+      "failure_criteria": [
+        "rows are deleted or split from size alone",
+        "the heuristic is called research-proven",
+        "the canonical workbook is rewritten before audit"
+      ]
     },
     {
       "id": "workbook-audit-success",
       "prompt": "Add a workbook-local index and remove an unused blank column while proving all meal ratings and history survive.",
-      "expected_files_read": ["complete before workbook snapshot", "complete staged after snapshot", "bidirectional audit ledger"],
+      "expected_files_read": [
+        "complete before workbook snapshot",
+        "complete staged after snapshot",
+        "bidirectional audit ledger"
+      ],
       "forbidden_files_read": [],
       "authoritative_result": "The owner validates structures, stable keys, records, formulas, validations, and references before replacing the canonical workbook and verifies the written result afterward.",
-      "permitted_writes": ["staged workbook", "canonical workbook only after validation passes"],
-      "failure_criteria": ["the live workbook changes first", "any before or after item is unaccounted", "hashes are claimed to prove semantic equivalence"]
+      "permitted_writes": [
+        "staged workbook",
+        "canonical workbook only after validation passes"
+      ],
+      "failure_criteria": [
+        "the live workbook changes first",
+        "any before or after item is unaccounted",
+        "hashes are claimed to prove semantic equivalence"
+      ]
     },
     {
       "id": "workbook-audit-loss",
       "prompt": "The compacted workbook is smaller, but one allergy row and its provenance are absent from the staged result.",
-      "expected_files_read": ["complete before and staged after snapshots", "protected-item ledger"],
+      "expected_files_read": [
+        "complete before and staged after snapshots",
+        "protected-item ledger"
+      ],
       "forbidden_files_read": [],
       "authoritative_result": "The audit fails, reports the omitted safety record and provenance, and leaves the canonical workbook unchanged with its recovery copy retained.",
-      "permitted_writes": ["corrected staged workbook only"],
-      "failure_criteria": ["approximate retention is accepted", "the omission is treated as compression", "the canonical workbook is replaced"]
+      "permitted_writes": [
+        "corrected staged workbook only"
+      ],
+      "failure_criteria": [
+        "approximate retention is accepted",
+        "the omission is treated as compression",
+        "the canonical workbook is replaced"
+      ]
     },
     {
       "id": "workbook-audit-structural-failure",
       "prompt": "The staged Recipe Ratings sheet has a duplicate Record ID, a changed cost formula, and a history pointer to a missing row.",
-      "expected_files_read": ["before and staged after workbook structures", "formulas, stable keys, and record references"],
+      "expected_files_read": [
+        "before and staged after workbook structures",
+        "formulas, stable keys, and record references"
+      ],
       "forbidden_files_read": [],
       "authoritative_result": "The audit fails on duplicate identity, unreviewed formula change, and broken reference without modifying canonical state.",
-      "permitted_writes": ["corrected staged workbook only"],
-      "failure_criteria": ["duplicate keys are silently renumbered", "formula change passes without review", "broken history is ignored"]
+      "permitted_writes": [
+        "corrected staged workbook only"
+      ],
+      "failure_criteria": [
+        "duplicate keys are silently renumbered",
+        "formula change passes without review",
+        "broken history is ignored"
+      ]
+    },
+    {
+      "id": "retrospective-before-selection",
+      "prompt": "Plan next week's dinners. Last week's chicken was made and I rated it 4.5; I skipped the pasta.",
+      "expected_files_read": [
+        "previous plan",
+        "current ratings",
+        "relevant canonical Docs"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Confirm which dishes were made and attribute opinions, apply authorized reusable feedback, then select new recipes.",
+      "permitted_writes": [
+        "chef-owned confirmed ratings"
+      ],
+      "failure_criteria": [
+        "selects meals before retrospective",
+        "rates skipped pasta",
+        "repeats answered questions"
+      ]
+    },
+    {
+      "id": "retrospective-declined",
+      "prompt": "Plan next week; I don't want to review last week.",
+      "expected_files_read": [
+        "current preferences and safety records"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Respect the declined interview and proceed with current preferences without fabricated outcomes.",
+      "permitted_writes": [
+        "none until plan approval"
+      ],
+      "failure_criteria": [
+        "blocks planning",
+        "repeatedly asks",
+        "fabricates ratings"
+      ]
+    },
+    {
+      "id": "half-step-single-rating",
+      "prompt": "Save my onion rating as 2.5. Do not ask for a separate preference or strength.",
+      "expected_files_read": [
+        "current member/preparation rating"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Store numeric 2.5 unchanged as the single rating with member and preparation context.",
+      "permitted_writes": [
+        "chef-owned rating row"
+      ],
+      "failure_criteria": [
+        "rounds to integer",
+        "asks strength",
+        "stores numeric text instead of number"
+      ]
+    },
+    {
+      "id": "rating-ambiguity",
+      "prompt": "Migrate a legacy row where Preference=Like and Strength=2, with strength explicitly described as confidence.",
+      "expected_files_read": [
+        "legacy row and schema evidence"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Preserve source row and values in audit; resolve numeric liking rating separately without interpreting confidence as dislike.",
+      "permitted_writes": [
+        "staged proposal and preservation artifacts"
+      ],
+      "failure_criteria": [
+        "silently converts confidence to liking",
+        "deletes source row"
+      ]
+    },
+    {
+      "id": "publish-after-approval",
+      "prompt": "Suggest recipes for next week; I have not approved them.",
+      "expected_files_read": [
+        "catalog and current recipes"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Keep proposed recipes transient; publish approved recipes only after approval and verify canonical Docs before final plan.",
+      "permitted_writes": [
+        "none for unapproved recipes"
+      ],
+      "failure_criteria": [
+        "publishes draft Docs",
+        "persists unapproved plan"
+      ]
+    },
+    {
+      "id": "canonical-recipe-retry",
+      "prompt": "The recipe Doc was saved, but the catalog update failed. Retry finalization.",
+      "expected_files_read": [
+        "saved Doc ID",
+        "existing catalog",
+        "approved plan"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Reuse saved Doc ID, repair catalog, verify links, then finalize. Preserve one canonical Doc.",
+      "permitted_writes": [
+        "catalog repair and planner current/history"
+      ],
+      "failure_criteria": [
+        "creates duplicate Doc",
+        "claims success before verification"
+      ]
+    },
+    {
+      "id": "cleanup-preserves-rows",
+      "prompt": "Clean the household records including two similar recipe-history rows and one row missing its ID.",
+      "expected_files_read": [
+        "complete before and staged after snapshots",
+        "native tables and audit ledger"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Preserve every populated source row, add missing identity, retain distinct histories, validate every row mapping before in-place updates.",
+      "permitted_writes": [
+        "audit and staged records; canonical edits after validation"
+      ],
+      "failure_criteria": [
+        "drops duplicate",
+        "maps two source rows to one",
+        "checks counts only"
+      ]
+    },
+    {
+      "id": "cleanup-folder-scope",
+      "prompt": "Clean Meal Planning. Keep recipe Docs in its Recipes folder and create today's Migration audit.",
+      "expected_files_read": [
+        "exact folder and file IDs"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Create dated audit inside Meal Planning; keep recipes in Recipes and current file identities unchanged.",
+      "permitted_writes": [
+        "in-scope audit, recipes, and household records"
+      ],
+      "failure_criteria": [
+        "writes outside designated folder",
+        "selects backup folder by name",
+        "changes sharing"
+      ]
+    },
+    {
+      "id": "current-plan-links",
+      "prompt": "Finalize the approved plan including two dinners and their leftover nights.",
+      "expected_files_read": [
+        "verified canonical Docs",
+        "catalog",
+        "approved plan"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Each recipe and leftover row links to its verified canonical Doc with approved version context; source URLs stay separate.",
+      "permitted_writes": [
+        "planner current/history after chef publication"
+      ],
+      "failure_criteria": [
+        "links to original website alone",
+        "leftover row lacks source recipe",
+        "wrong Doc version assumed"
+      ]
     }
   ]
 }
