@@ -42,11 +42,14 @@ Represent same-workbook pointers with `workbook_id`, `sheet`, and `record_id`. S
 
 ## Ledger
 
+For household cleanup, set `preserve_data_rows: true`. This prohibits removing any source record (even one marked disposable), requires a record target for every source record, and prohibits mapping two source records onto one target. Preserve data by stable identity and field mapping, not row counts alone. See [cleanup-migration.md](cleanup-migration.md).
+
 Create a bidirectional ledger after both snapshots exist:
 
 ```json
 {
   "schema_version": 1,
+  "preserve_data_rows": true,
   "before_hash": "sha256-of-canonical-before-json",
   "after_hash": "sha256-of-canonical-after-json",
   "decisions": [

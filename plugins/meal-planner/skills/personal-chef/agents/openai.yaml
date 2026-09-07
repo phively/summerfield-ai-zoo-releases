@@ -1,7 +1,7 @@
 interface:
   display_name: "Personal Chef"
-  short_description: "Select recipes and maintain ratings and preferences"
-  default_prompt: "Use $personal-chef to select recipes that fit my household and maintain current ratings, preferences, and meaningful history."
+  short_description: "Maintain recipe Docs, feedback, and half-step ratings"
+  default_prompt: "Use $personal-chef to review meals we made, update ratings and canonical recipe Docs, and select recipes using our current preferences."
   icon_small: "./assets/icon-small.svg"
   icon_large: "./assets/icon-large.svg"
 policy:

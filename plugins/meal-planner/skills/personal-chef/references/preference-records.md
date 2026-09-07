@@ -2,7 +2,7 @@
 
 Use a workbook or Google Sheet titled `Meal Preferences` or a clearly equivalent title such as `Recipe Preferences` or `Family Meal Preferences`. When creating a new workbook, use `Meal Preferences`. Reuse an accessible equivalent workbook instead of creating a competing copy.
 
-Use six canonical data tabs: `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, and `Recipe History`. For a new workbook, also create the workbook-local `Record Index` defined in shared record management. Accept clearly equivalent existing tab names and columns without forcing a migration. Treat the provider, immutable workbook ID or canonical path, visible title, worksheet, table or named range, stable key column, record ID, and relevant columns as source provenance; do not copy the records into skill-local files. Read [the shared record-management contract](../../../shared/record-management.md) before creating, revising, archiving, restoring, or resolving these records.
+Use seven canonical data tabs: `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, `Recipe History`, and `Recipe Catalog`. For a new workbook, also create the workbook-local `Record Index` defined in shared record management. Accept equivalent existing tab names and combined current/history tables with explicit status and stable keys without forcing a migration. Treat provider, immutable workbook ID or canonical path, title, worksheet, table or named range, stable key, record ID, and relevant columns as provenance; do not copy records into skill-local files. Read [shared record management](../../../shared/record-management.md) before persistent changes and [cleanup migration](../../../shared/cleanup-migration.md) before restructuring existing records.
 
 Use a `Record ID` column in every new current table and the existing `History ID` or `MH-...` field in history tables. Prefer structured tables or named ranges named for the canonical worksheet. Preserve a clearly equivalent existing composite key, but document it in `Record Index` rather than using row numbers. Use the logical uniqueness rules below to detect duplicates.
 
@@ -14,18 +14,19 @@ Use a `Record ID` column in every new current table and the existing `History ID
 | Household member | Person or `household` |
 | Category | Ingredient, cuisine, flavor, texture, technique, equipment, budget, or other |
 | Item | Normalized preference subject |
-| Preference | Love, like, neutral, limit, dislike, or exclude |
-| Strength | Optional 1-5 confidence or intensity |
+| Rating | Single numeric 1-5 value in increments of 0.5; blank if unknown |
 | Context | Weeknight, seasonal, preparation-specific, and similar qualifiers |
 | Reason or notes | User explanation in concise form |
 | Source | Direct statement, repeated behavior, or confirmed interpretation |
 | Updated date | ISO date |
 
-Use `exclude` only for a user-confirmed culinary exclusion. Keep allergy and medical rules in the safety record owned by `meal-planner` unless the user explicitly requests otherwise. Keep only current preference rows here.
+Use 1 = strongly dislike, 2 = dislike, 3 = neutral/mixed, 4 = like, 5 = love; half steps express intermediate opinions. Do not keep a separate Preference or Strength field in the active rating schema. Preserve context and notes. A low rating is not a hard exclusion. Keep confirmed culinary exclusions or frequency limits in planner-owned planning constraints; keep allergy and medical rules in the safety record. Preserve equivalent combined tables by marking superseded rows and filtering current state.
+
+Apply the same single half-step Rating validation to Ingredient Ratings and Recipe Ratings. Do not round invalid legacy ratings or interpret confidence as liking; preserve uncertain source values in the migration audit and mark rating unresolved until clarified. Prefer an existing numeric liking rating when row context establishes its meaning, including valid half steps, rather than replacing it with a coarse label mapping.
 
 ## Household Preferences History
 
-Move a prior material preference here only when a confirmed change retains analytical, explanatory, audit, or restoration value. Include stable history identifier, member, category, item, context, prior value and strength, current replacement, reason retained, source, recorded and effective dates, modification context when relevant, status, and uncertainty. Do not let a historical preference override the current tab.
+Preserve a prior material preference here only when a confirmed change retains continuing value. Include stable history identifier, member, category, item, context, prior rating, current replacement, reason retained, source, recorded and effective dates, status, and uncertainty. Historical legacy values may remain verbatim as evidence; they do not define the current rating schema.
 
 ## Ingredient Ratings
 
@@ -62,9 +63,11 @@ Keep one current decision-relevant row per normalized recipe identity and househ
 | Rating | Current 1-5 value, if supplied |
 | Rating date | ISO date |
 | Would make again | Yes, no, or conditional |
-| Preparation or modification | Version that was actually made |
+| Recipe ID | Stable RC identity from Recipe Catalog |
+| Canonical recipe link | Verified Google Doc link |
+| Version made | Version actually prepared; unknown stays blank |
 | What worked | Concise user feedback |
-| What to change | Specific actionable modification |
+| Feedback pointer | Doc section containing proposed or confirmed recipe changes |
 | Prep difficulty | User assessment |
 | Leftovers quality | User assessment |
 | Source classification | Direct report, confirmed interpretation, or unresolved |
@@ -76,7 +79,7 @@ Interpret ratings with notes rather than mechanically. Treat `would make again` 
 
 ## Recipe History
 
-Keep only prior ratings, material preparation experiences, modifications, and outcomes with continuing value.
+Keep prior ratings, material preparation experiences, and outcomes with continuing value, with pointers to recipe modifications in the canonical Doc.
 
 | Field | Purpose |
 | --- | --- |
@@ -89,8 +92,8 @@ Keep only prior ratings, material preparation experiences, modifications, and ou
 | Replacement rating | Current replacement, when applicable |
 | Would make again | Yes, no, or conditional |
 | What worked | Flavor, texture, ease, leftovers, and similar notes |
-| What to change | Specific actionable modification |
-| Modification tried | What differed from the source |
+| Feedback pointer | Doc section containing proposed or confirmed changes |
+| Preparation pointer | Canonical Doc section/version describing what differed |
 | Prep difficulty | User assessment |
 | Leftovers quality | User assessment |
 | Tags | Cuisine, protein, season, method, or occasion |
@@ -107,7 +110,11 @@ Do not append an identical rating merely because the recipe was served again or 
 3. Update a current ingredient or recipe rating only after direct feedback or confirmed interpretation. Preserve prior state in its historical companion only when it retains continuing value.
 4. Update a stable preference only after direct confirmation. Preserve the prior row in `Household Preferences History` only when it retains continuing value.
 5. Attribute individual reactions to the correct household member; do not convert recipe-specific feedback into a general ingredient preference or preparation-specific ingredient rating without confirmation.
-6. Revisit an older rating only when elapsed time combines with a decision-relevant reason such as repeated use, changed preparation, material modification, conflicting feedback, or upcoming reuse.
+6. At a new-plan request, review the previous plan before selecting recipes: ask what was made, then collect attributed opinions and update confirmed reusable records. Do not repeat already answered/declined questions. Outside that trigger, ask for a re-rating only when a changed preparation, conflicting feedback, or upcoming reuse makes it useful; elapsed time alone is insufficient.
 7. Preserve blanks rather than inventing ratings, dates, reasons, or modifications.
 8. Treat a material current/history update as one coherent operation. Summarize every completed write and surface unresolved duplicates or partial failures.
 9. Check workbook audit triggers using `Record Index` metadata or native row counts and schema metadata. Before structural maintenance, export and validate staged before/after snapshots under the shared protocol; do not use the Markdown audit validator for these workbook records.
+
+## Recipe Catalog
+
+Use the fields and lifecycle in [recipe storage](recipe-storage.md). Keep one row per canonical Recipe ID, independent of per-member rating rows. Do not store ingredients, instructions, or modification text in this catalog. Preserve original source URLs separately from canonical Doc links. Add missing IDs to legacy rows without deleting or merging those rows.

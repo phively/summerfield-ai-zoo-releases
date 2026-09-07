@@ -29,10 +29,13 @@ Preserve a clearly equivalent existing authority instead of renaming or copying 
 | Personal Chef | `Meal Preferences` workbook: `Household Preferences` | `Household Preferences History` | All Meal Planner skills, limited to task-relevant culinary preferences | `personal-chef` only |
 | Personal Chef | `Meal Preferences` workbook: `Ingredient Ratings` | `Ingredient Ratings History` | All Meal Planner skills, limited to task-relevant ingredient evidence | `personal-chef` only |
 | Personal Chef | `Meal Preferences` workbook: `Recipe Ratings` | `Recipe History` | All Meal Planner skills, limited to task-relevant recipe evidence | `personal-chef` only |
+| Personal Chef | `Meal Preferences`: `Recipe Catalog` and one canonical Google Doc per Recipe ID in the designated Recipes folder | Native Google Docs revision history; targeted preparation context in the Doc | All Meal Planner skills, current recipe first | `personal-chef` only |
 | Personal Shopper | `Grocery Preferences` workbook: `Store Preferences` | `Store Preferences History` | All Meal Planner skills, limited to task-relevant shopping context | `personal-shopper` only |
 | Personal Shopper | `Grocery Preferences` workbook: `Price Tracker` | The dated observations in the same tab are the record; do not add a duplicate archive | All Meal Planner skills, limited to relevant price evidence | `personal-shopper` only |
 
 The owner may create or update its records only when the user authorizes persistence or an existing confirmed workflow already authorizes that bounded write. Other skills send update requests through the canonical handoff contract. Do not create skill-local copies, per-plan authorities, or parallel workbooks.
+
+Resolve the designated Meal Planning folder and Recipes subfolder by immutable provider IDs. Keep all planning records within Meal Planning and canonical recipes within Recipes. Preserve equivalent existing names, combined tabs with clear status, and file identities. Read [cleanup-migration.md](cleanup-migration.md) before any cleanup or schema migration; preserve every populated source row and create a dated Migration audit within Meal Planning. Recipe schemas and lifecycle are in [recipe storage](../skills/personal-chef/references/recipe-storage.md).
 
 ## Native identities and routing
 
@@ -63,7 +66,7 @@ Keep one operationally complete most recently finalized plan. It must be underst
 - exact document provider and resource ID or canonical path plus the stable heading, bookmark, or named section used for retrieval;
 - household and serving assumptions;
 - exact household, safety, preference, recipe, pantry, and grocery-record identities used;
-- finalized recipe identities, sources, planned servings, material adaptations, and constraint-sensitive details;
+- finalized recipe IDs, verified canonical Google Doc links in the weekly table, versions used, source attribution, planned servings, plan-specific adaptations, and constraint-sensitive details;
 - schedule, leftovers, prep, storage, and shopping context needed to execute the plan;
 - unresolved assumptions or safety, availability, pantry, and pricing questions;
 - feedback candidates that may justify a later `personal-chef` check-in, without claiming a meal was prepared; and
@@ -89,7 +92,7 @@ Do not archive abandoned drafts, trivial wording changes, complete transcripts, 
 
 Treat finalization as one coherent operation:
 
-1. Confirm that the plan is final and resolve the authoritative current/history pair.
+1. Confirm user approval and resolve the authoritative current/history pair. Before changing either plan record, have the chef publish approved recipes and verify every canonical recipe Doc and catalog link. Do not publish newly proposed recipes before approval.
 2. Preserve the existing current plan in history when one exists and retains the required historical value.
 3. Replace the current authority with the newly finalized plan and its stable identifier.
 4. Add any justified targeted pointers and replacement relationships.
@@ -106,9 +109,9 @@ Do not archive ordinary pantry quantity churn. Never let a historical allergy or
 
 ### Household Preferences and Household Preferences History
 
-Keep one current row per household member, category, item, and material context in `Household Preferences`. This is the current authority for culinary ingredient, cuisine, flavor, texture, technique, equipment, and similar preferences.
+Keep one current row per household member, category, item, and material context in `Household Preferences`. This is the current authority for culinary ingredient, cuisine, flavor, texture, technique, equipment, and similar preferences. Use a single numeric Rating from 1 to 5 in half steps for culinary preferences and all ingredient/recipe ratings. Unknown stays blank; preserve member and preparation context. Do not maintain a separate active Preference or Strength field. Hard exclusions and frequency limits remain separate planner-owned constraints.
 
-When a confirmed current preference materially changes, move the prior formulation to `Household Preferences History` only if it retains analytical, explanatory, audit, or restoration value. Record `MH-...` identifier, household member, category, item, context, prior value and strength, current replacement identity or value, reason, source, recorded and effective dates, modification context when relevant, and uncertainty.
+When a confirmed current preference materially changes, preserve its prior formulation in `Household Preferences History` or a status-marked historical row when it retains continuing value. Record `MH-...` identifier, member, category, item, context, prior rating, replacement identity/value, reason, source, recorded/effective dates, and uncertainty. Historical legacy labels may remain as evidence; they never override the active numeric schema.
 
 Recipe-specific feedback does not establish a general ingredient preference without explicit confirmation. Individual feedback does not establish a household-wide preference.
 
@@ -124,16 +127,16 @@ Do not silently generalize a preparation-specific ingredient rating. For example
 
 Keep `Recipe Ratings` as the sole current authority for the latest decision-relevant rating of each recipe and household member or explicitly confirmed household aggregate. Use normalized recipe title plus source URL or stable original-recipe identity to match entries. Include:
 
-- recipe identity and source;
+- stable Recipe ID, canonical Google Doc link, and separate original source attribution;
 - household member or confirmed aggregate;
 - current 1-5 rating when supplied, `would make again`, and rating date;
-- preparation or modification identity;
-- what worked, what to change, difficulty, leftovers quality, and concise context;
+- version made or a pointer to the Doc's preparation context;
+- what worked, difficulty, leftovers quality, concise outcome context, and pointers to proposed or confirmed recipe modifications held in the Doc;
 - source classification: direct report, confirmed interpretation, or unresolved;
 - last-updated date and stale-review status; and
 - a targeted pointer when historical context could materially affect reuse.
 
-Use `Recipe History` for prior ratings, prior preparations, material modifications, and outcomes with continuing value. Each entry must contain `MH-...` identifier, recipe and member identities, prior and replacement values, dates, modification tried, reason retained, provenance, uncertainty, and `superseded`, `archived`, or `restored` status.
+Use `Recipe History` for prior ratings and outcomes with continuing value. Each entry contains `MH-...` identifier, recipe/member identities, prior and replacement ratings, dates, Doc version or preparation pointer, reason retained, provenance, uncertainty, and status. Keep recipe instructions and modification text in the canonical Doc, with Google Docs revision history; the workbook is not a second recipe store. Preserve equivalent combined current/history tables with explicit row status during migration.
 
 Do not append an identical rating merely because the recipe was served again. Do not erase meaningful prior outcomes, but do not turn history into a meal log.
 
@@ -155,7 +158,7 @@ Treat a material current-state change as one transaction:
 6. Add or revise only useful targeted pointers.
 7. Verify that no contradictory active formulation remains.
 
-Remove incorrect, transient, or valueless duplication instead of archiving it. A change requiring both current and history writes is incomplete unless both succeed.
+During cleanup, retain or update every populated source data row; do not remove or silently merge duplicates. Resolve conflicting active authority with status and pointers while preserving all original data in the row or its traceable history. A change requiring both current and history writes is incomplete unless both succeed.
 
 ## Format-aware review triggers
 
@@ -186,12 +189,16 @@ On unexplained omission, duplicate stable key, changed protected value, broken f
 
 ## Feedback check-in gate
 
-Ask `personal-chef` to collect or refresh feedback only when all applicable conditions pass:
+### Pre-planning retrospective
+
+A request for a new meal plan triggers one bounded retrospective before recipe selection. Read the previous current plan and ask which recipes were actually made. For confirmed dishes, collect member-attributed opinions, optional numeric ratings in half steps, repeat interest, and modifications. Ask about the version actually prepared rather than assuming today's canonical Doc was used. Apply confirmed reusable recipe and preference updates through their owners before making the new plan. An existing confirmed workflow may authorize these bounded writes; do not repeat permission questions already answered.
+
+Skip questions already answered or declined. If no prior plan exists, nothing was made, or feedback is unavailable, continue with current records and explicit uncertainty. Do not require numeric scores when qualitative feedback is all the user supplies. Do not run this interview for a cleanup-only request. Outside a new-plan request, collect or refresh feedback only when it could affect a current decision:
 
 1. Confirm the recipe was actually prepared or the ingredient was actually used; a plan alone is not evidence of consumption.
 2. Confirm that the affected household member is known or preserve individual attribution as unresolved.
 3. Identify how an answer could change future selection, adaptation, shopping, or a current rating.
-4. For re-rating, require both meaningful elapsed time and a decision-relevant reason such as repeated use, changed preparation, a material modification, conflicting feedback, or an upcoming reuse decision. Elapsed time alone is insufficient.
+4. For re-rating outside the retrospective, require a decision-relevant reason such as changed preparation, a material modification, conflicting feedback, or upcoming reuse. Elapsed time alone is insufficient.
 5. Ask the smallest useful set of questions and include the recipe or ingredient identity, preparation or modification, prior rating date and value when visible, and the reason review matters now.
 
 Do not repeatedly ask after the user declines or lacks feedback unless a materially different preparation or decision creates a new reason.

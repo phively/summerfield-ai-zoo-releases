@@ -1,7 +1,7 @@
 {
   "suite": "work-smarter-regression",
-  "plugin_version": "1.6.0",
-  "run_date": "2026-08-29",
+  "plugin_version": "1.8.0",
+  "run_date": "2026-09-07",
   "structural_checks": {
     "remember_me_skill_validator": "passed",
     "superb_skills_skill_validator": "passed",
@@ -9,10 +9,10 @@
     "teach_me_plugin_skill_validator": "passed",
     "teach_me_standalone_skill_validator": "passed",
     "plugin_validator": "passed",
-    "contract_and_behavior_tests": "27 passed",
+    "contract_and_behavior_tests": "33 passed",
     "marketplace_and_catalog_tests": "10 passed",
-    "regression_case_schema": "63 cases passed",
-    "full_repository_tests": "89 passed"
+    "regression_case_schema": "76 cases passed",
+    "full_repository_tests": "100 passed"
   },
   "forward_test_plugin_version": "1.4.0",
   "forward_test_run_date": "2026-08-16",
@@ -39,7 +39,8 @@
     }
   ],
   "not_run": [
-    "Clean-context forward tests for the 1.6.0 teach-me activation, research-first dialogue, personality fallback, and memory handoffs",
+    "Clean-context model forward tests for the 1.8.0 project-instruction character budget and installed-skill authority-leakage scenarios",
+    "Clean-context forward tests for the 1.7.0 teach-me learning plans, adaptive scaffolding, tool boundaries, evidence routing, research-first dialogue, personality fallback, and memory handoffs",
     "Clean-context forward tests for the 1.5.0 comparative-language and expanded maintenance-trigger scenarios",
     "Clean-context forward tests for remember-me activation, library writes, and cross-plugin handoffs",
     "Automatic activation testing after installation in a live ChatGPT plugin marketplace",

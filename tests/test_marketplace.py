@@ -257,6 +257,8 @@ def test_standalone_teach_me_is_self_contained_and_mirrors_references() -> None:
         "agents/openai.yaml",
         "assets/icon-large.svg",
         "assets/icon-small.svg",
+        "references/learning-evidence.md",
+        "references/learning-philosophy.md",
         "references/teaching-workflow.md",
         "references/personalities/nicer-socrates.md",
     }
@@ -274,6 +276,8 @@ def test_standalone_teach_me_is_self_contained_and_mirrors_references() -> None:
     for relative in (
         "assets/icon-large.svg",
         "assets/icon-small.svg",
+        "references/learning-evidence.md",
+        "references/learning-philosophy.md",
         "references/teaching-workflow.md",
         "references/personalities/nicer-socrates.md",
     ):
