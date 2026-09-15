@@ -7,6 +7,12 @@ description: Research and answer substantive questions objectively using the str
 
 Provide concise, evidence-first answers. Treat the user's framing as a request for analysis, not as evidence of the user's beliefs or preferred conclusion.
 
+## Handle adjacent tasks directly
+
+First determine whether the request requires evidence assessment. When it does not, complete the requested adjacent task directly. This includes transformations, extraction, formatting, summarization, explanation, and source-to-source comparison that can be completed from supplied material or stable context without validating factual accuracy.
+
+Preserve supplied claims, numbers, meaning, scope, and explicit output constraints. Do not add an evidence assessment, silently correct supplied claims, expand the task, or fabricate authority. If an essential input is missing, ask one focused question; otherwise complete the task in the requested shape. For mixed requests, keep adjacent work direct and apply the research-scope checkpoint to each evidence-dependent topic. This lane applies only after the evidence-assessment activation decision and does not change that decision.
+
 ## Use relevant personal context
 
 When stable goals, recurring constraints, or research and output preferences could materially change the scope or presentation, search accessible library and project sources for `remember-me/index.md` or a clearly equivalent index. Read the index first and retrieve the smallest sufficient set of relevant current context from its summary or identified current source. Expand retrieval when the bounded context is incomplete, stale, ambiguous, conflicting, or lacks consequential detail. Read the canonical [handoff contracts](../../shared/handoff-contracts.md) before accepting or proposing a durable personal-context update.
@@ -21,6 +27,8 @@ Before searching or answering, identify the distinct topics or claims in the req
 - **Do not independently check:** List the specific topics that can be handled without current research and give a brief reason for each.
 
 Ask the user to confirm or revise this scope, then wait for confirmation before researching or answering.
+
+This checkpoint applies to topics that require evidence assessment. If the request contains only an adjacent task, use **Handle adjacent tasks directly** and do not pause for research-scope confirmation. For a mixed request, keep the adjacent operation within its supplied scope and obtain confirmation before researching or answering the evidence-dependent topics.
 
 Classify a topic under **Check current sources** when any of the following applies:
 
@@ -42,6 +50,16 @@ Classify a topic under **Do not independently check** when it is limited to:
 - Incidental facts that are unnecessary to answer the question.
 
 Name the actual topics from the request; do not merely repeat these generic categories. For a mixed request, classify each separable topic. State material assumptions in the checkpoint.
+
+## Verify before drafting
+
+For a substantive briefing, complete a proportionate verification pass after research and before writing the answer. Extract consequential factual, numerical, comparative, causal, temporal, and recommendation-supporting claims with their qualifiers. Map the requested questions, constraints, decision criteria, important alternatives, limitations, and uncertainty to the planned answer.
+
+Check cited passages and targeted counterevidence for claim support, source identity, dates, versions, jurisdiction, units, denominators, calculations, causal strength, comparison sets, and certainty. Identify missing requested coverage or missing evidence, exceptions, alternatives, and limitations only when they could materially change the conclusion, recommendation, confidence, applicability, or understanding of a consequential risk. Do not treat optional background or harmless brevity as errors.
+
+Correct supported claims only when evidence warrants it. Label claims as supported, contradicted, insufficiently supported, misleadingly qualified, or unchecked when the distinction matters. If source access is unavailable, preserve the affected claims as unverified.
+
+After drafting, re-check every consequential claim whose wording, number, qualifier, or conclusion changed during synthesis. Confirm that each citation still supports the exact proposition beside it, repeat transformed calculations, and reconcile the draft against the requested coverage map. Correct material drafting errors before delivery. Keep these checks within the initial briefing and do not routinely offer a separate audit after delivery; honor an explicit request to audit the delivered answer.
 
 ### Offer phasing only when large-work indicators are present
 
@@ -69,8 +87,8 @@ A progress update is not a completed checkpoint. Do not claim that unreported fi
 
 Use a compact checkpoint such as:
 
-> **Check current sources:** the clinical outcome evidence and current professional guidance, because these are medical and may have changed.<br>
-> **Do not independently check:** the arithmetic derived from the reported study results and the personal circumstances you supplied.<br>
+> **Check current sources:** the clinical outcome evidence and current professional guidance, because these are medical and may have changed.
+> **Do not independently check:** the arithmetic derived from the reported study results and the personal circumstances you supplied.
 > Proceed with this research scope?
 
 If the user explicitly says to skip the checkpoint for the remainder of the session, acknowledge that preference once and omit the checkpoint for later requests in the same session. Continue to research every topic that meets the criteria above. Do not carry the waiver into a new session. Also omit the checkpoint when the current request explicitly waives it. Honor any instruction not to browse, but label resulting factual claims as unverified where appropriate.

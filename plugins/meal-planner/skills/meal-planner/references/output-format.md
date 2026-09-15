@@ -2,20 +2,22 @@
 
 Scale detail to the request. For a full printable weekly plan, use the structure below. For brainstorming, revisions, or short plans, include only the relevant sections.
 
+This reference governs conversational output. When persisting or reformatting a canonical plan, also read [the canonical meal-plan document template](meal-plan-document-template.md) and [native artifact storage and formatting](../../../shared/artifact-formatting.md). Render Google Docs with native headings, lists, tables, and descriptive hyperlinks; do not paste this Markdown structure into the document.
+
 ## Assumptions and safety notes
 
 List only assumptions or warnings that materially affect the plan.
 
 ## Weekly overview
 
-Use a compact table with day, meal, canonical recipe link, servings, active time, total time, planned leftovers, and new or returning status. In the persisted current plan, every recipe links to its verified canonical Google Doc; leftover-only meals link to the source dinner. Preserve the approved recipe version in plan metadata. For drafts, label an unpublished recipe link pending rather than inventing a URL. Use native Google resource links when supported.
+Use a compact table with day, meal, canonical recipe link, servings, active time, total time, planned leftovers, and new or returning status. In the persisted current plan, use a native table and give every recipe a descriptive link to its verified canonical Google Doc; leftover-only meals use a named link to the source dinner. Preserve the approved recipe version in plan metadata. For drafts, label an unpublished recipe link pending rather than inventing a URL. Use native Google resource links or supported smart chips when available, and never show a bare URL or raw HTML as link text.
 
 ## Dinner cards
 
 For each dinner, include:
 
 - Recipe name
-- Canonical Google Doc link and approved version, distinct from the original source attribution
+- Descriptive verified canonical Google Doc link and approved version, distinct from the original source attribution
 - Servings
 - Prep, cook, active, and total time
 - Protein, vegetables, and starch or approved alternative
@@ -26,7 +28,7 @@ For each dinner, include:
 - Leftover and storage strategy
 - Freezer notes when useful
 - Approximate calories, protein, fiber, carbohydrates, and fat per serving when requested or reliably calculable
-- Original recipe title, author, website, and direct link when externally sourced
+- Original recipe title, author, website, and descriptive verified link when externally sourced
 - Material modifications and reasons
 
 Avoid repeating full instructions for a planned leftover night. Refer back to the source dinner and provide reheating or transformation directions.
@@ -66,4 +68,4 @@ Summarize proteins, cuisines, cooking methods, new recipes, and returning favori
 
 ### Evidence and sources
 
-Provide links near health claims and a concise source list for nutrition guidance, seasonal-produce guidance, and original recipe pages actually used. Do not pad the section with sources that did not affect the plan.
+Provide descriptive, verified links near health claims and a concise source list for nutrition guidance, seasonal-produce guidance, and original recipe pages actually used. Do not display bare URLs or pad the section with sources that did not affect the plan.

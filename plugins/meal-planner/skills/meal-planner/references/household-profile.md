@@ -4,9 +4,9 @@ Collect only information relevant to the request. Prefer one focused checkpoint 
 
 ## Workbook and canonical tabs
 
-Use a workbook or Google Sheet titled `Household Preferences` or a clearly equivalent title such as `Household Profile` or `Family Preferences`. When creating a new workbook, use `Household Preferences`. Reuse an accessible equivalent workbook instead of creating a competing copy.
+Use a workbook or Google Sheet titled `Household Preferences` or a clearly equivalent title such as `Household Profile` or `Family Preferences`. When creating a new record and the user's Google Drive is accessible, prefer a Google Sheet titled `Household Preferences` inside the designated Meal Planning folder. Reuse an accessible equivalent workbook instead of creating a competing copy. Read [native artifact storage and formatting](../../../shared/artifact-formatting.md) before creating or formatting it.
 
-For a new workbook, also create the workbook-local `Record Index` defined in shared record management. For an existing workbook, use its native table, named range, or stable-key metadata and add the routing worksheet only with authorization when it materially improves retrieval or auditability.
+For a new workbook, also create the workbook-local `Record Index` defined in shared record management. Put each canonical dataset in native cells with a formatted header row, appropriate wrapping and widths, filters or a native table when supported, stable keys, and applicable validation. The Markdown tables in this reference describe schemas; never paste them as literal Markdown into a cell or document. For an existing workbook, use its native table, named range, or stable-key metadata and add the routing worksheet only with authorization when it materially improves retrieval or auditability.
 
 Use these canonical tabs, accepting clearly equivalent existing tab names without forcing a migration:
 
@@ -16,7 +16,7 @@ Use these canonical tabs, accepting clearly equivalent existing tab names withou
 - `Pantry Inventory`: item, quantity, unit, status, location, and updated date when the user maintains pantry data in this workbook.
 - `Household History`: material superseded or restored household, safety, and planning state with continuing provenance, audit, or restoration value. Do not use it for routine pantry churn.
 
-Treat exact workbook title, link or file identity, and tab names as part of source provenance. Report missing canonical tabs; create or rename tabs only with authorization, and do not copy their contents into skill-local files.
+Treat exact workbook title, named verified link or file identity, and tab names as part of source provenance. Report missing canonical tabs; create or rename tabs only with authorization, and do not copy their contents into skill-local files. Display descriptive hyperlink text rather than a bare URL; retain raw IDs or URLs only in dedicated routing fields when required.
 
 Use a `Record ID` column as the stable row key for new records. Prefer structured tables or named ranges named for their canonical worksheets. Preserve a clearly equivalent existing unique key, but document it in `Record Index` instead of identifying rows by position. Use these logical uniqueness rules to detect accidental duplicates:
 

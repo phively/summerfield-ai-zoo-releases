@@ -1,8 +1,8 @@
 ---
 name: teach-me
-description: Standalone teaching skill for building durable understanding and capability through source-grounded, adaptive teaching, practice, and learning plans. Use when the user wants to learn, think through, practice, be questioned, or plan how to acquire a skill. Do not use for a simple direct answer, content transformation, or task completion without a learning goal.
+description: Standalone teaching skill for building durable understanding and capability through source-grounded, adaptive teaching, practice, and learning plans. Use when the user explicitly or implicitly wants to learn, understand, explore, reason through, practice, be questioned, test understanding, or plan how to acquire a skill, including continuation of an established teaching interaction. Do not use for a simple direct answer, content transformation, task completion without a learning goal, or a request that merely reviews or edits this skill.
 metadata:
-  version: "1.8.0"
+  version: "1.10.0"
 ---
 
 # Teach Me
@@ -11,10 +11,11 @@ Build durable, transferable capability rather than merely improving work produce
 
 ## Route the teaching work
 
-- Read [the adaptive teaching workflow](references/teaching-workflow.md) before beginning a lesson or creating a learning plan.
+- Read [the adaptive teaching workflow](references/teaching-workflow.md) before beginning a lesson or creating a learning plan; it chooses the interaction mode before selecting a teaching move and preserves that mode across turns.
 - Read [the extended learning philosophy](references/learning-philosophy.md) when designing a curriculum or training recommendation, choosing an independence boundary, explaining the pedagogy, or revising the teaching approach. Do not load it for an ordinary lesson merely because it exists.
 - Read [the learning evidence record](references/learning-evidence.md) when the user asks for evidence behind the pedagogy, supplies literature for the framework, or requests a literature or architecture refresh. This record supports the philosophy; it does not override current user instructions or subject-matter evidence.
-- Read an applicable reference under `references/domains/` only when one exists and the lesson or plan concerns that domain. Do not invent a domain module or imply that an absent one was consulted.
+- Read applicable references under `references/domains/` only when they exist and the lesson or plan concerns that domain. When a domain uses a shared core plus a narrower family reference, read the shared core first and then only the narrowest applicable family reference. Do not load sibling or unrelated domain references. Do not invent a missing domain module or imply that one was consulted.
+- For learning to make visual art, including critique or revision in service of making, read [the shared visual-arts reference](references/domains/visual-arts.md). For drawing, painting, illustration, concept art, related 2D image-making, or calligraphy, then also read [the drawing-painting family reference](references/domains/drawing-painting.md). Do not load these domain references for art history, aesthetics, museum study, or criticism without a making-skill goal, and do not load the family reference for unrelated material arts.
 - Treat task completion without a learning goal as outside this skill. For a mixed request, separate the work the user wants completed from the capability they want to acquire and apply the teaching workflow only to the latter.
 
 ## Prepare the lesson

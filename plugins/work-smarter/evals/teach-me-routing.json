@@ -1,0 +1,1143 @@
+{
+  "suite": "teach-me-routing",
+  "version": "1.0.0",
+  "purpose": "Compare direct-answer routing with adaptive-learning routing while preserving mode continuity and user control.",
+  "provenance": {
+    "historical": [
+      "Kahneman/conjunction-fallacy discussion: use exact turns only when the source conversation is available.",
+      "AI-doomer discussion: use exact turns only when the source conversation is available."
+    ],
+    "adapted": [
+      "Kahneman alternate-formulation and critic-reading hypotheses are adapted from the supplied routing review.",
+      "AI-doomer and Pascal's-wager cases are adapted synthetic fixtures until the source turns are available."
+    ],
+    "synthetic": "All other cases are constructed regression fixtures."
+  },
+  "cases": [
+    {
+      "id": "route-direct-factual-standalone",
+      "turns": [
+        "What is the conjunction fallacy?"
+      ],
+      "expected_skills": [],
+      "intended_behavior": "Answer directly and concisely without activating teach-me or forcing a diagnostic question.",
+      "success_criteria": [
+        "direct answer",
+        "no unnecessary Socratic detour",
+        "does not claim a lesson is underway"
+      ],
+      "failure_criteria": [
+        "starts a lesson",
+        "asks about prior knowledge before answering",
+        "withholds the definition"
+      ],
+      "input": "What is the conjunction fallacy?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-direct-explanation-standalone",
+      "turns": [
+        "Explain the conjunction fallacy in two paragraphs."
+      ],
+      "expected_skills": [],
+      "intended_behavior": "Provide the requested explanation directly within the requested scope.",
+      "success_criteria": [
+        "direct explanation",
+        "approximately requested scope",
+        "no forced exercise"
+      ],
+      "failure_criteria": [
+        "asks the learner to explain first",
+        "turns the request into a lesson",
+        "refuses to explain"
+      ],
+      "input": "Explain the conjunction fallacy in two paragraphs.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-explicit-understanding",
+      "turns": [
+        "Help me understand why the conjunction fallacy occurs."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Establish learning mode and begin adaptive teaching; choose a question, example, or small explanation based on inferred prerequisites.",
+      "success_criteria": [
+        "learning mode",
+        "purposeful learner engagement",
+        "does not dump a complete lecture by default"
+      ],
+      "failure_criteria": [
+        "direct-only answer",
+        "generic quiz unrelated to the target",
+        "asks several questions at once without need"
+      ],
+      "input": "Help me understand why the conjunction fallacy occurs.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-explicit-exploration",
+      "turns": [
+        "I want to work through whether the Linda experiment really demonstrates irrationality."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Treat the request as guided exploration and preserve the distinction between evidence, interpretation, and hypothesis.",
+      "success_criteria": [
+        "learning mode",
+        "elicits or tests the learner's interpretation",
+        "preserves uncertainty"
+      ],
+      "failure_criteria": [
+        "declares the conclusion without engaging the learner",
+        "treats the framing as settled fact",
+        "asks for a full essay before any scaffold"
+      ],
+      "input": "I want to work through whether the Linda experiment really demonstrates irrationality.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-explicit-invocation-question-form",
+      "turns": [
+        "Use teach-me with the default personality: what is the conjunction fallacy?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Treat explicit teaching invocation as learning mode despite the interrogative wording, while still giving a necessary brief orientation.",
+      "success_criteria": [
+        "learning mode",
+        "does not confuse a question with direct-only intent",
+        "uses proportionate scaffolding"
+      ],
+      "failure_criteria": [
+        "ignores explicit invocation",
+        "delivers only a dictionary definition",
+        "forces a full unaided answer"
+      ],
+      "input": "Use teach-me with the default personality: what is the conjunction fallacy?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-explicit-direct-override",
+      "turns": [
+        "Answer this directly: did Tversky and Kahneman test alternate formulations?"
+      ],
+      "expected_skills": [],
+      "intended_behavior": "Honor the explicit direct-answer request for this turn and answer within the requested scope.",
+      "success_criteria": [
+        "direct answer",
+        "does not force a learning exercise",
+        "preserves uncertainty if the evidence requires it"
+      ],
+      "failure_criteria": [
+        "asks the learner to reason first",
+        "refuses because teach-me is available",
+        "turns direct wording into a lesson"
+      ],
+      "input": "Answer this directly: did Tversky and Kahneman test alternate formulations?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-active-lesson-ordinary-question",
+      "turns": [
+        "Help me examine the conjunction-fallacy evidence.",
+        "I think the framing may explain much of the result.",
+        "Why does that matter?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Retain learning mode across an ordinary follow-up question and respond with the most useful teaching move.",
+      "success_criteria": [
+        "continues the lesson",
+        "connects the question to the learner's hypothesis",
+        "does not require a fresh mode choice"
+      ],
+      "failure_criteria": [
+        "switches to direct-only mode because of the question",
+        "restarts from scratch",
+        "asks whether to learn or receive an answer despite context"
+      ],
+      "input": "Help me examine the conjunction-fallacy evidence.\n\nI think the framing may explain much of the result.\n\nWhy does that matter?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING",
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-active-kahneman-alternate-formulations",
+      "turns": [
+        "Let's explore the criticism of the conjunction-fallacy study.",
+        "What about the alternate formulations?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "provenance": "adapted",
+      "intended_behavior": "Treat the follow-up as continued exploration; provide needed factual context or a calibrated question without dumping an unrelated complete analysis.",
+      "success_criteria": [
+        "retains learning mode",
+        "answers the local prerequisite if needed",
+        "preserves learner agency"
+      ],
+      "failure_criteria": [
+        "complete answer silently replaces exploration",
+        "pretends the alternate-formulation evidence is known without verification",
+        "asks a redundant mode question"
+      ],
+      "input": "Let's explore the criticism of the conjunction-fallacy study.\n\nWhat about the alternate formulations?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-active-local-explanation",
+      "turns": [
+        "Teach me how framing affects the conjunction-fallacy judgment.",
+        "Can you just explain what an alternate formulation means?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Give the requested local explanation as scaffolding and retain the surrounding learning mode.",
+      "success_criteria": [
+        "direct local explanation",
+        "does not require rediscovery",
+        "lesson context remains available"
+      ],
+      "failure_criteria": [
+        "asks another equivalent question",
+        "treats explanation as permanent exit",
+        "withholds the requested prerequisite"
+      ],
+      "input": "Teach me how framing affects the conjunction-fallacy judgment.\n\nCan you just explain what an alternate formulation means?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-active-temporary-override",
+      "turns": [
+        "Help me compare the two arguments.",
+        "Just tell me whether that inference is valid, then let's keep going."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Answer the specified issue directly, then preserve learning mode for the stated continuation.",
+      "success_criteria": [
+        "direct answer for the local issue",
+        "retains lesson context",
+        "does not force an immediate question after the answer"
+      ],
+      "failure_criteria": [
+        "refuses direct override",
+        "permanently exits learning mode",
+        "ignores the requested continuation"
+      ],
+      "input": "Help me compare the two arguments.\n\nJust tell me whether that inference is valid, then let's keep going.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-active-permanent-exit",
+      "turns": [
+        "Help me reason through the argument.",
+        "Stop Socratic mode and answer directly from here."
+      ],
+      "expected_skills": [],
+      "intended_behavior": "Exit learning mode and answer subsequent requests directly until the user changes the mode.",
+      "success_criteria": [
+        "honors explicit exit",
+        "no forced questioning",
+        "scope of continuing override is clear"
+      ],
+      "failure_criteria": [
+        "continues Socratic questioning",
+        "asks permission to stop",
+        "treats the exit as only a local explanation request"
+      ],
+      "input": "Help me reason through the argument.\n\nStop Socratic mode and answer directly from here.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-active-source-request-continues",
+      "turns": [
+        "Let's learn how to assess this study.",
+        "Can you link the original paper? I want to keep discussing it afterward."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "intended_behavior": "Perform the source-link task directly and preserve learning mode for the explicitly stated continuation.",
+      "success_criteria": [
+        "performs the requested source task",
+        "does not force a lesson move in the same turn",
+        "retains the stated continuation"
+      ],
+      "failure_criteria": [
+        "refuses the link until the learner answers",
+        "ends the lesson despite explicit continuation",
+        "claims a source was checked when it was not"
+      ],
+      "input": "Let's learn how to assess this study.\n\nCan you link the original paper? I want to keep discussing it afterward.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-active-source-request-concludes",
+      "turns": [
+        "Help me understand the original study.",
+        "Please re-link the original study, then I think I'm good to go."
+      ],
+      "expected_skills": [],
+      "provenance": "adapted",
+      "intended_behavior": "Provide the requested link and conclude without adding a gratuitous Socratic question.",
+      "success_criteria": [
+        "performs the source task",
+        "recognizes the explicit conclusion",
+        "stops cleanly"
+      ],
+      "failure_criteria": [
+        "asks another teaching question",
+        "withholds the link",
+        "claims the learner reached mastery"
+      ],
+      "input": "Help me understand the original study.\n\nPlease re-link the original study, then I think I'm good to go.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-review-skill-negative",
+      "turns": [
+        "Review teach-me's routing instructions for ambiguity."
+      ],
+      "expected_skills": [
+        "superb-skills"
+      ],
+      "intended_behavior": "Treat this as instruction-package review; mentioning teach-me does not itself create a teaching goal.",
+      "success_criteria": [
+        "routes to instruction design",
+        "does not start a lesson",
+        "preserves review scope"
+      ],
+      "failure_criteria": [
+        "activates teach-me as a lesson",
+        "asks what the learner already knows",
+        "rewrites without diagnosis"
+      ],
+      "input": "Review teach-me's routing instructions for ambiguity.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-ai-analysis-direct",
+      "turns": [
+        "Compare AI-doomer arguments with Pascal's wager."
+      ],
+      "expected_skills": [],
+      "provenance": "adapted",
+      "intended_behavior": "Provide the requested analysis directly when no learning goal or active lesson is established.",
+      "success_criteria": [
+        "direct comparison",
+        "labels inference and uncertainty",
+        "does not force guided practice"
+      ],
+      "failure_criteria": [
+        "starts a Socratic lesson",
+        "asks the user to compare first",
+        "treats the comparison as a request for skill acquisition"
+      ],
+      "input": "Compare AI-doomer arguments with Pascal's wager.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-ai-exploration",
+      "turns": [
+        "I want to explore whether AI-doomer reasoning is structurally similar to Pascal's wager."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "provenance": "adapted",
+      "intended_behavior": "Use learning mode to examine the proposed structural mapping while preserving the user's hedging.",
+      "success_criteria": [
+        "learning mode",
+        "elicits or tests the mapping",
+        "does not strengthen 'whether' into certainty"
+      ],
+      "failure_criteria": [
+        "answers only with a finished essay",
+        "treats the analogy as established",
+        "rejects the hypothesis without examining it"
+      ],
+      "input": "I want to explore whether AI-doomer reasoning is structurally similar to Pascal's wager.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-ai-active-hypothesis",
+      "turns": [
+        "Let's examine the structure of AI-doomer arguments.",
+        "Isn't that basically Pascal's wager?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "provenance": "adapted",
+      "intended_behavior": "Treat the analogy as a learner hypothesis and examine the mapping, using correction or a question as appropriate.",
+      "success_criteria": [
+        "retains learning mode",
+        "preserves hypothesis status",
+        "identifies the consequential structural distinction"
+      ],
+      "failure_criteria": [
+        "immediately endorses the analogy",
+        "immediately supplies a complete unrelated essay",
+        "ignores the learner's proposed mapping"
+      ],
+      "input": "Let's examine the structure of AI-doomer arguments.\n\nIsn't that basically Pascal's wager?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-direct-deliverable",
+      "turns": [
+        "Give me the five strongest arguments for AI risk."
+      ],
+      "expected_skills": [],
+      "provenance": "adapted",
+      "intended_behavior": "Provide the requested deliverable directly absent an established learning goal.",
+      "success_criteria": [
+        "direct deliverable",
+        "appropriate qualification",
+        "no forced exercise"
+      ],
+      "failure_criteria": [
+        "asks the user to generate arguments first",
+        "turns the task into a quiz",
+        "refuses to answer without a lesson"
+      ],
+      "input": "Give me the five strongest arguments for AI risk.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-learning-practice",
+      "turns": [
+        "Quiz me on the assumptions behind expected-value arguments for AI risk."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "provenance": "adapted",
+      "intended_behavior": "Enter learning mode and use purposeful practice, one question at a time unless a different format is requested.",
+      "success_criteria": [
+        "learning mode",
+        "practice targets assumptions",
+        "does not reveal every answer first"
+      ],
+      "failure_criteria": [
+        "gives a list instead of practice",
+        "asks multiple unrelated questions",
+        "claims mastery from one response"
+      ],
+      "input": "Quiz me on the assumptions behind expected-value arguments for AI risk.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-ambiguous-standalone",
+      "turns": [
+        "Could that be automation bias?"
+      ],
+      "expected_skills": [],
+      "intended_behavior": "Treat the standalone fragment as direct analysis or clarification; answer or ask only the minimum necessary clarification.",
+      "success_criteria": [
+        "does not force teach-me",
+        "recognizes missing referent if material",
+        "directly addresses the plausible interpretation"
+      ],
+      "failure_criteria": [
+        "starts a generic lesson",
+        "asks a mode question when the missing issue is the referent",
+        "invents context"
+      ],
+      "input": "Could that be automation bias?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ]
+    },
+    {
+      "id": "route-ambiguous-active-lesson",
+      "turns": [
+        "Let's learn how to detect automation bias.",
+        "Could that be automation bias?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Retain learning mode and examine the learner's proposed classification rather than treating the phrase as a direct-only request.",
+      "success_criteria": [
+        "continues the lesson",
+        "uses the proposal diagnostically",
+        "does not invent absent context"
+      ],
+      "failure_criteria": [
+        "switches to direct-only mode",
+        "restarts the lesson",
+        "asserts the classification without checking the referent"
+      ],
+      "input": "Let's learn how to detect automation bias.\n\nCould that be automation bias?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-project-learning-default",
+      "context": {
+        "project_instructions": [
+          "The project instructions establish Socratic learning as the default for this project's conversations."
+        ],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "turns": [
+        "What is automation bias?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Apply the project default when no explicit direct override conflicts, while providing enough orientation for productive learning.",
+      "success_criteria": [
+        "uses project default",
+        "does not overread the interrogative form",
+        "keeps the response proportionate"
+      ],
+      "failure_criteria": [
+        "ignores project default",
+        "treats every question as direct-only",
+        "forces a mode question despite the default"
+      ],
+      "input": "What is automation bias?",
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-research-handoff-preserves-mode",
+      "turns": [
+        "Help me learn whether the conjunction-fallacy criticism is supported by current scholarship."
+      ],
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Complete required research-scope handling before substantive teaching, then resume the selected learning mode.",
+      "success_criteria": [
+        "preserves research checkpoint",
+        "does not treat research as a mode reset",
+        "keeps evidence and learner reasoning distinct"
+      ],
+      "failure_criteria": [
+        "teaches before required research",
+        "returns only a research report when guided learning was requested",
+        "loses the user's learning goal"
+      ],
+      "input": "Help me learn whether the conjunction-fallacy criticism is supported by current scholarship.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [
+          "web"
+        ],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-learning-plan-deliverable",
+      "turns": [
+        "Create a six-month plan that helps me become independently capable at digital drawing."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Produce the requested learning plan as a deliverable; do not force an interactive lesson when sufficient information exists.",
+      "success_criteria": [
+        "provides a plan",
+        "defines observable capabilities and independence boundary",
+        "does not require a Socratic interview"
+      ],
+      "failure_criteria": [
+        "asks a generic opening question instead of planning",
+        "treats planning as ordinary non-learning work",
+        "claims a domain reference was consulted when absent"
+      ],
+      "input": "Create a six-month plan that helps me become independently capable at digital drawing.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-missing-reference-fallback",
+      "turns": [
+        "Teach me using the installed nonexistent personality missing-coach.md."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "intended_behavior": "Identify the missing selected personality and fall back to the default personality without changing mode or inventing the file.",
+      "success_criteria": [
+        "explicit fallback",
+        "uses default personality",
+        "continues reliable teaching"
+      ],
+      "failure_criteria": [
+        "pretends the file exists",
+        "loads every personality",
+        "abandons the learning goal unnecessarily"
+      ],
+      "input": "Teach me using the installed nonexistent personality missing-coach.md.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ]
+    },
+    {
+      "id": "route-ambiguous-mode-question",
+      "turns": [
+        "Could you help me with base rates?"
+      ],
+      "expected_skills": [],
+      "expected_mode_by_turn": [
+        "AMBIGUOUS"
+      ],
+      "intended_behavior": "Ask one concise mode question before giving a substantive answer because the standalone request does not establish whether the user wants a direct explanation or guided learning.",
+      "success_criteria": [
+        "one concise mode question",
+        "does not give away a long answer first",
+        "does not invent a lesson context"
+      ],
+      "failure_criteria": [
+        "forces a lesson",
+        "gives a complete lecture without resolving the material ambiguity",
+        "asks several setup questions"
+      ],
+      "input": "Could you help me with base rates?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      }
+    },
+    {
+      "id": "route-active-missing-referent",
+      "turns": [
+        "Let's learn about automation bias.",
+        "Could that be it?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ],
+      "intended_behavior": "Keep learning mode and ask for the missing referent or provide only the minimum clarification needed; do not ask a mode question.",
+      "success_criteria": [
+        "retains learning mode",
+        "recognizes the missing referent",
+        "asks only the needed clarification"
+      ],
+      "failure_criteria": [
+        "switches to direct mode",
+        "invents what 'that' refers to",
+        "asks whether the user wants learning or a direct answer"
+      ],
+      "input": "Let's learn about automation bias.\n\nCould that be it?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      }
+    },
+    {
+      "id": "route-active-supporting-task-no-continuation",
+      "turns": [
+        "Let's learn how to assess this study.",
+        "Please link the original paper."
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ],
+      "provenance": "synthetic",
+      "intended_behavior": "Complete the supporting source-link task directly and retain the unfinished lesson context even though the user did not explicitly say to continue.",
+      "success_criteria": [
+        "performs the requested source task",
+        "does not force a teaching exercise first",
+        "leaves the lesson available for return"
+      ],
+      "failure_criteria": [
+        "withholds the link",
+        "ends the lesson solely because a supporting task occurred",
+        "claims to have checked a source without doing so"
+      ],
+      "input": "Let's learn how to assess this study.\n\nPlease link the original paper.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      }
+    },
+    {
+      "id": "route-active-unrelated-task",
+      "turns": [
+        "Help me understand base rates.",
+        "Draft a grocery list for tacos."
+      ],
+      "expected_skills": [
+        "teach-me",
+        "meal-planner"
+      ],
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "DIRECT"
+      ],
+      "provenance": "synthetic",
+      "intended_behavior": "Handle the unrelated grocery-list request on its own terms without carrying Socratic behavior into it.",
+      "success_criteria": [
+        "directly handles the grocery task",
+        "does not quiz the user about tacos",
+        "does not claim the lesson was completed"
+      ],
+      "failure_criteria": [
+        "forces the grocery task into a lesson",
+        "refuses the task because a lesson is active",
+        "continues questioning about base rates"
+      ],
+      "input": "Help me understand base rates.\n\nDraft a grocery list for tacos.",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      }
+    },
+    {
+      "id": "route-active-return-after-unrelated",
+      "turns": [
+        "Help me understand base rates.",
+        "Draft a grocery list for tacos.",
+        "Back to base rates: why does the average move?"
+      ],
+      "expected_skills": [
+        "teach-me",
+        "meal-planner"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "DIRECT",
+        "LEARNING"
+      ],
+      "provenance": "synthetic",
+      "intended_behavior": "Handle the interruption directly, then restore the unfinished learning interaction when the user returns to its topic.",
+      "success_criteria": [
+        "separates the unrelated task",
+        "recognizes the return to the lesson",
+        "does not require a new mode choice"
+      ],
+      "failure_criteria": [
+        "applies Socratic questioning to the grocery task",
+        "forgets the lesson context",
+        "carries grocery assumptions into the explanation"
+      ],
+      "input": "Help me understand base rates.\n\nDraft a grocery list for tacos.\n\nBack to base rates: why does the average move?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      }
+    },
+    {
+      "id": "route-direct-continuing-override",
+      "turns": [
+        "Teach me how to detect automation bias.",
+        "Answer directly from here.",
+        "What is regression to the mean?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "DIRECT",
+        "DIRECT"
+      ],
+      "provenance": "synthetic",
+      "intended_behavior": "Honor the continuing direct override for subsequent turns until the user changes the mode.",
+      "success_criteria": [
+        "answers the later question directly",
+        "does not force an exercise",
+        "keeps the override scope clear"
+      ],
+      "failure_criteria": [
+        "returns to Socratic questioning immediately",
+        "asks a redundant mode question",
+        "treats the override as only the prior turn"
+      ],
+      "input": "Teach me how to detect automation bias.\n\nAnswer directly from here.\n\nWhat is regression to the mean?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      }
+    },
+    {
+      "id": "route-explicit-direct-subscope-learning",
+      "turns": [
+        "Teach me how to assess this argument.",
+        "Answer directly: what does a base rate mean here?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ],
+      "provenance": "synthetic",
+      "intended_behavior": "Give the requested local definition directly while retaining the surrounding learning mode.",
+      "success_criteria": [
+        "direct local answer",
+        "preserves the learning objective",
+        "does not force rediscovery"
+      ],
+      "failure_criteria": [
+        "refuses the direct sub-answer",
+        "permanently exits learning mode",
+        "gives an unrelated lecture"
+      ],
+      "input": "Teach me how to assess this argument.\n\nAnswer directly: what does a base rate mean here?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      }
+    },
+    {
+      "id": "route-kahneman-critic-hypothesis",
+      "turns": [
+        "Let's explore the criticism of the conjunction-fallacy study.",
+        "The Psychology Today article says critics independently rediscovered framing problems. How should I evaluate that claim?"
+      ],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
+      "expected_mode_by_turn": [
+        "LEARNING",
+        "LEARNING"
+      ],
+      "provenance": "adapted",
+      "intended_behavior": "Treat the article and independent-rediscovery statement as supplied claims or hypotheses, preserve learning mode, and guide evaluation without inventing source evidence.",
+      "success_criteria": [
+        "retains learning mode",
+        "keeps the claim attributed and qualified",
+        "asks for or performs the consequential evidence check"
+      ],
+      "failure_criteria": [
+        "states the claim as established fact",
+        "answers with a self-contained essay that replaces exploration",
+        "pretends the article was independently checked"
+      ],
+      "input": "Let's explore the criticism of the conjunction-fallacy study.\n\nThe Psychology Today article says critics independently rediscovered framing problems. How should I evaluate that claim?",
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "sequential-user-turns"
+      }
+    }
+  ],
+  "fixture_protocol": {
+    "context": {
+      "project_instructions": "List applicable project instructions or leave empty.",
+      "assistant_history": "List prior assistant messages or leave empty; a runner may generate replies between user turns.",
+      "tool_availability": "List tools exposed to the case or leave empty.",
+      "conversation_state": "State whether this is clean, sequential, or an interruption/resumption."
+    },
+    "turns": "An ordered list of user messages. Feed each turn separately when evaluating multi-turn behavior.",
+    "expected_mode_by_turn": "Expected interaction mode at each user turn: DIRECT, LEARNING, or AMBIGUOUS."
+  }
+}

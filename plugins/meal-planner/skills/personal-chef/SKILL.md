@@ -11,7 +11,7 @@ Own recipe work and preference memory, including the canonical recipe Google Doc
 
 1. Accept the constraint packet from `meal-planner`. For direct requests, identify servings, hard exclusions, time, equipment, leftovers, budget, cuisine, and novelty needs before selecting recipes.
 2. Do not reinterpret or weaken medical restrictions. If a direct request has unresolved safety ambiguity, invoke `$meal-planner` when available or ask the minimum blocking question.
-3. Look for an accessible spreadsheet titled `Meal Preferences` or a clearly equivalent title. Prefer the user's accessible Google Sheet; otherwise use an attached or connected spreadsheet, CSV, or other durable preference record. Use its canonical `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, `Recipe History`, and `Recipe Catalog` tabs as defined in [references/preference-records.md](references/preference-records.md), accepting equivalent existing tab names without creating a competing workbook. Resolve provider, workbook identity, and designated folder IDs, then use `Record Index`, a table or named range, or stable key columns for bounded retrieval; never use a row number as the durable record identity. Canonical recipe persistence specifically requires Google Docs; a preference-file fallback does not authorize a second recipe store.
+3. Look for an accessible spreadsheet titled `Meal Preferences` or a clearly equivalent title. Prefer the user's accessible Google Sheet; otherwise use an attached or connected spreadsheet, CSV, or other durable preference record. Use its canonical `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, `Recipe History`, and `Recipe Catalog` tabs as defined in [references/preference-records.md](references/preference-records.md), accepting equivalent existing tab names without creating a competing workbook. Resolve provider, workbook identity, and designated Meal Planning, Recipes, and Audits folder IDs, then use `Record Index`, a table or named range, or stable key columns for bounded retrieval; never use a row number as the durable record identity. Canonical recipe persistence specifically requires Google Docs; a preference-file fallback does not authorize a second recipe store.
 4. Locate the current meal-plan record when it could materially affect recipe work or a feedback request. Use it as planner-owned context only; do not update it or read the complete plan history by default.
 5. Read [references/preference-records.md](references/preference-records.md) and [shared record management](../../shared/record-management.md) before creating or changing a preference or rating store, retrieving history, following a pointer, or resolving duplicate or partial records.
 6. Read the canonical [shared handoff contracts](../../shared/handoff-contracts.md) before accepting work from or returning work to `meal-planner`. Use that plugin-level file directly; do not create a skill-local copy.
@@ -32,20 +32,20 @@ Own recipe work and preference memory, including the canonical recipe Google Doc
 - Match every candidate to the supplied hard constraints, active and total time, equipment, servings, and leftover targets.
 - Build useful variety across protein, cuisine, vegetable, starch, texture, and cooking method unless the brief requests repetition.
 - Coordinate ingredient overlap without making meals feel duplicative. Flag perishables, batch-prep opportunities, freezer suitability, and intended leftovers.
-- Browse to the original or authoritative recipe page for external recipes. Return title, author when available, website, and direct link.
+- Browse to the original or authoritative recipe page for external recipes. Return title, author when available, website, and a descriptive verified link.
 - Summarize external recipes in original language; do not reproduce copyrighted recipe text. State each material adaptation and why it is needed.
 - Label synthesized recipes as original. Do not fabricate sources, ratings, timing, or household reactions.
 - Flag ambiguous packaged ingredients, cross-contact risks, or substitutions for `meal-planner` to verify. Do not claim a meal is medically safe.
 
 ## Maintain preference records
 
-- Read [references/recipe-storage.md](references/recipe-storage.md) before locating, creating, revising, or handing off canonical recipes. Store recipe instructions and reusable modifications in Google Docs; keep only identifiers, canonical links, attribution, version pointers, ratings, and outcome evidence in sheets. Edit a canonical Doc in place to retain its native revision history.
+- Read [references/recipe-storage.md](references/recipe-storage.md) before locating, creating, revising, formatting, or handing off canonical recipes. Store recipe instructions and reusable modifications in Google Docs; keep only identifiers, canonical links, attribution, version pointers, ratings, and outcome evidence in sheets. Edit a canonical Doc in place to retain its native revision history, use its native document structure, and verify descriptive link targets after writing.
 - Read [the cleanup procedure](../../shared/cleanup-migration.md) before migrating existing records. Every populated source data row must survive as an identifiable updated or retained row; additions are allowed. Do not delete or silently merge rows.
 
 - Prefer Google Sheets when the user has an accessible sheet and the required connector is available. Update the existing record rather than creating competing copies.
 - When creating a new workbook, title it `Meal Preferences` and create the seven canonical data tabs from [references/preference-records.md](references/preference-records.md). Preserve equivalent existing schemas and combined current/history tabs when status and stable identities provide reliable retrieval. Record the exact workbook and tabs read or changed.
 - Use workbook-native `Record ID`, table, named-range, and routing metadata defined in the preference-record reference. Do not create a separate memory or index file for spreadsheet records.
-- If direct updating is unavailable, produce a sheet-compatible table or file and clearly identify what remains to be applied.
+- If direct updating is unavailable, produce a sheet-compatible table or file and clearly identify what remains to be applied. Do not claim that a Markdown representation is a native Google table.
 - Preserve source URLs, dates, household-member attribution, and the user's wording where useful.
 - Before a write, resolve conflicting matches and material ambiguity. After a write, summarize the rows or fields changed.
 - Keep current preferences and recipe ratings in their current tabs. Preserve prior material state in the corresponding history tab only when it retains continuing value; do not create an unbounded meal log.
@@ -67,7 +67,7 @@ For delegated meal-plan work, return:
 7. Preference-record changes completed or proposed
 8. Exact `Meal Preferences` workbook identity and canonical tabs read or changed, or their availability status
 9. Exact current meal-plan identity and plan identifier used, plus confirmed preparation status for feedback work
-10. Canonical recipe ID, Google Doc ID/link, version, publication status and verification result for each recipe; designated Meal Planning and Recipes folder IDs
+10. Canonical recipe ID, Google Doc ID and named verified link, version, publication status and verification result for each recipe; designated Meal Planning, Recipes, and Audits folder IDs
 
 For direct user requests, present only the sections useful to the task.
 

@@ -2,6 +2,7 @@
 """Structural and behavioral contract tests for work-smarter."""
 
 import importlib.util
+import hashlib
 import json
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -27,6 +28,15 @@ def load_validator():
 def load_memory_audit_validator():
     path = ROOT / "scripts" / "validate_memory_audit.py"
     spec = importlib.util.spec_from_file_location("validate_memory_audit", path)
+    module = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(module)
+    return module
+
+
+def load_snapshot_validator():
+    path = ROOT / "skills" / "record-backup" / "scripts" / "validate_snapshot.py"
+    spec = importlib.util.spec_from_file_location("validate_snapshot", path)
     module = importlib.util.module_from_spec(spec)
     assert spec.loader is not None
     spec.loader.exec_module(module)
@@ -63,6 +73,40 @@ def test_research_checkpoint_is_preserved() -> None:
     assert "Begin with a research-scope checkpoint" in research
     assert "Ask the user to confirm or revise this scope, then wait" in research
     assert "must not treat initiation of the handoff as confirmation" in contract
+
+
+def test_research_briefing_routes_adjacent_tasks_before_research_checkpoint() -> None:
+    research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
+    lane = research.index("## Handle adjacent tasks directly")
+    checkpoint = research.index("## Begin with a research-scope checkpoint")
+    assert lane < checkpoint
+    adjacent = research[lane:checkpoint]
+    for phrase in (
+        "complete the requested adjacent task directly",
+        "Preserve supplied claims, numbers, meaning, scope",
+        "ask one focused question",
+        "Do not add an evidence assessment",
+        "source-to-source comparison",
+    ):
+        assert phrase in adjacent
+    assert "do not pause for research-scope confirmation" in research
+
+
+def test_research_briefing_verifies_consequential_claims_before_synthesis() -> None:
+    research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
+    verification = research.index("## Verify before drafting")
+    synthesis = research.index("## Synthesize objectively")
+    assert verification < synthesis
+    section = research[verification:synthesis]
+    for phrase in (
+        "consequential factual, numerical, comparative, causal, temporal",
+        "requested questions, constraints, decision criteria",
+        "targeted counterevidence",
+        "preserve the affected claims as unverified",
+        "re-check every consequential claim",
+        "reconcile the draft against the requested coverage map",
+    ):
+        assert phrase in section
 
 
 def test_research_checkpoint_offers_phases_only_for_defined_large_work() -> None:
@@ -175,7 +219,7 @@ def test_manifest_represents_all_bundled_skills() -> None:
     manifest = json.loads(read(ROOT / ".codex-plugin" / "plugin.json"))
     description = manifest["description"]
     assert "research" in description
-    assert "interactive teaching" in description
+    assert "adaptive teaching" in description
     assert "instruction design" in description
     assert "personal-context indexing" in description
 
@@ -386,6 +430,101 @@ def test_contract_is_single_and_explicit() -> None:
     assert "../../shared/handoff-contracts.md" in skill
 
 
+def test_record_backup_preserves_authority_and_has_three_modes() -> None:
+    root = ROOT / "skills" / "record-backup"
+    skill = read(root / "SKILL.md")
+    agent = read(root / "agents" / "openai.yaml")
+    schema = read(root / "references" / "configuration-and-schema.md")
+    daily = read(root / "references" / "daily-sync.md")
+    weekly = read(root / "references" / "weekly-reconciliation.md")
+    restore = read(root / "references" / "restore-staging.md")
+
+    assert "GitHub is backup and recovery history only" in skill
+    assert "An on-demand backup uses the daily-sync procedure" in skill
+    assert "independent remote read" in skill
+    assert "weekly reconciliation" in skill
+    assert "records" in schema and "backup-index.json" in schema
+    assert "do not create an empty content commit" in daily
+    assert "rediscover the complete configured scope" in weekly
+    assert "Obtain explicit confirmation" in restore
+    assert "$record-backup" in agent
+
+
+def test_record_backup_snapshot_validator_checks_hashes_and_unindexed_files() -> None:
+    validator = load_snapshot_validator()
+    with TemporaryDirectory() as directory:
+        root = Path(directory)
+        record = root / "records" / "remember-me" / "topic.md"
+        record.parent.mkdir(parents=True)
+        content = b"# Topic\n\nA durable record.\n"
+        record.write_bytes(content)
+        manifest = {
+            "schema_version": 1,
+            "records": [{
+                "repository_path": "records/remember-me/topic.md",
+                "source_provider": "test",
+                "source_container": "container-1",
+                "source_id": "source-1",
+                "source_path": "remember-me/topic.md",
+                "owner": "test",
+                "classification": "current-authority",
+                "byte_size": len(content),
+                "sha256": hashlib.sha256(content).hexdigest(),
+            }],
+        }
+        (root / "backup-index.json").write_text(json.dumps(manifest), encoding="utf-8")
+        second = root / "records" / "career" / "topic.md"
+        second.parent.mkdir(parents=True)
+        second_content = b"# Career\n\nAnother scoped record.\n"
+        second.write_bytes(second_content)
+        manifest["records"].append({
+            "repository_path": "records/career/topic.md",
+            "source_provider": "other-provider",
+            "source_container": "container-2",
+            "source_id": "source-1",
+            "source_path": "career/topic.md",
+            "owner": "test",
+            "classification": "current-authority",
+            "byte_size": len(second_content),
+            "sha256": hashlib.sha256(second_content).hexdigest(),
+        })
+        (root / "backup-index.json").write_text(json.dumps(manifest), encoding="utf-8")
+        (root / "receipts").mkdir()
+        (root / "receipts" / "run-1.json").write_text('{"status":"verified"}', encoding="utf-8")
+        result = validator.validate(root, root / "backup-index.json")
+        assert result["record_count"] == 2
+        duplicate = dict(manifest["records"][0])
+        duplicate["repository_path"] = "records/remember-me/duplicate.md"
+        duplicate_path = root / "records" / "remember-me" / "duplicate.md"
+        duplicate_path.write_bytes(content)
+        manifest["records"].append(duplicate)
+        (root / "backup-index.json").write_text(json.dumps(manifest), encoding="utf-8")
+        try:
+            validator.validate(root, root / "backup-index.json")
+        except validator.SnapshotError as exc:
+            assert "duplicate source identity" in str(exc)
+        else:
+            raise AssertionError("duplicate scoped source identity was not detected")
+        manifest["records"].pop()
+        duplicate_path.unlink()
+        (root / "backup-index.json").write_text(json.dumps(manifest), encoding="utf-8")
+        record.write_bytes(content + b"changed")
+        try:
+            validator.validate(root, root / "backup-index.json")
+        except validator.SnapshotError:
+            pass
+        else:
+            raise AssertionError("content hash mismatch was not detected")
+        record.write_bytes(content)
+        (root / "records" / "unindexed.md").write_bytes(b"extra")
+        try:
+            validator.validate(root, root / "backup-index.json")
+        except validator.SnapshotError as exc:
+            assert "unindexed files" in str(exc)
+        else:
+            raise AssertionError("unindexed file was not detected")
+
+
 def test_superb_skills_routes_conditional_references() -> None:
     root = ROOT / "skills" / "superb-skills"
     skill = read(root / "SKILL.md")
@@ -496,6 +635,24 @@ def test_teach_me_builds_capability_without_overgeneralizing_learning_methods() 
     assert "do not imply that the skill will return autonomously" in skill
 
 
+def test_teach_me_routes_visual_art_domains_without_2d_leakage() -> None:
+    root = ROOT / "skills" / "teach-me"
+    skill = read(root / "SKILL.md")
+    visual = read(root / "references" / "domains" / "visual-arts.md")
+    drawing = read(root / "references" / "domains" / "drawing-painting.md")
+
+    shared_link = "](references/domains/visual-arts.md)"
+    family_link = "](references/domains/drawing-painting.md)"
+    assert shared_link in skill and family_link in skill
+    assert skill.index(shared_link) < skill.index(family_link)
+    assert "without a making-skill goal" in skill
+    assert "Do not import drawing or painting procedures" in visual
+    assert "Do not load it for sculpture, ceramics, weaving" in drawing
+    assert "If the artwork itself is unavailable, do not pretend to inspect it" in drawing
+    assert "Do not assume cross-medium transfer" in visual
+    assert "Apply the shared visual-arts reference-use procedure" in drawing
+
+
 def test_teach_me_evidence_has_provenance_intake_and_maintenance_boundaries() -> None:
     evidence = read(ROOT / "skills" / "teach-me" / "references" / "learning-evidence.md")
 
@@ -544,6 +701,8 @@ def test_teach_me_standalone_mirrors_references_without_plugin_dependencies() ->
         Path("references/learning-philosophy.md"),
         Path("references/teaching-workflow.md"),
         Path("references/personalities/nicer-socrates.md"),
+        Path("references/domains/visual-arts.md"),
+        Path("references/domains/drawing-painting.md"),
         Path("assets/icon-small.svg"),
         Path("assets/icon-large.svg"),
     ):
@@ -600,6 +759,15 @@ def test_eval_suite_covers_required_behaviors() -> None:
         "teach-reconstruct-after-feedback", "teach-fade-and-restore",
         "teach-tool-boundary", "teach-commission-and-omission",
         "teach-pedagogy-evidence", "teach-reminder-boundary",
+        "teach-visual-digital-plan", "teach-visual-tool-only",
+        "teach-visual-production-negative", "teach-visual-mixed-production-learning",
+        "teach-visual-critique-learning", "teach-visual-critique-no-image",
+        "teach-visual-material-art", "teach-visual-nonmaking",
+        "teach-visual-calligraphy", "teach-visual-aid-boundary",
+        "teach-visual-stylized-imagination", "teach-visual-cross-medium-transfer",
+        "teach-visual-reference-study", "record-backup-daily-sync",
+        "record-backup-weekly-reconcile", "record-backup-manual-subset",
+        "record-backup-restore-staging",
     }.issubset(ids)
 
 

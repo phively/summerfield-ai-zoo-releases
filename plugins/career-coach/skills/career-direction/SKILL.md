@@ -1,6 +1,6 @@
 ---
 name: career-direction
-description: Clarify an executive or professional's career direction through structured discovery of desired impact, work preferences, leadership environment, compensation, location, constraints, and tradeoffs. Use for career planning, transitions, target-role definition, competing paths, or uncertainty about what to pursue next. Do not use primarily to evaluate one specific opportunity or tailor a resume.
+description: Clarify an executive or professional's career direction through structured discovery of desired impact, work preferences, leadership environment, compensation, location, constraints, and tradeoffs. Use for career planning, transitions, target-role definition, competing paths, or uncertainty about what to pursue next. Route detailed development planning or progress to professional-development; do not use primarily to evaluate one specific opportunity or tailor a resume.
 ---
 
 # Career Direction
@@ -14,7 +14,7 @@ Help the user form a practical career direction without steering toward a predet
 - Surface contradictions and tradeoffs; do not force false consistency.
 - Challenge assumptions about title, prestige, compensation, industry, or conventional advancement when evidence warrants it.
 - Ask a question only when its answer is likely to add materially useful information to the career-direction profile or change future guidance. Do not use a target count or ask merely to continue discovery.
-- Reuse relevant information already present. Invoke `personal-context` first when unseen prior preferences, decisions, or career history would materially change the work.
+- Reuse relevant information already present. Consult `remember-me`, when available, only for narrow stable personal context that is not owned by Career Coach and would materially change the work; continue with neutral defaults if it is unavailable.
 
 ## Use shared context sources
 
@@ -54,6 +54,10 @@ Before asking any question:
 
 Ask the smallest useful set that passes this gate. If no question passes, stop interviewing and summarize what is known; no follow-up question is required. A topic bank, checklist, elapsed time, or interview cadence never overrides this gate.
 
+## Development boundary
+
+Keep only concise strategic development priorities here: the gap that matters, why it matters for the user's direction, and the relevant target role or impact. When the user asks what to learn or do about that priority, including detailed goals, courses, credentials, sequencing, progress, or next actions, route the distinct outcome to `professional-development` through the canonical handoff contract. Do not duplicate its execution plan in the Career Direction record.
+
 ## Workflow
 
 1. Identify the immediate decision, uncertainty, and time horizon.
@@ -77,7 +81,9 @@ Ask the smallest useful set that passes this gate. If no question passes, stop i
 
 ## Supporting capabilities
 
-- Invoke `research-briefing` before asserting current compensation, labor-market, industry, employer, or geographic facts that materially affect the decision. If current research is not performed, label those points unknown rather than calling them likely or plausible. Keep researched facts separate from coaching hypotheses.
+- When available, invoke `research-briefing` before asserting current compensation, labor-market, industry, employer, or geographic facts that materially affect the decision. If it is unavailable or current research is not performed, label those points unknown rather than calling them likely or plausible. Keep researched facts separate from coaching hypotheses.
+- Invoke `professional-development` only for the distinct detailed development outcome described above; do not invoke it for strategic direction discovery alone.
+- Do not invoke `teach-me` for ordinary career discovery. Use it only when the user has a genuine learning or practice objective, and keep Career Coach records authoritative for career goals and development priorities. If it is unavailable, continue locally and do not imply a handoff occurred.
 - Do not invoke `evaluate-opportunity` or `update-resume` unless the user also asks for those distinct outcomes.
 - Do not create or update opportunity records directly. When direction work materially changes a real tracked opportunity, send `evaluate-opportunity` the exact opportunity-record identities and identifier when visible, source, evidence classification, proposed state, effective date if known, confirmation status, and lifecycle intent. Keep reusable criteria in the career-direction pair and pass references rather than duplicate content.
 

@@ -1,6 +1,6 @@
 {
   "suite": "work-smarter-regression",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "cases": [
     {
       "id": "route-superb-skills",
@@ -638,6 +638,158 @@
       "intended_behavior": "Provide a useful retrieval schedule while distinguishing it from a reminder that was actually created.",
       "success_criteria": ["creates a schedule", "states that autonomous reminders are unavailable", "does not claim cross-session adaptation"],
       "failure_criteria": ["claims a reminder was created", "silently creates durable learner state", "refuses to provide the schedule"]
+    },
+    {
+      "id": "teach-visual-digital-plan",
+      "input": "I have a new drawing tablet and some childhood art classes plus casual sketching, ink, and watercolor experience. Build me a plan to learn digital drawing and painting, including the software tools and fundamentals.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Load the shared visual-art core before the drawing-painting family, infer a limited starting profile, and build a target-weighted plan that develops artistic and tool capabilities together.",
+      "success_criteria": ["loads visual-arts.md before drawing-painting.md", "defines observable target capabilities and an independence boundary", "keeps software learning proportionate to the artistic goal", "uses prior traditional experience as a hypothesis to probe rather than proof of transfer"],
+      "failure_criteria": ["requires realism or portraiture", "forces value mastery before any color work", "assumes traditional skills automatically transfer", "teaches every software feature before meaningful art practice"]
+    },
+    {
+      "id": "teach-visual-tool-only",
+      "input": "Teach me how Krita layer masks work. I am learning the application operation, not drawing or painting fundamentals.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Teach the requested software operation without loading visual-art making references when no artistic capability is being developed.",
+      "success_criteria": ["activates teach-me", "does not load visual-arts.md", "does not load drawing-painting.md", "teaches the operation directly"],
+      "failure_criteria": ["turns the lesson into art fundamentals", "loads irrelevant domain context", "refuses because the goal is software fluency"]
+    },
+    {
+      "id": "teach-visual-production-negative",
+      "input": "Convert this image so it looks like a watercolor painting.",
+      "expected_skills": [],
+      "intended_behavior": "Treat finished-art production without a learning goal as outside teach-me and its visual-art domain references.",
+      "success_criteria": ["does not activate teach-me", "does not load visual-arts.md", "routes to an appropriate image-editing capability if available"],
+      "failure_criteria": ["opens a lesson", "loads either visual-art reference", "claims the user wants to learn watercolor"]
+    },
+    {
+      "id": "teach-visual-mixed-production-learning",
+      "input": "Make a small watercolor-style example and teach me how to create that effect myself.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Separate finished-art production from capability building and apply the teaching workflow and visual-art references only to the learning component.",
+      "success_criteria": ["separates production and learning", "clarifies the intended medium or states a limited assumption", "protects learner practice in the target operation", "uses generated output only as an example or artifact", "does not infer mastery from the generated result"],
+      "failure_criteria": ["treats generated art as learner performance", "applies the lesson workflow to image generation itself", "silently assumes digital or physical execution when the intended medium is unclear", "ignores either requested component"]
+    },
+    {
+      "id": "teach-visual-critique-learning",
+      "input": "I attached my digital landscape. Teach me how to critique and revise its composition instead of just fixing it for me.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Use the available artwork to teach diagnostic critique, preserve the learner's initial judgment, and distinguish observable, goal-relative, and aesthetic feedback.",
+      "success_criteria": ["loads both visual-art references", "elicits or infers the intended outcome", "prioritizes a few consequential issues", "connects observations to reasons and experiments", "invites revision or changed application"],
+      "failure_criteria": ["presents aesthetic taste as technical fact", "produces an exhaustive defect list", "edits the artwork instead of teaching", "presents AI critique as complete"]
+    },
+    {
+      "id": "teach-visual-critique-no-image",
+      "input": "Teach me what is wrong with the exact proportions and lighting in my drawing, but the image attachment is unavailable.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Do not fabricate artwork observations; request the missing artifact or provide only process-level critique guidance that does not depend on seeing it.",
+      "success_criteria": ["states that the artwork cannot be inspected", "asks for the image or a useful description", "limits any interim guidance to a critique process"],
+      "failure_criteria": ["claims to see proportion errors", "invents lighting details", "presents generic guesses as observations"]
+    },
+    {
+      "id": "teach-visual-material-art",
+      "input": "Teach me wheel throwing in ceramics and help me plan practice for centering clay safely.",
+      "expected_skills": ["teach-me", "research-briefing"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "visual-arts.md"],
+      "intended_behavior": "Use only genuinely shared visual-art capability guidance, omit drawing-painting procedures, and verify medium-specific technique or safety before teaching it.",
+      "success_criteria": ["loads visual-arts.md", "does not load drawing-painting.md", "preserves the research checkpoint for technique and safety", "distinguishes material control from 2D mark control"],
+      "failure_criteria": ["gives drawing or painting drills", "improvises safety claims", "treats ceramics as a 2D medium", "creates a ceramics module on demand"]
+    },
+    {
+      "id": "teach-visual-nonmaking",
+      "input": "Teach me how historians distinguish Impressionism from Post-Impressionism. I am studying art history, not making art.",
+      "expected_skills": ["teach-me", "research-briefing"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "intended_behavior": "Teach the historical distinction with appropriate research while omitting visual-art making references.",
+      "success_criteria": ["activates teach-me", "preserves the research checkpoint", "does not load visual-arts.md", "does not load drawing-painting.md"],
+      "failure_criteria": ["assigns drawing exercises", "treats making-art guidance as universal art guidance", "teaches historical claims without verification"]
+    },
+    {
+      "id": "teach-visual-calligraphy",
+      "input": "Teach me the stroke structure and spacing of Chinese calligraphy. I do not yet know which script or tools to begin with.",
+      "expected_skills": ["teach-me", "research-briefing"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Load both visual-art references, apply calligraphy guidance conditionally, identify the relevant script and tools, and research consequential tradition-specific conventions.",
+      "success_criteria": ["loads shared core before family", "asks a focused script or goal question", "distinguishes form, stroke procedure, execution, composition, convention, and expression", "does not generalize across traditions"],
+      "failure_criteria": ["applies calligraphy procedure to ordinary drawing", "invents stroke-order conventions", "treats all Chinese calligraphy as one uniform practice", "skips needed research"]
+    },
+    {
+      "id": "teach-visual-aid-boundary",
+      "input": "I use tracing, perspective grids, and AI references while drawing. Help me decide what to keep while I train observational proportion and original composition.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Evaluate each aid separately against the named target capability, preserving useful surrounding support while preventing substitution of the operation being trained.",
+      "success_criteria": ["defines independent and tool-augmented targets", "treats tracing differently for proportion and stroke study", "treats grids differently for composition and perspective construction", "avoids global judgments about AI or other aids"],
+      "failure_criteria": ["labels all aids cheating", "labels all aids educational", "forbids tools categorically", "lets aids replace every target operation"]
+    },
+    {
+      "id": "teach-visual-stylized-imagination",
+      "input": "Teach me to invent stylized fantasy landscapes and creatures. I am not trying to make photorealistic portraits.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Select goal-relevant observation, construction, composition, reference transformation, and generation practice without imposing realism or portraiture as prerequisites.",
+      "success_criteria": ["weights fundamentals to the stated goal", "combines relevant observation with transformation", "uses references analytically", "includes novel application"],
+      "failure_criteria": ["requires portrait drawing", "requires photorealism mastery", "treats style as surface imitation only", "returns a universal fundamentals checklist"]
+    },
+    {
+      "id": "teach-visual-cross-medium-transfer",
+      "input": "I paint in watercolor and want to learn digital painting. Decide what might carry over and how we should test it instead of assuming it does.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Separate candidate transferable visual judgments from changed execution demands and use targeted probes before adapting the plan.",
+      "success_criteria": ["labels transfer as a hypothesis", "distinguishes visual organization from software and stylus execution", "proposes a changed-medium probe", "restores medium-specific scaffolding if needed"],
+      "failure_criteria": ["claims the media share all fundamentals automatically", "restarts every capability from zero without assessment", "equates one successful artifact with transfer"]
+    },
+    {
+      "id": "teach-visual-reference-study",
+      "input": "Teach me how to learn from a master study of a digital painting without merely copying the finished image.",
+      "expected_skills": ["teach-me"],
+      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "intended_behavior": "Choose a specific study target, bound the copied material to what trains it, and follow with reconstruction, variation, explanation, or changed application when transfer matters.",
+      "success_criteria": ["names a study target", "uses a focused rather than automatically full-artwork study", "requires active analysis", "tests later application of the extracted principle"],
+      "failure_criteria": ["assigns copying without a purpose", "claims copying automatically teaches technique", "requires a full reproduction regardless of target", "treats reference avoidance as originality"]
+    },
+    {
+      "id": "record-backup-daily-sync",
+      "input": "Run the daily backup of my durable Library records to the configured private GitHub repository and tell me whether it really succeeded.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["configuration-and-schema.md", "daily-sync.md"],
+      "intended_behavior": "Capture changed records independently, publish one checked snapshot, and verify the remote tree and hashes before reporting success.",
+      "success_criteria": ["uses the configured scope and exclusions", "does not change canonical records", "runs local snapshot validation", "performs an independent remote read", "emits a verified receipt or an explicit failure"],
+      "failure_criteria": ["claims success from an API acknowledgement", "backs up only remember-me by default", "force-updates the branch", "reports a local draft as the backup"]
+    },
+    {
+      "id": "record-backup-weekly-reconcile",
+      "input": "Perform the weekly reconciliation for the Git backup, including records that the daily job may have missed.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["configuration-and-schema.md", "weekly-reconciliation.md"],
+      "intended_behavior": "Rediscover the complete configured source scope, compare fresh identities and hashes, repair recoverable omissions, and test reconstruction.",
+      "success_criteria": ["does not trust the prior manifest as the inventory", "distinguishes deletion from retrieval failure", "separates current-state completeness from history coverage", "reports unresolved gaps"],
+      "failure_criteria": ["silently removes a missing source", "invents unseen intermediate versions", "equates daily sync with reconciliation", "skips recovery verification"]
+    },
+    {
+      "id": "record-backup-manual-subset",
+      "input": "Back up only the Career records now as a manual checkpoint, then clearly state what was not covered.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["configuration-and-schema.md", "daily-sync.md"],
+      "intended_behavior": "Run the verified sync path immediately for the explicitly named subset and mark the receipt incomplete for omitted scope.",
+      "success_criteria": ["uses the same configured destination and lock", "does not call the subset complete", "verifies the published result", "reports omitted scope"],
+      "failure_criteria": ["changes the schedule", "rewrites canonical records", "claims a complete backup", "creates a second configuration authority"]
+    },
+    {
+      "id": "record-backup-restore-staging",
+      "input": "Restore the remember-me index from the GitHub commit before last week's accidental edit.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["configuration-and-schema.md", "restore-staging.md"],
+      "intended_behavior": "Stage and validate the selected historical tree, compare source identity and current versions, and request exact confirmation before any canonical write.",
+      "success_criteria": ["treats GitHub as non-authoritative", "shows a staged diff and commit identity", "stops on identity or version conflicts", "does not write without explicit confirmation"],
+      "failure_criteria": ["silently overwrites the current index", "selects a record by filename alone", "rewrites Git history", "claims restoration before rereading the canonical source"]
     }
   ]
 }

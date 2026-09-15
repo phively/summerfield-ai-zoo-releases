@@ -13,6 +13,7 @@ SKILLS_ROOT = PLUGIN_ROOT / "skills"
 SHARED_HANDOFF = PLUGIN_ROOT / "shared" / "handoff-contracts.md"
 RECORD_MANAGEMENT = PLUGIN_ROOT / "shared" / "record-management.md"
 WORKBOOK_AUDIT_SCHEMA = PLUGIN_ROOT / "shared" / "workbook-audit-schema.md"
+ARTIFACT_FORMATTING = PLUGIN_ROOT / "shared" / "artifact-formatting.md"
 SKILL_NAMES = ("meal-planner", "personal-chef", "personal-shopper")
 SHARED_LINK = "../../shared/handoff-contracts.md"
 
@@ -39,7 +40,7 @@ def test_canonical_plugin_structure() -> None:
     manifest = json.loads(read(manifest_path))
 
     assert manifest["name"] == PLUGIN_ROOT.name == "meal-planner"
-    assert manifest["version"].split("+", 1)[0] == "1.3.0"
+    assert manifest["version"].split("+", 1)[0] == "1.4.0"
     assert manifest["skills"] == "./skills/"
     assert re.fullmatch(r"\d+\.\d+\.\d+(?:\+codex\.[0-9A-Za-z.-]+)?", manifest["version"])
     assert manifest["description"]
@@ -55,17 +56,45 @@ def test_canonical_plugin_structure() -> None:
         assert (root / "assets" / "icon-large.svg").is_file()
 
 
-def test_all_skill_local_markdown_links_resolve() -> None:
+def test_all_plugin_local_markdown_links_resolve() -> None:
     link_pattern = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
-    for name in SKILL_NAMES:
-        skill_path = SKILLS_ROOT / name / "SKILL.md"
+    for skill_path in PLUGIN_ROOT.rglob("*.md"):
         links = link_pattern.findall(read(skill_path))
-        assert links, f"{name} should link to its required resources"
         for link in links:
             if "://" not in link and not link.startswith("#"):
-                assert (skill_path.parent / link).resolve().is_file(), (
-                    f"Broken local resource link in {name}: {link}"
+                target = link.split("#", 1)[0]
+                if not target:
+                    continue
+                assert (skill_path.parent / target).resolve().is_file(), (
+                    f"Broken local resource link in {skill_path}: {link}"
                 )
+
+
+def test_drive_native_storage_formatting_and_migration_contract() -> None:
+    formatting = read(ARTIFACT_FORMATTING)
+    cleanup = read(PLUGIN_ROOT / "shared" / "cleanup-migration.md")
+    handoff = read(SHARED_HANDOFF)
+    plan_template = read(
+        SKILLS_ROOT / "meal-planner" / "references" / "meal-plan-document-template.md"
+    )
+    recipe_template = read(
+        SKILLS_ROOT / "personal-chef" / "references" / "recipe-document-template.md"
+    )
+
+    for phrase in (
+        "Prefer the user's accessible Google Drive",
+        "`Recipes` subfolder",
+        "`Audits` subfolder",
+        "descriptive display text",
+        "Do not present a bare URL or raw HTML",
+        "Obtain the user's explicit permission",
+    ):
+        assert phrase in formatting
+    assert "Meal Planning, Recipes, and Audits folder IDs" in handoff
+    assert "General permission to clean records is not permission to migrate file type" in cleanup
+    assert "native table" in plan_template
+    assert "native numbered list" in recipe_template
+    assert "do not paste markdown" in (plan_template + recipe_template).lower()
 
 
 def test_meal_planner_functionality_contract() -> None:
@@ -105,7 +134,7 @@ def test_personal_chef_functionality_contract() -> None:
     assert "Household Preferences" in preference_records
     assert "Recipe History" in preference_records
     assert "`Meal Preferences` or a clearly equivalent title" in chef
-    assert "When creating a new workbook, use `Meal Preferences`" in preference_records
+    assert "prefer a Google Sheet titled `Meal Preferences`" in preference_records
 
 
 def test_personal_shopper_functionality_contract() -> None:
@@ -455,6 +484,11 @@ def test_record_management_eval_has_required_cases() -> None:
         "workbook-audit-success",
         "workbook-audit-loss",
         "workbook-audit-structural-failure",
+        "drive-native-new-records",
+        "cleanup-native-formatting",
+        "file-type-migration-permission",
+        "authorized-excel-conversion",
+        "named-resolving-links",
     } <= set(cases)
     for case in cases.values():
         assert case["expected_files_read"]

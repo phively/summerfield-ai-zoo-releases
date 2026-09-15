@@ -1,15 +1,15 @@
 {
   "name": "work-smarter",
-  "version": "1.8.0",
-  "description": "Evidence-grounded research and interactive teaching for durable capability building, reliable instruction design, and personal-context indexing with authoritative record routing.",
+  "version": "1.10.0",
+  "description": "Evidence-grounded research with direct adjacent-task handling and pre-draft verification, adaptive teaching including visual-art learning, reliable instruction design, personal-context indexing with authoritative record routing, and verified GitHub backups for durable records.",
   "author": {
     "name": "Paul Hively"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Work Smarter",
-    "shortDescription": "Research, teaching, skill design, and context",
-    "longDescription": "Investigate substantive questions with current, high-quality evidence and explicit uncertainty. Build durable understanding and skills through adaptive, source-grounded teaching, practice, and learning plans. Design, refine, and test prompts, instructions, skills, plugins, contracts, evaluations, and working-memory systems. Maintain a durable personal-context index that routes topics to their authoritative records.",
+    "shortDescription": "Research, teaching, context, and backups",
+    "longDescription": "Investigate substantive questions with current, high-quality evidence and explicit uncertainty. Build durable understanding and skills through adaptive, source-grounded teaching, practice, and learning plans. Design, refine, and test prompts, instructions, skills, plugins, contracts, evaluations, and working-memory systems. Maintain a durable personal-context index that routes topics to their authoritative records. Run verified daily and weekly GitHub backups of configured durable records.",
     "developerName": "Paul Hively",
     "category": "Productivity",
     "capabilities": [

@@ -1,0 +1,8 @@
+interface:
+  display_name: "Record Backup"
+  short_description: "Verify durable-record backups to GitHub"
+  default_prompt: "Use $record-backup to run or design a verified backup, reconciliation, or restore staging operation."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true

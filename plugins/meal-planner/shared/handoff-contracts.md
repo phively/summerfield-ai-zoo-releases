@@ -18,11 +18,11 @@ Use native workbook routing. When present, read `Record Index` first and then re
 
 ## Record authority and access
 
-`meal-planner` owns the `Household Preferences` workbook and the single current/history meal-plan pair. Use `meal-plan-current.md` and `meal-plan-history.md` when creating new filesystem records, or preserve one clearly equivalent existing Word document, Google Doc, Markdown pair, or other selected durable authority. All skills may read relevant current state; only `meal-planner` creates or updates these records.
+`meal-planner` owns the `Household Preferences` workbook and the single current/history meal-plan pair. Prefer a Google Sheet for a newly created household workbook and Google Docs for newly created narrative meal-plan records when the user's Drive is accessible; use `meal-plan-current.md` and `meal-plan-history.md` only for a filesystem fallback. Preserve one clearly equivalent existing authority in place. All skills may read relevant current state; only `meal-planner` creates or updates these records.
 
 `personal-chef` owns the `Meal Preferences` workbook, including current culinary preferences and recipe ratings plus their historical companions, and the canonical recipe Google Docs indexed by `Recipe Catalog`. All skills may read relevant current state; only `personal-chef` creates or updates these records. Use one numeric 1-5 Rating in half steps for culinary, ingredient, and recipe preferences; no separate preference label or strength score.
 
-Every Drive handoff includes the designated Meal Planning and Recipes folder IDs. Keep planning files and migration audits inside Meal Planning and canonical recipe Docs inside Recipes. Preserve existing structure, resource IDs, and sharing. During cleanup, follow [cleanup-migration.md](cleanup-migration.md): updates and additions may change data rows, but no populated source row may be deleted or silently merged.
+Every Drive handoff includes the designated Meal Planning, Recipes, and Audits folder IDs. Keep planning files inside Meal Planning, canonical recipe Docs inside Recipes, and audit, compaction, migration, staging, and recovery artifacts in a dated child folder under Audits. Preserve equivalent existing structure, resource IDs, and sharing. Follow [native artifact storage and formatting](artifact-formatting.md) for Drive-first creation, native formatting, and named verified links. During cleanup, follow [cleanup-migration.md](cleanup-migration.md): updates and additions may change data rows, but no populated source row may be deleted or silently merged. File-type or provider migration requires explicit user permission before a replacement is created for conversion, authority is transferred, the original is retired, or dependent links change.
 
 `personal-shopper` owns the `Grocery Preferences` workbook. All skills may read relevant current state and price evidence; only `personal-shopper` creates or updates these records.
 
@@ -36,7 +36,7 @@ Return a recipe-selection packet containing:
 
 - finalized or proposed status for every recipe;
 - recipe title, source URL or original-recipe label, yield, and planned servings;
-- stable Recipe ID, canonical Google Doc ID/link, current version, publication status, verification result, and designated folder IDs;
+- stable Recipe ID, canonical Google Doc ID and descriptive verified link, current version, publication status, verification result, and designated folder IDs;
 - ingredient quantities, active time, total time, equipment, and leftover yield;
 - material adaptations and reasons;
 - constraint-sensitive ingredients, labels, substitutions, and cross-contact questions requiring safety review;
@@ -47,7 +47,7 @@ Return a recipe-selection packet containing:
 
 The meal planner owns final safety approval. A chef handoff must never claim that a recipe is medically safe.
 
-For feedback requested after a plan, return only confirmed preparation or use, member attribution, current ratings or preferences changed, historical entries created, material modifications, unresolved questions, and exact records changed. If preparation or consumption is unconfirmed, return no rating update and identify the smallest useful follow-up.
+For feedback requested after a plan, return only confirmed preparation or use, member attribution, current ratings or preferences changed, historical entries created, material modifications, unresolved questions, and exact records changed. If preparation or consumption is unconfirmed, return no rating update and identify the smallest useful follow-up. User-visible links in every handoff must have descriptive labels and verified targets; pass raw URLs only in dedicated identity or source fields.
 
 ## Meal Planner to Personal Chef
 
@@ -60,7 +60,7 @@ Do not infer feedback merely because a recipe appeared in a plan or a fixed inte
 Send a shopping packet only after recipe selection and safety review are complete. Include:
 
 - final recipe names, ingredient quantities, source yields, planned servings, and leftover uses;
-- canonical Recipe IDs, verified Google Doc links, approved versions, and designated folder IDs;
+- canonical Recipe IDs, verified named Google Doc links, approved versions, and designated Meal Planning, Recipes, and Audits folder IDs;
 - confirmed pantry quantities plus separate `check pantry` items;
 - region, currency, shopping date, budget, and preferred stores in effective order;
 - required brands, products, labels, allergy constraints, medical constraints, and permitted substitutions;

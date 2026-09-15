@@ -1,0 +1,916 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Splitglass — Image comparison</title>
+  <style>
+    :root {
+      --ink: #f4f3ef;
+      --muted: #989c99;
+      --surface: #171918;
+      --line: #353a36;
+      --accent: #c7ff4a;
+      --accent-ink: #142000;
+      --danger: #ff8b79;
+      --split: 50%;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: #0d0f0e;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+    }
+
+    button { color: inherit; font: inherit; }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto auto minmax(28rem, 1fr) auto;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .topbar,
+    .source-panel,
+    .statusbar {
+      width: min(1500px, 100%);
+      margin-inline: auto;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .brand-mark {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+      border: 1px solid #4a504b;
+      border-radius: 7px;
+      flex: 0 0 auto;
+    }
+
+    .brand-mark span:first-child { background: var(--accent); }
+    .brand-mark span:last-child { background: #59605b; }
+
+    h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1;
+      letter-spacing: .02em;
+    }
+
+    .tagline {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .shortcuts {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+    }
+
+    kbd {
+      padding: 2px 6px;
+      border: 1px solid var(--line);
+      border-bottom-color: #4d544f;
+      border-radius: 4px;
+      background: var(--surface);
+      color: #c9ccc9;
+      font-size: 11px;
+    }
+
+    .source-panel {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+      gap: 10px;
+    }
+
+    .source {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+
+    .source-letter {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border-radius: 7px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-weight: 800;
+    }
+
+    .source-b .source-letter {
+      background: #d5d9d6;
+      color: #171918;
+    }
+
+    .source-info { min-width: 0; }
+
+    .source-title {
+      display: block;
+      margin-bottom: 2px;
+      color: #dfe2df;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .file-name {
+      display: block;
+      overflow: hidden;
+      color: var(--muted);
+      font-size: 13px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .file-picker { position: relative; }
+
+    .file-picker input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      clip-path: inset(50%);
+    }
+
+    .button,
+    .icon-button {
+      border: 1px solid #414641;
+      border-radius: 7px;
+      background: #292c2a;
+      cursor: pointer;
+      transition: background-color 120ms ease, border-color 120ms ease, transform 120ms ease;
+    }
+
+    .button:hover,
+    .icon-button:hover { background: #353936; border-color: #575e58; }
+
+    .button:active,
+    .icon-button:active { transform: translateY(1px); }
+
+    .button:focus-visible,
+    .icon-button:focus-visible,
+    .divider:focus-visible,
+    .file-picker input:focus-visible + .button {
+      outline: 3px solid rgba(199, 255, 74, .35);
+      outline-offset: 2px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 7px 12px;
+      color: #e6e8e6;
+      font-size: 13px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+
+    .button.primary {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    .button.primary:hover { background: #d3ff71; }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+    }
+
+    .icon-button {
+      min-width: 36px;
+      height: 34px;
+      padding: 0 9px;
+      font-weight: 750;
+    }
+
+    .zoom-value {
+      color: #dfe2df;
+      font-variant-numeric: tabular-nums;
+      font-size: 12px;
+    }
+
+    .comparison {
+      position: relative;
+      width: min(1500px, 100%);
+      min-height: 430px;
+      margin-inline: auto;
+      overflow: hidden;
+      border: 1px solid #3a3f3b;
+      border-radius: 12px;
+      background-color: #131514;
+      background-image:
+        linear-gradient(45deg, #1a1d1b 25%, transparent 25%),
+        linear-gradient(-45deg, #1a1d1b 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #1a1d1b 75%),
+        linear-gradient(-45deg, transparent 75%, #1a1d1b 75%);
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+      background-size: 20px 20px;
+      box-shadow: 0 18px 50px rgba(0, 0, 0, .32);
+      touch-action: none;
+      user-select: none;
+    }
+
+    .comparison.can-pan { cursor: grab; }
+    .comparison.is-panning { cursor: grabbing; }
+    .comparison.is-drop-target { border-color: var(--accent); }
+
+    .layer {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .layer-a {
+      z-index: 2;
+      clip-path: inset(0 calc(100% - var(--split)) 0 0);
+    }
+
+    .layer-b { z-index: 1; }
+
+    .image-plane {
+      position: absolute;
+      inset: 0;
+      transform-origin: 0 0;
+    }
+
+    .image-plane img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: 0;
+      transition: opacity 180ms ease;
+      -webkit-user-drag: none;
+    }
+
+    .layer.has-image img { opacity: 1; }
+
+    .empty-state {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+      background: rgba(13, 15, 14, .74);
+      text-align: center;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+    }
+
+    .empty-state.is-hidden { opacity: 0; }
+
+    .empty-card {
+      max-width: 430px;
+      padding: 30px;
+      border: 1px solid #3b403c;
+      border-radius: 12px;
+      background: rgba(24, 27, 25, .94);
+    }
+
+    .empty-icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .empty-card h2 {
+      margin: 0 0 8px;
+      font-size: clamp(20px, 3vw, 29px);
+      letter-spacing: -.025em;
+    }
+
+    .empty-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .divider {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      bottom: 0;
+      left: var(--split);
+      width: 48px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      cursor: ew-resize;
+      transform: translateX(-50%);
+    }
+
+    .divider::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: calc(50% - 1px);
+      width: 2px;
+      background: var(--accent);
+      box-shadow: 0 0 0 1px rgba(0, 0, 0, .25), 0 0 18px rgba(199, 255, 74, .18);
+    }
+
+    .divider-grip {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      display: grid;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border: 2px solid #101210;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -3px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, .36);
+      transform: translate(-50%, -50%);
+    }
+
+    .divider[aria-disabled="true"] {
+      opacity: .28;
+      pointer-events: none;
+    }
+
+    .image-badge {
+      position: absolute;
+      z-index: 4;
+      top: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(255, 255, 255, .16);
+      border-radius: 6px;
+      background: rgba(13, 15, 14, .8);
+      color: #f7f8f7;
+      backdrop-filter: blur(8px);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      opacity: 0;
+      text-transform: uppercase;
+      transition: opacity 160ms ease;
+    }
+
+    .image-badge.visible { opacity: 1; }
+    .badge-a { left: 14px; }
+    .badge-b { right: 14px; }
+
+    .drop-message {
+      position: absolute;
+      z-index: 8;
+      inset: 18px;
+      display: grid;
+      place-items: center;
+      border: 2px dashed var(--accent);
+      border-radius: 9px;
+      background: rgba(13, 15, 14, .88);
+      color: var(--accent);
+      font-size: 18px;
+      font-weight: 750;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 120ms ease;
+    }
+
+    .comparison.is-drop-target .drop-message { opacity: 1; }
+
+    .statusbar {
+      min-height: 24px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .status-message.error { color: var(--danger); }
+
+    @media (max-width: 780px) {
+      .app {
+        grid-template-rows: auto auto minmax(25rem, 1fr) auto;
+        padding: 12px;
+      }
+
+      .shortcuts { display: none; }
+
+      .source-panel {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .source {
+        grid-template-columns: auto minmax(0, 1fr);
+      }
+
+      .source .file-picker { grid-column: 1 / -1; }
+      .source .button { width: 100%; justify-content: center; }
+      .toolbar { grid-column: 1 / -1; justify-content: center; }
+      .comparison { min-height: 400px; }
+    }
+
+    @media (max-width: 480px) {
+      .source-panel { grid-template-columns: 1fr; }
+      .toolbar { grid-column: auto; }
+      .source { grid-template-columns: auto minmax(0, 1fr) auto; }
+      .source .file-picker { grid-column: auto; }
+      .source .button { width: auto; }
+      .tagline { display: none; }
+      .comparison { min-height: 360px; }
+      .empty-card { padding: 24px 18px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span></span>
+        <div>
+          <h1>Splitglass</h1>
+          <p class="tagline">Inspect every difference, down to the pixel.</p>
+        </div>
+      </div>
+      <div class="shortcuts">
+        <kbd>←</kbd> <kbd>→</kbd> divider &nbsp; <kbd>+</kbd> <kbd>−</kbd> zoom &nbsp; <kbd>0</kbd> reset
+      </div>
+    </header>
+
+    <section class="source-panel" aria-label="Images and view controls">
+      <div class="source">
+        <span class="source-letter" aria-hidden="true">A</span>
+        <div class="source-info">
+          <span class="source-title">Left image</span>
+          <span class="file-name" id="file-name-a">No image selected</span>
+        </div>
+        <label class="file-picker">
+          <input id="file-a" type="file" accept="image/*" aria-describedby="file-name-a">
+          <span class="button primary">Choose image</span>
+        </label>
+      </div>
+
+      <div class="source source-b">
+        <span class="source-letter" aria-hidden="true">B</span>
+        <div class="source-info">
+          <span class="source-title">Right image</span>
+          <span class="file-name" id="file-name-b">No image selected</span>
+        </div>
+        <label class="file-picker">
+          <input id="file-b" type="file" accept="image/*" aria-describedby="file-name-b">
+          <span class="button">Choose image</span>
+        </label>
+      </div>
+
+      <div class="toolbar" aria-label="Zoom controls">
+        <button class="icon-button" id="zoom-out" type="button" aria-label="Zoom out" title="Zoom out (−)">−</button>
+        <output class="zoom-value" id="zoom-value" aria-live="polite">100%</output>
+        <button class="icon-button" id="zoom-in" type="button" aria-label="Zoom in" title="Zoom in (+)">+</button>
+        <button class="button" id="fit-view" type="button" title="Fit images to view (F)">Fit</button>
+        <button class="button" id="reset-view" type="button" title="Reset zoom, pan, and divider (0)">Reset</button>
+      </div>
+    </section>
+
+    <section
+      class="comparison"
+      id="comparison"
+      aria-label="Image comparison area. Drop up to two images here, or use the choose image buttons."
+    >
+      <div class="layer layer-b" id="layer-b">
+        <div class="image-plane"><img id="image-b" alt="Right comparison image"></div>
+      </div>
+      <div class="layer layer-a" id="layer-a">
+        <div class="image-plane"><img id="image-a" alt="Left comparison image"></div>
+      </div>
+
+      <div class="empty-state" id="empty-state">
+        <div class="empty-card">
+          <div class="empty-icon" aria-hidden="true">↔</div>
+          <h2 id="empty-title">Add two images to compare</h2>
+          <p id="empty-copy">Choose images above or drop them anywhere in this viewing area. Your files stay on this device.</p>
+        </div>
+      </div>
+
+      <span class="image-badge badge-a" id="badge-a">Image A</span>
+      <span class="image-badge badge-b" id="badge-b">Image B</span>
+
+      <button
+        class="divider"
+        id="divider"
+        type="button"
+        role="slider"
+        aria-label="Image reveal position"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="50"
+        aria-valuetext="50 percent image A, 50 percent image B"
+        aria-disabled="true"
+      ><span class="divider-grip" aria-hidden="true">‹ ›</span></button>
+
+      <div class="drop-message" aria-hidden="true">Drop images to compare</div>
+    </section>
+
+    <footer class="statusbar">
+      <div class="status-message" id="status-message" role="status">Waiting for two images.</div>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const MIN_ZOOM = 0.125;
+      const state = {
+        split: 50,
+        scale: 1,
+        panX: 0,
+        panY: 0,
+        urls: { a: null, b: null },
+        dividerDragging: false,
+        pointers: new Map(),
+        panStart: null,
+        pinchStart: null,
+        dragDepth: 0
+      };
+
+      const el = {
+        comparison: document.querySelector('#comparison'),
+        divider: document.querySelector('#divider'),
+        emptyState: document.querySelector('#empty-state'),
+        emptyTitle: document.querySelector('#empty-title'),
+        emptyCopy: document.querySelector('#empty-copy'),
+        imageA: document.querySelector('#image-a'),
+        imageB: document.querySelector('#image-b'),
+        layerA: document.querySelector('#layer-a'),
+        layerB: document.querySelector('#layer-b'),
+        fileA: document.querySelector('#file-a'),
+        fileB: document.querySelector('#file-b'),
+        fileNameA: document.querySelector('#file-name-a'),
+        fileNameB: document.querySelector('#file-name-b'),
+        badgeA: document.querySelector('#badge-a'),
+        badgeB: document.querySelector('#badge-b'),
+        zoomIn: document.querySelector('#zoom-in'),
+        zoomOut: document.querySelector('#zoom-out'),
+        zoomValue: document.querySelector('#zoom-value'),
+        fitView: document.querySelector('#fit-view'),
+        resetView: document.querySelector('#reset-view'),
+        status: document.querySelector('#status-message'),
+        planes: [...document.querySelectorAll('.image-plane')]
+      };
+
+      const hasImage = key => Boolean(state.urls[key]);
+      const hasBothImages = () => hasImage('a') && hasImage('b');
+
+      function setStatus(message, isError = false) {
+        el.status.textContent = message;
+        el.status.classList.toggle('error', isError);
+      }
+
+      function formatZoom(scale) {
+        const percent = scale * 100;
+        if (percent >= 100000) return `${percent.toExponential(1)}%`;
+        if (percent >= 100) return `${Math.round(percent).toLocaleString()}%`;
+        return `${percent.toFixed(percent < 10 ? 1 : 0)}%`;
+      }
+
+      function renderTransform() {
+        const transform = `translate3d(${state.panX}px, ${state.panY}px, 0) scale(${state.scale})`;
+        el.planes.forEach(plane => { plane.style.transform = transform; });
+        el.zoomValue.textContent = formatZoom(state.scale);
+        el.comparison.classList.toggle('can-pan', state.scale !== 1 || state.panX !== 0 || state.panY !== 0);
+      }
+
+      function setSplit(value) {
+        state.split = Math.max(0, Math.min(100, value));
+        const rounded = Math.round(state.split);
+        el.comparison.style.setProperty('--split', `${state.split}%`);
+        el.divider.setAttribute('aria-valuenow', String(rounded));
+        el.divider.setAttribute('aria-valuetext', `${rounded} percent image A, ${100 - rounded} percent image B`);
+      }
+
+      function updateInterface() {
+        const count = Number(hasImage('a')) + Number(hasImage('b'));
+        const ready = count === 2;
+
+        el.layerA.classList.toggle('has-image', hasImage('a'));
+        el.layerB.classList.toggle('has-image', hasImage('b'));
+        el.badgeA.classList.toggle('visible', hasImage('a'));
+        el.badgeB.classList.toggle('visible', hasImage('b'));
+        el.divider.setAttribute('aria-disabled', String(!ready));
+        el.divider.tabIndex = ready ? 0 : -1;
+
+        if (ready) {
+          el.emptyState.classList.add('is-hidden');
+          setStatus('Ready. Drag the divider, scroll to zoom, and drag the canvas to pan.');
+        } else {
+          el.emptyState.classList.remove('is-hidden');
+          if (count === 1) {
+            const missing = hasImage('a') ? 'B' : 'A';
+            el.emptyTitle.textContent = `Add image ${missing} to compare`;
+            el.emptyCopy.textContent = 'Choose the remaining image above or drop it into this viewing area.';
+            setStatus(`Image ${missing} is still needed.`);
+          } else {
+            el.emptyTitle.textContent = 'Add two images to compare';
+            el.emptyCopy.textContent = 'Choose images above or drop them anywhere in this viewing area. Your files stay on this device.';
+            setStatus('Waiting for two images.');
+          }
+        }
+      }
+
+      async function loadImage(file, key) {
+        if (!file || !file.type.startsWith('image/')) {
+          setStatus('That file is not a supported image. Try PNG, JPEG, WebP, GIF, or another browser-supported format.', true);
+          return;
+        }
+
+        const image = key === 'a' ? el.imageA : el.imageB;
+        const name = key === 'a' ? el.fileNameA : el.fileNameB;
+        const previousUrl = state.urls[key];
+        const nextUrl = URL.createObjectURL(file);
+
+        try {
+          image.src = nextUrl;
+          await image.decode();
+          state.urls[key] = nextUrl;
+          name.textContent = file.name;
+          name.title = file.name;
+          if (previousUrl) URL.revokeObjectURL(previousUrl);
+          fitView();
+          updateInterface();
+        } catch {
+          if (previousUrl) image.src = previousUrl;
+          else image.removeAttribute('src');
+          URL.revokeObjectURL(nextUrl);
+          setStatus(`“${file.name}” could not be opened as an image.`, true);
+        }
+      }
+
+      function fitView() {
+        state.scale = 1;
+        state.panX = 0;
+        state.panY = 0;
+        renderTransform();
+      }
+
+      function resetView() {
+        fitView();
+        setSplit(50);
+      }
+
+      function zoomAt(clientX, clientY, factor) {
+        if (!hasBothImages()) return;
+        const rect = el.comparison.getBoundingClientRect();
+        const pointX = clientX - rect.left;
+        const pointY = clientY - rect.top;
+        const oldScale = state.scale;
+        const nextScale = Math.max(MIN_ZOOM, oldScale * factor);
+
+        if (!Number.isFinite(nextScale) || nextScale === oldScale) return;
+        const ratio = nextScale / oldScale;
+        state.panX = pointX - (pointX - state.panX) * ratio;
+        state.panY = pointY - (pointY - state.panY) * ratio;
+        state.scale = nextScale;
+        renderTransform();
+      }
+
+      function zoomFromCenter(factor) {
+        const rect = el.comparison.getBoundingClientRect();
+        zoomAt(rect.left + rect.width / 2, rect.top + rect.height / 2, factor);
+      }
+
+      function splitFromPointer(event) {
+        const rect = el.comparison.getBoundingClientRect();
+        setSplit(((event.clientX - rect.left) / rect.width) * 100);
+      }
+
+      el.fileA.addEventListener('change', event => loadImage(event.target.files[0], 'a'));
+      el.fileB.addEventListener('change', event => loadImage(event.target.files[0], 'b'));
+
+      el.divider.addEventListener('pointerdown', event => {
+        if (!hasBothImages()) return;
+        event.preventDefault();
+        event.stopPropagation();
+        state.dividerDragging = true;
+        el.divider.setPointerCapture(event.pointerId);
+        splitFromPointer(event);
+      });
+
+      el.divider.addEventListener('pointermove', event => {
+        if (!state.dividerDragging) return;
+        splitFromPointer(event);
+      });
+
+      const stopDividerDrag = () => {
+        if (!state.dividerDragging) return;
+        state.dividerDragging = false;
+      };
+
+      el.divider.addEventListener('pointerup', stopDividerDrag);
+      el.divider.addEventListener('pointercancel', stopDividerDrag);
+
+      el.divider.addEventListener('keydown', event => {
+        const step = event.shiftKey ? 5 : 1;
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+          event.preventDefault();
+          setSplit(state.split - step);
+        } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          setSplit(state.split + step);
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          setSplit(0);
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          setSplit(100);
+        }
+      });
+
+      el.comparison.addEventListener('wheel', event => {
+        if (!hasBothImages()) return;
+        event.preventDefault();
+        zoomAt(event.clientX, event.clientY, Math.exp(-event.deltaY * 0.0015));
+      }, { passive: false });
+
+      function pointerDistance(points) {
+        return Math.hypot(points[0].x - points[1].x, points[0].y - points[1].y);
+      }
+
+      function pointerCenter(points) {
+        return { x: (points[0].x + points[1].x) / 2, y: (points[0].y + points[1].y) / 2 };
+      }
+
+      el.comparison.addEventListener('pointerdown', event => {
+        if (!hasBothImages()) return;
+        event.preventDefault();
+        el.comparison.setPointerCapture(event.pointerId);
+        state.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+        if (state.pointers.size === 1) {
+          state.panStart = { x: event.clientX, y: event.clientY, panX: state.panX, panY: state.panY };
+          el.comparison.classList.add('is-panning');
+        } else if (state.pointers.size === 2) {
+          const points = [...state.pointers.values()];
+          state.pinchStart = {
+            distance: pointerDistance(points),
+            center: pointerCenter(points),
+            scale: state.scale,
+            panX: state.panX,
+            panY: state.panY
+          };
+          state.panStart = null;
+        }
+      });
+
+      el.comparison.addEventListener('pointermove', event => {
+        if (!state.pointers.has(event.pointerId)) return;
+        state.pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+
+        if (state.pointers.size === 1 && state.panStart) {
+          state.panX = state.panStart.panX + event.clientX - state.panStart.x;
+          state.panY = state.panStart.panY + event.clientY - state.panStart.y;
+          renderTransform();
+        } else if (state.pointers.size === 2 && state.pinchStart) {
+          const rect = el.comparison.getBoundingClientRect();
+          const points = [...state.pointers.values()];
+          const center = pointerCenter(points);
+          const factor = pointerDistance(points) / Math.max(1, state.pinchStart.distance);
+          const nextScale = Math.max(MIN_ZOOM, state.pinchStart.scale * factor);
+          const originX = state.pinchStart.center.x - rect.left;
+          const originY = state.pinchStart.center.y - rect.top;
+          const ratio = nextScale / state.pinchStart.scale;
+
+          state.scale = nextScale;
+          state.panX = originX - (originX - state.pinchStart.panX) * ratio + center.x - state.pinchStart.center.x;
+          state.panY = originY - (originY - state.pinchStart.panY) * ratio + center.y - state.pinchStart.center.y;
+          renderTransform();
+        }
+      });
+
+      function endPointer(event) {
+        state.pointers.delete(event.pointerId);
+
+        if (state.pointers.size === 1) {
+          const remaining = [...state.pointers.values()][0];
+          state.panStart = { x: remaining.x, y: remaining.y, panX: state.panX, panY: state.panY };
+          state.pinchStart = null;
+        } else if (state.pointers.size === 0) {
+          state.panStart = null;
+          state.pinchStart = null;
+          el.comparison.classList.remove('is-panning');
+        }
+      }
+
+      el.comparison.addEventListener('pointerup', endPointer);
+      el.comparison.addEventListener('pointercancel', endPointer);
+
+      el.comparison.addEventListener('dragenter', event => {
+        event.preventDefault();
+        state.dragDepth += 1;
+        el.comparison.classList.add('is-drop-target');
+      });
+
+      el.comparison.addEventListener('dragover', event => {
+        event.preventDefault();
+        if (event.dataTransfer) event.dataTransfer.dropEffect = 'copy';
+      });
+
+      el.comparison.addEventListener('dragleave', () => {
+        state.dragDepth = Math.max(0, state.dragDepth - 1);
+        if (state.dragDepth === 0) el.comparison.classList.remove('is-drop-target');
+      });
+
+      el.comparison.addEventListener('drop', async event => {
+        event.preventDefault();
+        state.dragDepth = 0;
+        el.comparison.classList.remove('is-drop-target');
+        const files = [...event.dataTransfer.files].filter(file => file.type.startsWith('image/')).slice(0, 2);
+
+        if (!files.length) {
+          setStatus('No supported image files were found in that drop.', true);
+          return;
+        }
+
+        if (files.length === 2) {
+          await Promise.all([loadImage(files[0], 'a'), loadImage(files[1], 'b')]);
+        } else {
+          const target = !hasImage('a') ? 'a' : !hasImage('b') ? 'b' : 'a';
+          await loadImage(files[0], target);
+        }
+      });
+
+      el.zoomIn.addEventListener('click', () => zoomFromCenter(1.25));
+      el.zoomOut.addEventListener('click', () => zoomFromCenter(0.8));
+      el.fitView.addEventListener('click', fitView);
+      el.resetView.addEventListener('click', resetView);
+
+      document.addEventListener('keydown', event => {
+        if (event.target.matches('input, button') || event.ctrlKey || event.metaKey || event.altKey) return;
+        if (event.key === '+' || event.key === '=') {
+          event.preventDefault();
+          zoomFromCenter(1.25);
+        } else if (event.key === '-' || event.key === '_') {
+          event.preventDefault();
+          zoomFromCenter(0.8);
+        } else if (event.key === '0') {
+          event.preventDefault();
+          resetView();
+        } else if (event.key.toLowerCase() === 'f') {
+          event.preventDefault();
+          fitView();
+        }
+      });
+
+      setSplit(50);
+      renderTransform();
+      updateInterface();
+    })();
+  </script>
+</body>
+</html>

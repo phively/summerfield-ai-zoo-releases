@@ -13,9 +13,16 @@ SKILLS_ROOT = PLUGIN_ROOT / "skills"
 SHARED_HANDOFF = PLUGIN_ROOT / "shared" / "handoff-contracts.md"
 RECORD_MANAGEMENT = PLUGIN_ROOT / "shared" / "career-direction-records.md"
 OPPORTUNITY_MANAGEMENT = PLUGIN_ROOT / "shared" / "opportunity-records.md"
+PROFESSIONAL_DEVELOPMENT_MANAGEMENT = PLUGIN_ROOT / "shared" / "professional-development-records.md"
 RECORD_AUDITS = PLUGIN_ROOT / "shared" / "record-audits.md"
 AUDIT_SCRIPT = PLUGIN_ROOT / "scripts" / "validate_record_audit.py"
-SKILL_NAMES = ("career-direction", "evaluate-opportunity", "update-resume")
+SKILL_NAMES = (
+    "career-direction",
+    "professional-development",
+    "evaluate-opportunity",
+    "prepare-interview",
+    "update-resume",
+)
 SHARED_LINK = "../../shared/handoff-contracts.md"
 
 
@@ -30,7 +37,7 @@ def skill_text(name: str) -> str:
 def test_canonical_plugin_and_skill_structure() -> None:
     manifest = json.loads(read(PLUGIN_ROOT / ".codex-plugin" / "plugin.json"))
     assert manifest["name"] == PLUGIN_ROOT.name == "career-coach"
-    assert manifest["version"] == "1.6.0"
+    assert manifest["version"] == "1.7.0"
     assert manifest["skills"] == "./skills/"
     for name in SKILL_NAMES:
         root = SKILLS_ROOT / name
@@ -50,7 +57,7 @@ def test_all_skill_local_markdown_links_resolve() -> None:
 
 
 def test_every_skill_checks_shared_context_sources() -> None:
-    for name in SKILL_NAMES:
+    for name in ("career-direction", "evaluate-opportunity", "update-resume"):
         skill = skill_text(name)
         assert "`career_direction_record.md` or a clearly equivalent" in skill
         assert "`career_direction_history.md` or its resolved" in skill
@@ -61,6 +68,23 @@ def test_every_skill_checks_shared_context_sources() -> None:
         assert "](../../shared/career-direction-records.md)" in skill
         assert "](../../shared/opportunity-records.md)" in skill
         assert "](../../shared/record-audits.md)" in skill
+
+
+def test_new_skills_have_bounded_context_and_ownership_contracts() -> None:
+    professional_development = skill_text("professional-development")
+    prepare_interview = skill_text("prepare-interview")
+    development_records = read(PROFESSIONAL_DEVELOPMENT_MANAGEMENT)
+    assert "professional-development-records.md" in professional_development
+    assert "sole writer" in professional_development
+    assert "PD-..." in professional_development
+    assert "explicit user confirmation" in professional_development
+    assert "shared/handoff-contracts.md" in prepare_interview
+    assert "evaluate-opportunity" in prepare_interview
+    assert "Do not create `interview-prep.md`" in prepare_interview
+    assert "explicit user confirmation" in prepare_interview
+    assert "## Current development goals" in development_records
+    assert "Goal ID" in development_records
+    assert "Completed evidence" in development_records
 
 
 def test_native_identity_authority_and_lifecycle_contract() -> None:

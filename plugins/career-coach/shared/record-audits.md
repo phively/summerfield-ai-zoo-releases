@@ -1,6 +1,6 @@
 # Persistent-record lifecycle and audits
 
-Read this reference before auditing, compacting, splitting, merging, migrating, deduplicating, reorganizing history, or transferring authority for any Career Coach record. Authority and ownership remain defined in [handoff-contracts.md](handoff-contracts.md); record schemas remain in [career-direction-records.md](career-direction-records.md) and [opportunity-records.md](opportunity-records.md).
+Read this reference before auditing, compacting, splitting, merging, migrating, deduplicating, reorganizing history, or transferring authority for any Career Coach record. Authority and ownership remain defined in [handoff-contracts.md](handoff-contracts.md); record schemas remain in [career-direction-records.md](career-direction-records.md), [professional-development-records.md](professional-development-records.md), and [opportunity-records.md](opportunity-records.md).
 
 ## Contents
 
@@ -17,6 +17,7 @@ Read this reference before auditing, compacting, splitting, merging, migrating, 
 Use the existing Markdown files as their own retrieval layer. Do not create a sidecar index by default.
 
 - Treat `career_direction_record.md` as a single-subject current profile. Keep a short table of contents and stable descriptive headings for current goals, criteria, constraints, positioning, evidence limits, and unresolved questions. Use the heading and canonical resource identity for bounded retrieval.
+- Treat `professional-development.md` as a single-subject current execution plan. Keep stable headings for current goals, capability and credential gaps, approaches and sequencing, progress and completed evidence, dependencies and next actions, and provenance. Use the current record and its canonical identity for bounded retrieval.
 - Treat `opportunities-current.md` as a multi-entry operational ledger. Use its ranked comparison table as the index and `O-...` headings as stable entry keys. Retrieve the table first when comparison or discovery is needed, then only the applicable detailed entries.
 - Treat each captured posting file as authority only for full posting text or an explicitly authorized source-grounded summary and its neutral provenance. It must not contain user- or candidate-specific context. Retrieve it through the exact resource identity recorded for its `O-...` entry.
 - Search history by `H-...` or `OH-...` identifier, subject, status, date, or relationship only when a documented retrieval condition applies.
@@ -30,7 +31,7 @@ Check inexpensive metadata at an authorized write, explicit audit, or consequent
 - a current or routing record exceeds 8 KiB;
 - a detailed current file, including a captured posting, exceeds 16 KiB and routine tasks repeatedly load unrelated content;
 - `Last audited` is missing or more than 180 days old;
-- either current record has accumulated 25 material changes since its recorded audit;
+- any current-state record has accumulated 25 material changes since its recorded audit;
 - duplicate or conflicting active entries, stable IDs, ranks, or authorities are detected;
 - a required history or posting pointer is missing or broken;
 - a current record is no longer understandable without routinely reading history; or

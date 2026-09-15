@@ -77,7 +77,7 @@
       "id": "support-prior-context",
       "prompt": "Use what we decided last time about my preferred management style and location to refine my target roles.",
       "expected_plugin_skills": ["career-direction"],
-      "expected_supporting_skills": ["personal-context"],
+      "expected_supporting_skills": ["remember-me"],
       "forbidden_plugin_skills": [],
       "expected_behavior": ["retrieves relevant prior context before asking repeat questions"]
     },

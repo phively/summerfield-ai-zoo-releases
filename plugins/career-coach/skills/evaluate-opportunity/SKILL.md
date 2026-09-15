@@ -1,6 +1,6 @@
 ---
 name: evaluate-opportunity
-description: "Evaluate a specific job posting, promotion, executive role, or career opportunity in both directions: candidate-to-role qualifications and role-to-candidate goals, preferences, constraints, and risks. Use for whether-to-apply decisions, role-fit analysis, qualification comparisons, tradeoffs, and interview due diligence. Do not use primarily to rewrite resume content."
+description: "Evaluate a specific job posting, promotion, executive role, or career opportunity in both directions: candidate-to-role qualifications and role-to-candidate goals, preferences, constraints, and risks. Use for whether-to-apply decisions, role-fit analysis, qualification comparisons, tradeoffs, and interview due diligence. Do not use primarily for candidate interview preparation or to rewrite resume content."
 ---
 
 # Evaluate Opportunity
@@ -14,7 +14,9 @@ Assess whether an opportunity is attainable and whether it serves the user's car
 - Preserve conflicts and uncertainty; do not resolve them silently.
 - Identify the source or reasoning behind material conclusions.
 - Ask only questions that could materially change the recommendation.
-- Invoke `personal-context` first when unseen prior preferences, constraints, decisions, or career history would materially affect fit.
+- Consult `remember-me`, when available, only for narrow stable personal context that is not owned by Career Coach and would materially affect fit; continue with neutral defaults if it is unavailable.
+
+`evaluate-opportunity` also owns durable opportunity-specific interview facts and due diligence: current round or stage, scheduled timing, known interviewers, questions actually asked, advancement or rejection state, and material role-specific unknowns. Keep speculative likely questions in `prepare-interview` outputs, not in opportunity records.
 
 ## Use shared context sources
 
@@ -48,6 +50,10 @@ Assess whether an opportunity is attainable and whether it serves the user's car
 6. Recommend pursue, deprioritize, or gather more information, with reasons and confidence.
 7. When durable tracking is authorized, save available full posting text in the preferred Google Drive description folder or directly in the selected library fallback. If full text is unavailable, incomplete, inaccessible, or cannot be saved, ask the user to choose: (1) supply the full job-description text, pausing capture until it is provided, or (2) explicitly authorize a source-grounded summary. Never save a summary before that authorization. Apply the posting-file privacy boundary in [opportunity record management](../../shared/opportunity-records.md), record the filename and location together with the source website, update the ranked comparison row and detailed entry, apply any confirmed lifecycle change, and verify all required records remain coherent.
 
+## Interview boundary
+
+Keep role- and employer-side due diligence here: what the candidate needs to learn about the opportunity, including material unknowns and questions to ask. When the user asks what the candidate should communicate, demonstrate, explain, or practice, route that distinct outcome to `prepare-interview`; do not turn due-diligence questions into candidate-preparation claims. `prepare-interview` may request bounded updates to this skill for actual interview facts, but it never writes opportunity records directly.
+
 ## References
 
 - Read [role-fit-rubric.md](references/role-fit-rubric.md) for a full assessment, competing opportunities, ambiguous qualification strength, or any recommendation about whether to pursue.
@@ -59,7 +65,9 @@ Assess whether an opportunity is attainable and whether it serves the user's car
 
 ## Supporting capabilities
 
-- Invoke `research-briefing` for current compensation, employer, industry, geographic, or labor-market claims. Distinguish sourced external facts from inferences about the unpublished reality of the role.
+- When available, invoke `research-briefing` for current compensation, employer, industry, geographic, or labor-market claims. If it is unavailable, label affected claims unverified or unknown. Distinguish sourced external facts from inferences about the unpublished reality of the role.
+- Do not invoke `teach-me` for opportunity evaluation or due diligence. Use it only when the user separately requests genuine interview or capability practice, with the relevant receiving skill retaining its own workflow. If it is unavailable, continue locally and do not imply a handoff occurred.
+- Invoke `prepare-interview` only when candidate preparation is a distinct requested outcome; do not invoke it merely because the opportunity is in an interview stage.
 - Do not invoke `career-direction` when existing criteria are adequate. Invoke it for broader discovery when requested or when missing criteria prevent a useful evaluation. Also invoke it for a bounded in-place update when the evaluation reveals a user-confirmed, durable criterion, preference, constraint, career hypothesis, or resolved contradiction that belongs in the selected career direction record.
 - Do not update either direction record directly. Send `career-direction` the exact working and historical record identities when visible, source, interpretation, effective date if confirmed, confirmation status, and reason the information is reusable beyond this opportunity.
 - Do not invoke `update-resume` unless the user also asks for resume changes.

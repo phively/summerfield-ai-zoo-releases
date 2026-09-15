@@ -1,8 +1,8 @@
 # Preference and recipe records
 
-Use a workbook or Google Sheet titled `Meal Preferences` or a clearly equivalent title such as `Recipe Preferences` or `Family Meal Preferences`. When creating a new workbook, use `Meal Preferences`. Reuse an accessible equivalent workbook instead of creating a competing copy.
+Use a workbook or Google Sheet titled `Meal Preferences` or a clearly equivalent title such as `Recipe Preferences` or `Family Meal Preferences`. When creating a new record and the user's Google Drive is accessible, prefer a Google Sheet titled `Meal Preferences` inside the designated Meal Planning folder. Reuse an accessible equivalent workbook instead of creating a competing copy. Read [native artifact storage and formatting](../../../shared/artifact-formatting.md) before creating or formatting it.
 
-Use seven canonical data tabs: `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, `Recipe History`, and `Recipe Catalog`. For a new workbook, also create the workbook-local `Record Index` defined in shared record management. Accept equivalent existing tab names and combined current/history tables with explicit status and stable keys without forcing a migration. Treat provider, immutable workbook ID or canonical path, title, worksheet, table or named range, stable key, record ID, and relevant columns as provenance; do not copy records into skill-local files. Read [shared record management](../../../shared/record-management.md) before persistent changes and [cleanup migration](../../../shared/cleanup-migration.md) before restructuring existing records.
+Use seven canonical data tabs: `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, `Recipe History`, and `Recipe Catalog`. For a new workbook, also create the workbook-local `Record Index` defined in shared record management. Store each dataset as native cells with formatted headers, suitable wrapping and widths, filters or native tables when supported, stable keys, and applicable validation. The Markdown tables below define schemas; never paste them as literal Markdown into a worksheet or Google Doc. Accept equivalent existing tab names and combined current/history tables with explicit status and stable keys without forcing a migration. Treat provider, immutable workbook ID or canonical path, title, worksheet, table or named range, stable key, record ID, and relevant columns as provenance; do not copy records into skill-local files. Read [shared record management](../../../shared/record-management.md) before persistent changes and [cleanup migration](../../../shared/cleanup-migration.md) before restructuring existing records.
 
 Use a `Record ID` column in every new current table and the existing `History ID` or `MH-...` field in history tables. Prefer structured tables or named ranges named for the canonical worksheet. Preserve a clearly equivalent existing composite key, but document it in `Record Index` rather than using row numbers. Use the logical uniqueness rules below to detect duplicates.
 
@@ -58,13 +58,13 @@ Keep one current decision-relevant row per normalized recipe identity and househ
 | --- | --- |
 | Record ID | Stable unique key; never a row number |
 | Recipe name | Recognizable title |
-| Source URL | Direct original recipe link, if any |
+| Source link | Descriptive named link to the original recipe, if any; retain a raw URL only in a dedicated matching field when required |
 | Household member | Individual or confirmed aggregate |
 | Rating | Current 1-5 value, if supplied |
 | Rating date | ISO date |
 | Would make again | Yes, no, or conditional |
 | Recipe ID | Stable RC identity from Recipe Catalog |
-| Canonical recipe link | Verified Google Doc link |
+| Canonical recipe link | Descriptive verified Google Doc link |
 | Version made | Version actually prepared; unknown stays blank |
 | What worked | Concise user feedback |
 | Feedback pointer | Doc section containing proposed or confirmed recipe changes |
@@ -85,7 +85,7 @@ Keep prior ratings, material preparation experiences, and outcomes with continui
 | --- | --- |
 | History ID | Stable `MH-YYYY-MM-DD-NN` identifier |
 | Recipe name | Recognizable title |
-| Source URL | Direct original recipe link, if any |
+| Source link | Descriptive named link to the original recipe, if any; retain a raw URL only in a dedicated matching field when required |
 | Date made | ISO date, when confirmed |
 | Household member | Individual or confirmed aggregate |
 | Prior rating | Prior 1-5 value, if supplied |

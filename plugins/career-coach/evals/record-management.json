@@ -103,7 +103,7 @@
     },
     {
       "id": "existing-behavior-regression",
-      "prompt": "Run the established Career Coach routing, evidence-integrity, preference-conflict, research, personal-context, and document cases.",
+      "prompt": "Run the established Career Coach routing, evidence-integrity, preference-conflict, research, remember-me, and document cases.",
       "expected_files_read": ["evals/regression.json and resources selected by each case"],
       "forbidden_files_read": ["career_direction_history.md unless a case meets a retrieval condition"],
       "authoritative_result": "Existing skill boundaries, evidence safeguards, preference precedence, and supporting-capability routing remain intact.",

@@ -48,7 +48,7 @@ After the research result returns, `teach-me` must correct consequential false p
 
 | Contract field | Requirement |
 | --- | --- |
-| Invoking skill | `superb-skills`, `research-briefing`, or `teach-me` |
+| Invoking skill | `superb-skills`, `research-briefing`, `teach-me`, or an available Career Coach skill |
 | Receiving skill | `remember-me` |
 | Trigger | Stable personal goals, preferences, constraints, prior decisions, or output choices could materially affect the current workflow and the answer is not already supplied in the current request. |
 | Exceptions | Do not consult for incidental personal facts, ordinary one-time instructions, context that cannot change the work, or information outside the user's authorized accessible sources. Do not load the complete profile by default. |
@@ -60,7 +60,7 @@ After the research result returns, `teach-me` must correct consequential false p
 | Information not to pass | Do not pass unrelated personal topics, complete profile or history files, secrets, credentials, unnecessary sensitive detail, or unsupported conclusions presented as facts. |
 | User confirmation | No new confirmation is required for a targeted read of an already authorized accessible record. Require confirmation before persisting an inference, replacing an explicit preference, resolving a consequential conflict, or retaining information whose sensitivity creates material privacy, safety, or misuse risk. |
 
-The invoking skill must apply only relevant context. `research-briefing` may use it to shape scope, tradeoffs, and presentation, but never as external evidence or as a predetermined conclusion. `superb-skills` may use it for discretionary design and communication choices, but never to override supported conventions or validation evidence. `teach-me` may use it for pacing, examples, accessibility, and learning goals, but never as external evidence or proof of mastery.
+The invoking skill must apply only relevant context. `research-briefing` may use it to shape scope, tradeoffs, and presentation, but never as external evidence or as a predetermined conclusion. `superb-skills` may use it for discretionary design and communication choices, but never to override supported conventions or validation evidence. `teach-me` may use it for pacing, examples, accessibility, and learning goals, but never as external evidence or proof of mastery. Career Coach may use it only for stable personal context outside Career Coach ownership; Career Coach records remain authoritative for career-domain state.
 
 ## Bundled Skills to Remember Me: durable update request
 
@@ -97,6 +97,8 @@ Other bundled skills must not maintain competing personal-profile files. A curre
 | User confirmation | Follow the receiving specialist's persistence and safety gates. A targeted read of an already authorized accessible record needs no additional confirmation; domain writes, consequential conflict resolution, sensitive retention, and ownership transfer require the applicable user authorization. |
 
 Use the external owner's canonical contract directly rather than copying its schema into `work-smarter`: [Career Coach](../../career-coach/shared/handoff-contracts.md) and [Meal Planner](../../meal-planner/shared/handoff-contracts.md).
+
+Career Coach's optional handoffs to `teach-me`, `research-briefing`, and targeted `remember-me` consultation are governed by the canonical [Career Coach handoff contract](../../career-coach/shared/handoff-contracts.md). That contract defines the invoking-skill boundaries, minimum context, authority, uncertainty, failure behavior, and confirmation requirements; this file remains authoritative for the receiving Work Smarter capability's behavior.
 
 ## No reverse handoff
 

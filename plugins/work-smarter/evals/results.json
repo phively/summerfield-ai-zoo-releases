@@ -1,6 +1,6 @@
 {
   "suite": "work-smarter-regression",
-  "plugin_version": "1.8.0",
+  "plugin_version": "1.8.1",
   "run_date": "2026-09-07",
   "structural_checks": {
     "remember_me_skill_validator": "passed",
@@ -9,38 +9,137 @@
     "teach_me_plugin_skill_validator": "passed",
     "teach_me_standalone_skill_validator": "passed",
     "plugin_validator": "passed",
-    "contract_and_behavior_tests": "33 passed",
+    "contract_and_behavior_tests": "34 passed",
     "marketplace_and_catalog_tests": "10 passed",
-    "regression_case_schema": "76 cases passed",
-    "full_repository_tests": "100 passed"
+    "regression_case_schema": "89 cases passed",
+    "full_repository_tests": "101 passed"
   },
-  "forward_test_plugin_version": "1.4.0",
-  "forward_test_run_date": "2026-08-16",
+  "forward_test_plugin_version": "1.8.1",
+  "forward_test_run_date": "2026-09-07",
   "forward_tests": [
     {
       "id": "forward-superb-skills-prompt-routing",
+      "plugin_version": "1.4.0",
+      "run_date": "2026-08-16",
       "status": "passed",
       "result": "Loaded only instruction-design.md, improved the one-time prompt, and did not propose a skill, plugin, evaluation workflow, or persistent memory."
     },
     {
       "id": "forward-superb-skills-plugin-routing",
+      "plugin_version": "1.4.0",
+      "run_date": "2026-08-16",
       "status": "passed",
       "result": "Loaded plugin-architecture.md and evaluation.md, invoked skill-creator as the implementation authority, compared split and combined architectures, and specified canonical handoffs and performance tests."
     },
     {
       "id": "forward-superb-skills-memory-routing",
+      "plugin_version": "1.4.0",
+      "run_date": "2026-08-16",
       "status": "passed",
       "result": "Loaded only working-memory.md, defined one authoritative current record and one subordinate audit record, and preserved conditional retrieval and coherent-update rules."
     },
     {
       "id": "forward-superb-skills-memory-audit",
+      "plugin_version": "1.4.0",
+      "run_date": "2026-08-16",
       "status": "passed",
       "result": "Recognized the 8 KiB and 180-day review triggers, kept trigger conditions separate from lifecycle decisions, staged the rewrite, required complete before/after inventories and a bidirectional semantic ledger, and left canonical files unchanged until validation passed."
+    },
+    {
+      "id": "forward-teach-visual-digital-plan-baseline",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "Compared committed HEAD with the working-tree skill on the same beginner digital-drawing plan. Both preserved the adaptive teaching and research checkpoints; only the working tree loaded visual-arts.md then drawing-painting.md and added goal-weighted fundamentals, proportional tool learning, aid boundaries, and explicit transfer probes without imposing realism or grayscale-first sequencing."
+    },
+    {
+      "id": "forward-teach-visual-tool-only",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "A Krita layer-mask lesson with an explicit application-operation goal loaded the teaching workflow and default personality but neither visual-art reference, avoiding irrelevant composition, drawing, and critique guidance."
+    },
+    {
+      "id": "forward-teach-visual-material-art",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "A wheel-throwing and clay-centering plan loaded visual-arts.md but not drawing-painting.md, preserved the required research checkpoint for technique and safety, and did not import 2D procedures. The shared research handoff contract exposed unrelated sections as pre-existing context overhead, not visual-domain leakage."
+    },
+    {
+      "id": "forward-teach-visual-production-negative",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "A direct request to convert an image to watercolor style did not activate teach-me or either visual-art reference; it routed to image editing because the medium name described the output rather than a learning goal."
+    },
+    {
+      "id": "forward-teach-visual-calligraphy",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "A Chinese-calligraphy lesson loaded the shared core before the drawing-painting family, applied only the conditional calligraphy section, requested the consequential script or tool distinction, and stopped before unverified tradition-specific claims. Unrelated perspective, value, color, and digital-painting procedures did not leak into the lesson."
+    },
+    {
+      "id": "forward-teach-visual-mixed-production-learning",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed_after_revision",
+      "result": "The first clean run correctly separated image production from teaching but silently chose physical watercolor for an ambiguous effect request. The family reference was revised to require identifying the intended medium or stating a limited assumption when execution materially differs; a clean rerun asked one focused medium question, used the generated example only as an analytical reference, and preserved learner practice."
+    },
+    {
+      "id": "forward-teach-visual-critique-learning",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "An artwork-available composition lesson loaded both visual-art references, elicited the learner's diagnostic commitment, separated observable structure, goal-relative composition, and aesthetic preference, and proposed a small revision experiment without editing the work for the learner."
+    },
+    {
+      "id": "forward-teach-visual-critique-no-image",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "When the drawing attachment was unavailable, the lesson did not invent proportion or lighting observations. It requested reattachment and limited interim help to a clearly generic self-critique process."
+    },
+    {
+      "id": "forward-teach-visual-nonmaking",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "An art-history lesson activated teach-me and the required historical-research checkpoint but loaded neither visual-art making reference, avoiding drawing exercises and making-specific guidance."
+    },
+    {
+      "id": "forward-teach-visual-aid-boundary",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "Tracing, perspective grids, and AI references were evaluated separately against observational proportion and original composition. The lesson protected unaided target operations while retaining aids for diagnosis, spatial support, comparison, or transformation and made no global good, bad, or cheating judgment."
+    },
+    {
+      "id": "forward-teach-visual-stylized-imagination",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "A stylized fantasy-landscape and creature lesson loaded both domain references but not the curriculum-only philosophy, used goal-relevant shape, construction, composition, and transformation practice, and imposed neither portraiture nor photorealism as a prerequisite."
+    },
+    {
+      "id": "forward-teach-visual-cross-medium-transfer",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "A watercolor-to-digital transition treated composition, value, color, and edge judgment as transfer hypotheses, separated them from stylus and software execution, and proposed paired, changed-subject, and delayed probes rather than claiming automatic transfer."
+    },
+    {
+      "id": "forward-teach-visual-reference-study",
+      "plugin_version": "1.8.1",
+      "run_date": "2026-09-07",
+      "status": "passed",
+      "result": "A digital-painting master-study lesson selected one analytical target, bounded the copied material, and followed it with comparison, reconstruction, and changed application. It explicitly rejected copying resemblance as evidence that technique had been learned."
     }
   ],
   "not_run": [
-    "Clean-context model forward tests for the 1.8.0 project-instruction character budget and installed-skill authority-leakage scenarios",
-    "Clean-context forward tests for the 1.7.0 teach-me learning plans, adaptive scaffolding, tool boundaries, evidence routing, research-first dialogue, personality fallback, and memory handoffs",
+    "Clean-context model forward tests for the 1.8.1 project-instruction character budget and installed-skill authority-leakage scenarios",
+    "A full unified-versus-core-plus-family architecture comparison beyond the HEAD baseline digital-plan case",
     "Clean-context forward tests for the 1.5.0 comparative-language and expanded maintenance-trigger scenarios",
     "Clean-context forward tests for remember-me activation, library writes, and cross-plugin handoffs",
     "Automatic activation testing after installation in a live ChatGPT plugin marketplace",

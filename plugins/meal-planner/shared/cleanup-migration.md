@@ -4,10 +4,18 @@ Read before cleaning up household documents, changing rating schemas, migrating 
 
 ## Scope and recovery
 
-1. Resolve the user's designated Meal Planning folder, Recipes folder, current workbook and document IDs, and native schemas. Stay inside the planning folder; canonical recipe Docs stay in Recipes. Similar titles in backup folders do not establish current authority.
-2. Create a new `Migration audit YYYY-MM-DD` subfolder inside Meal Planning using the user's local date; append the local time if that name already exists. Keep backups, staging workbooks, snapshots, hashes, row mappings, and the final report there. Existing audit folders remain historical.
+1. Resolve the user's designated Meal Planning folder, `Recipes` folder, `Audits` folder, current workbook and document IDs, and native schemas. Stay inside the planning folder; canonical recipe Docs stay in Recipes. Similar titles in backup folders do not establish current authority. Read [native artifact storage and formatting](artifact-formatting.md) before proposing formatting or conversion work.
+2. Create or reuse `Audits` inside Meal Planning, then create a dated operation folder such as `Migration audit YYYY-MM-DD` or `Compaction audit YYYY-MM-DD`; append the local time if that name already exists. Keep backups, staging workbooks, snapshots, hashes, row mappings, and the final report there. Existing audit folders remain historical and never establish current authority.
 3. Preserve native copies of affected files before content writes. Export complete before snapshots including hidden populated rows, stable keys, values, formulas, validation, named ranges, tables, relevant references, and document structure. Use bounded reads and assemble the complete snapshot. Stop a dependent write if extraction is incomplete.
 4. Work on staged workbook copies, then validate before editing the original authorities in place. Re-read original values before applying the approved edits; stop on concurrent changes. Keep provider IDs, folder placement, and sharing unchanged.
+
+## Formatting and conversion offer
+
+During cleanup or migration, compare each canonical artifact with its canonical structure and offer useful corrections. Examples include applying native headings and lists to recipes or meal plans, converting literal Markdown tables into native tables, formatting household ranges as tables, adding supported validation, repairing named links, or proposing an Excel-to-Google-Sheets or Word/Markdown-to-Google-Docs conversion.
+
+Distinguish in-place formatting from file-type migration. Perform in-place formatting only when it is within the authorized cleanup scope and the staged audit proves that content and structure are preserved. A change of file type or provider, creation of a replacement for conversion, transfer of canonical authority, retirement of the original, or dependent-link cutover requires the user's explicit permission after the source, target, benefits, affected identities, and recovery plan have been explained. General permission to clean records is not permission to migrate file type.
+
+For an approved file-type migration, keep the recoverable original in the dated Audits operation folder or preserve an equally recoverable native version, validate the staged replacement's content and native structure, recheck the source for concurrent changes, and update canonical pointers only after validation passes. Without permission or after a failed check, leave the original canonical authority and its links unchanged.
 
 ## Ratings and recipe cleanup
 
@@ -22,4 +30,4 @@ Read before cleaning up household documents, changing rating schemas, migrating 
 
 Set `preserve_data_rows: true` in the audit ledger. Run `../scripts/validate_workbook_audit.py` with complete before/after snapshots and a bidirectional ledger. Each populated source row must map to at least one distinct surviving data row; prohibit many-to-one collapse and the `removed` disposition for data rows. A matching total row count alone is insufficient. Map every addition to its reason and every changed field to preserved source evidence or an authorized update.
 
-Check exact stable IDs, protected values, formulas, validations, source links, recipe Doc identity/contents, and native table coverage. Include every original tab, even when unchanged. Re-read all changed ranges after writing, compare against the validated staged state, and verify every original row's identity and unchanged fields. Record successful writes, counts, pending questions, and failed checks in the audit. Preserve backups until verification succeeds; never claim a complete cleanup after a partial write.
+Check exact stable IDs, protected values, formulas, validations, descriptive link text and target resolution, recipe Doc identity and contents, native headings and lists, and native table coverage. Include every original tab, even when unchanged. Re-read all changed ranges and document structures after writing, compare against the validated staged state, and verify every original row's identity and unchanged fields. Record successful writes, counts, formatting changes, pending questions, and failed checks in the audit. Preserve backups until verification succeeds; never claim a complete cleanup after a partial write.

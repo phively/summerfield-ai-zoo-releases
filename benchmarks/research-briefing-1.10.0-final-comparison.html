@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research-briefing final benchmark comparison</title>
+<style>
+:root{color-scheme:light;--ink:#20252b;--muted:#5e6873;--line:#d9e0e7;--bg:#f7f9fb;--card:#fff;--new:#1769aa;--base:#64748b;--orig:#a16207;--good:#13795b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1320px;margin:0 auto;padding:32px 24px 56px}h1{font-size:clamp(1.6rem,2.5vw,2.2rem);line-height:1.15;margin:0 0 8px}h2{font-size:1.2rem;margin:30px 0 10px}.dek{color:var(--muted);max-width:1050px;margin:0 0 18px}.callout{border-left:4px solid var(--new);background:#eef6fd;padding:12px 15px;margin:18px 0}.callout strong{color:#0d4f83}.note{color:var(--muted);font-size:.9rem}.table-wrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:8px}table{border-collapse:collapse;width:100%;min-width:900px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:right;vertical-align:top}th{background:#eef2f6;font-weight:650;white-space:nowrap}th:first-child,td:first-child{text-align:left}tr:last-child td{border-bottom:0}td:first-child{font-weight:600}.sub{display:block;color:var(--muted);font-size:.78rem;font-weight:400}.legend{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:.9rem;margin:10px 0 14px}.swatch{display:inline-block;width:12px;height:12px;border-radius:3px;margin-right:5px;vertical-align:-1px}.swatch.new{background:var(--new)}.swatch.base{background:var(--base)}.swatch.orig{background:var(--orig)}.chart-card{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;margin-top:12px}.axis{display:flex;justify-content:space-between;color:var(--muted);font-size:.75rem;margin-left:180px;border-bottom:1px solid var(--line);padding-bottom:4px}.bar-row{display:grid;grid-template-columns:170px minmax(300px,1fr);gap:10px;padding:10px 0;border-bottom:1px solid #edf0f3}.bar-row:last-child{border-bottom:0}.bar-label{font-weight:600}.bar-label small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}.bars{display:grid;gap:5px}.bar-line{display:grid;grid-template-columns:155px minmax(120px,1fr) 58px;align-items:center;gap:7px;font-size:.8rem}.bar-name{color:var(--muted);text-align:right}.track{height:18px;background:repeating-linear-gradient(to right,#f0f3f6 0,#f0f3f6 calc(25% - 1px),#dfe5eb 25%);border-radius:3px;overflow:visible}.bar{height:100%;border-radius:3px;position:relative;cursor:help;transition:filter .15s,transform .15s}.bar:hover{filter:brightness(.9);transform:scaleY(1.12)}.bar.new{background:var(--new)}.bar.base{background:var(--base)}.bar.orig{background:var(--orig)}.bar-value{font-variant-numeric:tabular-nums;text-align:left}.tooltip{position:fixed;display:none;z-index:5;max-width:380px;padding:9px 11px;border:1px solid #aeb9c4;border-radius:6px;background:#fff;box-shadow:0 5px 18px #0002;font-size:.82rem;line-height:1.35;pointer-events:none}.sources{font-size:.88rem;color:var(--muted);margin-top:24px}@media(max-width:700px){main{padding:24px 14px 42px}.bar-row{grid-template-columns:1fr}.axis{margin-left:0}.bar-line{grid-template-columns:130px minmax(100px,1fr) 52px}}
+</style>
+</head>
+<body>
+<main>
+<h1>Research-briefing final benchmark comparison</h1>
+<p class="dek">Three versions evaluated on the same sealed semantic validation set: Work Smarter <strong>1.10.0</strong>, factorial candidate <strong>000 (integrated-initial)</strong>, and the <strong>original pre-factorial baseline</strong>.</p>
+<div class="callout"><strong>Headline:</strong> New 1.10.0 has the highest pooled task success (86.67%) and the highest unit coverage, routing accuracy, and process safety. All three runs have 0% observed critical errors in this final set.</div>
+
+<h2>Pooled comparison</h2>
+<p class="note">All columns are Luna-Max semantic adjudications of 30 cases x 3 repetitions (90 runs), generated with Luna-Xhigh. Higher is better except critical-error rate, where lower is better. Parentheses show the reported 95% interval.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th>Metric</th><th>New 1.10.0<span class="sub">90 runs</span></th><th>Baseline 000: integrated-initial<span class="sub">90 runs</span></th><th>Original pre-factorial skill<span class="sub">90 runs</span></th></tr></thead>
+<tbody>
+<tr><td>Task success %</td><td>86.67<span class="sub">79.25-94.08</span></td><td>54.44<span class="sub">38.94-69.94</span></td><td>48.89<span class="sub">32.69-65.08</span></td></tr>
+<tr><td>Critical-error %<span class="sub">lower is better</span></td><td>0.00<span class="sub">0-0</span></td><td>0.00<span class="sub">0-0</span></td><td>0.00<span class="sub">0-0</span></td></tr>
+<tr><td>Required-unit coverage %</td><td>87.87<span class="sub">80.68-95.06</span></td><td>64.63<span class="sub">52.14-77.12</span></td><td>59.26<span class="sub">45.04-73.47</span></td></tr>
+<tr><td>Activation precision %</td><td>98.51<span class="sub">92.02-99.74</span></td><td>100.00<span class="sub">94.08-100</span></td><td>100.00<span class="sub">93.89-100</span></td></tr>
+<tr><td>Activation recall %</td><td>100.00<span class="sub">94.50-100</span></td><td>92.42<span class="sub">83.46-96.72</span></td><td>89.39<span class="sub">79.69-94.77</span></td></tr>
+<tr><td>Routing accuracy %</td><td>87.78</td><td>74.44</td><td>64.44</td></tr>
+<tr><td>Process safety %</td><td>92.22</td><td>75.56</td><td>72.22</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2>Pooled metric bars</h2>
+<p class="note">Hover any bar for the exact value, interval, sample size, and direction. Critical errors retain the raw percentage scale; lower is desirable.</p>
+<div class="legend"><span><i class="swatch new"></i>New 1.10.0</span><span><i class="swatch base"></i>Baseline 000</span><span><i class="swatch orig"></i>Original pre-factorial</span></div>
+<div class="chart-card"><div class="axis"><span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span></div><div id="pooled-chart"></div></div>
+
+<h2>Interpretation</h2>
+<ul>
+<li>New 1.10.0 exceeds the 80% task-success target and has 0% observed critical errors.</li>
+<li>New 1.10.0 is 32.23 points above candidate 000 and 37.78 points above the original baseline on pooled task success.</li>
+<li>Candidate 000 and the original baseline have slightly higher activation precision, but both have lower recall, coverage, routing accuracy, and process safety.</li>
+<li>These are paired in protocol and case set, but not paired response-by-response across versions; the intervals reflect each version's case-clustered results.</li>
+</ul>
+<p class="sources">Sources: reviewer keys were withheld from generation and supplied only to Luna-Max adjudication. No individual run artifacts are required for this comparison.</p>
+</main>
+<div id="tooltip" class="tooltip" role="tooltip"></div>
+<script>
+const models=[
+ {key:'new',name:'New 1.10.0',sample:'30 cases / 90 runs'},
+ {key:'base',name:'Baseline 000',sample:'30 cases / 90 runs'},
+ {key:'orig',name:'Original pre-factorial',sample:'30 cases / 90 runs'}
+];
+const pooled=[
+ {label:'Task success',note:'higher is better',values:{new:86.67,base:54.44,orig:48.89},ci:{new:'79.25-94.08%',base:'38.94-69.94%',orig:'32.69-65.08%'}},
+ {label:'Critical errors',note:'lower is better',values:{new:0,base:0,orig:0},ci:{new:'0-0%',base:'0-0%',orig:'0-0%'}},
+ {label:'Unit coverage',note:'higher is better',values:{new:87.87,base:64.63,orig:59.26},ci:{new:'80.68-95.06%',base:'52.14-77.12%',orig:'45.04-73.47%'}},
+ {label:'Activation precision',note:'higher is better',values:{new:98.51,base:100,orig:100},ci:{new:'92.02-99.74%',base:'94.08-100%',orig:'93.89-100%'}},
+ {label:'Activation recall',note:'higher is better',values:{new:100,base:92.42,orig:89.39},ci:{new:'94.50-100%',base:'83.46-96.72%',orig:'79.69-94.77%'}},
+ {label:'Routing accuracy',note:'higher is better',values:{new:87.78,base:74.44,orig:64.44},ci:{new:'pooled rate',base:'pooled rate',orig:'pooled rate'}},
+ {label:'Process safety',note:'higher is better',values:{new:92.22,base:75.56,orig:72.22},ci:{new:'pooled rate',base:'pooled rate',orig:'pooled rate'}}
+];
+const tip=document.getElementById('tooltip');
+function fmt(v){return Number(v).toFixed(2)+'%'}
+function move(e){tip.style.left=Math.min(e.clientX+14,window.innerWidth-400)+'px';tip.style.top=Math.min(e.clientY+14,window.innerHeight-130)+'px'}
+function attachTip(el,text){el.title=text;el.addEventListener('mouseenter',e=>{tip.textContent=text;tip.style.display='block';move(e)});el.addEventListener('mousemove',move);el.addEventListener('mouseleave',()=>tip.style.display='none')}
+function addRow(root,d){const row=document.createElement('div');row.className='bar-row';const lab=document.createElement('div');lab.className='bar-label';lab.innerHTML=d.label+'<small>'+d.note+'</small>';row.appendChild(lab);const bars=document.createElement('div');bars.className='bars';for(const m of models){const line=document.createElement('div');line.className='bar-line';const nm=document.createElement('span');nm.className='bar-name';nm.textContent=m.name;const track=document.createElement('div');track.className='track';const bar=document.createElement('div');bar.className='bar '+m.key;const value=Number(d.values[m.key]);bar.style.width=value+'%';attachTip(bar,m.name+' - '+d.label+'\nValue: '+fmt(value)+'\n95% interval: '+d.ci[m.key]+'\nSample: '+m.sample);track.appendChild(bar);const val=document.createElement('span');val.className='bar-value';val.textContent=fmt(value);line.append(nm,track,val);bars.appendChild(line)}row.appendChild(bars);root.appendChild(row)}
+pooled.forEach(d=>addRow(document.getElementById('pooled-chart'),d));
+</script>
+</body>
+</html>

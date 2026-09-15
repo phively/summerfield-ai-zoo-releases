@@ -5,6 +5,7 @@ Read this reference before locating, creating, updating, archiving, restoring, o
 ## Contents
 
 - [Record registry](#record-registry)
+- [Storage and artifact format](#storage-and-artifact-format)
 - [Native identities and routing](#native-identities-and-routing)
 - [Authority and retrieval](#authority-and-retrieval)
 - [Meal-plan records](#meal-plan-records)
@@ -25,7 +26,7 @@ Preserve a clearly equivalent existing authority instead of renaming or copying 
 | Owner | Current authority | Historical companion | Readers | Writers |
 | --- | --- | --- | --- | --- |
 | Meal Planner | `Household Preferences` workbook: `Household Profile`, `Safety Constraints`, `Planning Preferences`, optional `Pantry Inventory` | `Household History` tab for material superseded household, safety, and planning state | All Meal Planner skills, limited to task-relevant state | `meal-planner` only |
-| Meal Planner | `meal-plan-current.md`, or one clearly equivalent current Word document, Google Doc, or Markdown file | `meal-plan-history.md`, or one clearly equivalent historical companion in the same selected storage system | All Meal Planner skills; current first and history only conditionally | `meal-planner` only |
+| Meal Planner | Current meal-plan Google Doc, or one clearly equivalent existing Word document, Google Doc, or Markdown file | Historical companion in the same selected storage system | All Meal Planner skills; current first and history only conditionally | `meal-planner` only |
 | Personal Chef | `Meal Preferences` workbook: `Household Preferences` | `Household Preferences History` | All Meal Planner skills, limited to task-relevant culinary preferences | `personal-chef` only |
 | Personal Chef | `Meal Preferences` workbook: `Ingredient Ratings` | `Ingredient Ratings History` | All Meal Planner skills, limited to task-relevant ingredient evidence | `personal-chef` only |
 | Personal Chef | `Meal Preferences` workbook: `Recipe Ratings` | `Recipe History` | All Meal Planner skills, limited to task-relevant recipe evidence | `personal-chef` only |
@@ -35,7 +36,13 @@ Preserve a clearly equivalent existing authority instead of renaming or copying 
 
 The owner may create or update its records only when the user authorizes persistence or an existing confirmed workflow already authorizes that bounded write. Other skills send update requests through the canonical handoff contract. Do not create skill-local copies, per-plan authorities, or parallel workbooks.
 
-Resolve the designated Meal Planning folder and Recipes subfolder by immutable provider IDs. Keep all planning records within Meal Planning and canonical recipes within Recipes. Preserve equivalent existing names, combined tabs with clear status, and file identities. Read [cleanup-migration.md](cleanup-migration.md) before any cleanup or schema migration; preserve every populated source row and create a dated Migration audit within Meal Planning. Recipe schemas and lifecycle are in [recipe storage](../skills/personal-chef/references/recipe-storage.md).
+Resolve the designated Meal Planning folder plus its `Recipes` and `Audits` subfolders by immutable provider IDs. Keep all planning records within Meal Planning, canonical recipes within Recipes, and audit, compaction, migration, and recovery artifacts within a dated child folder under Audits. Preserve equivalent existing names, combined tabs with clear status, and file identities. Read [cleanup-migration.md](cleanup-migration.md) before any cleanup or schema migration; preserve every populated source row. Recipe schemas and lifecycle are in [recipe storage](../skills/personal-chef/references/recipe-storage.md).
+
+## Storage and artifact format
+
+Read [native artifact storage and formatting](artifact-formatting.md) before creating a canonical artifact, formatting one during cleanup, or proposing a file-type migration. Preserve an existing compatible authority in place. For new records, prefer the user's accessible Google Drive: use Google Sheets for structured household and preference records and Google Docs for narrative meal plans and recipes. Use `meal-plan-current.md` and `meal-plan-history.md` only for a filesystem fallback.
+
+All user-visible links must have descriptive display text and resolve to the intended target before publication. Use native tables, headings, lists, and hyperlinks in Google artifacts rather than literal Markdown or raw HTML. A file-type or provider conversion requires explicit user permission and a passed staged audit before canonical authority or dependent links change.
 
 ## Native identities and routing
 
@@ -45,7 +52,7 @@ Use the workbook itself as its routing layer. For a new workbook, include a `Rec
 
 For an existing workbook, first use its native tables, named ranges, stable key columns, filters, and metadata. Add `Record Index` only with authorization and when it materially improves targeted retrieval or auditability. If no index worksheet exists, require a `Record ID` column or a documented unique composite key in every current, history, or evidence table touched by a write. Do not create a Markdown or other sidecar index for a workbook merely because its native routing is unfamiliar.
 
-For document-based meal plans, keep routing in the selected canonical document system: use the exact resource ID or path, stable `MP-...` plan ID, stable `MH-...` history entry ID, and a heading, bookmark, named section, or table-of-contents entry when supported. Do not create a separate index file unless the selected format cannot support reliable retrieval and the user authorizes a non-authoritative routing companion.
+For document-based meal plans, keep routing in the selected canonical document system: use the exact resource ID or path, stable `MP-...` plan ID, stable `MH-...` history entry ID, and a heading, bookmark, named section, or table-of-contents entry when supported. A new Drive-native plan uses a Google Doc with native document structure. Do not create a separate index file unless the selected format cannot support reliable retrieval and the user authorizes a non-authoritative routing companion.
 
 ## Authority and retrieval
 
@@ -66,7 +73,7 @@ Keep one operationally complete most recently finalized plan. It must be underst
 - exact document provider and resource ID or canonical path plus the stable heading, bookmark, or named section used for retrieval;
 - household and serving assumptions;
 - exact household, safety, preference, recipe, pantry, and grocery-record identities used;
-- finalized recipe IDs, verified canonical Google Doc links in the weekly table, versions used, source attribution, planned servings, plan-specific adaptations, and constraint-sensitive details;
+- finalized recipe IDs, verified named canonical Google Doc links in the native weekly table, versions used, source attribution, planned servings, plan-specific adaptations, and constraint-sensitive details;
 - schedule, leftovers, prep, storage, and shopping context needed to execute the plan;
 - unresolved assumptions or safety, availability, pantry, and pricing questions;
 - feedback candidates that may justify a later `personal-chef` check-in, without claiming a meal was prepared; and
@@ -97,7 +104,7 @@ Treat finalization as one coherent operation:
 3. Replace the current authority with the newly finalized plan and its stable identifier.
 4. Add any justified targeted pointers and replacement relationships.
 5. Verify that exactly one plan is current and the archived plan is not presented as active.
-6. Report success only after every required write and coherence check succeeds.
+6. Verify native formatting and every user-visible link, then report success only after every required write and coherence check succeeds.
 
 ## Household and safety history
 
@@ -127,7 +134,7 @@ Do not silently generalize a preparation-specific ingredient rating. For example
 
 Keep `Recipe Ratings` as the sole current authority for the latest decision-relevant rating of each recipe and household member or explicitly confirmed household aggregate. Use normalized recipe title plus source URL or stable original-recipe identity to match entries. Include:
 
-- stable Recipe ID, canonical Google Doc link, and separate original source attribution;
+- stable Recipe ID, descriptive verified canonical Google Doc link, and separate named original source attribution;
 - household member or confirmed aggregate;
 - current 1-5 rating when supplied, `would make again`, and rating date;
 - version made or a pointer to the Doc's preparation context;
@@ -209,11 +216,11 @@ Do not repeatedly ask after the user declines or lacks feedback unless a materia
 - Duplicate or ambiguous candidates: resolve the authority before substantive use or writing when the choice could affect the result.
 - Inaccessible history or broken pointer: preserve uncertainty; a retrieval miss is not evidence that history does not exist.
 - Partial access or writability: do not claim a coherent update. Provide a clearly labeled proposed update or identify the failed write and recovery action.
-- Unsupported format: preserve the logical current/history model in an accessible user-selected durable format; do not create several formats as competing authorities.
+- Unsupported format: offer a compatible Drive-native migration when useful, but do not convert file type, transfer authority, or change dependent links without explicit user permission. Otherwise preserve the logical current/history model in one accessible user-selected durable format.
 - Unconfirmed preparation, rating, preference, or lifecycle state: label it proposed or unknown and do not persist it as fact.
 
 Do not modify unavailable household records during plugin development. Update schemas, instructions, examples, evaluations, and tests instead.
 
 ## Coherence validation
 
-After a consequential update, verify that current records alone contain all operational state, historical material cannot silently override current state, stable identifiers and pointers resolve, attribution and dates remain explicit, safety constraints remain exact, ingredient and recipe ratings match the correct member and preparation, exactly one meal plan is current, downstream handoffs exclude irrelevant history, and no persistence claim exceeds the completed writes.
+After a consequential update, verify that current records alone contain all operational state, historical material cannot silently override current state, stable identifiers and pointers resolve, user-visible links are named and verified, native structure matches the artifact's canonical template, attribution and dates remain explicit, safety constraints remain exact, ingredient and recipe ratings match the correct member and preparation, exactly one meal plan is current, downstream handoffs exclude irrelevant history, and no persistence claim exceeds the completed writes.

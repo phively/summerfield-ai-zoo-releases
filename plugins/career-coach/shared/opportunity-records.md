@@ -66,6 +66,7 @@ Keep the smallest operationally complete current state, organized as one indepen
 - stable opportunity identifier in the form `O-YYYY-MM-DD-NN`;
 - organization, role or opportunity name, canonical captured-posting resource ID, filename, exact resolvable location, and folder identity when one exists, source website or other original source identity, and source date;
 - lifecycle status: `considering`, `applying`, `applied`, `interviewing`, `offer`, or another explicit active status;
+- current interview round or stage and status, scheduled date/time and timezone when known, known interviewers, concise questions actually asked, and advancement or rejection state when applicable;
 - current decision, next action, owner, relevant date or deadline, and last-updated date;
 - candidate-to-role and role-to-candidate conclusions with confidence;
 - material facts, supported inferences, hypotheses, unknowns, risks, and unresolved due-diligence questions under explicit labels;
@@ -75,7 +76,7 @@ Keep the smallest operationally complete current state, organized as one indepen
 
 At the record level, also preserve `Last audited`, audit byte size, and material-change count since audit. Reference applicable reusable career criteria by exact direction-record resource identity, stable heading or criterion identifier when present, and last-verified or effective date; do not copy their formulations into each opportunity entry.
 
-Do not copy complete postings, resumes, career-direction records, interview transcripts, or routine activity logs into the current record. Link or identify canonical sources and retain only the current opportunity state needed across workflows.
+Do not copy complete postings, resumes, career-direction records, complete interview transcripts, or routine activity logs into the current record. Concise facts about questions actually asked may be retained when they materially support future opportunity tracking or preparation. Link or identify canonical sources and retain only the current opportunity state needed across workflows.
 
 ## Ranked current-state table
 
@@ -145,7 +146,7 @@ Treat each consequential change as one coherent operation:
 Apply lifecycle actions as follows:
 
 - **Open:** create one comparison row and one detailed current entry after the user identifies a real opportunity and durable tracking is appropriate. Create its canonical posting file when posting text is supplied; do not create records for hypothetical examples.
-- **Advance:** update current status, decision, next action, dates, and material assessment without logging routine activity.
+- **Advance:** update current status, interview round or stage, scheduled date/time, known interviewers, concise questions actually asked, decision, next action, dates, and material assessment without logging routine activity.
 - **Revise:** replace a material current conclusion, preserving the prior state only when it retains continuing value.
 - **Close:** remove the opportunity from the current record and create one historical entry with the confirmed inactive status and material final state, including the captured-posting filename, location, and source website when available.
 - **Reopen:** restore current state to the current record under the same opportunity identifier and mark or relate history as `reopened`; do not erase intervening history.
@@ -163,6 +164,7 @@ After a consequential update, verify:
 - every active opportunity appears once in the comparison table and once as a detailed entry;
 - no inactive opportunity is presented as active;
 - current status, decision, next action, dates, provenance, and uncertainty are explicit;
+- current interview round or stage, scheduled date/time, known interviewers, questions actually asked, and advancement or rejection state are explicit when applicable and are not presented as speculative likely content;
 - stable identifiers are unique and consistent across both files;
 - every recorded posting filename and location resolves to the one canonical current file for that identifier, the source website remains recorded, and full text or an explicitly authorized, clearly labeled source-grounded summary and its provenance are preserved;
 - every canonical posting file contains only role-source content and neutral provenance, with no user- or candidate-specific information;

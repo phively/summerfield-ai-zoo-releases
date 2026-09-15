@@ -1,15 +1,15 @@
 {
   "name": "career-coach",
-  "version": "1.6.0",
-  "description": "Evidence-grounded career direction, opportunity fit and lifecycle tracking with durable records, and resume tailoring from verified evidence.",
+  "version": "1.7.0",
+  "description": "Evidence-grounded career direction, professional-development planning and tracking, bidirectional opportunity fit and due diligence, interview preparation, and resume tailoring from verified evidence.",
   "author": {
     "name": "Paul Hively"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Career Coach",
-    "shortDescription": "Career decisions, opportunity tracking, and resumes",
-    "longDescription": "Clarify career direction, evaluate and track specific opportunities from both sides, and tailor resumes without inventing or overstating evidence.",
+    "shortDescription": "Career direction, development, opportunities, interviews",
+    "longDescription": "Clarify career direction, plan and track professional development, evaluate opportunities from both sides, prepare evidence-based interviews, and tailor resumes without inventing or overstating evidence.",
     "developerName": "Paul Hively",
     "category": "Productivity",
     "capabilities": [
@@ -21,7 +21,9 @@
     "logo": "./assets/logo.svg",
     "defaultPrompt": [
       "Help me clarify what I should target next in my career.",
+      "Turn a career priority into a practical development plan and next actions.",
       "Evaluate whether this opportunity fits me and whether I fit it.",
+      "Prepare evidence-based answers for my upcoming interview.",
       "Tailor my resume to this role using only supported facts."
     ]
   }

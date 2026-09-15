@@ -4,7 +4,7 @@ Use this workflow to resolve, persist, apply, update, or remove store preference
 
 ## Workbook and canonical tabs
 
-Use a workbook or Google Sheet titled `Grocery Preferences` or a clearly equivalent title such as `Grocery Price Tracker` or `Shopping Preferences`. When creating a new workbook, use `Grocery Preferences`. Reuse an accessible equivalent workbook instead of creating a competing copy.
+Use a workbook or Google Sheet titled `Grocery Preferences` or a clearly equivalent title such as `Grocery Price Tracker` or `Shopping Preferences`. When creating a new record and the user's Google Drive is accessible, prefer a Google Sheet titled `Grocery Preferences` inside the designated Meal Planning folder. Reuse an accessible equivalent workbook instead of creating a competing copy. Read [native artifact storage and formatting](../../../shared/artifact-formatting.md) before creating or formatting it.
 
 Use these canonical tabs, accepting clearly equivalent existing tab names without forcing a migration:
 
@@ -14,7 +14,7 @@ Use these canonical tabs, accepting clearly equivalent existing tab names withou
 
 Treat the exact workbook title, link or file identity, and tab names as source provenance. Report missing canonical tabs; create or rename tabs only with authorization, and do not copy their contents into skill-local files.
 
-For a new workbook, also create the workbook-local `Record Index` defined in shared record management. Prefer structured tables or named ranges for each canonical worksheet. Use `Record ID` as the stable physical key for current and evidence rows and `MH-...` as the history key. Preserve a clearly equivalent existing unique key, but document it in `Record Index`; never use row position as identity.
+For a new workbook, also create the workbook-local `Record Index` defined in shared record management. Prefer structured tables or named ranges for each canonical worksheet, with formatted headers, suitable wrapping and widths, filters, stable keys, and applicable validation. The Markdown structures in this reference describe schemas; never paste them as literal Markdown into a worksheet. Use `Record ID` as the stable physical key for current and evidence rows and `MH-...` as the history key. Preserve a clearly equivalent existing unique key, but document it in `Record Index`; never use row position as identity.
 
 Read [the shared record-management contract](../../../shared/record-management.md) before creating, revising, archiving, restoring, or resolving these records. Current `Store Preferences` govern over history. Treat dated `Price Tracker` rows as evidence observations and do not duplicate them into a separate archive.
 

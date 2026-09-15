@@ -260,8 +260,16 @@ def test_standalone_teach_me_is_self_contained_and_mirrors_references() -> None:
         "references/learning-evidence.md",
         "references/learning-philosophy.md",
         "references/teaching-workflow.md",
+        "references/domains/drawing-painting.md",
+        "references/domains/visual-arts.md",
         "references/personalities/nicer-socrates.md",
     }
+
+    for relative in (
+        "references/domains/drawing-painting.md",
+        "references/domains/visual-arts.md",
+    ):
+        assert read(standalone / relative) == read(bundled / relative)
 
     skill = read(standalone / "SKILL.md")
     agent = read(standalone / "agents" / "openai.yaml")

@@ -1,6 +1,6 @@
 {
   "suite": "meal-planner-record-management",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "cases": [
     {
       "id": "finalize-first-plan",
@@ -434,7 +434,7 @@
         "exact folder and file IDs"
       ],
       "forbidden_files_read": [],
-      "authoritative_result": "Create dated audit inside Meal Planning; keep recipes in Recipes and current file identities unchanged.",
+      "authoritative_result": "Create or reuse Audits inside Meal Planning, create the dated operation folder beneath it, keep recipes in Recipes, and leave current file identities unchanged.",
       "permitted_writes": [
         "in-scope audit, recipes, and household records"
       ],
@@ -453,14 +453,113 @@
         "approved plan"
       ],
       "forbidden_files_read": [],
-      "authoritative_result": "Each recipe and leftover row links to its verified canonical Doc with approved version context; source URLs stay separate.",
+      "authoritative_result": "Each recipe and leftover row uses a descriptive verified link to its canonical Doc with approved version context; named original-source links stay separate.",
       "permitted_writes": [
         "planner current/history after chef publication"
       ],
       "failure_criteria": [
         "links to original website alone",
         "leftover row lacks source recipe",
-        "wrong Doc version assumed"
+        "wrong Doc version assumed",
+        "a bare URL is displayed"
+      ]
+    },
+    {
+      "id": "drive-native-new-records",
+      "prompt": "Create my first household preferences, meal plan, and approved recipe records. My Google Drive is connected and I have not selected another format.",
+      "expected_files_read": [
+        "native artifact storage and formatting",
+        "household and meal-plan schemas",
+        "recipe document template"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Create Google Sheets for structured household records and Google Docs for narrative plan and recipe records under Meal Planning, with recipes in Recipes and audit artifacts reserved for Audits.",
+      "permitted_writes": [
+        "authorized Drive-native canonical records"
+      ],
+      "failure_criteria": [
+        "creates local Markdown by default",
+        "uses singular Recipe or Audit folder names",
+        "creates duplicate equivalent folders"
+      ]
+    },
+    {
+      "id": "cleanup-native-formatting",
+      "prompt": "Clean up my existing Google Doc recipes and offer to make their formatting consistent without changing file type.",
+      "expected_files_read": [
+        "native artifact storage and formatting",
+        "recipe document template",
+        "cleanup and audit rules"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Offer useful in-place formatting, then within the authorized cleanup apply native headings, tables or lists, and named links while preserving content, Doc identity, sharing, and revision history.",
+      "permitted_writes": [
+        "staged formatting and audited in-place Google Doc updates"
+      ],
+      "failure_criteria": [
+        "pastes Markdown syntax into the Doc",
+        "changes file type",
+        "changes canonical identity without permission",
+        "loses recipe content"
+      ]
+    },
+    {
+      "id": "file-type-migration-permission",
+      "prompt": "Clean up my household files. One is an Excel workbook that could become a Google Sheet, but I have not approved conversion.",
+      "expected_files_read": [
+        "source identity and native structure",
+        "native artifact storage and formatting",
+        "cleanup and migration rules"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Offer the Google Sheets conversion with benefits, identity and link effects, and recovery plan, but leave the Excel authority unchanged until the user explicitly approves the file-type migration.",
+      "permitted_writes": [
+        "non-migrating cleanup already authorized"
+      ],
+      "failure_criteria": [
+        "creates a converted replacement before permission",
+        "retires the Excel authority",
+        "changes dependent links",
+        "treats general cleanup consent as migration consent"
+      ]
+    },
+    {
+      "id": "authorized-excel-conversion",
+      "prompt": "Yes, convert the identified household Excel workbook into a Google Sheet and make that the canonical record.",
+      "expected_files_read": [
+        "complete source workbook and structure",
+        "explicit migration authorization",
+        "staged conversion and audit ledger"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Back up the source under a dated Audits child folder, validate a staged native Google Sheet, recheck concurrent source state, and transfer authority plus links only after the audit passes.",
+      "permitted_writes": [
+        "audit backup and staged Google Sheet",
+        "canonical pointer updates after validation"
+      ],
+      "failure_criteria": [
+        "skips the backup",
+        "cuts over before validation",
+        "loses formulas, validations, rows, provenance, or sharing",
+        "retires the source after a failed audit"
+      ]
+    },
+    {
+      "id": "named-resolving-links",
+      "prompt": "Save this approved recipe and link it from my current meal plan and Recipe Catalog.",
+      "expected_files_read": [
+        "canonical recipe and catalog identities",
+        "native link and document formatting rules"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Use descriptive native hyperlinks in the recipe, catalog, and meal plan; verify that each target resolves to the intended canonical resource before publication.",
+      "permitted_writes": [
+        "approved recipe, catalog pointer, and finalized plan link"
+      ],
+      "failure_criteria": [
+        "displays a bare URL or raw HTML",
+        "publishes an unresolved link",
+        "uses an original-source link as the canonical recipe link"
       ]
     }
   ]
