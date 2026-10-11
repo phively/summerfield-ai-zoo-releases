@@ -5,6 +5,8 @@ import json
 import importlib.util
 import re
 import shutil
+import subprocess
+import sys
 from pathlib import Path
 
 
@@ -16,6 +18,8 @@ OPPORTUNITY_MANAGEMENT = PLUGIN_ROOT / "shared" / "opportunity-records.md"
 PROFESSIONAL_DEVELOPMENT_MANAGEMENT = PLUGIN_ROOT / "shared" / "professional-development-records.md"
 RECORD_AUDITS = PLUGIN_ROOT / "shared" / "record-audits.md"
 AUDIT_SCRIPT = PLUGIN_ROOT / "scripts" / "validate_record_audit.py"
+PREFERENCES_STORAGE = PLUGIN_ROOT / "shared" / "preferences-and-storage.md"
+POSTING_VALIDATOR = PLUGIN_ROOT / "scripts" / "validate_opportunity_posting.py"
 SKILL_NAMES = (
     "career-direction",
     "professional-development",
@@ -37,7 +41,7 @@ def skill_text(name: str) -> str:
 def test_canonical_plugin_and_skill_structure() -> None:
     manifest = json.loads(read(PLUGIN_ROOT / ".codex-plugin" / "plugin.json"))
     assert manifest["name"] == PLUGIN_ROOT.name == "career-coach"
-    assert manifest["version"] == "1.7.0"
+    assert manifest["version"] == "1.8.0"
     assert manifest["skills"] == "./skills/"
     for name in SKILL_NAMES:
         root = SKILLS_ROOT / name
@@ -51,23 +55,26 @@ def test_all_skill_local_markdown_links_resolve() -> None:
         skill_path = SKILLS_ROOT / name / "SKILL.md"
         for link in link_pattern.findall(read(skill_path)):
             if "://" not in link and not link.startswith("#"):
-                assert (skill_path.parent / link).resolve().is_file(), (
+                target = link.split("#", 1)[0]
+                assert (skill_path.parent / target).resolve().is_file(), (
                     f"Broken local resource link in {name}: {link}"
                 )
 
 
-def test_every_skill_checks_shared_context_sources() -> None:
+def test_every_skill_routes_relevant_context_to_shared_authority() -> None:
     for name in ("career-direction", "evaluate-opportunity", "update-resume"):
         skill = skill_text(name)
-        assert "`career_direction_record.md` or a clearly equivalent" in skill
-        assert "`career_direction_history.md` or its resolved" in skill
-        assert "`opportunities-current.md` or a clearly equivalent" in skill
-        assert "`opportunities-history.md`" in skill
-        assert "`career-coach-preferences.md` or a clearly equivalent" in skill
         assert f"]({SHARED_LINK})" in skill
         assert "](../../shared/career-direction-records.md)" in skill
         assert "](../../shared/opportunity-records.md)" in skill
         assert "](../../shared/record-audits.md)" in skill
+    for name in SKILL_NAMES:
+        skill = skill_text(name)
+        assert "](../../shared/preferences-and-storage.md)" in skill
+    shared = read(SHARED_HANDOFF)
+    assert "Retrieve context only when it could materially change" in shared
+    assert "Do not discover every career record at the start of every workflow" in shared
+    assert "Posting language" in shared
 
 
 def test_new_skills_have_bounded_context_and_ownership_contracts() -> None:
@@ -75,14 +82,14 @@ def test_new_skills_have_bounded_context_and_ownership_contracts() -> None:
     prepare_interview = skill_text("prepare-interview")
     development_records = read(PROFESSIONAL_DEVELOPMENT_MANAGEMENT)
     assert "professional-development-records.md" in professional_development
-    assert "sole writer" in professional_development
+    assert "is the sole writer" in read(SHARED_HANDOFF)
     assert "PD-..." in professional_development
     assert "explicit user confirmation" in professional_development
     assert "shared/handoff-contracts.md" in prepare_interview
     assert "evaluate-opportunity" in prepare_interview
     assert "Do not create `interview-prep.md`" in prepare_interview
     assert "explicit user confirmation" in prepare_interview
-    assert "## Current development goals" in development_records
+    assert "| Goal ID |" in development_records
     assert "Goal ID" in development_records
     assert "Completed evidence" in development_records
 
@@ -113,12 +120,20 @@ def test_native_identity_authority_and_lifecycle_contract() -> None:
 
 
 def test_preferences_do_not_silently_override_skill_instructions() -> None:
+    settings = read(PREFERENCES_STORAGE)
+    assert "The user owns the settings and authorizes their values" in settings
+    assert "All five Career Coach skills may read relevant settings" in settings
+    assert "explicit current-task confirmation" in settings
+    assert "never weaken factual accuracy, evidence integrity, non-fabrication" in settings
+    assert "task-only" in settings
+    assert "new-record destination" in settings
+    assert "Existing canonical records retain their identity" in settings
+    assert "stop the write and provide a proposed patch" in settings
+    assert "Partial write or failed verification" in settings
+    assert "backups may show provenance or prior configuration but never silently become current authority" in settings
+    assert not list(PLUGIN_ROOT.rglob("career-coach-preferences.md"))
     shared = read(SHARED_HANDOFF)
-    for name in SKILL_NAMES:
-        skill = skill_text(name)
-        assert "explicit user confirmation" in skill
-    assert "not an override of a conflicting skill instruction" in shared
-    assert "never weaken factual accuracy, evidence integrity" in shared
+    assert "Career criteria remain owned by `career-direction`" in shared
 
 
 def test_career_direction_owns_one_in_place_record() -> None:
@@ -127,8 +142,8 @@ def test_career_direction_owns_one_in_place_record() -> None:
         SKILLS_ROOT / "career-direction" / "references" / "decision-criteria.md"
     )
     assert "Own bounded durable creation and updates for both" in direction
-    assert "Update selected records in place" in direction
-    assert "Do not create a skill-local copy" in direction
+    assert "Own bounded durable creation and updates for both" in direction
+    assert "career-direction record management" in direction
     assert "discovery-framework.md" in direction
     assert "decision-criteria.md" in direction
     assert "Canonical record structure" in criteria
@@ -142,9 +157,9 @@ def test_career_direction_owns_one_in_place_record() -> None:
 def test_consumer_skills_search_record_without_owning_copies() -> None:
     for name in ("evaluate-opportunity", "update-resume"):
         skill = skill_text(name)
-        assert "Read it first" in skill
-        assert "Do not create or maintain a separate direction record" in skill
-        assert "bounded in-place update" in skill
+        assert "shared source discovery and authority" in skill
+        assert "Do not update either direction record directly" in skill
+        assert "career-direction" in skill
 
 
 def test_shared_handoffs_preserve_record_identity_and_evidence_limits() -> None:
@@ -293,11 +308,47 @@ def test_opportunity_posting_filename_and_authority_contract() -> None:
     assert "without summarizing, silently correcting, embellishing" in detail
     assert "authoritative only for full posting text or an explicitly authorized" in shared
     assert "canonical captured-posting files" in evaluate
-    assert "Google Drive folder named `opportunity descriptions`, `job descriptions`" in detail
-    assert "store each posting file directly in the selected library location" in detail
+    assert "No provider is preferred or required; Google Drive is optional" in detail
+    assert "preferences-and-storage.md" in detail
     assert "filename and exact resolvable location" in shared
     assert "source website" in shared
     assert "Use the captured file, not the live website" in shared
+
+
+def test_posting_template_has_neutral_provenance_and_optional_migration() -> None:
+    detail = read(OPPORTUNITY_MANAGEMENT)
+    template_match = re.search(r"```markdown\n(.*?)\n```", detail, re.DOTALL)
+    assert template_match
+    template = template_match.group(1)
+    fields = (
+        "Opportunity ID",
+        "Employer / role",
+        "Source website",
+        "Source identity",
+        "Captured",
+        "Completeness",
+        "Storage provider",
+        "Canonical path",
+        "Canonical link",
+        "Content type",
+    )
+    positions = [template.index(f"**{field}:**") for field in fields]
+    assert positions == sorted(positions)
+    assert "**Migration source:**" not in template
+    assert template.index("## Full Job Posting Text") > template.index("**Content type:**")
+    assert "only when this file was actually transferred and its provenance is known" in detail
+    assert "Opportunity-ID date, actual Captured date, Source date, and employer deadline are independent" in detail
+    assert "For an authorized summary" in detail
+
+
+def test_github_posting_messages_count_files_and_exclude_names() -> None:
+    detail = read(OPPORTUNITY_MANAGEMENT)
+    assert "Added <N> canonical career-opportunities record(s)" in detail
+    assert "number of newly created current canonical posting files in that commit" in detail
+    assert "Do not include employer, role, candidate, or other names in the subject or body" in detail
+    assert "For commits containing only updates, use `Updated canonical career-opportunities records`" in detail
+    assert "computed count and actual message passed to the tool" in detail
+    assert "one grouped file commit when supported and authorized" in detail
 
 
 def test_posting_privacy_and_summary_authorization_contract() -> None:
@@ -318,7 +369,7 @@ def test_posting_privacy_and_summary_authorization_contract() -> None:
     ):
         assert phrase in detail
     assert "Never place resume evidence, personal experience, preferences" in shared
-    assert "Never save a summary before that authorization" in evaluate
+    assert "save the summary only after that explicit authorization" in detail
 
     suite = json.loads(read(PLUGIN_ROOT / "evals" / "opportunity-record-management.json"))
     cases = {case["id"]: case for case in suite["cases"]}
@@ -332,6 +383,215 @@ def test_posting_privacy_and_summary_authorization_contract() -> None:
         "canonical posting" not in write or "no canonical posting write" in write
         for write in rejected["permitted_writes"]
     )
+
+
+def _write_synthetic_posting(
+    directory: Path,
+    opportunity_id: str,
+    employer: str,
+    role: str,
+    *,
+    migration: str | None = None,
+) -> Path:
+    filename = f"{opportunity_id} -- {employer} -- {role}.md"
+    canonical = f"canonical/career-opportunities/{filename}"
+    encoded_path = canonical.replace(" ", "%20").replace("'", "%27")
+    lines = [
+        "# Captured Opportunity Description",
+        "",
+        f"- **Opportunity ID:** `{opportunity_id}`",
+        f"- **Employer / role:** {employer} — {role}",
+        "- **Source website:** https://example.invalid/synthetic",
+        "- **Source identity:** Synthetic development fixture",
+        "- **Captured:** 2026-10-11",
+        "- **Completeness:** Complete synthetic posting text",
+        "- **Storage provider:** GitHub",
+        "- **Repository:** `phively/synthetic-career-fixtures`",
+        "- **Branch:** `main`",
+        f"- **Canonical path:** `{canonical}`",
+        f"- **Canonical link:** https://github.com/phively/synthetic-career-fixtures/blob/main/{encoded_path}",
+    ]
+    if migration:
+        lines.append(f"- **Migration source:** {migration}")
+    lines += [
+        "- **Content type:** `full posting text`",
+        "",
+        "## Full Job Posting Text",
+        "",
+        "Synthetic role-source text. No real personal or employer data.",
+    ]
+    path = directory / filename
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return path
+
+
+def _run_posting_validator(
+    files: list[Path], *, operation: str, message: str, body: str = ""
+) -> subprocess.CompletedProcess[str]:
+    command = [
+        sys.executable,
+        str(POSTING_VALIDATOR),
+        "--provider",
+        "GitHub",
+        "--operation",
+        operation,
+        "--message",
+        message,
+        "--body",
+        body,
+        *(str(path) for path in files),
+    ]
+    return subprocess.run(command, capture_output=True, text=True, check=False)
+
+
+def test_posting_validator_accepts_new_and_migrated_files_and_counts_commits(
+    tmp_path: Path,
+) -> None:
+    first = _write_synthetic_posting(
+        tmp_path, "O-2026-10-11-01", "Synthetic Agency", "Chief Data Officer"
+    )
+    migrated = _write_synthetic_posting(
+        tmp_path,
+        "O-2026-10-11-02",
+        "Synthetic Systems",
+        "Data Executive",
+        migration="Legacy Drive file ID SYNTHETIC-001",
+    )
+
+    single = _run_posting_validator(
+        [first],
+        operation="add",
+        message="Added 1 canonical career-opportunities record(s)",
+    )
+    batch = _run_posting_validator(
+        [first, migrated],
+        operation="add",
+        message="Added 2 canonical career-opportunities record(s)",
+    )
+    update = _run_posting_validator(
+        [first],
+        operation="update",
+        message="Updated canonical career-opportunities records",
+    )
+    assert (single.returncode, batch.returncode, update.returncode) == (0, 0, 0)
+    assert "ACCEPTED" in batch.stdout
+
+
+def test_posting_validator_rejects_missing_metadata_identity_and_message_leaks(
+    tmp_path: Path,
+) -> None:
+    valid = _write_synthetic_posting(
+        tmp_path, "O-2026-10-11-01", "Synthetic Agency", "Chief Data Officer"
+    )
+    missing = tmp_path / "O-2026-10-11-02 -- Synthetic Group -- Director.md"
+    missing.write_text(
+        "# Captured Opportunity Description\n\n## Full Job Posting Text\n\nSynthetic text.\n",
+        encoding="utf-8",
+    )
+    name_leak = _run_posting_validator(
+        [valid],
+        operation="add",
+        message="Added 1 canonical career-opportunities record(s) - Synthetic Agency",
+    )
+    wrong_count = _run_posting_validator(
+        [valid],
+        operation="add",
+        message="Added 2 canonical career-opportunities record(s)",
+    )
+    nonempty_body = _run_posting_validator(
+        [valid],
+        operation="add",
+        message="Added 1 canonical career-opportunities record(s)",
+        body="Synthetic Agency",
+    )
+    empty_content = tmp_path / "O-2026-10-11-03 -- Synthetic Group -- Director.md"
+    empty_content.write_text(
+        "\n".join(
+            [
+                "# Captured Opportunity Description",
+                "- **Opportunity ID:** `O-2026-10-11-03`",
+                "- **Employer / role:** Synthetic Group — Director",
+                "- **Source website:** https://example.invalid/synthetic",
+                "- **Source identity:** Synthetic fixture",
+                "- **Captured:** 2026-10-11",
+                "- **Completeness:** Empty fixture to test rejection",
+                "- **Storage provider:** GitHub",
+                "- **Repository:** `phively/synthetic-career-fixtures`",
+                "- **Branch:** `main`",
+                "- **Canonical path:** `canonical/career-opportunities/O-2026-10-11-03 -- Synthetic Group -- Director.md`",
+                "- **Canonical link:** https://github.com/phively/synthetic-career-fixtures/blob/main/canonical/career-opportunities/O-2026-10-11-03%20--%20Synthetic%20Group%20--%20Director.md",
+                "- **Content type:** `full posting text`",
+                "## Full Job Posting Text",
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    empty_text = _run_posting_validator(
+        [empty_content],
+        operation="add",
+        message="Added 1 canonical career-opportunities record(s)",
+    )
+    missing_fields = _run_posting_validator(
+        [missing],
+        operation="add",
+        message="Added 1 canonical career-opportunities record(s)",
+    )
+    assert all(
+        result.returncode == 1
+        for result in (name_leak, wrong_count, nonempty_body, missing_fields, empty_text)
+    )
+    assert "commit message does not match" in name_leak.stdout
+    assert "posting-file count" in wrong_count.stdout
+    assert "body must be empty" in nonempty_body.stdout
+    assert "expected one non-empty" in missing_fields.stdout
+    assert "posting content is empty" in empty_text.stdout
+
+
+def test_preference_storage_eval_defines_authority_precedence_and_failures() -> None:
+    suite = json.loads(read(PLUGIN_ROOT / "evals" / "preference-storage-management.json"))
+    assert suite["suite"] == "career-coach-preferences-and-storage"
+    cases = {case["id"]: case for case in suite["cases"]}
+    assert {
+        "github-override-while-drive-available",
+        "missing-setting-focused-question",
+        "unavailable-setting-no-provider-substitution",
+        "temporary-storage-override-not-persisted",
+        "authorized-setting-reused-in-new-task",
+        "unauthorized-setting-write",
+        "partly-readable-authority-no-replacement",
+        "partial-write-no-persistence-claim",
+        "plugin-update-preserves-external-setting",
+        "backup-copy-is-not-current-authority",
+        "career-coach-context-stays-with-domain-owner",
+    }.issubset(cases)
+    for case in cases.values():
+        assert case["expected_files_read"]
+        assert isinstance(case["forbidden_files_read"], list)
+        assert case["authoritative_result"]
+        assert isinstance(case["permitted_writes"], list)
+        assert case["failure_criteria"]
+
+
+def test_regression_suite_covers_all_five_skill_routes_and_scope_boundaries() -> None:
+    suite = json.loads(read(PLUGIN_ROOT / "evals" / "regression.json"))
+    cases = {case["id"]: case for case in suite["cases"]}
+    assert {
+        "explicit-professional-development",
+        "indirect-professional-development",
+        "explicit-prepare-interview",
+        "indirect-prepare-interview",
+        "mixed-direction-and-development",
+        "mixed-opportunity-and-interview",
+        "adjacent-professional-development-one-time-learning",
+        "adjacent-opportunity-due-diligence-vs-interview-prep",
+        "adjacent-direction-vs-single-role-evaluation",
+        "negative-unrelated-writing",
+    }.issubset(cases)
+    invoked_skills = set().union(
+        *(set(case["expected_plugin_skills"]) for case in cases.values())
+    )
+    assert invoked_skills == set(SKILL_NAMES)
 
 
 def test_ranked_opportunity_table_and_salary_contract() -> None:
@@ -369,7 +629,7 @@ def test_opportunity_handoffs_preserve_boundaries() -> None:
 def test_opportunity_record_eval_has_required_case_contracts() -> None:
     suite = json.loads(read(PLUGIN_ROOT / "evals" / "opportunity-record-management.json"))
     cases = {case["id"]: case for case in suite["cases"]}
-    assert set(cases) == {
+    assert {
         "open-real-opportunity",
         "capture-complete-posting",
         "capture-unavailable-posting-choice",
@@ -377,7 +637,7 @@ def test_opportunity_record_eval_has_required_case_contracts() -> None:
         "capture-authorized-third-party-summary",
         "capture-posting-excludes-candidate-context",
         "reject-user-identifiable-posting",
-        "capture-library-fallback",
+        "capture-user-selected-library-storage",
         "clarify-from-captured-posting",
         "sanitize-posting-filename",
         "rank-current-opportunities",
@@ -390,7 +650,7 @@ def test_opportunity_record_eval_has_required_case_contracts() -> None:
         "direction-consumer-bounded-handoff",
         "partial-opportunity-write",
         "duplicate-opportunity-records",
-    }
+    }.issubset(cases)
     for case in cases.values():
         assert case["expected_files_read"]
         assert isinstance(case["forbidden_files_read"], list)

@@ -27,6 +27,16 @@ Do not copy the procedures of `research-briefing`, `remember-me`, `skill-creator
 
 When a supplied instruction set mixes project-wide behavior with a specialized repeatable workflow, separate the components and explain the boundary. Invoke `skill-creator` only if the user wants the specialized workflow implemented as a skill.
 
+## Missing authority and missing case facts
+
+Treat these as separate dependencies. In corrected instructions for an authority-dependent decision, require the current authoritative rule and the material facts needed to apply it. Request missing case facts before eligibility, classification, or other consequential conclusions; requesting policy confirmation alone is insufficient. When current authority is unavailable, permit bounded factual preparation, label historical material, and defer the decision. Put this behavior in the copy-ready instructions, not only in commentary.
+
+## Track mutable dependencies
+
+When reusable instructions rely on references, tools, or data sources that can change, identify their role and version or provenance when available, and preserve a safe fallback for an unavailable dependency. Replacing or naming a dependency does not prove it was used or verified.
+
+In drafted or corrected instructions, explicitly state the applicable maintenance actions and their completion gate: when a dependency changes, revisit affected assumptions and examples, update or replace affected fixtures and reference responses where they exist, confirm that the relevant checks still apply, and rerun affected checks before releasing or adopting the updated instructions or freezing a successor package. Retain prior versions as historical evidence. Apply each action only to affected artifacts. A general direction to update materials or rerun checks does not establish assumption/example review, historical retention, or the required timing of validation. In a review, include this rule in the findings or corrected instructions; merely identifying a mutable or unavailable dependency is insufficient.
+
 ## Draft and reduce
 
 1. Preserve the user's meaning, scope, voice, authorization boundaries, and level of formality. Do not turn a narrow request into a generalized system.

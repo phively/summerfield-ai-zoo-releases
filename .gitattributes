@@ -1,0 +1,11 @@
+/plugins/work-smarter/evals/superb-skills-evaluation.json text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/*.json text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/**/*.json text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/*.md text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/**/*.md text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/*.yaml text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/**/*.yaml text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/*.yml text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/**/*.yml text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/*.txt text eol=lf
+/plugins/work-smarter/evals/fixtures/superb-skills/**/*.txt text eol=lf

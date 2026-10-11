@@ -1,0 +1,32 @@
+{
+  "suite_id": "document-assistant-comparison",
+  "suite_version": "1.0.0",
+  "rubric_id": "document-assistant-rubric",
+  "rubric_version": "1.0.0",
+  "cases": [
+    {
+      "id": "document-transformation",
+      "required": true,
+      "critical": true,
+      "checks": [
+        {"type": "contains", "value": "document transformation"}
+      ]
+    },
+    {
+      "id": "verification-before-completion",
+      "required": true,
+      "checks": [
+        {"type": "contains", "value": "read back"},
+        {"type": "contains", "value": "unresolved mismatch"}
+      ]
+    }
+  ],
+  "red_green": [
+    {
+      "criterion_id": "verification",
+      "red_candidate_id": "baseline",
+      "green_candidate_id": "improved",
+      "case_ids": ["verification-before-completion"]
+    }
+  ]
+}

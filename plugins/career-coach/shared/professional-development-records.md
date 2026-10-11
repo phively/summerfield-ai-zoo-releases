@@ -6,8 +6,6 @@ Read this reference when locating, reading, creating, updating, or auditing the 
 
 Use `professional-development.md` as the current record and sole authority for detailed development execution unless an existing clearly equivalent record is already authoritative in the user's selected location. Preserve the existing record's identity when one exists. Do not create skill-local copies or competing current records.
 
-## Current development goals
-
 `professional-development` owns bounded durable creation and updates. Other Career Coach skills are read-only consumers of relevant sections and may request a bounded update through the owning skill. If several plausible records exist, resolve the authority before writing; a retrieval miss is not evidence that no record exists.
 
 ## Canonical identity and retrieval

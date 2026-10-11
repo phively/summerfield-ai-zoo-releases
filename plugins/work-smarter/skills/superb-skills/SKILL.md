@@ -1,54 +1,48 @@
 ---
 name: superb-skills
-description: Design, refine, review, and test prompts, project or custom instructions, skills, multi-skill plugins, inter-skill contracts, and evaluations. Use for instruction-package architecture, placement, concise authoring, trigger design, or observed reliability failures. Do not use for ordinary content editing or software packaging unrelated to instruction systems.
+description: Design, refine, review, and test prompts and reusable instruction packages, skills, plugins, contracts, and evaluations. Use when a user wants reusable instructions or asks whether an instruction or assistant is reliable, including domain-specific evaluation plans, test cases, scorecards, and reference responses. Skip one-off content rewrites or ordinary use of fixed instructions.
 ---
 
 # Superb Skills
 
 Build reliable instruction packages with explicit authority, progressive disclosure, and observable tests.
 
+## Respect the operation boundary
+
+Resolve allowed operations before retrieval. Response-only/no-tool requests exclude reads, commands, tests, and writes; use supplied guidance and disclose missing essentials. Registered-read exceptions permit only the exact source, route, verification, and invocation-only wrappers. Apply these boundaries throughout.
+
 ## Route the work
 
-1. Identify the requested outcome, target platform, supplied artifacts, behavior to preserve, applicable limits, and consequential unknowns. Ask only questions whose answers could materially change the result.
-2. Select the smallest applicable workflow:
-   - Read [instruction-design.md](references/instruction-design.md) for one-time prompts, project or custom instructions, or direct review of supplied instruction text. When drafting project or custom instructions, also read [project-instructions-template.md](references/project-instructions-template.md).
-   - Read [plugin-architecture.md](references/plugin-architecture.md) for a plugin, multiple coordinated skills, manifests, inter-skill contracts, shared resources, packaging, or publication readiness.
-   - Invoke `skill-creator` and follow its current conventions whenever creating, revising, validating, installing, or packaging an individual skill. Do not duplicate its platform-specific implementation procedure here.
-   - Read [evaluation.md](references/evaluation.md) when comparing architectures, testing activation, diagnosing an observed failure, or determining whether a revision improved behavior.
-   - Read [working-memory.md](references/working-memory.md) only when persistent current state must survive extended work or conversation boundaries, multiple workflows need one current authority, meaningful history must remain reconstructable, or state drift would create material risk. Do not create persistent working-memory files by default or read the reference when this gate fails.
-3. Use every applicable workflow for mixed requests, but load no reference merely because it exists.
-4. Identify external claims that could materially affect the package. Use `research-briefing` through the canonical [handoff contract](../../shared/handoff-contracts.md) only when those claims require verification. Do not invoke it for stylistic editing, deterministic transformation, or direct analysis of supplied text that needs no factual validation.
-5. Consult `remember-me` through the same contract only when the user asks to apply stored personal context or missing durable context would materially change a discretionary design choice. Never copy its retrieval, storage, or lifecycle procedure into the output, and never silently change durable memory.
-6. Implement the smallest complete change, validate the affected structure and behavior, and report material decisions, results, and unresolved limitations.
+1. Identify the outcome, target, artifacts, preserved behavior, limits, and unknowns. Ask only questions that could change the result.
+2. Classify the request before acting: planning produces a plan; review reports findings; implementation edits and validates. Do not implement planning or review requests.
+3. Select the smallest applicable workflow:
+   - Read [instruction-design.md](references/instruction-design.md) for one-time prompts, project/custom instructions, or instruction review; apply its missing-authority and mutable-dependency rules. Also read [project-instructions-template.md](references/project-instructions-template.md) when drafting project or custom instructions.
+   - Read [plugin-architecture.md](references/plugin-architecture.md) for a plugin, multiple coordinated skills, manifests, contracts, shared resources, packaging, or publication readiness.
+   - Invoke `skill-creator` when creating, revising, validating, installing, or packaging an individual skill. Do not duplicate its platform-specific implementation procedure here.
+   - Read [evaluation.md](references/evaluation.md) for evaluation design or behavior checks, including architecture comparisons. Apply its feasibility, input-maintenance, and protected-validation rules, including planning-only obligations.
+   - Read [preferences-and-lessons.md](references/preferences-and-lessons.md) for missing preferences, project settings, task overrides, one observed operational mistake with a potentially reusable remedy, recurring mistakes, verified lessons, or unavailable/partial records. Apply its persistence and evidence rules to reusable preference-dependent targets, including standalone targets.
+   - Read [working-memory.md](references/working-memory.md) only when persistent current state must survive extended work or conversation boundaries, multiple workflows need one current authority, history must remain reconstructable, or drift creates material risk. Do not create persistent working-memory files by default or read the reference when this gate fails.
+4. Use every applicable workflow for mixed requests, but load no reference merely because it exists.
+5. Use `research-briefing` through the canonical [handoff contract](../../shared/handoff-contracts.md) only for material external claims requiring verification; omit it for stylistic edits, deterministic transformations, or supplied-text analysis needing no factual validation.
+6. Consult `remember-me` through the same contract only for requested personal context or missing durable context that materially affects a discretionary choice. Never copy its retrieval, storage, or lifecycle procedure into the output or silently change durable memory.
+7. Complete only that mode; check its applicable design obligations and report material decisions and limitations. Apply consequential constraints to the delivered target instructions or a bounded handoff, not only commentary.
 
 ## Keep one authority
 
-Before drafting, inventory the supplied and accessible instruction layers that govern the result. Classify each candidate rule by its narrowest reliable home:
+Inventory instruction layers before drafting. Choose the narrowest reliable owner: project/custom instructions for scope-wide behavior; skills for reusable workflows; plugin contracts for shared coordination; references for conditional detail; scripts for repeated deterministic work; the current prompt for one-time facts; or briefing/history only after the working-memory gate passes.
 
-- project or custom instructions for behavior relevant to most conversations in that scope;
-- a skill for a reusable specialized workflow with a recognizable user goal;
-- a plugin-level contract for coordination among bundled capabilities;
-- a conditional reference for detailed procedures, schemas, rubrics, examples, or source material;
-- a script for fragile or repeated deterministic work;
-- the current prompt for one-time facts and requirements; and
-- a working briefing or historical record only when the working-memory gate passes.
+Do not reproduce platform behavior, repository instructions, installed-skill procedures, plugin contracts, or another authoritative rule unless the target needs a narrow, identified local override. A routing sentence is not permission to summarize the receiving skill's workflow.
 
-Do not reproduce platform behavior, repository instructions, installed-skill procedures, plugin contracts, or another authoritative rule unless the target needs an explicit local override. State an override narrowly and identify what it changes. A routing sentence is not permission to summarize the receiving skill's workflow.
-
-When a supplied package contains duplicate or conflicting authorities, preserve the user's intended behavior while consolidating the rule into one owner. Never create a new skill, file, or storage tier solely for symmetry.
+Consolidate duplicate or conflicting authorities while preserving user intent. Never create a skill, file, or storage tier solely for symmetry.
 
 ## Package rules
 
-- Write concise, direct, imperative, testable rules.
-- Define the trigger, action, important exceptions, priority, and fallback for conditional behavior.
-- Put activation conditions in skill descriptions and conditional detail in the body or routed references.
-- Preserve user meaning, scope, authorization boundaries, useful behavior, and backward compatibility unless a genuine conflict requires a documented change.
-- Never invent requirements, preferences, evidence, platform capabilities, tool results, or missing content.
-- Match specificity to operational risk. Preserve judgment for variable work; use strict procedures or scripts for fragile repetition.
-- Prefer one owner plus references over synchronized prose copies.
+Write direct, testable rules with triggers, actions, exceptions, priority, and fallback. Put activation conditions in descriptions and conditional detail in references. Preserve meaning, scope, authorization, behavior, and compatibility; document necessary changes. Invent no requirements, preferences, evidence, capabilities, results, or missing content. Match specificity to risk and prefer one owner plus references.
 
 ## Validate behavior
 
-For a new architecture or a material boundary change, establish a baseline and compare candidates with the same prompts and scoring rules. Test direct, indirect, ambiguous, mixed, and negative routes; unavailable dependencies; authority leakage; output limits; and preservation of supplied requirements. Prefer the simpler architecture unless a split produces a clear measurable improvement that exceeds its added routing and maintenance cost.
+For new architectures or material boundary changes, compare baseline and candidates under identical prompts and scoring. Apply routed checks for activation, unavailable dependencies, authority leakage, output limits, and preserved requirements. Prefer simplicity unless measured gains exceed routing and maintenance costs.
 
-Lead with the completed artifact or recommendation. Keep explanations outside copy-ready instruction text and limit them to material changes, placement decisions, validation results, and unresolved risks.
+Surface blockers at their gate: state observed evidence, unknowns, and the smallest resolving action. Fix safe, authorized issues before dependent work; do not block a whole phase while a remedy remains. Request missing input/authority specifically; preserve completed work and resume at the failed gate.
+
+Lead with the artifact or recommendation; keep explanations outside copy-ready text and report only material changes, validation, and limitations.

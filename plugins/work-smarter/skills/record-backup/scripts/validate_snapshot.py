@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import re
 import sys
@@ -62,6 +63,17 @@ def validate(root: Path, manifest_path: Path) -> dict[str, object]:
     records = manifest.get("records")
     if not isinstance(records, list):
         raise SnapshotError("manifest records must be a list")
+    operational = "operational_layout" in manifest
+    if operational and (type(manifest["operational_layout"]) is not int or manifest["operational_layout"] != 1):
+        raise SnapshotError("unsupported operational_layout")
+    if operational:
+        profile_path = manifest.get("profile_repository_path")
+        safe_relative_path(profile_path, "profile_repository_path")
+        profiles = [r for r in records if isinstance(r, dict) and r.get("repository_path") == profile_path]
+        if len(profiles) != 1 or profiles[0].get("classification") != "configuration":
+            raise SnapshotError("operational layout requires one indexed configuration profile")
+        if Path(profile_path).suffix.lower() not in {".yaml", ".yml"}:
+            raise SnapshotError("configuration profile must retain its YAML extension")
 
     expected: set[Path] = set()
     expected_keys: set[str] = set()
@@ -122,9 +134,13 @@ def validate(root: Path, manifest_path: Path) -> dict[str, object]:
 
     actual_files: set[Path] = set()
     for path in root.rglob("*"):
+        if path.is_symlink():
+            raise SnapshotError(f"symlinks are not supported: {path.relative_to(root)}")
         if not path.is_file() or path.resolve() == manifest_path.resolve():
             continue
         relative = path.relative_to(root)
+        if relative == Path("README.md"):
+            continue
         if relative.parts[:1] == ("receipts",):
             if len(relative.parts) != 2 or relative.suffix.lower() != ".json":
                 raise SnapshotError(
@@ -146,6 +162,14 @@ def validate(root: Path, manifest_path: Path) -> dict[str, object]:
         if missing:
             details.append(f"missing files: {', '.join(missing)}")
         raise SnapshotError("; ".join(details))
+    if operational or (root / "README.md").exists() or "legacy_receipts" in manifest:
+        spec = importlib.util.spec_from_file_location("backup_reporting", Path(__file__).with_name("reporting.py"))
+        reporting = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(reporting)
+        try:
+            reporting.process(root)
+        except (ValueError, OSError) as exc:
+            raise SnapshotError(f"invalid operational files: {exc}") from exc
     return {
         "record_count": len(records),
         "byte_count": sum(item["byte_size"] for item in summaries),

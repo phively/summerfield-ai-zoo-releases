@@ -1,0 +1,248 @@
+{
+  "validation": "Career Coach issue #18 stage 6",
+  "plugin_version": "1.8.0",
+  "date": "2026-10-11",
+  "version_decision": "User confirmed 1.8.0 minor bump for backward-compatible additions to the storage/preferences and posting-validation contracts.",
+  "package_sha256": "0e251c3b81c0e0e0b0b4e5bb449c3de8de995c6e3618f8850698785f4b5f1760",
+  "hash_method": "SHA256 of sorted repository-relative-path:lowercase-file-SHA256 lines joined with LF, no trailing LF",
+  "hash_scope": "All Career Coach package files except this results artifact and generated __pycache__ files; excludes no instruction or test files.",
+  "file_hashes": [
+    {
+      "path": "plugins/career-coach/.codex-plugin/plugin.json",
+      "sha256": "99c30a1bd25edaec09600026b219285df5b5acf169000648c4a647ee036c4241"
+    },
+    {
+      "path": "plugins/career-coach/assets/icon.png",
+      "sha256": "db78f57b2c29dd03112cf733b8f152999987da0ec3795190bf16cc1374486cb1"
+    },
+    {
+      "path": "plugins/career-coach/assets/logo.svg",
+      "sha256": "6e8f4f2827d8c4fc2a6b44ee9d40e51bec9d3b777c3af021b47a147cdd60452f"
+    },
+    {
+      "path": "plugins/career-coach/evals/opportunity-record-management.json",
+      "sha256": "6e1ae85f45a7963d2a89dbdf484d281fb01e9101ceeb6a4837fc566c1744f6fd"
+    },
+    {
+      "path": "plugins/career-coach/evals/preference-storage-management.json",
+      "sha256": "04f7223f11c5dbb3816b2187039ba53553fff55894392ff969eb9fd5cc356201"
+    },
+    {
+      "path": "plugins/career-coach/evals/record-audits.json",
+      "sha256": "1983ef03f855ce7c70e2dc718426db84cdf7b385fa6fbaf03886f698a5bac5a8"
+    },
+    {
+      "path": "plugins/career-coach/evals/record-management.json",
+      "sha256": "70059475c8c0bd6ff1ce9ef2ffba3c573d98c7a97eeedec8f70cc19bec225a9b"
+    },
+    {
+      "path": "plugins/career-coach/evals/regression.json",
+      "sha256": "3fe542c0d249a896eb71686e781ea5d4763c582ae5b69444e7166184a89412dc"
+    },
+    {
+      "path": "plugins/career-coach/evals/results.json",
+      "sha256": "d24c13b5e5347a6bfd970b209c382b00a161c1c8aad7899df648265c1adc023a"
+    },
+    {
+      "path": "plugins/career-coach/README.md",
+      "sha256": "c20634d79ff25f23d757ee531f28935bdaf90cdbd682e4de31ca1f83e116d5bc"
+    },
+    {
+      "path": "plugins/career-coach/scripts/validate_opportunity_posting.py",
+      "sha256": "a4bd77cc903ab6c0162575b31655cc4cb3f88748676f3258793269bb53ef0b5b"
+    },
+    {
+      "path": "plugins/career-coach/scripts/validate_record_audit.py",
+      "sha256": "e926ede2eb9e477cced4a0fd2c77a222fb0f77227a6de109c0572652727df132"
+    },
+    {
+      "path": "plugins/career-coach/shared/career-direction-records.md",
+      "sha256": "f77f2a054107831651cb46a85218dbbab6545d36c5d33ab163cc7aad96b57c21"
+    },
+    {
+      "path": "plugins/career-coach/shared/handoff-contracts.md",
+      "sha256": "8fa0e610173ca8796ef187a6224820e03f472f19d55b2abdb3d9e02b4d87d689"
+    },
+    {
+      "path": "plugins/career-coach/shared/opportunity-records.md",
+      "sha256": "d30e25291778e9eabc2cba1bcb7a98b98dc3a1d4c90820b073dc4907317b9118"
+    },
+    {
+      "path": "plugins/career-coach/shared/preferences-and-storage.md",
+      "sha256": "f594c0fb409b76db30411962650bdcee67da73aed421054357c7195f5dcca8e6"
+    },
+    {
+      "path": "plugins/career-coach/shared/professional-development-records.md",
+      "sha256": "d531012e27a12545108d28a53951ba69e671e4a987b7b46411f1f0c31f1e7196"
+    },
+    {
+      "path": "plugins/career-coach/shared/record-audits.md",
+      "sha256": "1d598d9a1e8e00c31925b197218ab02e033184ecd40801b3f26918ffed304c53"
+    },
+    {
+      "path": "plugins/career-coach/skills/career-direction/agents/openai.yaml",
+      "sha256": "866369dc8d3d642b9956bac0ed681d3b3bf588f551ff707255fedb7e5a4848d7"
+    },
+    {
+      "path": "plugins/career-coach/skills/career-direction/assets/icon-large.svg",
+      "sha256": "ec6c0460cf853f5ea2612a5c7af9b961933d98a4fa2cdb68dc7a8fd2cd72e58c"
+    },
+    {
+      "path": "plugins/career-coach/skills/career-direction/assets/icon-small.svg",
+      "sha256": "f2a94d3a9a1cfb2c56e786b22f370b1cb944a2a3967c429b8776d0512853200b"
+    },
+    {
+      "path": "plugins/career-coach/skills/career-direction/references/decision-criteria.md",
+      "sha256": "67b331851f112b03c6b59adc99cba7b9d4fa62a5dba4ffed186138f892a76301"
+    },
+    {
+      "path": "plugins/career-coach/skills/career-direction/references/discovery-framework.md",
+      "sha256": "7176ba6be9aae823fd675f1e8e7364fca611dc565d8aea826f8d43a8bb8042dc"
+    },
+    {
+      "path": "plugins/career-coach/skills/career-direction/SKILL.md",
+      "sha256": "a5f3caac778d21d6fbbfb36f9ba67b13efc0f565283587f19111a1c79ae2cc1d"
+    },
+    {
+      "path": "plugins/career-coach/skills/evaluate-opportunity/agents/openai.yaml",
+      "sha256": "9ae0cef68808e9a5f02678f4c1f35a4e2e7c5de268bb90833cd854fabd8541f8"
+    },
+    {
+      "path": "plugins/career-coach/skills/evaluate-opportunity/assets/icon-large.svg",
+      "sha256": "e5bcbbb30ff570bfeda3f03b5bf1c3c3c9de549821804327d4695485a7f6a3f0"
+    },
+    {
+      "path": "plugins/career-coach/skills/evaluate-opportunity/assets/icon-small.svg",
+      "sha256": "8247b2840d8b6c9e41684b292192c5fd2e60ab60d210a508683c07c0303437d6"
+    },
+    {
+      "path": "plugins/career-coach/skills/evaluate-opportunity/references/due-diligence-questions.md",
+      "sha256": "135b93e322bcca5cc43c94a78b8c38b2ed6ca3100238b520ea6beb0242adc35f"
+    },
+    {
+      "path": "plugins/career-coach/skills/evaluate-opportunity/references/role-fit-rubric.md",
+      "sha256": "9773fc7a5a2ce5084e33a8a2a5094fee0ce1a8cba2efeec9bc9f4d68d8c94317"
+    },
+    {
+      "path": "plugins/career-coach/skills/evaluate-opportunity/SKILL.md",
+      "sha256": "295ba0d49f10aa8662c14295c25102b1e6f5755626e360035dbc7b78537b5917"
+    },
+    {
+      "path": "plugins/career-coach/skills/prepare-interview/agents/openai.yaml",
+      "sha256": "1a7df810e82198accabf3d0931b27cb1f3838f5b23b21b55e749c54a0c889a98"
+    },
+    {
+      "path": "plugins/career-coach/skills/prepare-interview/assets/icon-large.svg",
+      "sha256": "af0cf70abeb6908d91ba38815abddc496eab994e6a6e6b011f0f7193afeff88d"
+    },
+    {
+      "path": "plugins/career-coach/skills/prepare-interview/assets/icon-small.svg",
+      "sha256": "bdb4eb9e9da84ede14c9b01d8a241a1160ad9a1fcf435f1e7677e79047ed8031"
+    },
+    {
+      "path": "plugins/career-coach/skills/prepare-interview/SKILL.md",
+      "sha256": "f4baca30d914ebfd08f46d4deb8cd41bb8768c9a66499103f357fa2befe59e28"
+    },
+    {
+      "path": "plugins/career-coach/skills/professional-development/agents/openai.yaml",
+      "sha256": "71564f89b75c5ec4d33c70ed20d0528cd83d324b113e03c889e5beb92618109a"
+    },
+    {
+      "path": "plugins/career-coach/skills/professional-development/assets/icon-large.svg",
+      "sha256": "202e473817671ece2fb7660adbc8ebea1c25889d3b33a95036a9a697ab57822f"
+    },
+    {
+      "path": "plugins/career-coach/skills/professional-development/assets/icon-small.svg",
+      "sha256": "598d6592c467cb67104f3b1a0055f749106d5e927801e57358c244fe030fa110"
+    },
+    {
+      "path": "plugins/career-coach/skills/professional-development/SKILL.md",
+      "sha256": "e9ff54c339f819e98ef40bb414bb785f89d0dc46c256836156e9f0f20a52c1df"
+    },
+    {
+      "path": "plugins/career-coach/skills/update-resume/agents/openai.yaml",
+      "sha256": "0f2a8946f8d9cf2a060ed4038078f46eaf8fae04d0e7362442466314f86c8ac9"
+    },
+    {
+      "path": "plugins/career-coach/skills/update-resume/assets/icon-large.svg",
+      "sha256": "203068e3688e57dbc72fd9745bc81594b2520ff4b590cadc16221da37db6dcf0"
+    },
+    {
+      "path": "plugins/career-coach/skills/update-resume/assets/icon-small.svg",
+      "sha256": "15303bd2f579a4cb8145e53601dad3ec2de2970a8753642ed74a996a0c91c9bf"
+    },
+    {
+      "path": "plugins/career-coach/skills/update-resume/references/evidence-standard.md",
+      "sha256": "455a93b28141f4f30377bb11cb3185f346c6b0a0f1cac3c60581f6897767fd40"
+    },
+    {
+      "path": "plugins/career-coach/skills/update-resume/references/output-templates.md",
+      "sha256": "1078261201a8b5219b75ae10e331d2119eb425f3b77c34b5dd89952156e55831"
+    },
+    {
+      "path": "plugins/career-coach/skills/update-resume/references/posting-analysis.md",
+      "sha256": "ae680f6f1841fde7817185a1928c9e187221826560f6a4f220f064ff93d6fe25"
+    },
+    {
+      "path": "plugins/career-coach/skills/update-resume/references/resume-writing.md",
+      "sha256": "7de7cbeab9a66e68b2ab77735c3ea85f8e609c36ef16800b06bb99f9c0455f56"
+    },
+    {
+      "path": "plugins/career-coach/skills/update-resume/SKILL.md",
+      "sha256": "c31529ea53e47b4d267b7256769325fd14beb25fb45ba54fe46230945f0bd346"
+    },
+    {
+      "path": "plugins/career-coach/tests/test_career_coach_contracts.py",
+      "sha256": "c6112ce5b6abd23f7f52873ecf5881243f10dd66cb3470fe36d061aacb586ab7"
+    }
+  ],
+  "checks": [
+    {
+      "check": "career-coach-tests",
+      "command": [
+        "C:\\Users\\Paul\\AppData\\Local\\Temp\\career-coach-step5-20261011\\Scripts\\python.exe",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "plugins/career-coach/tests"
+      ],
+      "exit_status": 0,
+      "stdout": ".............................                                            [100%]\n29 passed in 0.92s\n",
+      "stderr": ""
+    },
+    {
+      "check": "all-package-json-and-local-markdown-links",
+      "exit_status": 0
+    },
+    {
+      "check": "git diff --check",
+      "exit_status": 0
+    },
+    {
+      "check": "git diff --cached --check",
+      "exit_status": 0
+    }
+  ],
+  "skill_structure": "All five skill-creator quick validators passed; detailed commands and outputs are private development evidence and are not distributed.",
+  "repository_tests": {
+    "command": "python -B -m pytest -q -p no:cacheprovider tests plugins --tb=short",
+    "result": "9 failed, 170 passed, 1 skipped",
+    "evidence": "Private development evidence; not distributed in this public snapshot.",
+    "failures_scope": "Unchanged repository SVG/mirror/catalog checks, Meal Planner version assertion, and Work Smarter superb-skills instruction-size/routing assertions. No Career Coach failures."
+  },
+  "prior_behavioral_evidence": {
+    "version": "1.7.0 worktree candidate",
+    "package_sha256": "ef8240c1b02dcc40b57b1f00b6df46acf18687ae025574de634c5db018c3ee6b",
+    "evidence": "Private development evidence; not distributed in this public snapshot.",
+    "transfer_basis": "Stage 6 changed plugin version, README overview, matching test version assertion, and added this results artifact. Behavioral instructions and validator are unchanged from stage 5."
+  },
+  "limitations": [
+    "Single exploratory paired case only; no grouped comparison or untouched holdout.",
+    "No installed-plugin activation or live-provider operations tested.",
+    "Repository-wide test suite is not green; unrelated failures retained in evidence."
+  ],
+  "outcome": "Career Coach package checks passed; stage 6 completed with documented repository-wide failures."
+}

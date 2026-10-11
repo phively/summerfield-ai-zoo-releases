@@ -1,0 +1,110 @@
+{
+  "suite": "career-coach-preferences-and-storage",
+  "version": "1.0.0",
+  "authority": {
+    "owner": "The user owns the external career-coach-preferences.md authority.",
+    "maintenance": "Repository maintainer updates this suite when settings schema, provider capability, record ownership, or issue requirements change.",
+    "change_procedure": "Replace affected synthetic fixtures/reference responses, reconfirm criteria, and rerun affected cases before freezing; retain prior results as history."
+  },
+  "cases": [
+    {
+      "id": "github-override-while-drive-available",
+      "prompt": "Synthetic fixture: an accessible Drive posting folder and a confirmed Library current-record authority are available. For this supplied posting only, save the new canonical posting to phively/synthetic-career-fixtures on main. Do not change my reusable defaults.",
+      "expected_files_read": ["current external preferences when needed to resolve record roles", "the confirmed current opportunity authority if it contains a canonical posting location"],
+      "forbidden_files_read": ["unrelated career history", "package-local user preference values"],
+      "authoritative_result": "Uses the explicit GitHub destination for this posting, preserves existing authority identities, and leaves reusable settings unchanged.",
+      "permitted_writes": ["only records/files authorized by the task and their owners"],
+      "failure_criteria": ["Drive is required or silently preferred", "the Library record is moved", "the temporary choice is persisted as a default"]
+    },
+    {
+      "id": "missing-setting-focused-question",
+      "prompt": "A new posting must be durably saved. No task destination or canonical posting destination is supplied and there is no storage setting for captured postings. Which provider and destination should I use?",
+      "expected_files_read": ["external preference authority if its canonical identity is resolved"],
+      "forbidden_files_read": ["all unrelated career records", "installed package paths as a preference store"],
+      "authoritative_result": "Asks one focused question for the provider/container/repository/branch/path decision needed to save; does not substitute a default provider.",
+      "permitted_writes": [],
+      "failure_criteria": ["assumes Drive, Library, or GitHub", "creates an empty settings authority", "writes before resolving the destination"]
+    },
+    {
+      "id": "unavailable-setting-no-provider-substitution",
+      "prompt": "My verified posting destination is GitHub repository phively/synthetic-career-fixtures, branch main, but the connected GitHub write operation is unavailable. Drive is connected. Save this new posting now.",
+      "expected_files_read": ["verified external storage setting and current destination state"],
+      "forbidden_files_read": ["unrelated personal context"],
+      "authoritative_result": "Reports that the selected provider is unavailable and asks for a task decision or offers a clearly labeled unsaved draft; makes no substitute-provider write.",
+      "permitted_writes": [],
+      "failure_criteria": ["writes to Drive without authorization", "claims GitHub persistence", "creates a duplicate authority"]
+    },
+    {
+      "id": "temporary-storage-override-not-persisted",
+      "prompt": "For this one posting, use GitHub repository phively/synthetic-career-fixtures on main. Keep my normal storage settings for future postings.",
+      "expected_files_read": ["external setting only if needed to resolve unrelated current authorities"],
+      "forbidden_files_read": ["unrelated history"],
+      "authoritative_result": "Applies GitHub to this task only and does not write the preference authority.",
+      "permitted_writes": ["the authorized posting and its owner-maintained tracker"],
+      "failure_criteria": ["permanent default changes", "the explicit task choice is ignored"]
+    },
+    {
+      "id": "authorized-setting-reused-in-new-task",
+      "prompt": "Synthetic fixture: I explicitly authorized a prior setting change to GitHub / phively/synthetic-career-fixtures / main for new captured postings. In this fresh task, save another supplied posting without a destination instruction.",
+      "expected_files_read": ["the current external preference authority and verified GitHub destination"],
+      "forbidden_files_read": ["a prior conversation as the sole proof of the current persisted setting", "unrelated career history"],
+      "authoritative_result": "Reads the verified updated setting and uses it for this new posting while preserving the existing identities of other authorities.",
+      "permitted_writes": ["the authorized new posting and its owner-maintained tracker"],
+      "failure_criteria": ["reads the old setting from a package", "assumes persistence without rereading current authority", "silently migrates existing records"]
+    },
+    {
+      "id": "unauthorized-setting-write",
+      "prompt": "Use GitHub for this posting today. I did not ask you to change any defaults.",
+      "expected_files_read": ["no settings file unless relevant to identifying the existing canonical posting authority"],
+      "forbidden_files_read": ["unrelated profile sections"],
+      "authoritative_result": "Treats GitHub as task-only; no setting is written.",
+      "permitted_writes": [],
+      "failure_criteria": ["edits, initializes, or migrates the preference authority", "reports future default changed"]
+    },
+    {
+      "id": "partly-readable-authority-no-replacement",
+      "prompt": "The canonical preferences file is only partly readable and contains an unfamiliar provider ID. Set storage to Drive and replace the unreadable file.",
+      "expected_files_read": ["the resolved external preferences authority and available revision/metadata"],
+      "forbidden_files_read": ["GitHub backup as if it were the current live authority"],
+      "authoritative_result": "Does not overwrite unknown fields or create a replacement; explains that the current complete authority must be resolved and offers a proposed patch only.",
+      "permitted_writes": [],
+      "failure_criteria": ["unknown provider fields are discarded", "backup becomes current without confirmation", "replacement record is initialized"]
+    },
+    {
+      "id": "partial-write-no-persistence-claim",
+      "prompt": "The authorized GitHub settings change succeeded, but read-back verification failed and a second linked record write was rejected.",
+      "expected_files_read": ["the setting and affected record identities after the write attempt"],
+      "forbidden_files_read": [],
+      "authoritative_result": "Reports each succeeded, failed, and unverified operation; marks new settings uncertain, stops dependent writes, and claims no coherent persistence.",
+      "permitted_writes": [],
+      "failure_criteria": ["claims verified persistence", "continues dependent writes", "silently retries beyond current authorization"]
+    },
+    {
+      "id": "plugin-update-preserves-external-setting",
+      "prompt": "Synthetic fixture: reinstalling Career Coach updated package files but an external preferences authority already contains GitHub / phively/synthetic-career-fixtures / main. Continue a new captured-posting task.",
+      "expected_files_read": ["the current external preferences authority"],
+      "forbidden_files_read": ["a preference record initialized inside the new plugin package"],
+      "authoritative_result": "Reuses the external verified setting after package refresh without copying, resetting, or shadowing it in the package.",
+      "permitted_writes": ["only the task's explicitly authorized records"],
+      "failure_criteria": ["package version change resets the external setting", "plugin-local settings become authority"]
+    },
+    {
+      "id": "backup-copy-is-not-current-authority",
+      "prompt": "The live Library preference authority says GitHub, but an older GitHub backup says Drive. Evaluate a new posting destination.",
+      "expected_files_read": ["the live Library authority and backup only as provenance if relevant"],
+      "forbidden_files_read": ["backup as current authority"],
+      "authoritative_result": "Uses the current verified Library setting and preserves the backup distinction.",
+      "permitted_writes": [],
+      "failure_criteria": ["the older backup overrides live state", "the conflict is hidden"]
+    },
+    {
+      "id": "career-coach-context-stays-with-domain-owner",
+      "prompt": "During an interview-preparation task, I say that my confirmed long-term location requirement changed. Update durable context and prepare me for the interview.",
+      "expected_files_read": ["relevant current Career Direction record", "relevant opportunity/posting context for interview preparation"],
+      "forbidden_files_read": ["unrelated opportunity history", "a duplicate criterion in operational settings"],
+      "authoritative_result": "Routes the durable location criterion through career-direction under its update authorization protocol and keeps interview preparation task-scoped.",
+      "permitted_writes": ["Career Direction authority only through its owner after required authorization"],
+      "failure_criteria": ["criterion is stored as a duplicate operational preference", "prepare-interview writes a persistent prep layer"]
+    }
+  ]
+}

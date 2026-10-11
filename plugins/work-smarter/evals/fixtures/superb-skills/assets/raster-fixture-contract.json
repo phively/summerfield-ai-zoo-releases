@@ -1,0 +1,10 @@
+{
+  "fixture_state": "metadata_contract_only",
+  "purpose": "Records asset expectations; execution-time checks cover dimensions and visual review.",
+  "assets": [
+    {"id": "small-raster", "format": "raster", "width": 32, "height": 32, "visual_review": "required"},
+    {"id": "large-raster", "format": "raster", "width": 128, "height": 128, "visual_review": "required"},
+    {"id": "valid-vector", "format": "svg", "preserve_unless_defective": true}
+  ],
+  "limitation": "This contract does not claim that dimensions establish legibility or replace the later visual review."
+}

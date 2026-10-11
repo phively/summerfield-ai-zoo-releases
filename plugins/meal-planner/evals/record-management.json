@@ -1,6 +1,6 @@
 {
   "suite": "meal-planner-record-management",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "cases": [
     {
       "id": "finalize-first-plan",
@@ -473,7 +473,7 @@
         "recipe document template"
       ],
       "forbidden_files_read": [],
-      "authoritative_result": "Create Google Sheets for structured household records and Google Docs for narrative plan and recipe records under Meal Planning, with recipes in Recipes and audit artifacts reserved for Audits.",
+      "authoritative_result": "Create Google Sheets for structured household records and Google Docs for narrative plan and recipe records under Meal Planning, with recipes in Recipes and audit artifacts reserved for Audits. Apply and verify each new artifact's required native structure before reporting it complete.",
       "permitted_writes": [
         "authorized Drive-native canonical records"
       ],
@@ -560,6 +560,118 @@
         "displays a bare URL or raw HTML",
         "publishes an unresolved link",
         "uses an original-source link as the canonical recipe link"
+      ]
+    },
+    {
+      "id": "new-recipe-format-verification",
+      "prompt": "Save this approved recipe as a new canonical Google Doc and report when it is ready for my meal plan.",
+      "expected_files_read": [
+        "native artifact storage and formatting",
+        "recipe document template",
+        "recipe storage"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Create the recipe with the template's native Title, Heading 1 or Heading 2, Normal text, table, list, and link structures; read them back, repair mismatches, and report separate content, native-formatting, and link verification results before publication.",
+      "permitted_writes": [
+        "one approved canonical recipe Doc in Recipes",
+        "Recipe Catalog pointer after all required checks pass"
+      ],
+      "failure_criteria": [
+        "reports completion after checking text only",
+        "publishes before native formatting verification",
+        "creates a duplicate Doc while retrying formatting"
+      ]
+    },
+    {
+      "id": "recipe-style-mismatch-repair",
+      "prompt": "The new recipe's title and section labels look bold, but they are normal paragraphs. Finish the recipe.",
+      "expected_files_read": [
+        "recipe document template",
+        "native artifact storage and formatting",
+        "existing recipe Doc identity"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Inspect the actual paragraph styles, change the title to Title and section labels to the required heading styles, reread the affected elements, and report publication only after the check passes.",
+      "permitted_writes": [
+        "in-place formatting repair in the existing recipe Doc"
+      ],
+      "failure_criteria": [
+        "treats bold or larger Normal text as a valid heading",
+        "rewrites recipe content unnecessarily",
+        "creates a second canonical Doc"
+      ]
+    },
+    {
+      "id": "recipe-native-lists-and-table",
+      "prompt": "Save the recipe, which currently contains typed bullet characters, numbered steps, and a pipe-delimited metadata table.",
+      "expected_files_read": [
+        "recipe document template",
+        "native artifact storage and formatting"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Convert the content into native Google Docs lists and a native metadata table, preserve the recipe text, reread the structure, and keep publication pending until the native check passes.",
+      "permitted_writes": [
+        "authorized in-place recipe structure repair"
+      ],
+      "failure_criteria": [
+        "leaves Markdown list or table syntax in the Doc",
+        "counts plain text punctuation as native structure",
+        "loses quantities or instructions during repair"
+      ]
+    },
+    {
+      "id": "formatting-readback-unavailable",
+      "prompt": "Create the approved recipe, but the available read operation returns text and links without paragraph-style information.",
+      "expected_files_read": [
+        "native artifact storage and formatting",
+        "recipe document template",
+        "recipe storage"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Report content and link results separately, mark native formatting as unverified, and do not update the Recipe Catalog or claim the recipe is published until a native style check is available.",
+      "permitted_writes": [
+        "recipe content only when the user has authorized a staged or pending write"
+      ],
+      "failure_criteria": [
+        "infers paragraph styles from text alone",
+        "claims formatting passed without evidence",
+        "publishes or links an unverified recipe"
+      ]
+    },
+    {
+      "id": "meal-plan-format-verification",
+      "prompt": "Persist this approved weekly meal plan as a new Google Doc.",
+      "expected_files_read": [
+        "native artifact storage and formatting",
+        "meal-plan document template"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Apply and verify the meal-plan Title, Heading 1 and Heading 2 hierarchy, Normal text, native tables and lists, and descriptive links before reporting the current plan as persisted.",
+      "permitted_writes": [
+        "one authorized current meal-plan Google Doc"
+      ],
+      "failure_criteria": [
+        "reports persistence after a text-only read-back",
+        "uses bold Normal text in place of headings",
+        "pastes the Markdown template into the Google Doc"
+      ]
+    },
+    {
+      "id": "spreadsheet-format-verification",
+      "prompt": "Create the Meal Preferences workbook and its Recipe Catalog tabs in Google Sheets.",
+      "expected_files_read": [
+        "native artifact storage and formatting",
+        "preference and recipe record schemas"
+      ],
+      "forbidden_files_read": [],
+      "authoritative_result": "Create native cells and applicable headers, wrapping or widths, filters or tables, stable keys, validation, and links; read back the affected ranges and report any unverified formatting instead of claiming the workbook is complete.",
+      "permitted_writes": [
+        "authorized Meal Preferences workbook and canonical tabs"
+      ],
+      "failure_criteria": [
+        "pastes Markdown tables into cells",
+        "skips read-back of created ranges",
+        "claims visual formatting from a text-only export"
       ]
     }
   ]

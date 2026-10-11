@@ -21,6 +21,17 @@ Keep each audit operation in a dated child folder under `Audits`, such as `Migra
 - In other formats, use that format's native heading, list, table, and hyperlink features when available. A text-only fallback may use Markdown, but it remains a fallback rather than a model for Google artifacts.
 - Read back consequential content and inspect the resulting structure after writing. A write is incomplete when the correct text exists but required headings, lists, tables, or links were not created in native form.
 
+### Format-aware completion check
+
+Before creating a native artifact, read the applicable document or workbook template and identify its required elements and styles. After writing:
+
+1. Read back the content, native structure, applicable styles, and user-visible links using the strongest available native representation.
+2. Compare every required element with the template. In Google Docs, distinguish paragraph styles such as `Title`, `Heading 1`, `Heading 2`, `Normal text`, bulleted lists, and numbered lists from direct formatting such as bold, font size, or indentation. In Google Sheets, inspect the affected headers, ranges, tables or filters, wrapping, widths, validation, and links.
+3. Repair mismatches within the authorized artifact and read the affected elements again.
+4. Mark the artifact formatting as verified only when the required checks pass. If the available read operation exposes text but not the relevant native formatting, report formatting as unverified and do not claim the write is complete.
+
+Do not update dependent catalog rows, pointers, or current-plan authorities until required content, native structure, formatting, and links are verified. Preserve the artifact identity and use the same returned identity when retrying a failed check.
+
 ## Links
 
 Every user-visible link must have concise descriptive display text, use the artifact's native hyperlink or supported smart-chip representation, and resolve to the intended resource before publication. Do not present a bare URL or raw HTML as the link label. Keep immutable resource IDs and raw URLs only in dedicated identity or source fields when required for reliable routing; they do not replace the named user-visible link.

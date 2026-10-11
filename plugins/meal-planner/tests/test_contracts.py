@@ -40,7 +40,6 @@ def test_canonical_plugin_structure() -> None:
     manifest = json.loads(read(manifest_path))
 
     assert manifest["name"] == PLUGIN_ROOT.name == "meal-planner"
-    assert manifest["version"].split("+", 1)[0] == "1.4.0"
     assert manifest["skills"] == "./skills/"
     assert re.fullmatch(r"\d+\.\d+\.\d+(?:\+codex\.[0-9A-Za-z.-]+)?", manifest["version"])
     assert manifest["description"]
@@ -95,6 +94,13 @@ def test_drive_native_storage_formatting_and_migration_contract() -> None:
     assert "native table" in plan_template
     assert "native numbered list" in recipe_template
     assert "do not paste markdown" in (plan_template + recipe_template).lower()
+    assert "Format-aware completion check" in formatting
+    assert "paragraph styles such as `Title`, `Heading 1`, `Heading 2`, `Normal text`" in formatting
+    assert "report formatting as unverified" in formatting
+    assert "Do not update dependent catalog rows" in formatting
+    assert "native `Title` paragraph style" in recipe_template
+    assert "Bold, larger, or indented text does not satisfy a required paragraph style" in recipe_template
+    assert "Use native `Title`, `Heading 1`, `Heading 2`, and `Normal text`" in plan_template
 
 
 def test_meal_planner_functionality_contract() -> None:
@@ -135,6 +141,10 @@ def test_personal_chef_functionality_contract() -> None:
     assert "Recipe History" in preference_records
     assert "`Meal Preferences` or a clearly equivalent title" in chef
     assert "prefer a Google Sheet titled `Meal Preferences`" in preference_records
+    assert "Do not report a new recipe as published until the required formatting checks pass" in chef
+    assert "required paragraph styles" in read(
+        SKILLS_ROOT / "personal-chef" / "references" / "recipe-storage.md"
+    )
 
 
 def test_personal_shopper_functionality_contract() -> None:
@@ -245,6 +255,7 @@ def test_chef_planner_handoff_preserves_safety_and_recipe_fields() -> None:
     ):
         assert field in shared.lower()
     assert "The meal planner owns final safety approval" in shared
+    assert "content, native-formatting, and link verification" in shared
     assert "Do not independently redo recipe selection after a valid handoff" in planner
     assert "Return a structured handoff" in chef
 
@@ -489,6 +500,12 @@ def test_record_management_eval_has_required_cases() -> None:
         "file-type-migration-permission",
         "authorized-excel-conversion",
         "named-resolving-links",
+        "new-recipe-format-verification",
+        "recipe-style-mismatch-repair",
+        "recipe-native-lists-and-table",
+        "formatting-readback-unavailable",
+        "meal-plan-format-verification",
+        "spreadsheet-format-verification",
     } <= set(cases)
     for case in cases.values():
         assert case["expected_files_read"]

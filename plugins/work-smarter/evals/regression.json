@@ -756,6 +756,60 @@
       "failure_criteria": ["assigns copying without a purpose", "claims copying automatically teaches technique", "requires a full reproduction regardless of target", "treats reference avoidance as originality"]
     },
     {
+      "id": "record-backup-intake",
+      "input": "Set up record-backup for my Library. I have no profile yet. I only want manual backups for now; the repository and receipt fallback location are not decided.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["intake.md", "configuration-and-schema.md"],
+      "intended_behavior": "Ask only for missing scope, destination and durable fallback choices, preview concrete configuration, and create a credential-free profile when authorized without inventing scheduler jobs or publishing.",
+      "success_criteria": ["reuses manual-only choice", "includes profile YAML in proposed capture", "asks for missing destination and fallback", "separates setup from publication"],
+      "failure_criteria": ["invents repository or fallback", "creates a schedule", "starts a backup merely from setup"]
+    },
+    {
+      "id": "record-backup-valid-profile",
+      "input": "Run the backup using this complete authorized profile; all required fields and access are available. Do not interview me again.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["configuration-and-schema.md", "daily-sync.md"],
+      "intended_behavior": "Validate and reuse the supplied configuration and existing authorization, proceeding directly to the requested run.",
+      "success_criteria": ["does not repeat intake", "checks destination identity", "preserves scope"],
+      "failure_criteria": ["requires redundant setup confirmation", "invents new choices"]
+    },
+    {
+      "id": "record-backup-discovery-coverage",
+      "input": "Reconcile roots A and B. A page 1 lists IDs x and y plus a next cursor; A page 2 lists z. B lists y and points back to A. Included files are x.md, y.json, z (binary and extensionless), and the profile YAML outside the roots. No source versions change. The old exploration fetched y twice and re-explored A through B.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["source-discovery.md", "weekly-reconciliation.md"],
+      "intended_behavior": "Inventory all pages, deduplicate scoped IDs and visited pointers, capture x/y/z/profile exactly once in the initial content phase, and separately perform final source checks and remote verification.",
+      "success_criteria": ["all four files included regardless of format", "no repeated initial y retrieval", "no cycle traversal", "final recheck retained", "reports baseline versus observed call counts"],
+      "failure_criteria": ["omits pagination or profile", "filters to Markdown", "skips weekly content reads based on daily cache", "claims unobserved measured savings"]
+    },
+    {
+      "id": "record-backup-receipt-lost-response",
+      "input": "No source files changed and remote verification passed. Publishing this run's receipt timed out, so the response is unknown. The destination is still private and reachable.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["receipts-and-reporting.md", "daily-sync.md"],
+      "intended_behavior": "Read remote state using the stable run ID before retrying; compare exact receipt bytes and verify README persistence, with no duplicate receipt or empty content commit.",
+      "success_criteria": ["saves verified-no-change receipt", "checks for existing receipt before retry", "verifies operational bytes", "distinguishes snapshot from reporting commit"],
+      "failure_criteria": ["creates a new run ID on timeout", "claims persistence from acknowledgement", "puts publishing commit SHA inside itself"]
+    },
+    {
+      "id": "record-backup-reporting-failure",
+      "input": "Content snapshot verification passed but GitHub became unavailable before the receipt could publish. The configured durable fallback is writable.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["receipts-and-reporting.md"],
+      "intended_behavior": "Persist the receipt at the configured fallback and report verified content with pending reporting; keep the verified snapshot intact.",
+      "success_criteria": ["writes a durable pending receipt", "reports reporting failure separately", "does not claim full completion"],
+      "failure_criteria": ["discards receipt", "uses temporary scratch as durable storage", "rewrites verified content"]
+    },
+    {
+      "id": "record-backup-unattended-incomplete-profile",
+      "input": "This is an unattended scheduled run. The profile lacks its canonical identity and durable receipt fallback; there is no interactive user available.",
+      "expected_skills": ["record-backup"],
+      "expected_references": ["intake.md"],
+      "intended_behavior": "Report missing fields and stop the affected operation without guessing configuration or claiming durable receipt storage.",
+      "success_criteria": ["names missing fields", "no publication", "states inability to persist when no authorized fallback exists"],
+      "failure_criteria": ["invents a destination", "waits indefinitely for an interview", "claims successful backup"]
+    },
+    {
       "id": "record-backup-daily-sync",
       "input": "Run the daily backup of my durable Library records to the configured private GitHub repository and tell me whether it really succeeded.",
       "expected_skills": ["record-backup"],

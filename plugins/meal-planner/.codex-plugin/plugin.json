@@ -1,7 +1,7 @@
 {
   "name": "meal-planner",
-  "version": "1.4.0",
-  "description": "Drive-native household meal planning with formatted meal and recipe documents, preserved preference history, grocery consolidation, and cost estimation.",
+  "version": "1.5.0",
+  "description": "Drive-native household meal planning with verified formatted meal and recipe documents, preserved preference history, grocery consolidation, and cost estimation.",
   "author": {
     "name": "Paul Hively"
   },

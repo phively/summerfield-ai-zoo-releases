@@ -22,19 +22,21 @@ Each cross-skill handoff must use a contract below. Do not invoke another capabi
 
 ## Shared source discovery
 
-At the start of each skill workflow, search accessible library and project sources for:
+Retrieve context only when it could materially change the requested result. A narrow task with sufficient supplied material needs no search of unrelated records. Follow known canonical pointers first; otherwise search only the accessible user-selected scope for the relevant record role. Do not discover every career record at the start of every workflow.
 
-- `career_direction_record.md` or a clearly equivalent working file containing the user's current reusable career direction;
-- `career_direction_history.md` or a clearly equivalent historical companion, but do not read its contents by default; and
-- when development context could materially affect the task, `professional-development.md` or a clearly equivalent current execution record; and
-- `opportunities-current.md` or a clearly equivalent working file containing active opportunities and their current state;
-- `opportunities-history.md` or a clearly equivalent historical companion, but do not read its contents by default; and
-- an accessible Google Drive folder named `opportunity descriptions`, `job descriptions`, or a clearly equivalent name, containing canonical captured postings when available; otherwise canonical captured postings stored directly in the selected library location; and
-- `career-coach-preferences.md` or a clearly equivalent file containing user-specific coaching, analysis, or output preferences.
+| Task need | Relevant current source |
+| --- | --- |
+| Reusable direction or career criteria | `career_direction_record.md`, `career-direction-record.md`, or the existing authoritative equivalent |
+| Detailed development execution or completed evidence to verify | `professional-development.md` or its authoritative equivalent |
+| A tracked opportunity, current comparison, or actual interview state | Relevant table/entry in `opportunities-current.md` |
+| Posting language | Exact captured-posting location recorded for the opportunity, before the live website |
+| Discretionary coaching/output defaults or a new storage destination | Relevant sections of the external `career-coach-preferences.md` authority |
+
+Read [preferences-and-storage.md](preferences-and-storage.md) when settings or storage selection matter or a settings update is requested. It defines the user owner, permitted maintenance by all five skills, external schema, precedence, focused intake, authorization, and missing/unavailable/partial-write branches. No provider is preferred or required. Existing record identities govern existing updates; settings select destinations for new records and never silently migrate existing records. Locate or retrieve historical companions only when a historical retrieval condition below applies.
 
 Preserve exact source identities and update existing records in place. Resolve a canonical Markdown record by storage provider, immutable resource or file ID when available, canonical link or durable path, visible filename, selected library or folder identity, record role, and stable entry or heading when applicable. A filename, line number, organization name, or vague folder location alone is not a durable identity. Preserve the existing working record's identity wherever possible and introduce only one clearly named historical companion. Never create skill-local static copies or competing current records. If several plausible files or pairs exist and the choice could change the work, surface the candidates and resolve the authoritative pair before writing. Do not claim access to a missing or inaccessible source.
 
-Treat `career-coach-preferences.md` as guidance for discretionary behavior. A stored preference is not an override of a conflicting skill instruction without explicit user confirmation for the current task. Even with confirmation, never weaken factual accuracy, evidence integrity, or non-fabrication requirements.
+Career criteria remain owned by `career-direction`; operational coaching/output and storage settings use the separate shared settings protocol. Remember Me may route to these authorities but must not duplicate them, and GitHub backups must not silently substitute for current Library authorities.
 
 ## Opportunity record authority and ownership
 
@@ -76,7 +78,7 @@ Canonical resume artifacts and supporting evidence remain authoritative for resu
 
 ## Retrieval precedence
 
-Every skill reads the working record first. Read only the relevant historical entry or section when the working record points to it, the user asks about prior state or change over time, history is needed to resolve a material contradiction, an archived subject becomes relevant again, a superseded criterion may need restoration, or intentionally omitted provenance is necessary. Do not load the complete archive merely because it is accessible.
+When a record is relevant, read its working authority first. Read only the relevant historical entry or section when the working record points to it, the user asks about prior state or change over time, history is needed to resolve a material contradiction, an archived subject becomes relevant again, a superseded criterion may need restoration, or intentionally omitted provenance is necessary. Do not load the complete archive merely because it is accessible.
 
 Historical entries must have a stable identifier such as `H-YYYY-MM-DD-NN`, an explicit `superseded`, `archived`, `rejected`, or `restored` status, relevant dates, and replacement or restoration references when applicable. A retrieval miss is not evidence that history does not exist; preserve uncertainty when missing history could materially change the result.
 

@@ -2,7 +2,7 @@
 name: teach-me
 description: Standalone teaching skill for building durable understanding and capability through source-grounded, adaptive teaching, practice, and learning plans. Use when the user explicitly or implicitly wants to learn, understand, explore, reason through, practice, be questioned, test understanding, or plan how to acquire a skill, including continuation of an established teaching interaction. Do not use for a simple direct answer, content transformation, task completion without a learning goal, or a request that merely reviews or edits this skill.
 metadata:
-  version: "1.10.0"
+  version: "1.12.1"
 ---
 
 # Teach Me

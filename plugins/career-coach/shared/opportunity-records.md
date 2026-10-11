@@ -7,6 +7,7 @@ Read this reference when locating, reading, creating, updating, closing, reopeni
 - [Canonical pair](#canonical-pair)
 - [Canonical identity and native retrieval](#canonical-identity-and-native-retrieval)
 - [Opportunity-description files](#opportunity-description-files)
+- [GitHub publication messages](#github-publication-messages)
 - [Current-record schema](#current-record-schema)
 - [Ranked current-state table](#ranked-current-state-table)
 - [Historical-record schema](#historical-record-schema)
@@ -25,7 +26,7 @@ Use these identities unless an existing clearly equivalent pair is already autho
 
 Preserve an existing authoritative equivalent record's exact identity and update it in place. Keep the pair together in the same selected library or project location. Do not create skill-local copies, competing current records, or per-opportunity files other than the canonical posting files defined below. Do not create a replacement because access is inconvenient. Resolve multiple plausible candidates before substantive use or writing.
 
-Prefer an existing accessible, writable Google Drive folder named `opportunity descriptions`, `job descriptions`, or a clearly equivalent name for canonical captured-posting files. If no such Drive folder is available, store each posting file directly in the selected library location. Each posting file is authoritative for captured posting content, while `opportunities-current.md` remains the sole authority for active state and ranking. Preserve an already selected canonical posting location unless the user requests migration, and resolve multiple plausible Drive folders before writing when the choice could matter.
+Resolve new posting destinations through [preferences-and-storage.md](preferences-and-storage.md): explicit task choices, then verified reusable storage settings or an existing verified canonical posting location, then focused intake. No provider is preferred or required; Google Drive is optional. Preserve an already selected canonical posting identity unless migration is explicitly authorized. Each posting file is authoritative for captured posting content, while `opportunities-current.md` remains the sole authority for active state and ranking.
 
 `evaluate-opportunity` owns creation and bounded durable updates to both records. `career-direction` and `update-resume` may read relevant opportunity context and request bounded changes through `evaluate-opportunity`; they must not maintain parallel opportunity records.
 
@@ -39,7 +40,7 @@ Use the Markdown files as their own retrieval layer. Treat the comparison table 
 
 ## Opportunity-description files
 
-Create a canonical posting file when a real opportunity is added to durable tracking and either the full posting text is available or the user has explicitly authorized a source-grounded summary after learning that full text is unavailable. Use this filename in the selected Google Drive description folder or directly in the library fallback:
+Create a canonical posting file when a real opportunity is added to authorized durable tracking and either the full posting text is available or the user has explicitly authorized a source-grounded summary after learning that full text is unavailable. Use this filename in the user-selected canonical posting destination:
 
 `O-YYYY-MM-DD-NN -- Employer -- Role.md`
 
@@ -49,7 +50,37 @@ For example:
 
 Use the same stable opportunity identifier as the current record. Use exactly two ASCII hyphens (`--`) surrounded by single spaces as separators; never use em dashes as filename separators. Preserve readable employer and role text, including spaces and apostrophes. Sanitize only characters invalid for the target filesystem: replace invalid path characters with a hyphen, remove prohibited trailing spaces or periods, and shorten employer or role text only when a target path-length limit requires it. Preserve the complete opportunity identifier and both separators. If employer or role is unknown, use an explicit `Unknown Employer` or `Unknown Role` label and retain the uncertainty in the record. Do not create a second file for the same opportunity identifier.
 
-Begin each file with concise provenance metadata containing the opportunity identifier, employer, role, storage provider, immutable resource or file ID when available, canonical link or durable path, selected folder identity, source URL or source identity, source date when known, captured date, and content type: `full posting text` or `source-grounded summary`. Identify a third-party source explicitly. Follow the metadata with only the captured role content. Preserve full text without summarizing, silently correcting, embellishing, or filling omissions. Label an authorized summary prominently, summarize only source-supported role content, and disclose material source limitations.
+Begin each saved file with the labeled metadata block below, above its posting content. Replace placeholders with source-supported values or explicit `Unknown` values; do not write this example literally. Preserve full text without summarizing, silently correcting, embellishing, or filling omissions. Label an authorized summary prominently, summarize only source-supported role content, and disclose material source limitations.
+
+```markdown
+# Captured Opportunity Description
+
+- **Opportunity ID:** `O-YYYY-MM-DD-NN`
+- **Employer / role:** <employer> — <role>
+- **Source website:** <original source URL, or Unknown when unavailable>
+- **Source identity:** <source document/site identity; identify third-party sources explicitly>
+- **Captured:** <actual capture date in YYYY-MM-DD>
+- **Completeness:** <complete text or explicitly authorized summary; disclose source omissions/limitations>
+- **Storage provider:** <selected provider>
+- **Canonical path:** <durable path or immutable resource ID>
+- **Canonical link:** <resolvable link when supported, otherwise explicitly unavailable>
+- **Content type:** `full posting text`
+
+## Full Job Posting Text
+
+<captured role-source text only>
+```
+
+For an authorized summary, use `source-grounded summary` as Content type and `## Source-grounded Summary` as the content heading. Record the source limitation in Completeness; retain summary authorization in the opportunity operation, not as candidate-specific content in the posting. Never label incomplete text complete.
+
+Add these fields above the content heading when applicable:
+
+- **Application link**, **Employer application deadline**, and **Source date** when supplied or known. Do not invent them or infer one date from another.
+- For GitHub, **Repository** (`owner/repository`) and **Branch** along with the repository-relative Canonical path and file link. The branch/path/link must identify the same destination.
+- For other providers, **Container / folder** and **Resource ID** when available, using the actual provider's identity model. Preserve a newly assigned resource ID after creation; do not claim it before the provider returns it.
+- **Migration source** only when this file was actually transferred and its provenance is known: original provider, resource/path, and container when available. Omit it for newly captured records and unknown transfer provenance. Preserve known migration provenance on subsequent updates; do not manufacture a migration history.
+
+Opportunity-ID date, actual Captured date, Source date, and employer deadline are independent. Preserve the stable ID even when capture or transfer happens later. No bulk migration is implied by this template. Keep neutral provenance already present in an existing file; apply the template during an authorized save/update, not as an unsolicited rewrite of every external posting.
 
 Never include user- or candidate-specific information in a canonical posting file. Exclude the user's name, personal contact details or other user identifiers, resume evidence, experience claims, qualification comparisons, career preferences or constraints, candidate-to-role or role-to-candidate fit, recommendations, rankings, decisions, application status, next actions, and other personal context. Keep that information only in the applicable opportunity, career-direction, or resume records. Employer or recruiter details present in the source posting and neutral posting provenance are permitted; do not misclassify them as user identifiers.
 
@@ -58,6 +89,14 @@ If full posting text is unavailable, incomplete, inaccessible, or cannot be save
 Treat the posting file as authoritative only for captured posting content. Record its filename and exact resolvable location or resource identity in both `opportunities-current.md` and any historical entry for that opportunity, together with the source website or other original source identity. Link the recorded location when the storage system supports a durable link, and do not copy the complete posting into either record. When clarifying job-posting language, retrieve the captured file from that recorded location before accessing the live website. Use the website only when the captured file is missing or broken, the user requests current verification, or refreshing the captured source is part of the task; never silently replace captured language with changed live-site wording.
 
 On a user-supplied or explicitly refreshed revision for the same opportunity, apply the same personal-information boundary and full-text-or-authorized-summary choice, then update the canonical file in place. When the prior full text has continuing evidentiary or audit value, archive it first as a clearly dated superseded sibling in the same selected posting location and add its filename and exact location to a targeted `opportunities-history.md` entry; otherwise replace it without creating routine history. A superseded posting file must not appear to be the current canonical source.
+
+## GitHub publication messages
+
+For a GitHub commit adding canonical posting files, use exactly `Added <N> canonical career-opportunities record(s)`, replacing `<N>` with the number of newly created current canonical posting files in that commit. Use the literal `record(s)` for both single and batch additions. Count each new opportunity once; exclude updates to existing postings, superseded snapshots, current/history trackers, preferences, and other files. Do not include employer, role, candidate, or other names in the subject or body; leave the body empty. For commits containing only updates, use `Updated canonical career-opportunities records`; for other Career Coach record writes, use `Updated Career Coach records`, also without names or a body.
+
+Before publication, inspect the actual proposed file set and selected branch's current state, confirm ID/filename/path/metadata agreement, full-text preservation or summary authorization, clean posting content, and the computed count and actual message passed to the tool. Use one grouped file commit when supported and authorized. If only individual file commits are supported, each addition commit counts its own new posting files; do not reuse the batch count. Do not claim that a tool accepting a message used it until its returned or retrieved commit confirms the message and file set.
+
+Use expected-head/revision checks when supported; never force-update a branch. On a concurrent branch change, reread the head and affected files and recompute additions. Stop on conflicts; one reconciled retry is allowed only within current authorization. After timeout or an ambiguous response, inspect the branch before retrying so an already published addition is not counted or created twice. Report exactly which files and commits are verified, failed, or unknown. A successful GitHub commit does not establish success of separate Library/tracker writes; stop and report an incomplete operation when required writes cannot complete coherently.
 
 ## Current-record schema
 

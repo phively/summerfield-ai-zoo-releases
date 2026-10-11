@@ -17,7 +17,7 @@ Help the candidate communicate, demonstrate, explain, and practice what matters 
 
 ## Workflow
 
-1. Resolve the opportunity identity, interview stage, date or timing, format, known interviewers, and requested preparation scope. If the opportunity is not identifiable, preserve the ambiguity and ask only for the missing detail that changes the work.
+1. Resolve the opportunity identity, interview stage, date or timing, format, known interviewers, and requested preparation scope. Follow [shared source discovery and authority](../../shared/handoff-contracts.md#shared-source-discovery) only for missing relevant context; sufficient supplied material needs no broad record search. Read [preferences and storage](../../shared/preferences-and-storage.md) when preparation/output defaults or an authorized operational settings change matters. If the opportunity is not identifiable, preserve the ambiguity and ask only for the missing detail that changes the work.
 2. Retrieve the canonical captured posting when available, then the relevant current opportunity-fit analysis and current role-specific unknowns. Use the captured posting before the live source when clarifying role language.
 3. Retrieve candidate evidence needed to support answers, such as a resume, project summaries, reviews, promotion materials, or other user-provided sources. Never treat career-direction or opportunity conclusions as evidence of experience, scope, ownership, outcomes, metrics, or credentials.
 4. Identify likely question families and stage-appropriate demonstrations from the available role and stage context. Label inferred families and possible questions as inferred; distinguish them from questions actually supplied or previously asked.

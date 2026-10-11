@@ -1,0 +1,32 @@
+{
+  "requested_runner": "runtime-selected-runner",
+  "requested_model": "runtime-selected-model",
+  "requested_reasoning_effort": "task-appropriate",
+  "actual_runner": "pending-smoke",
+  "actual_model": "pending-smoke",
+  "actual_reasoning_effort": "pending-smoke",
+  "substitution_reason": "The actual configuration is recorded after the authorized smoke trial.",
+  "model_selection": {
+    "policy": "cost_intelligence_time",
+    "basis": "current target benchmark evidence",
+    "reason": "Select the least costly verified configuration adequate for this target."
+  },
+  "requested_environment_identity": "target-environment-to-be-inventoried",
+  "actual_environment_identity": "pending-smoke",
+  "permissions_profile": "target-authorized-profile",
+  "authorization": {"run": true, "output": true},
+  "concurrency": 2,
+  "command_output_limit_bytes": 10000000,
+  "artifact_paths": [],
+  "command_dependencies": [],
+  "smoke_test": {
+    "status": "pending",
+    "output_inspected": false,
+    "permissions_verified": false,
+    "trial_id": "pending-smoke",
+    "artifact_path": "authorized-smoke-output.txt"
+  },
+  "target_package_id": "fixture-document-assistant",
+  "target_package_path": "../targets/document-assistant",
+  "target_content_hash": "sha256:6e8f20874aba68374f7b598fa872de4cd31fb221adabd23200b74a6e23da4cc7"
+}

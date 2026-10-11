@@ -1,0 +1,30 @@
+{
+  "plan_id": "document-assistant-development",
+  "scope": "target_runtime",
+  "scheme": "grouped_development_evaluation",
+  "grouping_key": "scenario_family",
+  "assignment": {
+    "algorithm": "stable_group_order",
+    "version": "1",
+    "stable_inputs": ["document-workflow"]
+  },
+  "requested_fold_count": 5,
+  "requested_holdout_percent": 10,
+  "rounding_rule": "round_half_up",
+  "coverage": {
+    "status": "insufficient_coverage",
+    "reason": "Two cases in one indivisible group cannot support five folds or a non-empty 10% holdout."
+  },
+  "exposure_policy": {
+    "holdout_content_before_freeze": "implementation_agent_prohibited",
+    "exposure_log": []
+  },
+  "case_ids": ["document-transformation", "verification-before-completion"],
+  "groups": [
+    {"id": "document-workflow", "case_ids": ["document-transformation", "verification-before-completion"]}
+  ],
+  "folds": [
+    {"id": "fold-1", "group_ids": ["document-workflow"], "training_group_ids": [], "case_ids": ["document-transformation", "verification-before-completion"], "case_count": 2}
+  ],
+  "holdout": {"case_ids": [], "case_count": 0, "status": "insufficient_coverage"}
+}

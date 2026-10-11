@@ -39,7 +39,7 @@ Own recipe work and preference memory, including the canonical recipe Google Doc
 
 ## Maintain preference records
 
-- Read [references/recipe-storage.md](references/recipe-storage.md) before locating, creating, revising, formatting, or handing off canonical recipes. Store recipe instructions and reusable modifications in Google Docs; keep only identifiers, canonical links, attribution, version pointers, ratings, and outcome evidence in sheets. Edit a canonical Doc in place to retain its native revision history, use its native document structure, and verify descriptive link targets after writing.
+- Read [references/recipe-storage.md](references/recipe-storage.md) before locating, creating, revising, formatting, or handing off canonical recipes. Store recipe instructions and reusable modifications in Google Docs; keep only identifiers, canonical links, attribution, version pointers, ratings, and outcome evidence in sheets. Edit a canonical Doc in place to retain its native revision history, use its native document structure, and verify content, paragraph styles, native structure, and descriptive link targets after writing. Do not report a new recipe as published until the required formatting checks pass.
 - Read [the cleanup procedure](../../shared/cleanup-migration.md) before migrating existing records. Every populated source data row must survive as an identifiable updated or retained row; additions are allowed. Do not delete or silently merge rows.
 
 - Prefer Google Sheets when the user has an accessible sheet and the required connector is available. Update the existing record rather than creating competing copies.

@@ -36,7 +36,7 @@ Return a recipe-selection packet containing:
 
 - finalized or proposed status for every recipe;
 - recipe title, source URL or original-recipe label, yield, and planned servings;
-- stable Recipe ID, canonical Google Doc ID and descriptive verified link, current version, publication status, verification result, and designated folder IDs;
+- stable Recipe ID, canonical Google Doc ID and descriptive verified link, current version, publication status, content and native-formatting verification result, link verification result, and designated folder IDs;
 - ingredient quantities, active time, total time, equipment, and leftover yield;
 - material adaptations and reasons;
 - constraint-sensitive ingredients, labels, substitutions, and cross-contact questions requiring safety review;
@@ -45,7 +45,7 @@ Return a recipe-selection packet containing:
 - exact current meal-plan identity and plan identifier when supplied, without copying the complete plan;
 - ingredient-overlap, batch-prep, freezer, and leftover notes.
 
-The meal planner owns final safety approval. A chef handoff must never claim that a recipe is medically safe.
+The meal planner owns final safety approval. A chef handoff must never claim that a recipe is medically safe. For a newly created or changed canonical recipe, report content, native-formatting, and link verification separately, including any unavailable or failed check. Formatting that was not read back from the native document remains unverified.
 
 For feedback requested after a plan, return only confirmed preparation or use, member attribution, current ratings or preferences changed, historical entries created, material modifications, unresolved questions, and exact records changed. If preparation or consumption is unconfirmed, return no rating update and identify the smallest useful follow-up. User-visible links in every handoff must have descriptive labels and verified targets; pass raw URLs only in dedicated identity or source fields.
 
@@ -53,7 +53,7 @@ For feedback requested after a plan, return only confirmed preparation or use, m
 
 For a new-plan request, first send the previous current plan's exact identity and plan identifier for the pre-planning retrospective. Prepared status may initially be unknown: ask which recipes were made before requesting opinions. Include recipe IDs and Doc links, version made when known, member attribution, existing ratings/dates, answered or declined questions, and persistence authorization. Confirm and apply affected record updates before selecting the new recipes. Then send the bounded constraint and updated preference packet for recipe selection.
 
-Do not infer feedback merely because a recipe appeared in a plan or a fixed interval elapsed. A newly requested plan triggers the retrospective, with a preparation check first. `personal-chef` applies the shared gate and owns culinary preferences, ratings, Recipe Catalog, and recipe-Doc writes. Return safety or practical planning updates to `meal-planner`, and shopping preferences to `personal-shopper`. After plan approval, explicitly hand off approved recipe publication and require verified links before the new current plan is saved.
+Do not infer feedback merely because a recipe appeared in a plan or a fixed interval elapsed. A newly requested plan triggers the retrospective, with a preparation check first. `personal-chef` applies the shared gate and owns culinary preferences, ratings, Recipe Catalog, and recipe-Doc writes. Return safety or practical planning updates to `meal-planner`, and shopping preferences to `personal-shopper`. After plan approval, explicitly hand off approved recipe publication and require verified content, native formatting, and links before the new current plan is saved.
 
 ## Meal Planner to Personal Shopper
 

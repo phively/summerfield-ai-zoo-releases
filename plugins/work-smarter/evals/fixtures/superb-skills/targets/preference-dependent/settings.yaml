@@ -1,0 +1,9 @@
+schema_version: "1.0"
+owner: fixture-project
+preferences:
+  dietary_pattern: vegetarian
+  output_style: brief
+precedence:
+  task_override: current_task_only
+authorization:
+  project_write: explicit_only

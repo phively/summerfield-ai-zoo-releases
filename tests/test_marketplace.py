@@ -120,7 +120,8 @@ def test_research_briefing_has_bundled_and_standalone_copies() -> None:
     assert standalone.is_file()
     matches = {
         path
-        for path in REPO_ROOT.glob("**/research-briefing/SKILL.md")
+        for package_root in (REPO_ROOT / "plugins", REPO_ROOT / "skills")
+        for path in package_root.glob("**/research-briefing/SKILL.md")
         if ".git" not in path.parts
     }
     assert matches == {bundled, standalone}
@@ -214,6 +215,8 @@ def test_catalog_and_readme_cover_standalone_research_briefing() -> None:
     skill = read(skill_path)
     description = re.search(r"(?m)^description:\s*(.+?)\s*$", skill)
     assert description is not None
+    version = re.search(r'(?m)^metadata:\n  version: "([^"]+)"\n---$', skill)
+    assert version is not None
 
     assert re.search(
         r"(?ms)^  - name: research-briefing\n    type: skill\n"
@@ -221,7 +224,7 @@ def test_catalog_and_readme_cover_standalone_research_briefing() -> None:
         catalog,
     )
     assert (
-        "| research-briefing | skill | "
+        f"| research-briefing | skill | {version.group(1)} | "
         "[skills/research-briefing](skills/research-briefing/SKILL.md) | "
         f"{description.group(1)} |"
     ) in readme
@@ -235,7 +238,8 @@ def test_teach_me_has_bundled_and_standalone_copies() -> None:
 
     matches = {
         path
-        for path in REPO_ROOT.glob("**/teach-me/SKILL.md")
+        for package_root in (REPO_ROOT / "plugins", REPO_ROOT / "skills")
+        for path in package_root.glob("**/teach-me/SKILL.md")
         if ".git" not in path.parts
     }
     assert matches == {bundled / "SKILL.md", standalone / "SKILL.md"}

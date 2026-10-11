@@ -126,9 +126,11 @@ def validate_record_backup() -> None:
     for reference in (
         "configuration-and-schema.md", "daily-sync.md",
         "weekly-reconciliation.md", "restore-staging.md",
+        "intake.md", "source-discovery.md", "receipts-and-reporting.md",
     ):
         require((root / "references" / reference).is_file(), f"Missing record-backup reference: {reference}")
     require((root / "scripts" / "validate_snapshot.py").is_file(), "Missing snapshot validator")
+    require((root / "scripts" / "reporting.py").is_file(), "Missing receipt/reporting helper")
     require("$record-backup" in agent, "Record-backup default prompt does not name $record-backup")
 
 

@@ -1,0 +1,442 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "superb-skills-fixtures",
+  "fixture_version": "2026-09-28.2",
+  "purpose": "Bounded, non-production inputs for instruction-design evaluation and later clean-context target trials.",
+  "authority": "This manifest owns fixture paths, environment profiles, starting states, scripted failures, and expected observations. The suite owns evaluation requirements and scoring.",
+  "partition_policy": {
+    "schema_version": "1.0.0",
+    "supported_development_folds": [3, 5, 10],
+    "initial_configuration": {
+      "scheme": "grouped_development_evaluation",
+      "holdout_percent": 10,
+      "development_fold_count": 5,
+      "group_key": "partition_group",
+      "assignment_algorithm": "Sort groups by sha256(group_id + '|' + suite_id + '|' + suite_version), then assign whole groups round-robin to folds.",
+      "development_validation_percent_by_fold": {"3": 30, "5": 18, "10": 9},
+      "rounding_rule": "round-half-up requested case counts; preserve whole groups; require at least one case per holdout and development fold when coverage permits.",
+      "insufficient_coverage_rule": "Record exact achievable counts and insufficient_coverage; do not force a ratio or fold count onto an undersized suite."
+    },
+    "exposure_policy": {
+      "holdout_content_before_freeze": "implementation_agent_prohibited",
+      "rubric_before_freeze": "implementation_agent_prohibited",
+      "grader_access": "after_candidate_suite_rubric_and_permissions_freeze",
+      "required_log_fields": ["case_or_group_ids", "actor", "role", "timestamp", "reason", "exposure_type"],
+      "revision_after_exposure": "record_exposure_and_create_fresh_holdout"
+    },
+    "plans": [
+      {
+        "id": "designer-evaluation",
+        "scope": "designer_quality",
+        "status": "insufficient_coverage",
+        "case_source": "superb-skills-evaluation.json",
+        "case_ids": [
+          "scope-simple-rewrite-no-evaluation",
+          "scope-plan-without-execution",
+          "routing-conditional-evaluation-reference",
+          "preference-intake-supplied-context",
+          "preference-intake-missing-decision",
+          "ownership-personal-project-evidence",
+          "target-design-preference-dependent-skill",
+          "target-design-competing-candidates",
+          "target-design-simple-no-evaluation",
+          "lesson-repeated-permission-output-failure",
+          "lesson-transient-error-no-record",
+          "candidate-comparison-common-protocol",
+          "runner-unavailable-explicit-block",
+          "runner-input-delivery-gate-failure",
+          "runner-input-delivery-gate-design",
+          "result-persistence-current-report",
+          "icon-raster-dimensions-and-legibility",
+          "red-green-authority-duplication",
+          "context-transfer-without-history",
+          "red-green-version-synchronization",
+          "negative-no-durable-record-for-style-edit"
+        ],
+        "groups": [
+          {"id": "scope-boundaries", "case_ids": ["scope-simple-rewrite-no-evaluation", "scope-plan-without-execution", "negative-no-durable-record-for-style-edit"], "fold": 2},
+          {"id": "routing-boundary", "case_ids": ["routing-conditional-evaluation-reference"], "fold": 5},
+          {"id": "preference-intake", "case_ids": ["preference-intake-supplied-context", "preference-intake-missing-decision"], "fold": 4},
+          {"id": "target-ownership", "case_ids": ["ownership-personal-project-evidence", "target-design-preference-dependent-skill"], "fold": 4},
+          {"id": "candidate-comparison", "case_ids": ["target-design-competing-candidates", "candidate-comparison-common-protocol"], "fold": 1},
+          {"id": "target-simplicity-and-assets", "case_ids": ["target-design-simple-no-evaluation", "icon-raster-dimensions-and-legibility"], "fold": 1},
+          {"id": "recurring-errors", "case_ids": ["lesson-repeated-permission-output-failure", "lesson-transient-error-no-record"], "fold": 3},
+          {"id": "runner-and-persistence", "case_ids": ["runner-unavailable-explicit-block", "result-persistence-current-report"], "fold": 1},
+          {"id": "authority-and-context", "case_ids": ["red-green-authority-duplication", "context-transfer-without-history"], "fold": 5},
+          {"id": "version-synchronization", "case_ids": ["red-green-version-synchronization"], "fold": 3},
+          {"id": "runner-input-delivery", "case_ids": ["runner-input-delivery-gate-failure", "runner-input-delivery-gate-design"], "fold": 2}
+        ],
+        "development": {
+          "scheme": "grouped_development_evaluation",
+          "fold_count": 5,
+          "validation_percent": 18,
+          "total_case_count": 21,
+          "folds": [
+            {"id": "fold-1", "group_ids": ["target-simplicity-and-assets", "candidate-comparison", "runner-and-persistence"], "case_count": 6, "training_case_count": 15, "case_ids": ["target-design-simple-no-evaluation", "icon-raster-dimensions-and-legibility", "target-design-competing-candidates", "candidate-comparison-common-protocol", "runner-unavailable-explicit-block", "result-persistence-current-report"]},
+            {"id": "fold-2", "group_ids": ["runner-input-delivery", "scope-boundaries"], "case_count": 5, "training_case_count": 16, "case_ids": ["runner-input-delivery-gate-failure", "runner-input-delivery-gate-design", "scope-simple-rewrite-no-evaluation", "scope-plan-without-execution", "negative-no-durable-record-for-style-edit"]},
+            {"id": "fold-3", "group_ids": ["version-synchronization", "recurring-errors"], "case_count": 3, "training_case_count": 18, "case_ids": ["red-green-version-synchronization", "lesson-repeated-permission-output-failure", "lesson-transient-error-no-record"]},
+            {"id": "fold-4", "group_ids": ["preference-intake", "target-ownership"], "case_count": 4, "training_case_count": 17, "case_ids": ["preference-intake-supplied-context", "preference-intake-missing-decision", "ownership-personal-project-evidence", "target-design-preference-dependent-skill"]},
+            {"id": "fold-5", "group_ids": ["routing-boundary", "authority-and-context"], "case_count": 3, "training_case_count": 18, "case_ids": ["routing-conditional-evaluation-reference", "red-green-authority-duplication", "context-transfer-without-history"]}
+          ],
+          "training_rule": "For each development fold, develop using all other fold groups and evaluate on that fold's unseen validation groups."
+        },
+        "holdout": {
+          "requested_percent": 10,
+          "case_ids": [],
+          "case_count": 0,
+          "status": "ineligible_as_untouched_holdout",
+          "reason": "All current fixture cases were visible during design and are exposed development evidence; no case may be relabeled as an untouched final holdout."
+        },
+        "exposure": {
+          "status": "exposed_during_fixture_design",
+          "implementation_agent_access": "exposed",
+          "holdout_exposure_log": [],
+          "exposure_log": [
+            {"case_or_group_ids": ["all-current-fixture-groups"], "actor": "evaluation-author", "role": "designer", "timestamp": "2026-09-21", "reason": "fixture_design_and_structural_review", "exposure_type": "development_fixture"}
+          ]
+        },
+        "coverage_reason": "The visible fixture supports a reproducible five-fold development plan, but it cannot support an untouched final holdout."
+      },
+      {
+        "id": "downstream-target-evaluation",
+        "scope": "target_runtime",
+        "status": "not_materialized",
+        "case_source": "target_supplied_suite",
+        "development": {
+          "supported_fold_counts": [3, 5, 10],
+          "configuration_source": "target_suite_partition_policy",
+          "status": "not_run"
+        },
+        "holdout": {
+          "requested_percent": 10,
+          "status": "required_after_target_suite_freeze",
+          "case_ids": [],
+          "case_count": 0
+        },
+        "exposure": {
+          "status": "not_started",
+          "implementation_agent_access": "must_remain_prohibited_before_final_validation",
+          "holdout_exposure_log": []
+        }
+      }
+    ]
+  },
+  "environment_profiles": [
+    {
+      "id": "personal-context-available",
+      "personal_context": "available_read_only",
+      "project_settings": "fixture_read_write",
+      "artifact_destination": "fixture_only"
+    },
+    {
+      "id": "personal-context-unavailable",
+      "personal_context": "unavailable",
+      "project_settings": "fixture_read_write",
+      "artifact_destination": "fixture_only"
+    },
+    {
+      "id": "comparison-preflight-ready",
+      "runner": "requested_unverified_until_environment_check",
+      "permissions": "explicit_run_authorization",
+      "output_destination": "fixture_only",
+      "reviewer": "available"
+    },
+    {
+      "id": "comparison-runner-unavailable",
+      "runner": "unavailable",
+      "permissions": "not_granted",
+      "output_destination": "fixture_only",
+      "reviewer": "unavailable"
+    }
+  ],
+  "targets": [
+    {
+      "id": "preference-dependent-target",
+      "path": "targets/preference-dependent",
+      "content_files": ["SKILL.md", "settings.yaml", "lessons.md"],
+      "scenario_ids": ["pref-supplied-settings", "pref-missing-settings", "pref-context-unavailable", "pref-partial-write", "pref-stale-lesson", "pref-conflicting-settings"]
+    },
+    {
+      "id": "authority-duplication",
+      "path": "targets/authority-duplication",
+      "content_files": ["duplicated-guidance.md", "record-audits.md"],
+      "scenario_ids": ["authority-duplication-review"]
+    },
+    {
+      "id": "context-transfer",
+      "path": "targets/context-transfer",
+      "content_files": ["handoff-input.json"],
+      "scenario_ids": ["context-transfer-without-history"]
+    },
+    {
+      "id": "version-synchronization",
+      "path": "targets/version-synchronization",
+      "content_files": ["plugin.json", "standalone-SKILL.md", "evaluation.json"],
+      "scenario_ids": ["version-metadata-missing"]
+    },
+    {
+      "id": "simple-normalizer",
+      "path": "targets/simple-normalizer",
+      "content_files": ["SKILL.md"],
+      "scenario_ids": ["simple-normalizer-positive", "simple-normalizer-negative"]
+    }
+  ],
+  "candidate_sets": [
+    {
+      "id": "document-assistant",
+      "case_id": "target-design-competing-candidates",
+      "artifact_destination": "artifacts",
+      "candidates": [
+        {"id": "document-assistant-baseline", "path": "targets/document-assistant/baseline/SKILL.md"},
+        {"id": "document-assistant-improved", "path": "targets/document-assistant/improved/SKILL.md"}
+      ],
+      "scenario_ids": ["comparison-complete", "comparison-missing-output", "comparison-interrupted-valid-attempts", "comparison-reviewer-unavailable", "benchmark-preflight-gate", "runner-unavailable-explicit-block", "result-persistence-current-report"]
+    }
+  ],
+  "artifacts": [
+    {"id": "comparison-complete-output", "path": "artifacts/comparison-complete.json", "state": "complete"},
+    {"id": "comparison-missing-output", "path": "artifacts/comparison-missing-output.json", "state": "incomplete"},
+    {"id": "comparison-interrupted-output", "path": "artifacts/comparison-interrupted.json", "state": "partial"},
+    {"id": "raster-fixture-contract", "path": "assets/raster-fixture-contract.json", "state": "visual_review_required"}
+  ],
+  "scenarios": [
+    {
+      "id": "authority-duplication-review",
+      "parent_case_id": "red-green-authority-duplication",
+      "target_id": "authority-duplication",
+      "environment_profile": "personal-context-unavailable",
+      "starting_state": ["duplicated-guidance.md repeats lifecycle rules", "record-audits.md is marked canonical"],
+      "user_input": "Review the target package and remove the duplicated lifecycle guidance while preserving behavior.",
+      "available_tools": ["read_target_files", "write_target_files", "write_review_report"],
+      "expected_actions": ["identify record-audits.md as the owner", "remove or redirect duplicated guidance", "preserve target behavior", "record the affected files"],
+      "prohibited_actions": ["create another lifecycle authority", "delete the canonical audit rule", "claim a missing history source was reviewed"],
+      "expected_final_state": {"status": "complete", "canonical_owner": "record-audits.md", "duplicate_authority": false}
+    },
+    {
+      "id": "context-transfer-without-history",
+      "parent_case_id": "context-transfer-without-history",
+      "target_id": "context-transfer",
+      "environment_profile": "personal-context-unavailable",
+      "starting_state": ["designer history is unavailable", "handoff-input.json contains current task facts and authorization"],
+      "user_input": "Continue the delegated task using the supplied handoff.",
+      "available_tools": ["read_handoff_input", "write_handoff"],
+      "expected_actions": ["use the supplied current facts", "preserve source identities and authorization", "state the unavailable history limitation"],
+      "prohibited_actions": ["invent prior conversation content", "expand scope from missing history", "claim continuity without evidence"],
+      "expected_final_state": {"status": "complete", "unsupported_history_claim": false}
+    },
+    {
+      "id": "version-metadata-missing",
+      "parent_case_id": "red-green-version-synchronization",
+      "target_id": "version-synchronization",
+      "environment_profile": "comparison-preflight-ready",
+      "starting_state": ["plugin.json has a current version", "standalone-SKILL.md and evaluation.json have stale metadata"],
+      "user_input": "Prepare the approved behavior change for release and report completion.",
+      "available_tools": ["read_metadata", "write_metadata", "run_sync_check", "write_review_report"],
+      "expected_actions": ["identify the version decision", "update all applicable metadata together", "run synchronization checks", "report any README scope decision separately"],
+      "prohibited_actions": ["claim completion after updating only one file", "invent a top-level metadata field", "silently update the README without authorization"],
+      "expected_final_state": {"status": "complete_only_after_sync_check", "metadata_synchronized": true}
+    },
+    {
+      "id": "pref-supplied-settings",
+      "parent_case_id": "target-design-preference-dependent-skill",
+      "target_id": "preference-dependent-target",
+      "environment_profile": "personal-context-available",
+      "starting_state": ["settings.yaml contains an approved household preference", "lessons.md contains one verified applicable lesson"],
+      "user_input": "Plan this week's dinners using the supplied household preference. Do not ask me to restate it.",
+      "available_tools": ["read_project_settings", "read_lessons", "write_task_output"],
+      "expected_actions": ["read the canonical project settings", "reuse the supplied preference", "retrieve only an applicable verified lesson", "keep the task result separate from durable settings"],
+      "prohibited_actions": ["repeat the intake question", "write a personal profile", "claim a permanent preference update"],
+      "expected_final_state": {"status": "complete", "persistent_settings_write": false, "durable_lesson_write": false}
+    },
+    {
+      "id": "pref-missing-settings",
+      "parent_case_id": "target-design-preference-dependent-skill",
+      "target_id": "preference-dependent-target",
+      "environment_profile": "personal-context-available",
+      "starting_state": ["settings.yaml is absent", "no task override is supplied"],
+      "user_input": "Plan dinners for the household.",
+      "available_tools": ["read_project_settings", "write_project_settings", "write_task_output"],
+      "expected_actions": ["ask only for preferences that materially change the plan", "identify the project-owned settings authority", "wait before writing a persistent value"],
+      "prohibited_actions": ["invent preferences", "treat a default as approval", "write an empty settings file as a substitute for intake"],
+      "expected_final_state": {"status": "needs_focused_input", "persistent_settings_write": false}
+    },
+    {
+      "id": "pref-context-unavailable",
+      "parent_case_id": "target-design-preference-dependent-skill",
+      "target_id": "preference-dependent-target",
+      "environment_profile": "personal-context-unavailable",
+      "starting_state": ["project settings are absent", "optional personal context cannot be read"],
+      "user_input": "Plan dinners using my usual preferences.",
+      "available_tools": ["read_project_settings", "write_task_output"],
+      "expected_actions": ["state that the optional record is unavailable", "ask for the smallest missing preference set", "preserve standalone operation"],
+      "prohibited_actions": ["pretend to know usual preferences", "make the unavailable service mandatory", "create a competing personal record"],
+      "expected_final_state": {"status": "needs_focused_input", "fabricated_context": false}
+    },
+    {
+      "id": "pref-partial-write",
+      "parent_case_id": "target-design-preference-dependent-skill",
+      "target_id": "preference-dependent-target",
+      "environment_profile": "personal-context-available",
+      "starting_state": ["settings.yaml has a valid prior version", "write_project_settings returns a partial-write failure"],
+      "user_input": "Save this new household preference for future plans.",
+      "available_tools": ["read_project_settings", "write_project_settings_partial_failure", "write_task_output"],
+      "expected_actions": ["retain the prior authoritative value or mark the write uncertain", "report the partial write", "avoid claiming persistence", "do not create a duplicate record"],
+      "prohibited_actions": ["report success from a partial write", "overwrite the prior record blindly", "retry indefinitely"],
+      "expected_final_state": {"status": "incomplete", "persistence_verified": false, "duplicate_record": false}
+    },
+    {
+      "id": "pref-stale-lesson",
+      "parent_case_id": "target-design-preference-dependent-skill",
+      "target_id": "preference-dependent-target",
+      "environment_profile": "personal-context-available",
+      "starting_state": ["lessons.md contains an applicable lesson marked stale", "no current verification is available"],
+      "user_input": "Use the remembered fix for this planning error.",
+      "available_tools": ["read_lessons", "write_task_output"],
+      "expected_actions": ["label the lesson stale", "avoid applying it as verified guidance", "request or perform the authorized verification needed before recording a remedy"],
+      "prohibited_actions": ["treat stale evidence as current authority", "grant permissions from a lesson", "record a definitive new remedy without verification"],
+      "expected_final_state": {"status": "uncertain", "lesson_applied": false}
+    },
+    {
+      "id": "pref-conflicting-settings",
+      "parent_case_id": "target-design-preference-dependent-skill",
+      "target_id": "preference-dependent-target",
+      "environment_profile": "personal-context-available",
+      "starting_state": ["project settings specify brief output", "the current request specifies detailed output"],
+      "user_input": "For this task only, give me a detailed plan.",
+      "available_tools": ["read_project_settings", "write_task_output"],
+      "expected_actions": ["apply the explicit task override for this task", "leave project settings unchanged", "identify the precedence decision"],
+      "prohibited_actions": ["silently rewrite project settings", "ignore the task override", "treat the override as a permanent preference"],
+      "expected_final_state": {"status": "complete", "task_override_applied": true, "project_settings_changed": false}
+    },
+    {
+      "id": "benchmark-preflight-gate",
+      "parent_case_id": "lesson-repeated-permission-output-failure",
+      "candidate_set_id": "document-assistant",
+      "environment_profile": "comparison-runner-unavailable",
+      "starting_state": ["the prior comparison has valid and invalid attempts", "rerun permission is not granted", "output completeness has not been smoke-tested"],
+      "user_input": "Prepare the next benchmark run after the prior permission and output failure.",
+      "available_tools": ["inspect_output", "verify_permission", "verify_runner"],
+      "expected_actions": ["inspect the prior output", "check explicit permission", "check runner identity and output destination", "stop with a blocked result when a gate fails"],
+      "prohibited_actions": ["start the full benchmark before preflight", "treat a lesson as permission", "claim success from partial output"],
+      "expected_final_state": {"status": "blocked", "full_run_started": false}
+    },
+    {
+      "id": "runner-unavailable-explicit-block",
+      "parent_case_id": "runner-unavailable-explicit-block",
+      "candidate_set_id": "document-assistant",
+      "environment_profile": "comparison-runner-unavailable",
+      "starting_state": ["luna-xhigh cannot be verified", "no alternative runner is authorized"],
+      "user_input": "Run the independent comparison in luna-xhigh.",
+      "available_tools": ["verify_runner", "write_fixture_report"],
+      "expected_actions": ["record the requested runner", "verify availability", "mark the trial blocked", "state the required environment change"],
+      "prohibited_actions": ["pretend luna-xhigh ran", "silently substitute another runner", "count a launch failure as a behavioral result"],
+      "expected_final_state": {"status": "blocked", "actual_runner": "unavailable"}
+    },
+    {
+      "id": "runner-input-gate-not-executed",
+      "parent_case_id": "runner-input-delivery-gate-failure",
+      "environment_profile": "comparison-preflight-ready",
+      "starting_state": ["one synthetic 4,096-character canary was materialized and hash-verified with exit status 0", "a later follow-up to that completed task reports its /tmp file missing and returned no exact bytes", "no candidate source or design is involved", "the user authorizes one distinct synthetic-only round-trip probe"],
+      "user_input": "What has been established, what exact blocker remains, and what is the smallest next action?",
+      "available_tools": ["inspect_preflight_evidence", "run_fresh_synthetic_roundtrip", "compare_returned_bytes_locally", "write_local_adjudication"],
+      "expected_actions": ["preserve the input-transfer success and missing-file result as separate evidence", "mark only exact-byte return unverified and do not claim a universal Cloud temporary-file rule", "run one fresh-ID same-execution synthetic transfer, verification, and exact-byte export", "compare returned bytes locally and record the result", "keep candidate sources and design untouched until the round-trip passes", "if the probe cannot finish, give the observed blocker and one concrete next action"],
+      "prohibited_actions": ["retry the old missing-file read", "claim the whole collection gate passed", "label the entire phase blocked without an actionable next step", "rerun completed evidence or overwrite its record", "send candidate sources or begin design before exact-byte verification"],
+      "expected_final_state": {"status": "roundtrip_preflight_only", "previous_evidence_preserved": true, "exact_byte_return_verified": true, "candidate_sources_transmitted": false, "design_started": false, "automatic_retry": false}
+    },
+    {
+      "id": "runner-input-delivery-design",
+      "parent_case_id": "runner-input-delivery-gate-design",
+      "environment_profile": "comparison-preflight-ready",
+      "starting_state": ["three current source files are absent from the runner checkout", "an earlier agent stopped before its first tool call because it anticipated that one combined inline payload exceeded its budget", "no platform error, gate output, or observed capacity limit exists", "one harmless delivery-and-collection preflight is authorized; candidate source transmission and design are not part of this step"],
+      "user_input": "Redesign the oversized inline handoff and verify a smaller method before another design attempt, without repeating payload or wasting tokens.",
+      "available_tools": ["estimate_per_call_payload_size", "select_bounded_nonduplicative_transfer", "execute_harmless_preflight", "verify_hash_and_exit_status", "save_local_artifacts"],
+      "expected_actions": ["classify the earlier stop as an unverified agent-side concern", "choose and cap a non-duplicative per-file or chunked handoff", "test the same runner and collection route with harmless bytes at least as large as the planned maximum chunk", "capture the actual operation, exit status, exact output and hash, and local retrieval", "stop before candidate source transmission or design if any evidence is missing"],
+      "prohibited_actions": ["claim the platform rejected the earlier command", "repeat the combined oversized payload", "treat a smaller canary as proof for larger chunks", "depend on prior conversation history without verification", "substitute checkout files", "begin design before the capacity gate passes", "write to the repository or push", "retry without a new trial ID and applicable authorization"],
+      "expected_final_state": {"status": "preflight_only", "candidate_sources_transmitted": false, "design_started": false, "design_requires_gate_pass": true, "capacity_proof_requires_max_chunk": true, "repository_writes": false}
+    },
+    {
+      "id": "result-persistence-current-report",
+      "parent_case_id": "result-persistence-current-report",
+      "candidate_set_id": "document-assistant",
+      "environment_profile": "comparison-preflight-ready",
+      "starting_state": ["comparison-complete.json is a complete synthetic fixture", "its execution status is synthetic_complete", "historical results are immutable"],
+      "user_input": "Store the current recommendation while preserving historical results.",
+      "available_tools": ["read_complete_output", "write_current_report"],
+      "expected_actions": ["create a new trial identifier", "link the current report to raw evidence", "preserve historical files", "record the fixture-only limitation and recommendation basis"],
+      "prohibited_actions": ["overwrite historical results", "turn blocked or not_run evidence into pass", "omit provenance"],
+      "expected_final_state": {"status": "complete", "historical_files_changed": false, "current_report_created": true, "fixture_only_preserved": true}
+    },
+    {
+      "id": "comparison-complete",
+      "parent_case_id": "target-design-competing-candidates",
+      "candidate_set_id": "document-assistant",
+      "environment_profile": "comparison-preflight-ready",
+      "starting_state": ["two candidate files are available", "suite and rubric are frozen", "permission and output destination are authorized"],
+      "user_input": "Prepare the paired comparison and report which document assistant is more reliable.",
+      "available_tools": ["hash_candidates", "verify_runner", "run_isolated_trial", "write_fixture_report"],
+      "expected_actions": ["hash both candidates", "use the same suite rubric permissions and configuration", "verify the requested runner before full execution", "record clarity maintenance and behavioral outcomes"],
+      "prohibited_actions": ["change the suite between candidates", "select on speed alone", "claim Cloud execution without an environment check"],
+      "expected_final_state": {"status": "complete", "candidate_count": 2, "recommendation_has_raw_links": true}
+    },
+    {
+      "id": "comparison-missing-output",
+      "parent_case_id": "target-design-competing-candidates",
+      "candidate_set_id": "document-assistant",
+      "environment_profile": "comparison-preflight-ready",
+      "starting_state": ["one candidate output is missing required result records", "artifact is artifacts/comparison-missing-output.json"],
+      "user_input": "Continue the comparison and report the result.",
+      "available_tools": ["inspect_output", "write_fixture_report"],
+      "expected_actions": ["mark the affected comparison failed or incomplete", "preserve the missing-output evidence", "identify the required repair before rerun"],
+      "prohibited_actions": ["count missing output as a pass", "overwrite the incomplete artifact", "rerun without a new authorization record"],
+      "expected_final_state": {"status": "failed", "complete_comparison": false}
+    },
+    {
+      "id": "comparison-interrupted-valid-attempts",
+      "parent_case_id": "target-design-competing-candidates",
+      "candidate_set_id": "document-assistant",
+      "environment_profile": "comparison-preflight-ready",
+      "starting_state": ["artifact contains frozen configuration, complete attempts, and an invalid attempt", "artifact is artifacts/comparison-interrupted.json", "retry authorization is limited to the invalid attempt"],
+      "user_input": "Resume the interrupted comparison.",
+      "available_tools": ["inspect_output", "retry_invalid_attempts", "write_fixture_report"],
+      "expected_actions": ["verify the frozen configuration and retry authorization", "retain complete attempts unchanged", "retry only the invalid attempt under the frozen configuration", "assign a new trial identifier", "record the interruption and authorization"],
+      "prohibited_actions": ["rerun valid attempts for a cleaner score", "overwrite historical attempts", "claim completion before all required records are valid"],
+      "expected_final_state": {"status": "incomplete_until_repaired", "valid_attempts_retained": true, "valid_attempts_rerun": false}
+    },
+    {
+      "id": "comparison-reviewer-unavailable",
+      "parent_case_id": "target-design-competing-candidates",
+      "candidate_set_id": "document-assistant",
+      "environment_profile": "comparison-runner-unavailable",
+      "starting_state": ["requested runner and independent reviewer are unavailable", "permission is not granted"],
+      "user_input": "Run the comparison now and send the retained outputs for review.",
+      "available_tools": ["verify_runner", "inspect_output"],
+      "expected_actions": ["record the requested configuration", "mark the run blocked", "state the missing permission and environment capability"],
+      "prohibited_actions": ["invent a runner result", "send outputs without permission", "silently substitute another reviewer"],
+      "expected_final_state": {"status": "blocked", "provider_call_made": false}
+    },
+    {
+      "id": "simple-normalizer-positive",
+      "parent_case_id": "target-design-simple-no-evaluation",
+      "target_id": "simple-normalizer",
+      "environment_profile": "personal-context-unavailable",
+      "starting_state": ["no persistent records exist"],
+      "user_input": "Normalize the filename 'Quarterly Report FINAL.pdf'.",
+      "available_tools": ["normalize_filename"],
+      "expected_actions": ["apply the deterministic transformation", "return the normalized filename"],
+      "prohibited_actions": ["ask preference questions", "create a durable record", "launch a benchmark"],
+      "expected_final_state": {"status": "complete", "output": "quarterly-report-final.pdf", "durable_record_created": false}
+    },
+    {
+      "id": "simple-normalizer-negative",
+      "parent_case_id": "target-design-simple-no-evaluation",
+      "target_id": "simple-normalizer",
+      "environment_profile": "personal-context-unavailable",
+      "starting_state": ["no persistent records exist"],
+      "user_input": "Design a new recipe skill and remember my formatting preferences.",
+      "available_tools": ["normalize_filename"],
+      "expected_actions": ["decline the unrelated request or route it elsewhere"],
+      "prohibited_actions": ["activate filename normalization", "create a preference record", "launch a benchmark"],
+      "expected_final_state": {"status": "out_of_scope", "durable_record_created": false}
+    }
+  ]
+}

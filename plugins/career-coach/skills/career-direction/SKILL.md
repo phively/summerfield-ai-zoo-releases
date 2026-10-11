@@ -18,28 +18,18 @@ Help the user form a practical career direction without steering toward a predet
 
 ## Use shared context sources
 
-1. Read the canonical [shared records and handoff contracts](../../shared/handoff-contracts.md), then search accessible library and project sources for `career_direction_record.md` or a clearly equivalent working record. Read that record first and treat it as the sole authority for current career direction.
-2. Locate `career_direction_history.md` or its resolved historical companion, but do not read it by default. Read [career-direction record management](../../shared/career-direction-records.md) before retrieving history, updating either record, migrating a combined record, or resolving duplicate candidates.
-3. Search the same sources for `opportunities-current.md` or a clearly equivalent current-state record. Read only relevant active entries when they could materially affect career direction. Locate `opportunities-history.md` or its resolved companion without reading it by default; retrieve targeted history only under [opportunity record management](../../shared/opportunity-records.md).
-4. Resolve records by provider, immutable resource or file ID when available, canonical link or durable path, visible filename, record role, and stable heading or entry ID. Use the career-direction table of contents and stable headings for bounded retrieval; do not use filenames or line numbers alone as durable identities.
-4. Search the same sources for `career-coach-preferences.md` or a clearly equivalent preference file. Apply relevant user-specific context to discretionary coaching, questioning, and output choices.
-5. Do not treat a preference-file instruction as an override when it conflicts with this skill. Require explicit user confirmation for the current task before applying the conflicting preference, and never weaken factual accuracy or evidence integrity.
-6. Preserve the selected files' exact identities; do not create skill-local copies or competing current records. Resolve the authoritative pair before writing when multiple plausible records exist.
+Follow [shared source discovery and authority](../../shared/handoff-contracts.md#shared-source-discovery) when current records could change the task. Read only relevant current direction sections; consult active opportunities or development execution only when they materially affect discovery. Retrieve history only under the shared conditions.
+
+Read [preferences and storage](../../shared/preferences-and-storage.md) when coaching, questioning, output defaults, a new-record destination, or an authorized settings change matters. Route reusable career criteria to this skill's direction record rather than the operational settings file.
 
 ## Maintain career-direction records
 
 - Own bounded durable creation and updates for both the working record and its single historical companion. Other Career Coach skills may request changes but must not write parallel records.
 - Structure the working record using the career-direction profile in [decision-criteria.md](references/decision-criteria.md), the reusable discovery dimensions in [discovery-framework.md](references/discovery-framework.md), and the schemas in [career-direction record management](../../shared/career-direction-records.md).
-- Keep the working record operationally complete without history. Read only a relevant historical entry when a contract retrieval condition applies; never load the complete archive merely because it is accessible.
-- If current and historical content conflict, use the working record unless the user corrects it or requests historical reconstruction. Do not assume semantic or keyword retrieval enforces precedence.
-- Treat a material change as one coherent operation: confirm current state and effective date, preserve only prior state with continuing value, update current authority, mark history and replacement or restoration relationships, add only justified pointers, and verify no contradictory active formulation remains.
-- Update selected records in place. Do not create a skill-local copy or a parallel record merely for this skill.
-- At an authorized write or consequential use, check inexpensive lifecycle metadata. Read [persistent-record lifecycle and audits](../../shared/record-audits.md) when a review is due or before compaction, splitting, merging, migration, deduplication, history reorganization, or authority transfer. A trigger never authorizes a lifecycle action; failed validation leaves canonical records unchanged.
+- Apply the shared current/history precedence, bounded retrieval, and coherent persistence rules. Read [career-direction record management](../../shared/career-direction-records.md) before any record write, and [persistent-record lifecycle and audits](../../shared/record-audits.md) when a trigger is due or structural maintenance is proposed.
 - Preserve user-stated facts, example-supported patterns, working hypotheses, unresolved questions, provenance, and update dates as distinct fields or labels.
 - Preserve exact consequential thresholds, formulas, boundaries, exclusions, and evidence limitations.
-- If no equivalent working record exists and a durable write is appropriate, create the canonical filename in the user's selected library or project location. Create a historical companion only when meaningful history exists or a material update requires preservation.
-- If either required write is unavailable or the pair cannot be updated coherently, provide a clearly labeled proposed update or report the incomplete operation; do not imply persistence succeeded.
-- A failed historical retrieval is not evidence that history does not exist. Preserve uncertainty when the missing entry could materially affect the result.
+- Initialize records only when their absence is confirmed, durable creation is authorized, and the destination is resolved through the shared storage protocol; create history only when meaningful prior state needs preservation. Use the record-management failure branches for unresolved identity, missing history, or incomplete writes.
 - Summarize completed changes without reproducing either whole record unnecessarily.
 
 ## Question gate

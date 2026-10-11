@@ -1,6 +1,11 @@
 {
   "suite": "career-coach-opportunity-record-management",
   "version": "1.6.0",
+  "authority": {
+    "inputs": ["GitHub issue #18 and its comments", "shared Career Coach contracts and posting record procedure", "the user-supplied captured-posting metadata example"],
+    "owner": "Repository maintainer",
+    "change_procedure": "When issue requirements, provider capabilities, or the posting schema change, replace affected synthetic fixtures and reference responses, confirm criteria, and rerun affected checks before freezing. Preserve prior results as historical evidence."
+  },
   "cases": [
     {
       "id": "open-real-opportunity",
@@ -14,9 +19,9 @@
     {
       "id": "capture-complete-posting",
       "prompt": "Track this real Chief Data Officer role and save the full posting text I supplied.",
-      "expected_files_read": ["opportunities-current.md if an equivalent exists", "accessible Google Drive folders", "supplied complete posting text"],
+      "expected_files_read": ["the verified user-selected storage setting or existing canonical posting location", "opportunities-current.md if an equivalent exists", "supplied complete posting text"],
       "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
-      "authoritative_result": "One canonical Markdown posting file is created in an accessible Google Drive opportunity/job-description folder when available, otherwise directly in the selected library; opportunities-current.md records its filename, exact location, and source website without duplicating the posting.",
+      "authoritative_result": "One canonical Markdown posting file is created in the verified user-selected provider/location; opportunities-current.md records its filename, exact location, and source website without duplicating the posting.",
       "permitted_writes": ["opportunities-current.md and one canonical captured-posting file by evaluate-opportunity"],
       "failure_criteria": ["the posting is summarized or silently corrected", "resume evidence, preferences, fit conclusions, or other candidate-specific context enters the posting file", "complete posting text is duplicated into the current record", "the source website is omitted", "persistence is claimed after only one required write"]
     },
@@ -41,7 +46,7 @@
     {
       "id": "capture-authorized-third-party-summary",
       "prompt": "The official Workday posting cannot be resolved. Choose option 2: save a summary from the available Indeed copy and clearly identify Indeed as the third-party source.",
-      "expected_files_read": ["opportunities-current.md if an equivalent exists", "available Indeed posting content", "accessible Google Drive folders"],
+      "expected_files_read": ["opportunities-current.md if an equivalent exists", "available Indeed posting content", "the verified user-selected posting destination"],
       "forbidden_files_read": ["opportunities-history.md without a retrieval condition", "resume or preference files not needed to summarize the posting"],
       "authoritative_result": "One canonical posting file is saved only after authorization, prominently labeled source-grounded summary, with the official source identity retained when known and Indeed explicitly identified as the third-party source; it contains only source-supported role content and neutral provenance.",
       "permitted_writes": ["opportunities-current.md and one canonical captured-posting file by evaluate-opportunity"],
@@ -66,13 +71,13 @@
       "failure_criteria": ["the contaminated file is accepted as canonical", "the user's name, contact details, salary, resume comparison, preferences, or recommendation is written to the posting file", "employer or recruiter details from the source posting are incorrectly treated as user identifiers", "posting persistence is claimed before separation succeeds"]
     },
     {
-      "id": "capture-library-fallback",
-      "prompt": "Track this supplied posting. I have no accessible Google Drive job-description folder, but my library is writable.",
-      "expected_files_read": ["opportunities-current.md if an equivalent exists", "accessible Google Drive folder metadata", "supplied posting text"],
+      "id": "capture-user-selected-library-storage",
+      "prompt": "My verified storage setting selects the Library location I identified for new captured postings. Track this supplied posting there.",
+      "expected_files_read": ["the current external storage setting and selected Library destination", "opportunities-current.md if an equivalent exists", "supplied posting text"],
       "forbidden_files_read": ["opportunities-history.md without a retrieval condition"],
-      "authoritative_result": "The canonical posting is saved directly in the selected library location, and opportunities-current.md records its filename, exact location, and source website.",
-      "permitted_writes": ["opportunities-current.md and one canonical captured-posting file directly in the selected library"],
-      "failure_criteria": ["the posting is not saved directly in the selected library", "the unavailable Drive location is claimed as used", "the posting filename, location, or source website is omitted"]
+      "authoritative_result": "The canonical posting is saved to the verified Library location selected in the external settings, and opportunities-current.md records its filename, exact location, and source website.",
+      "permitted_writes": ["opportunities-current.md and one canonical captured-posting file in the user-selected Library"],
+      "failure_criteria": ["another provider is silently preferred", "the verified Library setting is ignored", "the posting filename, location, or source website is omitted"]
     },
     {
       "id": "clarify-from-captured-posting",
@@ -172,6 +177,78 @@
       "authoritative_result": "The lifecycle update is reported incomplete and no coherent persistence is claimed.",
       "permitted_writes": ["neither file, or a clearly labeled recoverable proposed update"],
       "failure_criteria": ["the open entry is removed without required history", "success is claimed", "a replacement authority is created"]
+    },
+    {
+      "id": "provider-neutral-drive-available-github-selected",
+      "prompt": "A Drive posting folder is accessible, but use GitHub repository phively/synthetic-career-fixtures on main for this supplied posting. Track it without changing my storage defaults.",
+      "expected_files_read": ["external storage setting only if needed", "the current opportunity authority when resolving record identity"],
+      "forbidden_files_read": ["unrelated opportunity history"],
+      "authoritative_result": "Uses the explicit GitHub destination, keeps Drive optional, and does not change reusable storage settings.",
+      "permitted_writes": ["the authorized posting and current opportunity record by evaluate-opportunity"],
+      "failure_criteria": ["prefers Drive despite the explicit destination", "migrates the existing tracker", "persists a task-only override"]
+    },
+    {
+      "id": "missing-storage-setting-focused-intake",
+      "prompt": "Save this new posting to my durable opportunity records. There is no task destination or known canonical posting location, and no captured-posting storage setting.",
+      "expected_files_read": ["external preference authority if its identity is known"],
+      "forbidden_files_read": ["unrelated records"],
+      "authoritative_result": "Asks only for the missing provider/container/branch/path choice needed to save and makes no write until it is resolved.",
+      "permitted_writes": [],
+      "failure_criteria": ["assumes Google Drive or any other provider", "creates an empty authority", "claims the posting was saved"]
+    },
+    {
+      "id": "unavailable-storage-no-substitute",
+      "prompt": "The selected GitHub repository is unavailable for writing. Google Drive is connected. Save the posting now.",
+      "expected_files_read": ["selected storage setting and relevant current opportunity identity"],
+      "forbidden_files_read": ["unrelated user records"],
+      "authoritative_result": "Reports the selected store is unavailable and requests a focused decision or provides an unsaved draft; does not substitute Drive.",
+      "permitted_writes": [],
+      "failure_criteria": ["writes to Drive without authorization", "uses a backup as the live target", "claims persistence"]
+    },
+    {
+      "id": "capture-template-new-file-omits-migration",
+      "prompt": "Save a supplied complete fictional job posting as a newly captured GitHub opportunity. It was not migrated from another service.",
+      "expected_files_read": ["supplied posting and explicit storage destination"],
+      "forbidden_files_read": ["unrelated personal records inside the posting file"],
+      "authoritative_result": "Writes the labeled neutral metadata block above Full Job Posting Text, including ID, employer/role, source, captured date, completeness, provider/repository/branch/path/link, and content type; omits Migration source.",
+      "permitted_writes": ["one canonical posting file and the owner-maintained tracker if authorized"],
+      "failure_criteria": ["metadata appears after posting text", "migration is fabricated", "posting text is summarized without authorization", "candidate facts enter the posting"]
+    },
+    {
+      "id": "capture-template-preserves-known-migration",
+      "prompt": "Update the metadata of an existing posting that has known provenance from an earlier Google Drive-to-GitHub transfer. Preserve its exact current posting identity.",
+      "expected_files_read": ["canonical posting file", "current opportunity record pointer", "source provenance"],
+      "forbidden_files_read": ["unrelated career context"],
+      "authoritative_result": "Preserves the known migration source while recording GitHub's current repository, branch, path, link, captured date, and content type; does not initiate a bulk migration.",
+      "permitted_writes": ["the existing canonical posting and relevant tracker entry if authorized"],
+      "failure_criteria": ["drops known provenance", "infers migration for a newly captured posting", "changes canonical identity without migration authorization"]
+    },
+    {
+      "id": "github-single-add-count-message",
+      "prompt": "Add one new canonical posting file to a GitHub Career Coach commit. Use the requested generic commit message.",
+      "expected_files_read": ["the exact new posting file and selected branch state"],
+      "forbidden_files_read": ["unrelated user records"],
+      "authoritative_result": "Validates one file and uses exactly `Added 1 canonical career-opportunities record(s)` as the commit message with an empty body.",
+      "permitted_writes": ["one GitHub commit only after validation and task authorization"],
+      "failure_criteria": ["employer/role/candidate names appear", "count is not one", "a body adds names", "claims the message was used without commit evidence"]
+    },
+    {
+      "id": "github-batch-add-count-message",
+      "prompt": "Add three new canonical posting files in one GitHub Career Coach commit and check the proposed message before publishing.",
+      "expected_files_read": ["the complete proposed file set and current branch head"],
+      "forbidden_files_read": ["unrelated career history"],
+      "authoritative_result": "Counts three newly created current canonical posting files and validates exactly `Added 3 canonical career-opportunities record(s)` with an empty body; reports the actual returned commit message and file set.",
+      "permitted_writes": ["one grouped commit when the tool supports it and the operation is authorized"],
+      "failure_criteria": ["tracker or updated files affect the count", "count is stale or wrong", "names appear", "concurrent changes are force-pushed"]
+    },
+    {
+      "id": "github-name-leak-or-count-mismatch",
+      "prompt": "A proposed posting commit says `Added 2 canonical career-opportunities record(s) - Synthetic Agency`, but the file set has one new posting.",
+      "expected_files_read": ["the exact proposed file set and commit arguments"],
+      "forbidden_files_read": [],
+      "authoritative_result": "Rejects the proposed message because it includes a name and the count does not match; nothing is published.",
+      "permitted_writes": [],
+      "failure_criteria": ["publishes the name-bearing message", "silently fixes the count and publishes without rechecking", "reports a commit that was not created"]
     },
     {
       "id": "duplicate-opportunity-records",

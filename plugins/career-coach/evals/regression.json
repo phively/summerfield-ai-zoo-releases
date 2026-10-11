@@ -1,6 +1,11 @@
 {
   "suite": "career-coach-regression",
   "version": "1.6.0",
+  "authority": {
+    "inputs": ["Career Coach skill descriptions and boundaries", "shared Career Coach handoff contracts", "optional supporting-skill availability"],
+    "owner": "Repository maintainer",
+    "change_procedure": "When descriptions, routing contracts, plugin dependencies, or optional supporting-skill availability change, replace affected synthetic prompts and reference responses, confirm criteria, and rerun affected checks before freezing. Preserve prior results as historical evidence."
+  },
   "cases": [
     {
       "id": "route-career-direction",
@@ -77,9 +82,9 @@
       "id": "support-prior-context",
       "prompt": "Use what we decided last time about my preferred management style and location to refine my target roles.",
       "expected_plugin_skills": ["career-direction"],
-      "expected_supporting_skills": ["remember-me"],
+      "forbidden_supporting_skills": ["remember-me"],
       "forbidden_plugin_skills": [],
-      "expected_behavior": ["retrieves relevant prior context before asking repeat questions"]
+      "expected_behavior": ["reads the Career Direction authority for owned management and location criteria", "does not route Career Coach-owned criteria through Remember Me", "retrieves only relevant current context before asking repeat questions"]
     },
     {
       "id": "support-documents",
@@ -130,6 +135,76 @@
       "expected_plugin_skills": ["update-resume"],
       "forbidden_plugin_skills": ["career-direction"],
       "expected_behavior": ["uses current opportunity context only", "does not treat resume completion as application submission", "requests any material opportunity update through evaluate-opportunity"]
+    },
+    {
+      "id": "explicit-professional-development",
+      "prompt": "$professional-development Turn my confirmed career-direction priority into a credential and course plan with next actions.",
+      "expected_plugin_skills": ["professional-development"],
+      "forbidden_plugin_skills": ["career-direction", "evaluate-opportunity", "prepare-interview", "update-resume"],
+      "expected_behavior": ["plans capability or credential execution", "keeps the strategic priority with Career Direction"]
+    },
+    {
+      "id": "indirect-professional-development",
+      "prompt": "I need to choose training and sequence the projects that will close a confirmed skill gap for my target roles.",
+      "expected_plugin_skills": ["professional-development"],
+      "forbidden_plugin_skills": ["evaluate-opportunity", "prepare-interview", "update-resume"],
+      "expected_behavior": ["routes detailed development planning", "preserves cost, time, and credential confirmation boundaries"]
+    },
+    {
+      "id": "explicit-prepare-interview",
+      "prompt": "$prepare-interview Help me practice evidence-based answers for my upcoming panel interview.",
+      "expected_plugin_skills": ["prepare-interview"],
+      "forbidden_plugin_skills": ["evaluate-opportunity", "update-resume"],
+      "expected_behavior": ["maps supported evidence to inferred questions", "keeps actual and inferred interview content distinct"]
+    },
+    {
+      "id": "indirect-prepare-interview",
+      "prompt": "I have a recruiter screen tomorrow. Help me rehearse my opening story and likely questions using my resume.",
+      "expected_plugin_skills": ["prepare-interview"],
+      "forbidden_plugin_skills": ["evaluate-opportunity", "update-resume"],
+      "expected_behavior": ["prepares candidate communication and practice", "does not persist a prep or story-bank record"]
+    },
+    {
+      "id": "mixed-direction-and-development",
+      "prompt": "Help me choose a long-term target role, then turn its confirmed analytics gap into a sequenced development plan.",
+      "expected_plugin_skills": ["career-direction", "professional-development"],
+      "forbidden_plugin_skills": ["evaluate-opportunity", "prepare-interview", "update-resume"],
+      "expected_behavior": ["separates strategic direction from execution", "passes only the confirmed priority and relevant constraints"]
+    },
+    {
+      "id": "mixed-opportunity-and-interview",
+      "prompt": "Evaluate this tracked role against my criteria and prepare evidence-based stories for my hiring-manager interview.",
+      "expected_plugin_skills": ["evaluate-opportunity", "prepare-interview"],
+      "forbidden_plugin_skills": ["career-direction", "professional-development", "update-resume"],
+      "expected_behavior": ["keeps employer due diligence with Evaluate Opportunity", "routes candidate rehearsal to Prepare Interview", "passes only relevant role context"]
+    },
+    {
+      "id": "adjacent-professional-development-one-time-learning",
+      "prompt": "What is a data warehouse? Give me a short explanation; I am not asking for a career learning plan.",
+      "expected_plugin_skills": [],
+      "forbidden_plugin_skills": ["professional-development", "career-direction"],
+      "expected_behavior": ["answers the direct question without creating a development plan"]
+    },
+    {
+      "id": "adjacent-opportunity-due-diligence-vs-interview-prep",
+      "prompt": "I have not decided whether to apply. Help me identify what to learn about this employer's management expectations.",
+      "expected_plugin_skills": ["evaluate-opportunity"],
+      "forbidden_plugin_skills": ["prepare-interview", "update-resume"],
+      "expected_behavior": ["keeps employer-side due diligence with Evaluate Opportunity", "does not infer that interview preparation is requested"]
+    },
+    {
+      "id": "adjacent-direction-vs-single-role-evaluation",
+      "prompt": "Would this particular COO role fit my confirmed autonomy and location criteria? I am not asking what career path to pursue generally.",
+      "expected_plugin_skills": ["evaluate-opportunity"],
+      "forbidden_plugin_skills": ["career-direction", "update-resume"],
+      "expected_behavior": ["evaluates the specific opportunity using relevant current criteria", "does not reopen general career discovery"]
+    },
+    {
+      "id": "negative-unrelated-writing",
+      "prompt": "Write a short congratulations note to my colleague for a project milestone; there is no job or career decision.",
+      "expected_plugin_skills": [],
+      "forbidden_plugin_skills": ["career-direction", "professional-development", "evaluate-opportunity", "prepare-interview", "update-resume"],
+      "expected_behavior": ["does not activate Career Coach"]
     },
     {
       "id": "negative-route",

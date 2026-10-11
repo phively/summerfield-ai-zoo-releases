@@ -1,0 +1,7 @@
+{
+  "task_id": "fixture-task-001",
+  "source_identity": "fixture-source-001",
+  "current_requirements": ["preserve supplied target", "report unresolved mismatch"],
+  "authorization": {"write_target": true, "send_external_message": false},
+  "unavailable_context": ["designer conversation history"]
+}

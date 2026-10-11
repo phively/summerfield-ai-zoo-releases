@@ -53,7 +53,7 @@ Begin a valid `meal-planner` handoff without re-requesting finalized recipe deta
 
 Do not create or update meal-plan, household, recipe, or rating records directly. Send a bounded request to the owning skill when shopping work reveals a material confirmed change.
 
-For shopper-owned persistent writes, use the workbook-native identities and lifecycle rules in shared record management. Create native worksheet tables and descriptive hyperlinks, not Markdown tables or bare user-visible URLs. Before structural maintenance, validate a staged before/after workbook snapshot and leave the canonical workbook unchanged on any unexplained loss, duplicate key, broken formula, validation, named range, or record reference.
+For shopper-owned persistent writes, use the workbook-native identities and lifecycle rules in shared record management. Create native worksheet tables and descriptive hyperlinks, not Markdown tables or bare user-visible URLs. Read back and verify the affected headers, tables or filters, wrapping or widths, validations, stable keys, and links before reporting the write complete. Before structural maintenance, validate a staged before/after workbook snapshot and leave the canonical workbook unchanged on any unexplained loss, duplicate key, broken formula, validation, named range, or record reference.
 
 For direct user requests, include only the useful sections.
 

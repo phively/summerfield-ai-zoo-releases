@@ -16,11 +16,11 @@ Turn strategic career priorities into practical development work and keep its cu
 
 ## Workflow
 
-1. Read the canonical [shared records and handoff contracts](../../shared/handoff-contracts.md). Retrieve the relevant current Career Direction context first, including the priority's source, evidence class, target roles, constraints, and unresolved uncertainty. Locate and read the relevant current professional-development record before proposing changes.
+1. Follow [shared source discovery and authority](../../shared/handoff-contracts.md#shared-source-discovery). Retrieve only the current Career Direction priority and constraints needed for the plan and relevant current development entries. A supplied priority can support a task-only plan; resolve the existing development authority before any persistent update. Read [preferences and storage](../../shared/preferences-and-storage.md) when planning/output defaults, a new-record destination, or an authorized settings change matters. Retrieve history only under the shared conditions.
 2. Translate confirmed strategic priorities into actionable development goals. Give each goal a stable `PD-...` identifier and distinguish capability acquisition from credential acquisition.
 3. Compare capability gaps and candidate investments by career relevance, urgency, expected evidence, effort, cost, prerequisites, portability, and fit with the user's constraints. Preserve unknowns rather than inventing outcomes.
 4. Choose a proportionate development approach and sequence. Keep courses, practice, projects, mentoring, credentials, and other resources as options rather than assuming a course or credential is required.
-5. Record or update current progress, completed evidence, dependencies, target or review dates, provenance, and the smallest useful next action in the canonical professional-development record. This skill is the sole writer; do not create skill-local copies. Require explicit user confirmation before persisting an inferred goal or committing consequential cost, time, or credential activity.
+5. When durable tracking is authorized, record or update current progress, completed evidence, dependencies, target or review dates, provenance, and the smallest useful next action in the canonical professional-development record under its shared procedure. Require explicit user confirmation before persisting an inferred goal or committing consequential cost, time, or credential activity.
 6. Reassess priorities when new evidence, changed direction, completed work, or a blocked dependency changes the plan. Route durable changes to reusable strategic priorities back to `career-direction`; keep detailed execution here.
 
 ## Supporting capabilities

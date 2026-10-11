@@ -16,12 +16,27 @@ Career Coach coordinates five bounded capabilities for evidence-grounded career 
 
 | Record authority | Canonical owner | Scope |
 | --- | --- | --- |
+| [User-designated preferences file](shared/preferences-and-storage.md) | User owns values; all five skills use the shared maintenance protocol | Confirmed reusable coaching/output preferences and storage settings; career context remains with its domain owner |
 | [Career-direction records](shared/career-direction-records.md) | `career-direction` | Current direction and material historical direction state |
 | [Professional-development records](shared/professional-development-records.md) | `professional-development` | Current development execution plan and completed evidence |
 | [Opportunity records](shared/opportunity-records.md) | `evaluate-opportunity` | Active and historical opportunity state, captured postings, and concise actual interview facts |
 | Interview preparation | None | Preparation remains task-scoped; it does not create an interview history, transcript, or story-bank record |
 
 All lifecycle audits use [record-audits.md](shared/record-audits.md). Skills may read bounded context from another authority or request a bounded update through that owner; they do not create competing copies.
+
+Reusable preferences and career records stay outside plugin and skill packages, in the user's designated authoritative files, and survive package updates. No storage provider is required or preferred. For new records, an explicit task destination takes precedence over verified reusable storage settings. Existing records retain their canonical identities; a task-only override does not change defaults or authorize migration. Settings updates require exact authorization, preservation of unrelated values, and read-back verification. See [preferences and storage](shared/preferences-and-storage.md) for discovery, precedence, maintenance, and failure handling.
+
+## Posting capture and publication
+
+Canonical posting files contain neutral provenance metadata above the full source text, or an explicitly authorized and labeled source-grounded summary. Candidate context belongs in its owning career records. Known transfer provenance is preserved when applicable; newly captured files need no migration history, and no bulk migration is implied. The [opportunity-record procedure](shared/opportunity-records.md) defines the metadata template, stable identities, and generic GitHub commit messages.
+
+Before publication, run [validate_opportunity_posting.py](scripts/validate_opportunity_posting.py) with the proposed file set, provider, operation, message, and body. For example:
+
+```powershell
+python scripts/validate_opportunity_posting.py --provider GitHub --operation add --message "Added 1 canonical career-opportunities record(s)" "path/to/O-2026-10-11-01 -- Employer -- Role.md"
+```
+
+Run from this plugin directory and supply the actual proposed files. The validator checks metadata, identity/path/link consistency, content presence, addition count, and generic empty-body messages. It does not establish privacy, summary authorization, actual staged changes, provider access, or successful persistence; the owning workflow must verify those separately. Version-specific validation evidence is recorded under `evals/`, with historical results retained.
 
 ## Choose a skill
 

@@ -56,7 +56,7 @@ Require it to return:
 - active and total time, yield, leftovers, and ingredient-overlap notes;
 - constraint-sensitive ingredients or labels needing final verification;
 - preference observations and any proposed or completed record changes.
-- canonical recipe IDs, Google Doc IDs and links, version/status, and verified or pending publication state;
+- canonical recipe IDs, Google Doc IDs and links, version/status, content and native-formatting verification results, and verified or pending publication state;
 - confirmed prepared or used status before asking for ratings; never infer consumption from plan inclusion.
 
 Do not independently redo recipe selection after a valid handoff. Review and return targeted revision requests when a candidate fails a constraint.
@@ -87,9 +87,9 @@ Require it to return a grocery list by store section, purchase quantities and pa
 
 - Own the single current/history meal-plan pair and update the selected authorities in place. Other Meal Planner skills may read relevant state and request changes but must not create parallel plan records.
 - Persist only a user-confirmed finalized plan. Do not archive drafts, rejected candidates, trivial wording changes, or routine process events.
-- After user approval, have `personal-chef` save new approved recipes and approved adaptations in the selected `Recipes` folder, update existing canonical Docs in place, and verify the Recipe Catalog pointers. Recipe selection and safety approval alone are not user approval. Persist the new current plan only after every required canonical recipe link has descriptive text, resolves, and matches the approved version. Retry by recipe ID without creating duplicate Docs.
+- After user approval, have `personal-chef` save new approved recipes and approved adaptations in the selected `Recipes` folder, update existing canonical Docs in place, and verify the Recipe Catalog pointers. Recipe selection and safety approval alone are not user approval. Persist the new current plan only after every required canonical recipe has verified content, native formatting, and descriptive links, and every required link resolves and matches the approved version. Treat an unavailable or failed recipe-formatting check as pending publication. Retry by recipe ID without creating duplicate Docs.
 - Keep meal-planning records within the user's designated Meal Planning folder, recipe documents within `Recipes`, and audit or recovery artifacts within dated child folders under `Audits`. Resolve and pass all three folder IDs; preserve equivalent existing names and organization. Do not search or write similarly named backup folders as current authorities.
-- Prefer Google Docs for newly created narrative meal-plan records when Drive is accessible. Use native headings, lists, tables, and hyperlinks. Preserve an existing compatible authority rather than converting it implicitly; file-type or provider migration requires explicit user permission and a passed staged audit.
+- Prefer Google Docs for newly created narrative meal-plan records when Drive is accessible. Read the canonical meal-plan template and shared native-formatting contract, then use native `Title`, `Heading 1`, `Heading 2`, `Normal text`, lists, tables, and hyperlinks. Read back and repair the affected structure and styles before reporting persistence complete. Preserve an existing compatible authority rather than converting it implicitly; file-type or provider migration requires explicit user permission and a passed staged audit.
 - Finalize coherently: archive the previously current plan when present and valuable, replace the current authority, add only useful pointers and relationships, and verify exactly one current plan remains. Do not claim persistence if a required write fails.
 - Keep the current plan operationally complete without history and preserve exact record identities, safety constraints, servings, recipes, adaptations, dates, unresolved questions, and provenance.
 - Check the shared format-aware review triggers at authorized write or consequential-use boundaries. Before compaction, splitting, migration, deduplication, or authority transfer, stage and validate the complete before/after records under the shared audit protocol; do not replace a canonical record after a failed audit.
@@ -106,6 +106,7 @@ Confirm internally that:
 - grocery and cost work came from `personal-shopper` when available and used only finalized recipes;
 - times, servings, leftovers, grocery quantities, purchase totals, and meal-cost allocations are consistent;
 - sources and record updates are accurately represented;
+- newly created or reformatted Google Docs have verified required native structure and paragraph styles, or the formatting check is explicitly pending;
 - the finalized current plan and any required historical entry were updated coherently, or persistence failure is explicit;
 - health claims have appropriate evidence and citations;
 - assumptions and unresolved limitations are visible.
