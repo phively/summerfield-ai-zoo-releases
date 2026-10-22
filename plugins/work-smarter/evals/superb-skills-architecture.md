@@ -1,6 +1,6 @@
 # Superb Skills architecture and ownership decision
 
-Status: The Phase 1–7 implementation artifacts are present, but acceptance remains incomplete. The current acceptance matrix in private development records (not distributed) is the single checklist. Existing T5/T6/T8 task pages have been adjudicated read-only and remain qualified because their generated outputs are unavailable. T8 reports one preflight, one smoke, and four development attempts at concurrency one; this does not establish target model quality, installed-skill activation, or holdout performance. Actual model/effort remain unknown under the user's accepted qualification.
+Status: The Phase 1–7 implementation artifacts are present, but acceptance remains incomplete. The current acceptance matrix in ignored `output/` is the single checklist. Existing T5/T6/T8 task pages have been adjudicated read-only and remain qualified because their generated outputs are unavailable. T8 reports one preflight, one smoke, and four development attempts at concurrency one; this does not establish target model quality, installed-skill activation, or holdout performance. Actual model/effort remain unknown under the user's accepted qualification.
 
 ## Decision
 

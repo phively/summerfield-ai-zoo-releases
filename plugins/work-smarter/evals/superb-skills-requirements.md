@@ -1,6 +1,6 @@
 # Superb Skills requirements and acceptance record
 
-Status: Phase 1–7 implementation artifacts are present, but acceptance remains incomplete. Historical test and validator results are tied to their recorded snapshots below. The current acceptance matrix in private development records (not distributed) is the single checklist. Existing T5/T6/T8 task pages were adjudicated read-only and remain qualified because their generated outputs are unavailable. T8 used local branch alias `work` for selected remote branch eval/superb-skills-acceptance-20260927-t8 and reports one preflight, one smoke, and four development attempts. Its deterministic result is not model-quality or holdout evidence. Actual model/effort remain unknown under the user's accepted qualification.
+Status: Phase 1–7 implementation artifacts are present, but acceptance remains incomplete. Historical test and validator results are tied to their recorded snapshots below. The current acceptance matrix in ignored `output/` is the single checklist. Existing T5/T6/T8 task pages were adjudicated read-only and remain qualified because their generated outputs are unavailable. T8 used local branch alias `work` for selected remote branch eval/superb-skills-acceptance-20260927-t8 and reports one preflight, one smoke, and four development attempts. Its deterministic result is not model-quality or holdout evidence. Actual model/effort remain unknown under the user's accepted qualification.
 
 This record defines Superb Skills as a reusable designer and evaluator for other skills, plugins, prompts, and instruction packages, including itself. The current Superb Skills revision is one dogfooding target. The record separates reusable capability requirements from evidence that the capability works on target packages.
 
@@ -16,7 +16,7 @@ This record defines Superb Skills as a reusable designer and evaluator for other
 | Worktree state | The baseline excludes uncommitted changes; the current worktree is not used as evidence. |
 | Execution status | One read-only Codex Cloud checkout/scope smoke was completed; the local deterministic comparison is recorded separately. Response-only designer tasks occurred, but no clean-context target-runtime behavioral trial, final holdout validation, installation, publication, or live skill change has occurred. |
 
-The plan is the ignored file private development evidence (not distributed). The canonical requirements and architecture records define the design; the evaluation JSON and protocol define the evaluation artifact. None of these records alone establishes behavioral evidence.
+The plan is the ignored file `output/20260921 superb-skills implementation.md`. The canonical requirements and architecture records define the design; the evaluation JSON and protocol define the evaluation artifact. None of these records alone establishes behavioral evidence.
 
 ## Relevant baseline file hashes
 
@@ -98,9 +98,9 @@ Baseline classifications use `supported`, `partial`, `missing`, or `dependent_on
 
 ## Phase 1–7 verification status
 
-This subsection records only the 2026-09-24 checkpoint. Its `not_run` and no-smoke statements are historical, not current. The 2026-09-27 acceptance matrix in private development records (not distributed) supersedes them for current Phase 1–7 status.
+This subsection records only the 2026-09-24 checkpoint. Its `not_run` and no-smoke statements are historical, not current. The 2026-09-27 acceptance matrix in ignored `output/` supersedes them for current Phase 1–7 status.
 
-Verification ran on 2026-09-24 against commit `77ffc94de6f47b365d5183ea01fd23b860eb8525` with Work Smarter `1.11.0`. The detailed evidence index and retained local comparison are in ignored private development evidence (not distributed).
+Verification ran on 2026-09-24 against commit `77ffc94de6f47b365d5183ea01fd23b860eb8525` with Work Smarter `1.11.0`. The detailed evidence index and retained local comparison are in ignored `output/superb-skills-phase1-7-acceptance-20260924/verification.json`.
 
 Completed checks:
 
@@ -114,7 +114,7 @@ Acceptance still open:
 
 - Preference, lesson, authority, context-transfer, red/green, routing, and version-synchronization target behavior trials have no clean-context results and remain `not_run`.
 - The tracked icon fixture contains only dimension metadata and no raster images. Ignored synthetic samples were dimension-checked (32×32 and 128×128 accepted; 129×129 rejected) and visually inspected at the two supported sizes. This demonstrates fixture-level handling only; review of a real target-package raster asset remains `not_run`.
-- One read-only Codex Cloud task checked out the pinned sanitized private-repository commit, confirmed evaluation and repository-local instructions content were absent, and made no file changes. This verifies checkout/scope only, not implicit skill activation, model/reasoning-effort propagation, or behavioral compatibility. Subsequent response-only designer tasks do not establish those capabilities. Task metadata did not expose actual model/effort. The latest user-provided screenshot showed 71% five-hour and 95% weekly usage remaining, and the user authorized bypassing usage checks for the rest of closeout; no API billing, paid credits, or auto-reload were used. This does not waive the user's separate no-test instruction: target-runtime trials, benchmarks, preflight, and smoke remain unrun. Actual model/effort are a qualified limitation, not an inferred value. The local report does not establish Cloud compatibility.
+- One read-only Codex Cloud task checked out the pinned sanitized private-repository commit, confirmed evaluation and private repository instruction content were absent, and made no file changes. This verifies checkout/scope only, not implicit skill activation, model/reasoning-effort propagation, or behavioral compatibility. Subsequent response-only designer tasks do not establish those capabilities. Task metadata did not expose actual model/effort. The latest user-provided screenshot showed 71% five-hour and 95% weekly usage remaining, and the user authorized bypassing usage checks for the rest of closeout; no API billing, paid credits, or auto-reload were used. This does not waive the user's separate no-test instruction: target-runtime trials, benchmarks, preflight, and smoke remain unrun. Actual model/effort are a qualified limitation, not an inferred value. The local report does not establish Cloud compatibility.
 - The installed-copy pytest is a skip unless a distinct installed skill root is supplied. Its comparison logic was separately exercised against a distinct temporary copy by the helper tests.
 - Final untouched-holdout validation remains reserved for the later final-validation phase. Historical `evals/results.json` belongs to Work Smarter `1.8.1` and is not current or target evidence.
 

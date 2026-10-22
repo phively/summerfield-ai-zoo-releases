@@ -7,12 +7,26 @@ import argparse
 import difflib
 from datetime import datetime
 import hashlib
+import importlib.util
 import json
 from pathlib import Path
 import re
 
 START = "<!-- record-backup:start -->"
 END = "<!-- record-backup:end -->"
+
+
+def _load_destination_policy():
+    path = Path(__file__).with_name("destination_policy.py")
+    spec = importlib.util.spec_from_file_location("record_backup_destination_policy", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("could not load destination policy helper")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+destination_policy = _load_destination_policy()
 
 
 def timestamp(value):
@@ -55,6 +69,47 @@ def validate_receipt(value, stem, *, discovery_keys=None):
     checks = value.get("checks")
     if not isinstance(checks, dict) or not {"local_snapshot", "remote_snapshot"} <= checks.keys() or any(type(v) is not bool for v in checks.values()):
         raise ValueError("receipt requires boolean snapshot checks")
+    destination_exclusions = value.get("destination_exclusions", [])
+    try:
+        normalized_exclusions = destination_policy.normalize_exclusions(destination_exclusions)
+    except destination_policy.DestinationPolicyError as exc:
+        raise ValueError(f"invalid destination_exclusions: {exc}") from exc
+    if normalized_exclusions != destination_exclusions:
+        raise ValueError("destination_exclusions must use normalized literal paths")
+    preservation = value.get("destination_preservation")
+    if destination_exclusions:
+        required_fields = {"status", "protected_roots", "baseline_commit", "content_commit"}
+        allowed_fields = required_fields | {"operational_commit"}
+        if not isinstance(preservation, dict) or set(preservation) not in (
+            required_fields, allowed_fields
+        ):
+            raise ValueError("destination exclusions require separate preservation evidence")
+        if preservation.get("status") not in {
+            "staged_preserved", "content_preserved", "preserved", "unverified", "failed"
+        }:
+            raise ValueError("invalid destination preservation status")
+        try:
+            roots = destination_policy.normalize_exclusions(preservation.get("protected_roots"))
+        except destination_policy.DestinationPolicyError as exc:
+            raise ValueError(f"invalid destination preservation roots: {exc}") from exc
+        if roots != destination_exclusions:
+            raise ValueError("destination preservation roots differ from configured exclusions")
+        for field in ("baseline_commit", "content_commit", "operational_commit"):
+            commit = preservation.get(field)
+            if commit is not None and (not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", commit)):
+                raise ValueError(f"destination preservation {field} must be a full Git SHA or null")
+        expected_commit_fields = {
+            "staged_preserved": (True, False, False),
+            "content_preserved": (True, True, False),
+            "preserved": (True, True, True),
+        }.get(preservation["status"])
+        if expected_commit_fields and tuple(
+            preservation.get(field) is not None
+            for field in ("baseline_commit", "content_commit", "operational_commit")
+        ) != expected_commit_fields:
+            raise ValueError("destination preservation commit evidence does not match its status")
+    elif preservation is not None:
+        raise ValueError("destination preservation evidence requires configured exclusions")
     sha = value.get("snapshot_commit")
     if "snapshot_commit" not in value or (sha is not None and (not isinstance(sha, str) or not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", sha))):
         raise ValueError("receipt requires full snapshot SHA or null")
@@ -68,6 +123,15 @@ def validate_receipt(value, stem, *, discovery_keys=None):
     verified = value["status"] in {"verified", "verified-no-change"}
     if verified and (not sha or not all(checks[k] for k in ("local_snapshot", "remote_snapshot")) or not value["current_state_complete"]):
         raise ValueError("verified receipt requires complete, checked snapshot")
+    if verified and destination_exclusions and preservation["status"] not in {
+        "content_preserved", "preserved"
+    }:
+        raise ValueError("verified receipt requires complete destination preservation evidence")
+    if (verified and destination_exclusions
+            and preservation["content_commit"] != sha):
+        raise ValueError(
+            "verified receipt requires destination preservation content_commit to match snapshot_commit"
+        )
     if verified and value["mode"] == "weekly" and any(
         checks.get(key) is False for key in ("full_latest_restore", "full_older_restore")
     ):
@@ -139,11 +203,14 @@ def validate_legacy_receipt(value, stem):
 
 
 def load_receipts(root):
+    return _load_receipts(root, legacy_entries(root))
+
+
+def _load_receipts(root, legacy):
     directory = root / "receipts"
     if directory.is_symlink():
         raise ValueError("receipt directory must not be a symlink")
     result = []
-    legacy = legacy_entries(root)
     seen = set()
     if directory.exists():
         for path in sorted(directory.iterdir()):
@@ -184,7 +251,7 @@ def render_block(receipts, legacy_count=0):
         if not selected:
             lines += [f"No {mode} results recorded.", ""]
             continue
-        lines += ["| Completed | Result | Records / bytes | Coverage | Receipt |", "| --- | --- | --- | --- | --- |"]
+        lines += ["| Completed | Result | Records / bytes | Coverage | Preservation | Receipt |", "| --- | --- | --- | --- | --- | --- |"]
         for r in selected:
             coverage = ("Complete current state" if r["current_state_complete"] else "Incomplete current state")
             coverage += "; history: " + r["history_coverage"]
@@ -192,7 +259,12 @@ def render_block(receipts, legacy_count=0):
                 coverage += "; " + "; ".join(r["coverage_limits"])
             if mode == "weekly":
                 coverage += "; restore: " + r["restore_test"]
-            lines.append(f"| {cell(r['ended_at'])} | {r['status']} | {r['counts']['records']} / {r['counts']['bytes']} | {cell(coverage)} | [{r['run_id']}](receipts/{r['run_id']}.json) |")
+            preservation = r.get("destination_preservation")
+            if preservation is None:
+                preservation_label = "not configured" if "destination_exclusions" in r else "not recorded"
+            else:
+                preservation_label = preservation["status"]
+            lines.append(f"| {cell(r['ended_at'])} | {r['status']} | {r['counts']['records']} / {r['counts']['bytes']} | {cell(coverage)} | {cell(preservation_label)} | [{r['run_id']}](receipts/{r['run_id']}.json) |")
         lines.append("")
     return "\n".join(lines + [END])
 
@@ -242,13 +314,14 @@ def migrate_readme(original, plan):
 
 
 def process(root, write=False, migration_plan=None):
-    receipts = load_receipts(root)
+    legacy = legacy_entries(root)
+    receipts = _load_receipts(root, legacy)
     path = root / "README.md"
     if path.is_symlink():
         raise ValueError("README must not be a symlink")
     original = path.read_bytes().decode("utf-8") if path.exists() else ""
     base = migrate_readme(original, migration_plan) if migration_plan is not None else original
-    updated = update_readme(base, render_block(receipts, len(legacy_entries(root))))
+    updated = update_readme(base, render_block(receipts, len(legacy)))
     if write:
         path.write_bytes(updated.encode("utf-8"))
     elif migration_plan is not None:

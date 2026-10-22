@@ -15,7 +15,7 @@ Preserve supplied claims, numbers, meaning, scope, and explicit output constrain
 
 ## Use relevant personal context
 
-When stable goals, recurring constraints, or research and output preferences could materially change the scope or presentation, search accessible library and project sources for `remember-me/index.md` or a clearly equivalent index. Read the index first and retrieve the smallest sufficient set of relevant current context from its summary or identified current source. Expand retrieval when the bounded context is incomplete, stale, ambiguous, conflicting, or lacks consequential detail. Read the canonical [handoff contracts](../../shared/handoff-contracts.md) before accepting or proposing a durable personal-context update.
+When stable goals, recurring constraints, or research and output preferences could materially change the scope or presentation, search accessible library and project sources for `remember-me/index.md` or a clearly equivalent index. Before personal-content use, apply the receiving Remember Me first-use/setup gate in the [handoff contracts](../../shared/handoff-contracts.md): inspect only bounded canonical identity/setup metadata for implicit consultation. Unknown setup means continue neutrally, without personal-topic use, persistence, unsolicited setup/save offers, or a competing index. A direct read-only request authorizes only its bounded retrieval and no setup write. After the gate permits use, read the index first and retrieve the smallest sufficient set of relevant current context from its summary or identified current source. Expand retrieval when the bounded context is incomplete, stale, ambiguous, conflicting, or lacks consequential detail. Read the canonical [handoff contracts](../../shared/handoff-contracts.md) before accepting or proposing a durable personal-context update.
 
 Treat current instructions as authoritative for the current request without silently changing durable memory. Personal context may guide scope, tradeoffs, and presentation, but it is not evidence for an external claim and cannot predetermine the research conclusion. If the index is missing or inaccessible, continue neutrally and identify the limitation only when it materially affects the answer.
 
@@ -87,8 +87,8 @@ A progress update is not a completed checkpoint. Do not claim that unreported fi
 
 Use a compact checkpoint such as:
 
-> **Check current sources:** the clinical outcome evidence and current professional guidance, because these are medical and may have changed.\
-> **Do not independently check:** the arithmetic derived from the reported study results and the personal circumstances you supplied.\
+> **Check current sources:** the clinical outcome evidence and current professional guidance, because these are medical and may have changed.
+> **Do not independently check:** the arithmetic derived from the reported study results and the personal circumstances you supplied.
 > Proceed with this research scope?
 
 If the user explicitly says to skip the checkpoint for the remainder of the session, acknowledge that preference once and omit the checkpoint for later requests in the same session. Continue to research every topic that meets the criteria above. Do not carry the waiver into a new session. Also omit the checkpoint when the current request explicitly waives it. Honor any instruction not to browse, but label resulting factual claims as unverified where appropriate.

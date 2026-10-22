@@ -7,9 +7,10 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import os
 import re
 import sys
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 
 
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
@@ -19,24 +20,24 @@ class SnapshotError(ValueError):
     """Raised when a staged snapshot is unsafe or inconsistent."""
 
 
+def _load_destination_policy():
+    path = Path(__file__).with_name("destination_policy.py")
+    spec = importlib.util.spec_from_file_location("record_backup_destination_policy", path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("could not load destination policy helper")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+destination_policy_helper = _load_destination_policy()
+
+
 def safe_relative_path(value: object, field: str) -> Path:
-    if not isinstance(value, str) or not value:
-        raise SnapshotError(f"{field} must be a non-empty string")
-    if "\\" in value:
-        raise SnapshotError(f"{field} must use forward slashes")
-    parsed = PurePosixPath(value)
-    reserved = {"CON", "PRN", "AUX", "NUL"}
-    if parsed.is_absolute() or value != parsed.as_posix() or ".." in parsed.parts or "." in parsed.parts:
-        raise SnapshotError(f"unsafe {field}: {value}")
-    for part in parsed.parts:
-        stem = part.split(".", 1)[0].upper()
-        if ":" in part or stem in reserved or (
-            stem.startswith("COM") and stem[3:].isdigit()
-        ) or (
-            stem.startswith("LPT") and stem[3:].isdigit()
-        ):
-            raise SnapshotError(f"unsafe {field}: {value}")
-    return Path(*parsed.parts)
+    try:
+        return destination_policy_helper.safe_relative_path(value, field)
+    except destination_policy_helper.DestinationPolicyError as exc:
+        raise SnapshotError(str(exc)) from exc
 
 
 def digest(path: Path) -> tuple[int, str]:
@@ -49,15 +50,58 @@ def digest(path: Path) -> tuple[int, str]:
     return size, hasher.hexdigest()
 
 
-def validate(root: Path, manifest_path: Path) -> dict[str, object]:
-    if not root.is_dir():
+def _read_json(path: Path, field: str) -> object:
+    try:
+        return json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=destination_policy_helper.unique_object,
+        )
+    except FileNotFoundError as exc:
+        raise SnapshotError(f"missing {field}: {path}") from exc
+    except (json.JSONDecodeError, UnicodeDecodeError, ValueError) as exc:
+        raise SnapshotError(f"invalid {field}: {exc}") from exc
+
+
+def _tree_paths(root: Path):
+    def onerror(error: OSError) -> None:
+        raise SnapshotError(f"could not inspect destination tree: {error}") from error
+
+    try:
+        for directory, directories, files in os.walk(
+            root, topdown=True, followlinks=False, onerror=onerror
+        ):
+            current = Path(directory)
+            for name in list(directories):
+                path = current / name
+                if path.is_symlink():
+                    raise SnapshotError(f"symlinks are not supported: {path.relative_to(root)}")
+                if not path.is_dir():
+                    raise SnapshotError(f"unsupported destination entry: {path.relative_to(root)}")
+                yield path
+            for name in files:
+                path = current / name
+                if path.is_symlink():
+                    raise SnapshotError(f"symlinks are not supported: {path.relative_to(root)}")
+                if not path.is_file():
+                    raise SnapshotError(f"unsupported destination entry: {path.relative_to(root)}")
+                yield path
+    except OSError as exc:
+        raise SnapshotError(f"could not inspect destination tree: {exc}") from exc
+
+
+def validate(
+    root: Path,
+    manifest_path: Path,
+    *,
+    destination_policy: object | None = None,
+    policy_expectations: object | None = None,
+) -> dict[str, object]:
+    if root.is_symlink() or not root.is_dir():
         raise SnapshotError(f"staging root is not a directory: {root}")
     try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    except FileNotFoundError as exc:
-        raise SnapshotError(f"missing manifest: {manifest_path}") from exc
-    except json.JSONDecodeError as exc:
-        raise SnapshotError(f"invalid JSON manifest: {exc}") from exc
+        manifest = _read_json(manifest_path, "manifest")
+    except OSError as exc:
+        raise SnapshotError(f"could not read manifest: {exc}") from exc
     if not isinstance(manifest, dict) or manifest.get("schema_version") != 1:
         raise SnapshotError("manifest schema_version must be 1")
     records = manifest.get("records")
@@ -74,6 +118,10 @@ def validate(root: Path, manifest_path: Path) -> dict[str, object]:
             raise SnapshotError("operational layout requires one indexed configuration profile")
         if Path(profile_path).suffix.lower() not in {".yaml", ".yml"}:
             raise SnapshotError("configuration profile must retain its YAML extension")
+    if destination_policy is None and policy_expectations is not None:
+        raise SnapshotError("policy expectations require a destination policy packet")
+    if destination_policy is not None and policy_expectations is None:
+        raise SnapshotError("destination policy packet requires independent expectations")
 
     expected: set[Path] = set()
     expected_keys: set[str] = set()
@@ -132,13 +180,84 @@ def validate(root: Path, manifest_path: Path) -> dict[str, object]:
             raise SnapshotError(f"content mismatch: {relative.as_posix()}")
         summaries.append({"path": relative.as_posix(), "byte_size": size, "sha256": actual})
 
+    normalized_exclusions: list[tuple[str, ...]] = []
+    if destination_policy is not None:
+        if not operational:
+            raise SnapshotError("destination policy requires an indexed operational profile")
+        profile_repository_path = manifest["profile_repository_path"]
+        profile_records = [record for record in records if record["repository_path"] == profile_repository_path]
+        if len(profile_records) != 1:
+            raise SnapshotError("destination policy requires one indexed profile record")
+        profile_record = profile_records[0]
+        try:
+            helper_profile = policy_expectations.get("profile") if isinstance(policy_expectations, dict) else None
+            if not isinstance(helper_profile, dict):
+                raise destination_policy_helper.DestinationPolicyError("expectations.profile must be an object")
+            identity_fields = {
+                "provider": "source_provider",
+                "container": "source_container",
+                "id": "source_id",
+                "path": "source_path",
+                "repository_path": "repository_path",
+            }
+            if any(profile_record.get(record_field) != helper_profile.get(profile_field)
+                   for profile_field, record_field in identity_fields.items()):
+                raise destination_policy_helper.DestinationPolicyError(
+                    "indexed profile record identity differs from independent expectations"
+                )
+            profile_bytes = (root / Path(profile_repository_path)).read_bytes()
+            try:
+                manifest_relative_path = manifest_path.resolve().relative_to(root.resolve()).as_posix()
+            except ValueError:
+                manifest_relative_path = "backup-index.json"
+            capture_policy = destination_policy_helper.validate_policy(
+                destination_policy,
+                policy_expectations,
+                profile_bytes=profile_bytes,
+                indexed_profile_path=profile_repository_path,
+                proposed_managed_paths=[record["repository_path"] for record in records],
+                manifest_relative_path=manifest_relative_path,
+            )
+        except (destination_policy_helper.DestinationPolicyError, OSError, AttributeError, TypeError) as exc:
+            raise SnapshotError(f"invalid destination policy: {exc}") from exc
+        if manifest.get("capture_policy") != capture_policy:
+            raise SnapshotError("manifest capture_policy differs from the validated destination policy")
+        normalized_exclusions = [tuple(path.split("/")) for path in capture_policy["exclusions"]]
+        for components in normalized_exclusions:
+            exclusion_path = root.joinpath(*components)
+            try:
+                resolved = exclusion_path.resolve()
+                resolved.relative_to(root.resolve())
+            except (OSError, ValueError) as exc:
+                raise SnapshotError(
+                    f"exclusion path escapes staging root: {'/'.join(components)}"
+                ) from exc
+            if exclusion_path.is_symlink():
+                raise SnapshotError(f"symlinks are not supported: {'/'.join(components)}")
+            if exclusion_path.exists() and not exclusion_path.is_dir():
+                raise SnapshotError(f"exclusion root is not a directory: {'/'.join(components)}")
+
     actual_files: set[Path] = set()
-    for path in root.rglob("*"):
-        if path.is_symlink():
-            raise SnapshotError(f"symlinks are not supported: {path.relative_to(root)}")
-        if not path.is_file() or path.resolve() == manifest_path.resolve():
-            continue
+    actual_paths_by_key: dict[str, str] = {}
+    try:
+        manifest_resolved = manifest_path.resolve()
+    except OSError as exc:
+        raise SnapshotError(f"could not resolve manifest path: {exc}") from exc
+    for path in _tree_paths(root):
         relative = path.relative_to(root)
+        relative_value = relative.as_posix()
+        relative_key = relative_value.casefold()
+        previous = actual_paths_by_key.setdefault(relative_key, relative_value)
+        if previous != relative_value:
+            raise SnapshotError("case-colliding stored paths")
+        try:
+            path.resolve().relative_to(root.resolve())
+        except (OSError, ValueError) as exc:
+            raise SnapshotError(f"stored path escapes staging root: {relative_value}") from exc
+        if path.is_dir():
+            continue
+        if not path.is_file() or path.resolve() == manifest_resolved:
+            continue
         if relative == Path("README.md"):
             continue
         if relative.parts[:1] == ("receipts",):
@@ -150,11 +269,13 @@ def validate(root: Path, manifest_path: Path) -> dict[str, object]:
             safe_relative_path(relative.as_posix(), "receipt_path")
             continue
         actual_files.add(relative)
-    actual_keys = [path.as_posix().casefold() for path in actual_files]
-    if len(actual_keys) != len(set(actual_keys)):
-        raise SnapshotError("case-colliding stored file paths")
-    if actual_files != expected or set(actual_keys) != expected_keys:
-        extras = sorted(path.as_posix() for path in actual_files - expected)
+    coverage_files = {
+        path for path in actual_files
+        if not any(path.parts[:len(exclusion)] == exclusion for exclusion in normalized_exclusions)
+    }
+    coverage_keys = {path.as_posix().casefold() for path in coverage_files}
+    if coverage_files != expected or coverage_keys != expected_keys:
+        extras = sorted(path.as_posix() for path in coverage_files - expected)
         missing = sorted(path.as_posix() for path in expected - actual_files)
         details = []
         if extras:
@@ -181,10 +302,21 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("root", type=Path, help="staging tree containing backup-index.json")
     parser.add_argument("--manifest", type=Path, default=None, help="manifest path (default: ROOT/backup-index.json)")
+    parser.add_argument("--destination-policy", type=Path, default=None, help="disposable JSON policy packet")
+    parser.add_argument("--policy-expectations", type=Path, default=None, help="independent profile, destination, and managed-path bindings")
     args = parser.parse_args(argv)
     manifest = args.manifest or args.root / "backup-index.json"
     try:
-        summary = validate(args.root, manifest)
+        if (args.destination_policy is None) != (args.policy_expectations is None):
+            raise SnapshotError("--destination-policy and --policy-expectations must be supplied together")
+        packet = _read_json(args.destination_policy, "destination policy packet") if args.destination_policy else None
+        expectations = _read_json(args.policy_expectations, "policy expectations") if args.policy_expectations else None
+        summary = validate(
+            args.root,
+            manifest,
+            destination_policy=packet,
+            policy_expectations=expectations,
+        )
     except (OSError, SnapshotError) as exc:
         print(f"FAIL {exc}", file=sys.stderr)
         return 1

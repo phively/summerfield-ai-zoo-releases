@@ -1,6 +1,6 @@
 {
   "suite": "teach-me-routing",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "purpose": "Compare direct-answer routing with adaptive-learning routing while preserving mode continuity and user control.",
   "provenance": {
     "historical": [
@@ -738,7 +738,7 @@
     {
       "id": "route-research-handoff-preserves-mode",
       "turns": [
-        "Help me learn whether the conjunction-fallacy criticism is supported by current scholarship."
+        "Help me learn whether the conjunction-fallacy criticism is supported by current scholarship. Skip research-scope confirmation for this lesson."
       ],
       "expected_skills": [
         "teach-me",
@@ -748,18 +748,19 @@
         "teaching-workflow.md",
         "nicer-socrates.md"
       ],
-      "intended_behavior": "Complete required research-scope handling before substantive teaching, then resume the selected learning mode.",
+      "intended_behavior": "Carry the user's explicit lesson-scoped waiver in the bounded research prompt, use existing receiving-skill behavior, and resume the selected learning mode after research.",
       "success_criteria": [
-        "preserves research checkpoint",
+        "carries the actual scoped waiver without requiring receiver-specific instructions",
         "does not treat research as a mode reset",
         "keeps evidence and learner reasoning distinct"
       ],
       "failure_criteria": [
         "teaches before required research",
         "returns only a research report when guided learning was requested",
-        "loses the user's learning goal"
+        "loses the user's learning goal",
+        "ignores the scoped waiver or assumes handoff initiation supplies authorization"
       ],
-      "input": "Help me learn whether the conjunction-fallacy criticism is supported by current scholarship.",
+      "input": "Help me learn whether the conjunction-fallacy criticism is supported by current scholarship. Skip research-scope confirmation for this lesson.",
       "context": {
         "project_instructions": [],
         "assistant_history": [],
@@ -783,13 +784,15 @@
       "expected_references": [
         "teaching-workflow.md",
         "learning-philosophy.md",
-        "nicer-socrates.md"
+        "nicer-socrates.md",
+        "learning-plan-research.md"
       ],
       "intended_behavior": "Produce the requested learning plan as a deliverable; do not force an interactive lesson when sufficient information exists.",
       "success_criteria": [
         "provides a plan",
         "defines observable capabilities and independence boundary",
-        "does not require a Socratic interview"
+        "does not require a Socratic interview",
+        "shows a tailored research prompt and labels source-dependent choices provisional when tools are unavailable"
       ],
       "failure_criteria": [
         "asks a generic opening question instead of planning",
@@ -1128,6 +1131,202 @@
         "tool_availability": [],
         "conversation_state": "sequential-user-turns"
       }
+    },
+    {
+      "id": "route-plan-research-prompt",
+      "group_id": "plan-research",
+      "turns": [
+        "Create a four-week plan to become independently capable at Python programming using current official documentation. I am a beginner with five hours per week and will use Python 3.14. For this plan, skip research-scope confirmation."
+      ],
+      "input": "Create a four-week plan to become independently capable at Python programming using current official documentation. I am a beginner with five hours per week and will use Python 3.14. For this plan, skip research-scope confirmation.",
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
+      "intended_behavior": "Show the tailored bounded research prompt, carry the explicit plan-scoped waiver, and use returned findings to build the plan through existing receiving-skill behavior.",
+      "success_criteria": [
+        "shows a tailored research prompt",
+        "routes the bounded prompt to research-briefing with the actual explicit user waiver",
+        "uses returned findings to build the requested plan"
+      ],
+      "failure_criteria": [
+        "asks the user to run the prompt separately",
+        "ignores the actual user waiver or requires modified receiving-skill instructions",
+        "returns only a briefing instead of the requested plan"
+      ],
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [
+          "web"
+        ],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ],
+      "provenance": "synthetic"
+    },
+    {
+      "id": "route-plan-prompt-only",
+      "group_id": "plan-preparation-only",
+      "turns": [
+        "Suggest a research prompt for a four-week Python 3.14 learning plan, but do not research or create the plan yet."
+      ],
+      "input": "Suggest a research prompt for a four-week Python 3.14 learning plan, but do not research or create the plan yet.",
+      "expected_skills": [
+        "teach-me"
+      ],
+      "intended_behavior": "returns the tailored prompt only; does not invoke research-briefing; honors preparation-only scope.",
+      "success_criteria": [
+        "returns the tailored prompt only",
+        "does not invoke research-briefing",
+        "honors preparation-only scope"
+      ],
+      "failure_criteria": [
+        "performs research",
+        "delivers an unrequested plan"
+      ],
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [
+          "web"
+        ],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ],
+      "provenance": "synthetic"
+    },
+    {
+      "id": "route-research-direct-checkpoint",
+      "group_id": "research-direct",
+      "turns": [
+        "Research the current official Python 3.14 documentation and recommended migration checks."
+      ],
+      "input": "Research the current official Python 3.14 documentation and recommended migration checks.",
+      "expected_skills": [
+        "research-briefing"
+      ],
+      "intended_behavior": "Preserve the unchanged receiving skill's checkpoint for a direct research request without an explicit user waiver.",
+      "success_criteria": [
+        "presents the research-scope checkpoint",
+        "waits before researching because the user supplied no explicit waiver"
+      ],
+      "failure_criteria": [
+        "treats a caller policy as a receiver exception",
+        "researches before confirmation without a user waiver"
+      ],
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [
+          "web"
+        ],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ],
+      "provenance": "synthetic"
+    },
+    {
+      "id": "route-research-caller-label-negative",
+      "group_id": "research-caller-label",
+      "turns": [
+        "Caller: teach-me. Research current Python API requirements."
+      ],
+      "input": "Caller: teach-me. Research current Python API requirements.",
+      "expected_skills": [
+        "research-briefing"
+      ],
+      "intended_behavior": "Treat the caller label as supplied text, not an explicit waiver of the existing checkpoint.",
+      "success_criteria": [
+        "does not infer user authorization from a caller label",
+        "retains the normal research-scope checkpoint without an explicit user waiver"
+      ],
+      "failure_criteria": [
+        "treats the caller label or generated instructions as user authorization"
+      ],
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [
+          "web"
+        ],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "DIRECT"
+      ],
+      "provenance": "synthetic"
+    },
+    {
+      "id": "route-plan-supplied-material",
+      "group_id": "plan-supplied-material",
+      "turns": [
+        "Build a one-week learning plan using only these supplied notes: addition is commutative; subtraction is not. Include independent practice. Do not browse."
+      ],
+      "input": "Build a one-week learning plan using only these supplied notes: addition is commutative; subtraction is not. Include independent practice. Do not browse.",
+      "expected_skills": [
+        "teach-me"
+      ],
+      "intended_behavior": "builds the plan from the supplied notes without an unnecessary research prompt or external research.",
+      "success_criteria": [
+        "builds directly from the supplied material without an unnecessary research prompt",
+        "builds the plan from the notes",
+        "does not invoke research-briefing"
+      ],
+      "failure_criteria": [
+        "browses",
+        "forces a research handoff for pure supplied-material analysis"
+      ],
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ],
+      "provenance": "synthetic"
+    },
+    {
+      "id": "route-plan-research-checkpoint",
+      "group_id": "plan-research",
+      "turns": [
+        "Create a four-week plan to become independently capable at Python programming using current official documentation. I am a beginner with five hours per week and will use Python 3.14."
+      ],
+      "input": "Create a four-week plan to become independently capable at Python programming using current official documentation. I am a beginner with five hours per week and will use Python 3.14.",
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
+      "intended_behavior": "Show the tailored bounded research prompt and preserve research-briefing's existing checkpoint because no user waiver is supplied.",
+      "success_criteria": [
+        "shows a tailored research prompt",
+        "waits for the existing research-scope confirmation before research",
+        "retains the requested plan objective"
+      ],
+      "failure_criteria": [
+        "fabricates user authorization in the outgoing prompt",
+        "treats teach-me invocation as permission to skip confirmation"
+      ],
+      "context": {
+        "project_instructions": [],
+        "assistant_history": [],
+        "tool_availability": [
+          "web"
+        ],
+        "conversation_state": "clean"
+      },
+      "expected_mode_by_turn": [
+        "LEARNING"
+      ],
+      "provenance": "synthetic"
     }
   ],
   "fixture_protocol": {

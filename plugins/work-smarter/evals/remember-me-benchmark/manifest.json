@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "suite_id": "remember-me-memory-benchmark-development",
+  "suite_version": "1.1.0",
+  "rubric_id": "remember-me-recall-and-retrieval-cost",
+  "rubric_version": "1.1.0",
+  "evidence_status": "development-fixture-definition-only",
+  "calibration": {
+    "source_repository": "phively/personal-context",
+    "source_path": "records/remember-me",
+    "source_commit": "ce276b13c47061347080168d7a87583e8d3d633f",
+    "source_record": "remember-me-index.md",
+    "source_blob_sha": "72c992d7c979cc8d478cfa277df70ea630d935e5",
+    "source_scope": "read-only directory metadata and index structure at the pinned commit; no record payload is retained",
+    "observations": {
+      "index_utf8_bytes": 40505,
+      "heading_counts": {"h1": 1, "h2": 3, "h3": 14},
+      "yaml_frontmatter": false,
+      "markdown_tables": false,
+      "record_file_count": 19,
+      "nested_directory_count": 1,
+      "record_file_utf8_bytes": {"minimum": 2428, "median": 14779, "maximum": 48584}
+    }
+  },
+  "candidate_matrix": [
+    {"id": "A", "index_representation": "detailed", "retrieval_strategy": "full"},
+    {"id": "B", "index_representation": "compact", "retrieval_strategy": "full"},
+    {"id": "C", "index_representation": "detailed", "retrieval_strategy": "headings"},
+    {"id": "D", "index_representation": "compact", "retrieval_strategy": "headings"}
+  ],
+  "common_tool_envelope": ["read_full", "read_heading_map", "read_section"],
+  "scenario_tool_envelopes": {
+    "amortized-update-audit": ["save_append"],
+    "closeout-sequence-40k": ["save_append"]
+  },
+  "conditional_tool_envelopes": {
+    "index-maintenance-16k": ["stage_index_maintenance", "promote_index_maintenance"],
+    "index-maintenance-40k": ["stage_index_maintenance", "promote_index_maintenance"],
+    "index-maintenance-64k": ["stage_index_maintenance", "promote_index_maintenance"],
+    "index-maintenance-80k": ["stage_index_maintenance", "promote_index_maintenance"],
+    "closeout-sequence-40k": ["stage_index_maintenance", "promote_index_maintenance"]
+  },
+  "detail_and_strategy_are_independent": true,
+  "authoritative_topics_shared_across_candidates": true,
+  "index_trigger_treatments_kib": [8, 32, 48, 64],
+  "development_scenarios": [
+    {"id": "index-2k", "family": "index-scaling", "index_bytes": 2048, "topic_bytes": 2428},
+    {"id": "index-4k", "family": "index-scaling", "index_bytes": 4096, "topic_bytes": 2428},
+    {"id": "index-8k", "family": "index-scaling", "index_bytes": 8192, "topic_bytes": 2428},
+    {"id": "index-16k", "family": "index-scaling", "index_bytes": 16384, "topic_bytes": 2428},
+    {"id": "index-32k", "family": "index-scaling", "index_bytes": 32768, "topic_bytes": 2428},
+    {"id": "index-40k", "family": "index-scaling", "index_bytes": 40505, "topic_bytes": 2428},
+    {"id": "index-64k", "family": "index-scaling", "index_bytes": 65536, "topic_bytes": 2428},
+    {"id": "topic-4k", "family": "topic-scaling", "index_bytes": 8192, "topic_bytes": 4096},
+    {"id": "topic-8k", "family": "topic-scaling", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "topic-16k", "family": "topic-scaling", "index_bytes": 8192, "topic_bytes": 16384},
+    {"id": "topic-32k", "family": "topic-scaling", "index_bytes": 8192, "topic_bytes": 32768},
+    {"id": "topic-64k", "family": "topic-scaling", "index_bytes": 8192, "topic_bytes": 65536},
+    {"id": "multi-source-split", "family": "multi-source-identity-freshness", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "identity-conflict", "family": "multi-source-identity-freshness", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "stale-pointer", "family": "multi-source-identity-freshness", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "evolution-correction", "family": "evolution", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "evolution-uncertainty", "family": "evolution", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "evolution-attribution", "family": "evolution", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "audit-loss-control", "family": "staged-audit-recovery", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "audit-pointer-recovery", "family": "staged-audit-recovery", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "audit-authorized-review", "family": "staged-audit-recovery", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "amortized-cold", "family": "amortized-read-save-audit", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "amortized-repeated", "family": "amortized-read-save-audit", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "amortized-update-audit", "family": "amortized-read-save-audit", "index_bytes": 8192, "topic_bytes": 8192},
+    {"id": "index-maintenance-16k", "family": "authorized-maintenance", "index_bytes": 16384, "topic_bytes": 2428},
+    {"id": "index-maintenance-40k", "family": "authorized-maintenance", "index_bytes": 40505, "topic_bytes": 2428},
+    {"id": "index-maintenance-64k", "family": "authorized-maintenance", "index_bytes": 65536, "topic_bytes": 2428},
+    {"id": "index-maintenance-80k", "family": "authorized-maintenance", "index_bytes": 81920, "topic_bytes": 2428},
+    {"id": "closeout-sequence-40k", "family": "closeout-maintenance-sequence", "index_bytes": 40505, "topic_bytes": 2428}
+  ],
+  "case_contract": {
+    "fact_values": "synthetic-only",
+    "gold_visible_to_agent": false,
+    "fault_schedule_visible_to_agent": false,
+    "expected_answer_visible_to_agent": false,
+    "final_holdout": "not-defined-or-run-by-approved-closeout",
+    "model_trials": "bounded exposed development panel run under U2; see benchmarks/remember-me-20261020-closeout-final-comparison.json",
+    "maintenance_approval": "case-specific and bound to the exact staged candidate digest"
+  },
+  "closeout_launch_budget": {
+    "maximum_additional_process_starts": 26,
+    "maximum_infrastructure_recovery_starts": 2,
+    "behavioral_retries": false,
+    "counts": "every initial process and same-session continuation"
+  }
+}

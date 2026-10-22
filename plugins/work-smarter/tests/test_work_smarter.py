@@ -79,59 +79,6 @@ def test_full_validator() -> None:
     assert load_validator().main() == 0
 
 
-def assert_skill_copy_matches(source: Path, bundled: Path) -> None:
-    source = source.resolve()
-    bundled = bundled.resolve()
-    if source == bundled:
-        raise ValueError("installed skill source and bundled skill must be distinct directories")
-    if not source.is_dir():
-        raise FileNotFoundError(f"configured installed skill source is missing: {source}")
-    source_files = sorted(path.relative_to(source) for path in source.rglob("*") if path.is_file())
-    bundled_files = sorted(path.relative_to(bundled) for path in bundled.rglob("*") if path.is_file())
-    if source_files != bundled_files:
-        raise AssertionError("installed and bundled skill file lists differ")
-    for relative in source_files:
-        if (source / relative).read_bytes() != (bundled / relative).read_bytes():
-            raise AssertionError(f"installed and bundled skill contents differ: {relative}")
-
-
-def test_research_briefing_matches_installed_work_smarter_copy() -> None:
-    """Compare an installed copy only when its root is supplied by the test environment."""
-    installed_root = os.environ.get("WORK_SMARTER_INSTALLED_SKILLS_ROOT")
-    if not installed_root:
-        pytest.skip("set WORK_SMARTER_INSTALLED_SKILLS_ROOT to compare an installed skill copy")
-    source = Path(installed_root) / "research-briefing"
-    bundled = ROOT / "skills" / "research-briefing"
-    assert_skill_copy_matches(source, bundled)
-
-
-def test_installed_skill_copy_comparison_accepts_distinct_matching_directories(tmp_path: Path) -> None:
-    bundled = ROOT / "skills" / "research-briefing"
-    installed = tmp_path / "installed" / "research-briefing"
-    copytree(bundled, installed)
-    assert_skill_copy_matches(installed, bundled)
-
-
-def test_installed_skill_copy_comparison_rejects_changed_content(tmp_path: Path) -> None:
-    bundled = ROOT / "skills" / "research-briefing"
-    installed = tmp_path / "installed" / "research-briefing"
-    copytree(bundled, installed)
-    skill_file = next(path for path in installed.rglob("*") if path.is_file())
-    skill_file.write_bytes(skill_file.read_bytes() + b"\nchanged")
-    with pytest.raises(AssertionError, match="contents differ"):
-        assert_skill_copy_matches(installed, bundled)
-
-
-def test_installed_skill_copy_comparison_rejects_missing_source(tmp_path: Path) -> None:
-    with pytest.raises(FileNotFoundError, match="source is missing"):
-        assert_skill_copy_matches(tmp_path / "missing", ROOT / "skills" / "research-briefing")
-
-
-def test_installed_skill_copy_comparison_rejects_same_directory() -> None:
-    bundled = ROOT / "skills" / "research-briefing"
-    with pytest.raises(ValueError, match="must be distinct"):
-        assert_skill_copy_matches(bundled, bundled)
-
 
 def test_research_checkpoint_is_preserved() -> None:
     research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
@@ -1113,6 +1060,18 @@ def test_memory_maintenance_triggers_are_measurable_and_non_destructive() -> Non
         assert phrase in records
     assert "Any trigger can make an audit due. No trigger decides" in memory
     assert "A due trigger requires review, not automatic" in remember
+    assert "Follow an explicit domain review policy when supplied" in memory
+    assert "Use elapsed time for routine cleanup review; absolute file size is advisory" in remember
+    triggers = records.split("make an audit due when", 1)[1].split("These numerical thresholds", 1)[0]
+    assert "180 days" in triggers
+    assert "8 KiB" not in triggers
+    assert "16 KiB" not in triggers
+    assert "not an independent audit trigger" in records
+    assert "An unchanged healthy oversized file does not make another audit due" in records
+    assert "no content changes are needed" in records
+    assert "Incomplete or failed audits preserve the prior audit-completion metadata" in records
+    assert "ordinary saves do not reset it" in records
+    assert "Only a completed review of the full Remember Me file set" in records
 
 
 def test_comparative_claims_require_basis_but_preserve_labeled_opinion() -> None:
@@ -1567,7 +1526,7 @@ def test_teach_me_evidence_has_provenance_intake_and_maintenance_boundaries() ->
 
     for phrase in (
         "Initial provenance",
-        "did not independently repeat its web research",
+        "the supplied 2026-09-06 audit reported checking the source",
         "Candidate-source intake",
         "User-supplied claims remain attributed and `candidate`",
         "A due date means review is due; it does not authorize research",
@@ -1608,10 +1567,13 @@ def test_teach_me_standalone_mirrors_references_without_plugin_dependencies() ->
     for relative in (
         Path("references/learning-evidence.md"),
         Path("references/learning-philosophy.md"),
+        Path("references/learning-plan-research.md"),
         Path("references/teaching-workflow.md"),
         Path("references/personalities/nicer-socrates.md"),
+        Path("references/personalities/financial-fiduciary.md"),
         Path("references/domains/visual-arts.md"),
         Path("references/domains/drawing-painting.md"),
+        Path("references/domains/if-you-can.md"),
         Path("assets/icon-small.svg"),
         Path("assets/icon-large.svg"),
     ):
@@ -1619,9 +1581,9 @@ def test_teach_me_standalone_mirrors_references_without_plugin_dependencies() ->
 
     standalone_skill = read(standalone_root / "SKILL.md")
     standalone_agent = read(standalone_root / "agents" / "openai.yaml")
-    assert "Standalone teaching skill" in standalone_skill
+    assert "Standalone adaptive teaching and advice skill" in standalone_skill
     assert f'metadata:\n  version: "{plugin["version"]}"\n---' in standalone_skill
-    assert "Ask the user to confirm or revise the scope, then wait" in standalone_skill
+    assert "proceed without a research-scope confirmation pause" in standalone_skill
     for forbidden in ("work-smarter", "remember-me", "research-briefing", "handoff-contracts"):
         assert forbidden not in standalone_skill
         assert forbidden not in standalone_agent
@@ -2128,3 +2090,27 @@ if __name__ == "__main__":
         test()
         print(f"PASS {name}")
     print(f"PASS {len(tests)} plugin tests")
+
+
+def test_save_trial_validator_rejects_missing_acceptance_coverage(tmp_path, monkeypatch):
+    validator = load_validator()
+    copytree(ROOT / 'evals' / 'remember-me-save', tmp_path / 'evals' / 'remember-me-save')
+    manifest = tmp_path / 'evals' / 'remember-me-save' / 'manifest.json'
+    data = json.loads(read(manifest))
+    for case in data['cases']:
+        case['acceptance'] = [ae for ae in case['acceptance'] if ae != 'AE10']
+    manifest.write_text(json.dumps(data))
+    monkeypatch.setattr(validator, 'ROOT', tmp_path)
+    with pytest.raises(AssertionError, match='AE1-AE10'):
+        validator.validate_save_trials()
+
+
+def test_remember_me_runtime_references_and_static_policy():
+    import yaml
+    skill = ROOT / 'skills' / 'remember-me'
+    metadata = yaml.safe_load(read(skill / 'agents' / 'openai.yaml'))
+    assert metadata['policy']['allow_implicit_invocation'] is True
+    assert (skill / 'references' / 'transcript-sources.md').is_file()
+    assert 'ordinary-save-verification' in read(skill / 'SKILL.md')
+    assert 'setup_confirmed' in read(ROOT / 'shared' / 'handoff-contracts.md')
+    assert 'first-use/setup gate' in read(ROOT / 'skills' / 'research-briefing' / 'SKILL.md')

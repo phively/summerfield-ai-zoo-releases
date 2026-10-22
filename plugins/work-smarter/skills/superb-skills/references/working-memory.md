@@ -93,7 +93,7 @@ Update only affected sections and justified pointers when that preserves a coher
 
 Every persistent-memory design must define independently observable review triggers in four classes: a measurable elapsed-time, byte-size, token-estimate, growth, or material-change-count threshold; a lifecycle operation; an integrity or coherence failure; and a retrieval or identity failure. Check inexpensive metadata at a workflow boundary such as an authorized write, explicit audit, or consequential use; do not repeatedly load full records merely to test a trigger. Any trigger can make an audit due. No trigger decides the lifecycle action by itself.
 
-When domain evidence supplies no better threshold, use this conservative default design heuristic and label it as a heuristic rather than a research finding:
+Follow an explicit domain review policy when supplied; Remember Me uses elapsed time for routine cleanup and treats absolute file size as advisory. Otherwise, when domain evidence supplies no better threshold, use this conservative default design heuristic and label it as a heuristic rather than a research finding:
 
 - review when the routing or current-state file exceeds 8 KiB, any detailed current file exceeds 16 KiB, 180 days have elapsed since its recorded audit, 25 material changes have accumulated since audit, or the record has grown by 25 percent since audit when that metadata is inexpensive to maintain;
 - audit before every persistent-record compaction, split, merge, deduplication, archive migration, schema migration, or authority transfer regardless of size or age;

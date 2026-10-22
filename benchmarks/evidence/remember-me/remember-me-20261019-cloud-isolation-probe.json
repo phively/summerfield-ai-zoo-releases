@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "study_id": "remember-me-cloud-isolation-probe-20261019",
+  "generated_at_utc": "2026-10-19T20:34:21Z",
+  "purpose": "Cloud task workspace capability probe; not a behavioral benchmark trial",
+  "requested_model_family": "GPT-6 Luna",
+  "requested_reasoning_efforts": [
+    "high",
+    "extra_high"
+  ],
+  "observed_model_metadata": "The first two tasks exposed no model metadata. The third task response reported GPT-5.6 Sol; reasoning effort was unavailable. Its submission requested GPT-6 Luna with high reasoning through CLI config overrides, so the requested model was not verified.",
+  "tasks": [
+    {
+      "task_id": "task_b_6ad67581a4fc8326924e3137c75e9019",
+      "environment": "A",
+      "workspace": "/workspace/superb-skills-isolated-a",
+      "head": "545cf527223a012d2bc427b5bd9c6ace6f1754bc",
+      "report_path_in_task": "issue-24-cloud-isolation-report.md"
+    },
+    {
+      "task_id": "task_b_6ad675906a4483269720dd75946f06c4",
+      "environment": "B",
+      "workspace": "/workspace/superb-skills-isolated-b",
+      "head": "0adaad7dd7fcf34eed00ebe1820c1ec42ddd7184",
+      "report_path_in_task": "cloud-isolation-probe-report.md"
+    },
+    {
+      "task_id": "task_b_6ad67dfa0cf483269a2661796abebc98",
+      "url": "https://chatgpt.com/codex/tasks/task_b_6ad67dfa0cf483269a2661796abebc98",
+      "environment": "summerfield2607/superb-skills-eval",
+      "workspace": "/workspace/superb-skills-eval",
+      "branch": "work",
+      "head": "9658c59dfd8459ecefbb47167dc677041e03bcbf",
+      "tracked_file_count": 14,
+      "issue24_test_files": 0,
+      "issue24_fixture_files": 0,
+      "issue24_gold_or_holdout_files": 0,
+      "generic_compare_controller_and_scorer_present": true,
+      "tests_executed": 0,
+      "test_skip_reason": "The repository had no Issue 24 protocol, target fixtures, gold inputs, or test files.",
+      "requested_model": "gpt-6-luna",
+      "requested_reasoning_effort": "high",
+      "reported_model": "GPT-5.6 Sol",
+      "reported_reasoning_effort": "Unavailable",
+      "yolo_enabled": false,
+      "working_tree_clean": true
+    }
+  ],
+  "observations": {
+    "candidate_remember_me_skill_present": true,
+    "benchmark_protocol_present": false,
+    "benchmark_adapter_present": false,
+    "benchmark_scorer_present": false,
+    "controller_or_gold_paths_present": false,
+    "requester_local_workspace_path_observed": false,
+    "yolo_enabled": false,
+    "cloud_task_diffs_applied_to_local_checkout": false,
+    "evaluation_environment_had_issue24_harness": false,
+    "evaluation_environment_had_generic_compare_tools": true,
+    "evaluation_environment_test_cases_executed": 0,
+    "current_repository_cloud_lookup": "403 repo_not_accessible",
+    "requested_luna_model_verified": false
+  },
+  "result": "The two isolated A/B checkouts contained the candidate skill but lacked the benchmark harness and grading data. The separate superb-skills-eval task had generic comparison, controller and scorer tools but no Issue 24 protocol, target fixtures, gold or holdout inputs, or tests; it ran zero tests. A Cloud lookup for the current summerfield-ai-zoo repository returned 403 repo_not_accessible. The third task response reported GPT-5.6 Sol with reasoning effort unavailable despite CLI config overrides requesting GPT-6 Luna high. No behavioral trial or U2/U6 scoring was possible. These observations support only separation within the inspected task trees, not KTD10 or the Cloud VM isolation guarantee.",
+  "limitations": [
+    "Path inspection is bounded evidence; it does not prove every Cloud service isolation guarantee.",
+    "No candidate behavior trial, model comparison, token or timing measurement, holdout run, backup-mode activation, or provider publication was performed.",
+    "The task results did not expose observed model and reasoning metadata.",
+    "YOLO behavior was not exercised. Official Codex CLI documentation states that YOLO bypasses Codex approvals and sandboxing and is intended only inside an externally hardened environment.",
+    "The codex cloud exec help exposes no model or reasoning-effort option. A task submitted with model and reasoning-effort config overrides reported GPT-5.6 Sol and no reasoning-effort value; do not count it as a GPT-6 Luna trial.",
+    "The available Cloud environments did not include the current summerfield-ai-zoo repository or the required Issue 24 benchmark inputs."
+  ],
+  "references": [
+    "https://learn.chatgpt.com/docs/environments/cloud-environments",
+    "https://learn.chatgpt.com/docs/cli/reference"
+  ]
+}

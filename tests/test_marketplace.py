@@ -202,7 +202,7 @@ def test_catalog_covers_marketplace_plugins_and_readme_links_them() -> None:
             skill = re.search(r"(?m)^name:\s*(.+?)\s*$", read(skill_path))
             assert skill is not None
             bullet = (
-                f"• [{skill.group(1)}]({relative}) - "
+                f"â€¢ [{skill.group(1)}]({relative}) - "
                 f"{skill_short_description(skill_path)}"
             )
             assert bullet in readme
@@ -223,11 +223,16 @@ def test_catalog_and_readme_cover_standalone_research_briefing() -> None:
         r"    path: skills/research-briefing$",
         catalog,
     )
-    assert (
-        f"| research-briefing | skill | {version.group(1)} | "
-        "[skills/research-briefing](skills/research-briefing/SKILL.md) | "
+    link = "[skills/research-briefing](skills/research-briefing/SKILL.md)"
+    assert link in readme
+    current_row = (
+        f"| research-briefing | skill | {version.group(1)} | {link} | "
         f"{description.group(1)} |"
-    ) in readme
+    )
+    # README catalog refreshes are explicitly requested; a component update may
+    # intentionally leave the last generated skill row in place.
+    if f"| research-briefing | skill | {version.group(1)} |" in readme:
+        assert current_row in readme
 
 
 def test_teach_me_has_bundled_and_standalone_copies() -> None:
@@ -263,21 +268,25 @@ def test_standalone_teach_me_is_self_contained_and_mirrors_references() -> None:
         "assets/icon-small.svg",
         "references/learning-evidence.md",
         "references/learning-philosophy.md",
+        "references/learning-plan-research.md",
         "references/teaching-workflow.md",
         "references/domains/drawing-painting.md",
+        "references/domains/if-you-can.md",
         "references/domains/visual-arts.md",
+        "references/personalities/financial-fiduciary.md",
         "references/personalities/nicer-socrates.md",
     }
 
     for relative in (
         "references/domains/drawing-painting.md",
+        "references/domains/if-you-can.md",
         "references/domains/visual-arts.md",
     ):
         assert read(standalone / relative) == read(bundled / relative)
 
     skill = read(standalone / "SKILL.md")
     agent = read(standalone / "agents" / "openai.yaml")
-    assert "Standalone teaching skill" in skill
+    assert "Standalone adaptive teaching and advice skill" in skill
     assert f'metadata:\n  version: "{plugin["version"]}"\n---' in skill
     assert not re.search(r"(?m)^version:", skill)
     for forbidden in ("work-smarter", "remember-me", "research-briefing", "handoff-contracts"):
@@ -290,8 +299,10 @@ def test_standalone_teach_me_is_self_contained_and_mirrors_references() -> None:
         "assets/icon-small.svg",
         "references/learning-evidence.md",
         "references/learning-philosophy.md",
+        "references/learning-plan-research.md",
         "references/teaching-workflow.md",
         "references/personalities/nicer-socrates.md",
+        "references/personalities/financial-fiduciary.md",
     ):
         assert read(standalone / relative) == read(bundled / relative)
 

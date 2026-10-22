@@ -1,0 +1,1811 @@
+{
+  "schema_version": 1,
+  "suite": "remember-me-save-development",
+  "cases": [
+    {
+      "id": "implicit-first-use",
+      "acceptance": [
+        "AE1"
+      ],
+      "public": {
+        "prompt": "Bundled implicit consultation: use personal communication preferences if already authorized. The current user only says: explain a sorting algorithm.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": [],
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "incidental-first-use",
+      "acceptance": [
+        "AE1"
+      ],
+      "public": {
+        "prompt": "Incidental user statement: I like concise answers. Please explain sorting. No request to remember.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": [],
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "ordinary-save",
+      "acceptance": [
+        "AE2",
+        "AE6"
+      ],
+      "public": {
+        "prompt": "Remember that I prefer concise answers. Use my existing library-a index and topic.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        },
+        "index": {
+          "summary": "concise answers",
+          "setup_confirmed": true
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "legacy-read",
+      "acceptance": [
+        "AE2"
+      ],
+      "public": {
+        "prompt": "Tell me my recorded communication preference; this is read-only.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": null,
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "wrapup-declined",
+      "acceptance": [
+        "AE3"
+      ],
+      "public": {
+        "prompt": "I now prefer concise answers. That is all for today. Offer any useful topic update, then wait.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "No, do not save that.",
+        "allow": false
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "detailed answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "detailed answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": null,
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "wrapup-silence",
+      "acceptance": [
+        "AE3"
+      ],
+      "public": {
+        "prompt": "I now prefer concise answers. That is all for today. Offer any useful topic update, then wait.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "detailed answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "detailed answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": null,
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "wrapup-accepted",
+      "acceptance": [
+        "AE3"
+      ],
+      "public": {
+        "prompt": "I now prefer concise answers. That is all for today. Offer any useful topic update, then wait.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "Yes, save that topic update in library-a.",
+        "allow": true
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "detailed answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "detailed answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        },
+        "index": {
+          "summary": "concise answers"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "sensitive-confirmed",
+      "acceptance": [
+        "AE4"
+      ],
+      "public": {
+        "prompt": "Remember this sensitive health fact: I have a peanut allergy. Preview the retained fact and destination before saving.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "Yes, save exactly the peanut allergy fact in library-a.",
+        "allow": true
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "topic": {
+          "health": "peanut allergy"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "sensitive-declined",
+      "acceptance": [
+        "AE4"
+      ],
+      "public": {
+        "prompt": "Remember this sensitive health fact: I have a peanut allergy.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "Do not save it.",
+        "allow": false
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": null,
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "ambiguous-index",
+      "acceptance": [
+        "AE5"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers. I have same-named indexes in two libraries and have not selected an authority. Ask which one; do not choose.",
+        "selected_container": null,
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        },
+        "other-index": {
+          "provider": "fixture",
+          "container": "library-b",
+          "id": "other-index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": null,
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "renamed-resource",
+      "acceptance": [
+        "AE5",
+        "AE6"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers in library-a. Resolve index topic_id even though the filename changed.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "renamed/communication.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        },
+        "index": {
+          "summary": "concise answers"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "mismatched-readback",
+      "acceptance": [
+        "AE7"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers in library-a.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "topic:read": "mismatch-after-write"
+      },
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "unverified",
+      "required_attempts": [
+        {
+          "id": "topic",
+          "op": "read",
+          "after_commit": true
+        }
+      ]
+    },
+    {
+      "id": "unavailable-readback",
+      "acceptance": [
+        "AE7"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers in library-a.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "topic:read": "unavailable-after-write"
+      },
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "unverified",
+      "required_attempts": [
+        {
+          "id": "topic",
+          "op": "read",
+          "after_commit": true
+        }
+      ]
+    },
+    {
+      "id": "partial-index",
+      "acceptance": [
+        "AE8"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers in library-a.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "index:write": "reject"
+      },
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "partial",
+      "required_attempts": [
+        {
+          "id": "index",
+          "op": "write",
+          "error": "index unavailable"
+        }
+      ]
+    },
+    {
+      "id": "lost-ack",
+      "acceptance": [
+        "AE7"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers in library-a. If an acknowledgement is lost, reread before retrying.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "topic:write": "lost-ack"
+      },
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        },
+        "index": {
+          "summary": "concise answers"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "owner-done-only",
+      "acceptance": [
+        "AE7"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers in the specialist-owned topic. Request its owner update; a bare done is not readback evidence.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve",
+            "owner": "specialist"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "specialist",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "topic:owner_update": "done-only"
+      },
+      "expected": {},
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "unverified",
+      "required_attempts": [
+        {
+          "id": "topic",
+          "op": "owner_update",
+          "message": "done"
+        }
+      ]
+    },
+    {
+      "id": "owner-evidence",
+      "acceptance": [
+        "AE2"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers in the specialist-owned topic. Use owner_update and inspect its returned fresh evidence.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve",
+            "owner": "specialist"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "specialist",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        },
+        "index": {
+          "summary": "concise answers"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "copied-setup",
+      "acceptance": [
+        "AE1",
+        "AE5"
+      ],
+      "public": {
+        "prompt": "Implicit consultation. Only a copied index is present; its content canonical_container is library-b although it was found in library-a. Continue neutrally.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "canonical_container": "library-b"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": [],
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "research-briefing-unknown",
+      "acceptance": [
+        "AE1"
+      ],
+      "public": {
+        "prompt": "research-briefing implicit personal-context consultation with unknown setup. Continue neutrally without personal-topic retrieval or setup offers.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": [
+        "index"
+      ],
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "teach-me-unknown",
+      "acceptance": [
+        "AE1"
+      ],
+      "public": {
+        "prompt": "teach-me implicit personal-context consultation with unknown setup. Continue neutrally without personal-topic retrieval or setup offers.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": [
+        "index"
+      ],
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "transcript-confirmed",
+      "acceptance": [
+        "AE9"
+      ],
+      "public": {
+        "prompt": "Save a verbatim Markdown transcript of these available turns: ## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n Confirm scope, format, representation and library-a destination first. Do not update my current preference.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "Yes, save exactly those available turns as verbatim Markdown in library-a/remember-me/sources/source-1.md; keep current topics unchanged.",
+        "allow": true
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "source-1": {
+          "markdown": "## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n"
+        }
+      },
+      "allowed_writes": [
+        "source-1"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "transcript-incomplete",
+      "acceptance": [
+        "AE9",
+        "AE10"
+      ],
+      "public": {
+        "prompt": "Save a verbatim Markdown transcript of these available turns: ## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n Earlier turns, attachments, and tool outputs are unavailable. Disclose these omissions. Confirm scope, format, representation and library-a destination first. Do not update my current preference.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "Yes, save exactly those available turns as verbatim Markdown in library-a/remember-me/sources/source-1.md; keep current topics unchanged.",
+        "allow": true
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "source-1": {
+          "markdown": "## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n"
+        }
+      },
+      "allowed_writes": [
+        "source-1"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "transcript-declined",
+      "acceptance": [
+        "AE9"
+      ],
+      "public": {
+        "prompt": "Save a transcript of this exchange as Markdown; confirm scope and destination first.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "No, do not save a transcript.",
+        "allow": false
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": null,
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "transcript-citation",
+      "acceptance": [
+        "AE9",
+        "AE10"
+      ],
+      "public": {
+        "prompt": "The verified source-1 has historical long-answer preference. Add only a concise citation to that source in the topic. Keep my current brief-answer preference.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        },
+        "source-1": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "source-1",
+          "path": "remember-me/sources/source-1.md",
+          "owner": "remember-me",
+          "content": {
+            "markdown": "## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "topic": {
+          "preference": "brief answers",
+          "source_id": "source-1",
+          "source_anchor": "turn-1"
+        }
+      },
+      "allowed_writes": [
+        "topic",
+        "index"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "changed-destination",
+      "acceptance": [
+        "AE3"
+      ],
+      "public": {
+        "prompt": "I now prefer concise answers. That is all for today. Offer any useful topic update, then wait.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "Actually use library-b instead. Show me the revised destination before saving.",
+        "allow": false
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "detailed answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "detailed answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_writes": [],
+      "allowed_reads": null,
+      "report": "no-write",
+      "required_attempts": []
+    },
+    {
+      "id": "newer-conflict",
+      "acceptance": [
+        "AE7"
+      ],
+      "public": {
+        "prompt": "Remember I prefer concise answers in library-a. If an acknowledgement is lost, reread before retrying.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "topic:write": "lost-ack-conflict"
+      },
+      "expected": {
+        "topic": {
+          "preference": "detailed answers (newer user correction)"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "unverified",
+      "required_attempts": []
+    },
+    {
+      "id": "source-lost-ack",
+      "acceptance": [
+        "AE9"
+      ],
+      "public": {
+        "prompt": "Save a verbatim Markdown transcript of these available turns: ## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n Confirm scope, format, representation and library-a destination first. Do not update my current preference.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": {
+        "reply": "Yes, save exactly those available turns as verbatim Markdown in library-a/remember-me/sources/source-1.md; keep current topics unchanged.",
+        "allow": true
+      },
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "setup_confirmed": true,
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "source-1:create": "lost-ack"
+      },
+      "expected": {
+        "source-1": {
+          "markdown": "## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n"
+        }
+      },
+      "allowed_writes": [
+        "source-1"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "new-index-save",
+      "acceptance": [
+        "AE2",
+        "AE6"
+      ],
+      "public": {
+        "prompt": "Remember that I prefer concise answers. My selected destination is library-a; it has no existing Remember Me records.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority. This provider uses reserved client-assigned IDs index for remember-me/index.md and topic for the one new current topic file. The provider name is fixture; include it in every created record."
+      },
+      "approval_turn": null,
+      "initial": {},
+      "faults": {},
+      "expected": {
+        "topic": {
+          "preference": "concise answers"
+        },
+        "index": {
+          "summary": "concise answers",
+          "setup_confirmed": true
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    },
+    {
+      "id": "setup-readback-fails",
+      "acceptance": [
+        "AE2",
+        "AE6"
+      ],
+      "public": {
+        "prompt": "Remember that I prefer concise answers. Use my existing library-a index and topic.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "index:read": "unavailable-after-write",
+        "index:metadata": "unavailable-after-write"
+      },
+      "expected": {
+        "index": {
+          "setup_confirmed": true
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "unverified",
+      "required_attempts": []
+    },
+    {
+      "id": "setup-verified-topic-fails",
+      "acceptance": [
+        "AE2",
+        "AE6"
+      ],
+      "public": {
+        "prompt": "Remember that I prefer concise answers. Use my existing library-a index and topic.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user"
+          }
+        }
+      },
+      "faults": {
+        "topic:write": "reject"
+      },
+      "expected": {
+        "index": {
+          "setup_confirmed": true
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "partial",
+      "required_attempts": []
+    },
+    {
+      "id": "freshness-metadata",
+      "acceptance": [
+        "AE2",
+        "AE6"
+      ],
+      "public": {
+        "prompt": "Remember that I prefer concise answers. Use my existing library-a index and topic.",
+        "selected_container": "library-a",
+        "tools": [
+          "metadata",
+          "list",
+          "read",
+          "write",
+          "create",
+          "owner_update"
+        ],
+        "tool_contract": "Use provider/container/id for read and write; patch content fields without dropping unrelated fields. create takes record. Only owner_update may change specialist records. Each call is one JSON request to the adapter. Reports must identify destination and verified, partial, unverified, or no-write outcome. Metadata reads use op=metadata. A transcript source is a Markdown string in content.markdown. Patches merge fields directly into record.content, without a nested content envelope; null is stored literally. Synthetic content fields: preference and summary use the preference phrase without an attribution prefix; health uses a minimized condition phrase; markdown holds only verbatim turn bodies with source metadata in separate fields. A topic citation uses source_id and source_anchor. For these synthetic fixtures, index.topic_id identifies the existing current topic record; preserve that authority."
+      },
+      "approval_turn": null,
+      "initial": {
+        "index": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "index",
+          "path": "remember-me/index.md",
+          "owner": "remember-me",
+          "content": {
+            "summary": "brief answers",
+            "topic_id": "topic",
+            "last_audited": "2026-01-01",
+            "unrelated": "preserve",
+            "last_verified": "2026-10-01"
+          }
+        },
+        "topic": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "topic",
+          "path": "remember-me/topic.md",
+          "owner": "remember-me",
+          "content": {
+            "preference": "brief answers",
+            "attribution": "user",
+            "last_updated": "2026-10-01"
+          }
+        }
+      },
+      "faults": {},
+      "expected": {
+        "topic": {
+          "preference": "concise answers",
+          "last_updated": "2026-10-17"
+        },
+        "index": {
+          "summary": "concise answers",
+          "setup_confirmed": true,
+          "last_verified": "2026-10-17"
+        }
+      },
+      "allowed_writes": [
+        "index",
+        "topic"
+      ],
+      "allowed_reads": null,
+      "report": "verified",
+      "required_attempts": []
+    }
+  ]
+}

@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "study_id": "20261018-issue16-runtime-isolation-blocked",
+  "status": "blocked-incomplete",
+  "generated_at_utc": "2026-10-19T04:08:43Z",
+  "integrity": {
+    "algorithm": "sha256",
+    "index_self_hash": "omitted; an index cannot include its own stable hash",
+    "verification": {
+      "status": "unverifiable",
+      "checked_at_utc": "2026-10-19T20:14:26Z",
+      "historical_artifact_count": 12,
+      "historical_hashes_matching_commit": 11,
+      "comparison_commit": "60a3210e965c1e7b4041a11ea246de32daab55df",
+      "unrecovered_artifacts": [
+        {
+          "path": "plugins/work-smarter/evals/remember-me-benchmark/adapter.py",
+          "sha256": "b1501c6b45f702b43ffc1b3ce430277e1bb8cba9b77e360d753e669f10f88f74"
+        }
+      ],
+      "reason": "The original indexed hashes and suite/rubric 1.0.0 metadata are preserved. Eleven indexed artifact bytes match the comparison commit, but the captured adapter digest is absent from that commit and tracked history. Seven indexed paths now contain changed bytes, including suite/rubric 1.1.0 materials. This historical index cannot validate the current candidate tree; assign a fresh study_id to future candidate results."
+    },
+    "bound_artifacts": [
+      {
+        "path": "benchmarks/remember-me-20261018-issue16-runtime-isolation-blocked-final-comparison.html",
+        "sha256": "34591600f28e8c512f99b150046b7195443ac651cefbc0bfdbe48a8e3b688c56"
+      },
+      {
+        "path": "benchmarks/remember-me-20261018-issue16-runtime-isolation-blocked-final-comparison.json",
+        "sha256": "be1a885dbe36e65bb475d1042d7bc5b5e5661be476c72ad3dc48310dc2c0e807"
+      },
+      {
+        "path": "plugins/work-smarter/evals/remember-me-benchmark-review.md",
+        "sha256": "e9ad0462839046ef1fc10d4e9fa4fd4fb5fa1378fdfe41402731fcf351a57330"
+      },
+      {
+        "path": "private planning record (omitted from public snapshot)",
+        "sha256": "11489a7aa6637c0d88e9faf22e4eb66972db12c75f93e6c3620bfd32c0805a1d"
+      }
+    ],
+    "candidate_and_target_materials": [
+      {
+        "path": "plugins/work-smarter/evals/remember-me-benchmark/manifest.json",
+        "sha256": "da531f041b563feb8e843e1ed973cd62dc4cbedac339b0f8a251abb9a941efb2"
+      },
+      {
+        "path": "plugins/work-smarter/evals/remember-me-benchmark/protocol.md",
+        "sha256": "461d9ed0e928a4f902e78f3f1e114f7f3f74d455643f214ae0dfd9eac6841f99"
+      },
+      {
+        "path": "plugins/work-smarter/evals/remember-me-benchmark/fixtures.py",
+        "sha256": "946f5aeecd7de806b21a6156b75e78c4692310f0500a71b7ae08653a34b5af5f"
+      },
+      {
+        "path": "plugins/work-smarter/evals/remember-me-benchmark/adapter.py",
+        "sha256": "b1501c6b45f702b43ffc1b3ce430277e1bb8cba9b77e360d753e669f10f88f74"
+      },
+      {
+        "path": "plugins/work-smarter/evals/remember-me-benchmark/score.py",
+        "sha256": "59f23a438c37a10eb65d7b81ca19400e40fd321fe72a5c5172423c4d0c5a177c"
+      },
+      {
+        "path": "plugins/work-smarter/skills/remember-me/SKILL.md",
+        "sha256": "b58886f7dd7f3f4767e635ec75b655bb64bd83c246e74b7f01e5dda2fae419d2"
+      },
+      {
+        "path": "plugins/work-smarter/skills/remember-me/references/record-management.md",
+        "sha256": "d60774e879f9dd5e7a2bbc1d9386380375711b9ba014a1cc9c991a68f41bf81a"
+      },
+      {
+        "path": "plugins/work-smarter/tests/test_remember_me_benchmark.py",
+        "sha256": "1a90bdc2b6467b7d7fd6392350e97eafe36cb56dd26c4074d108af2346c804a7"
+      }
+    ]
+  },
+  "repository_state": {
+    "base_commit": "967cd52006ae0607c4b9262bbdf9e1785db60482",
+    "branch_at_evidence_capture": "codex/remember-me-save-review-fixes",
+    "working_tree_changes_included": true,
+    "remote_publication": false
+  },
+  "benchmark_identity": {
+    "suite_id": "remember-me-memory-benchmark-development",
+    "suite_version": "1.0.0",
+    "rubric_id": "remember-me-recall-and-retrieval-cost",
+    "rubric_version": "1.0.0",
+    "candidate_identities": "The deterministic builder emits a public retrieval instruction tied to each candidate strategy; candidate IDs and gold remain controller-only. No model candidate was executed.",
+    "target": {
+      "skill": "plugins/work-smarter/skills/remember-me/SKILL.md",
+      "record_management": "plugins/work-smarter/skills/remember-me/references/record-management.md",
+      "candidate_policy_changed": false
+    },
+    "corpus": {
+      "identity_source": "plugins/work-smarter/evals/remember-me-benchmark/manifest.json",
+      "mode": "synthetic-development-only",
+      "declared_scenarios": 24,
+      "source_repository": "phively/personal-context",
+      "source_path": "records/remember-me",
+      "source_commit": "ce276b13c47061347080168d7a87583e8d3d633f",
+      "source_index_blob_sha": "72c992d7c979cc8d478cfa277df70ea630d935e5",
+      "source_payload_retained": false
+    },
+    "partition": {
+      "development_scenarios": "24 declared, all development fixtures",
+      "independent_partition": "none",
+      "protected_final_holdout": "not-created-or-run"
+    },
+    "runtime": {
+      "requested_model": "GPT-6 Luna",
+      "requested_reasoning_effort": "xhigh",
+      "requested_speed_mode": "standard",
+      "faster_1_5x": false,
+      "observed_model": null,
+      "observed_reasoning_effort": null,
+      "observed_speed_mode": null,
+      "observed_tool_envelope": null
+    }
+  },
+  "attempts": {
+    "model_sessions_started": 0,
+    "attempt_records": [],
+    "exposure_records": [],
+    "raw_attempts": [],
+    "reason": "No model trial was launched because one-shot command execution remains available to a trial agent and cannot be disabled by this host's available Codex configuration."
+  },
+  "deterministic_development_checks": {
+    "pre_followup_bounded_suite": {
+      "method": "stdlib pytest-compatibility fallback; not pytest",
+      "focused_tests_passed": 112,
+      "focused_tests_failed": 0,
+      "focused_tests_skipped": 0,
+      "note": "Run before the candidate-specific retrieval instruction change; destination-policy and reporting code were unchanged afterward."
+    },
+    "post_followup_benchmark_module": {
+      "method": "stdlib direct-call fallback; not pytest",
+      "focused_tests_passed": 13,
+      "focused_tests_failed": 0,
+      "focused_tests_skipped": 0,
+      "scope": "all test functions in test_remember_me_benchmark.py, after adding the candidate-strategy control"
+    },
+    "pytest_status": "blocked: python3 -m pytest reports No module named pytest",
+    "post_review_fix_seven_module_fallback": {
+      "method": "manual stdlib runner with a limited pytest compatibility shim; not pytest",
+      "focused_tests_passed": 317,
+      "focused_tests_failed": 0,
+      "focused_tests_skipped": 0,
+      "scope": [
+        "test_remember_me_benchmark.py",
+        "test_record_backup_destination_policy.py",
+        "test_work_smarter.py",
+        "test_record_backup_reporting.py",
+        "test_record_backup_permissions_and_downloads.py",
+        "test_record_backup_manual_verification.py",
+        "test_remember_me_save_trials.py"
+      ],
+      "note": "This fallback does not satisfy the exact pytest gate; pytest is not installed."
+    }
+  },
+  "host_isolation_evidence": {
+    "codex_cli_version": "0.163.0",
+    "finding": "The available CLI exposes one-shot command execution despite the attempted unified-exec opt-out; managed restrictions can remove resumable process control but do not remove the one-shot exec tool.",
+    "official_reference": "https://learn.chatgpt.com/docs/config-file/config-reference",
+    "result": "required trial isolation boundary not enforceable here"
+  },
+  "evidence_gaps": [
+    "No actual model operations, exit statuses, or session artifacts were observed.",
+    "No independent final trial stores or semantic adjudication exist.",
+    "Recall, token usage, timing, amortized cost, sample counts and uncertainty are unavailable, not zero.",
+    "The pre-freeze behavioral feasibility pilot did not pass; deterministic local controls are not model evidence.",
+    "Live Library heading/section behavior and daily/manual/weekly/restore behavior were not tested.",
+    "No remote destination publication or readback was performed."
+  ]
+}

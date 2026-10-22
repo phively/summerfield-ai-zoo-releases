@@ -11,8 +11,6 @@ This is the current evidence authority for the `teach-me` learning philosophy. R
 - Next targeted AI-learning review due: 2026-12-06
 - Next comprehensive review due: 2027-09-06
 - Initial provenance: source-level audit contained in the user-supplied `teach-me` research and architecture transcript
-- Implementation note: the 1.7.0 implementation captured that audited synthesis but did not independently repeat its web research
-- History: Git; do not create a separate history file until current retrieval or auditability materially benefits from separation
 
 ## Current synthesis
 
@@ -58,7 +56,7 @@ This is the current evidence authority for the `teach-me` learning philosophy. R
 | Use contrast and interleaving for discrimination | Supported conditionally | Domain differences are substantial |
 | Treat the tutor as fallible | Safety and transfer implication from automation evidence | Exact exercise design requires domain judgment |
 
-## Initial source register
+## Source register
 
 `verified` below means that the supplied 2026-09-06 audit reported checking the source and the summarized result. Preserve that provenance until a future maintenance review independently verifies it again.
 
@@ -119,4 +117,4 @@ Also review when:
 - the file exceeds 16 KiB or grows by 25 percent since its last structural review; or
 - a split, compaction, schema migration, or authority transfer is proposed.
 
-For a material update, preserve the existing file, inventory current principles and sources, stage the revision, map each changed item to retained, revised, added, excluded, or superseded, check links and active contradictions, and replace the current authority only after review. Git history is sufficient while the record remains understandable and easy to retrieve; add a separate history only when meaningful superseded conclusions make the current file materially harder to use.
+For a material update, inventory current principles and sources, review affected claims and examples, check links and active contradictions, and replace the current synthesis only after review. Keep source provenance and exclusions that materially affect interpretation of the current evidence.

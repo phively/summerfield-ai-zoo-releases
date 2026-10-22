@@ -226,17 +226,17 @@
       "exit_status": 0
     }
   ],
-  "skill_structure": "All five skill-creator quick validators passed; detailed commands and outputs are private development evidence and are not distributed.",
+  "skill_structure": "All five skill-creator quick validators passed; commands and outputs in output/career-coach-issue-18-stage6-preparation-checks-2026-10-11.json.",
   "repository_tests": {
     "command": "python -B -m pytest -q -p no:cacheprovider tests plugins --tb=short",
     "result": "9 failed, 170 passed, 1 skipped",
-    "evidence": "Private development evidence; not distributed in this public snapshot.",
+    "evidence": "output/career-coach-issue-18-stage6-repository-tests-2026-10-11.txt",
     "failures_scope": "Unchanged repository SVG/mirror/catalog checks, Meal Planner version assertion, and Work Smarter superb-skills instruction-size/routing assertions. No Career Coach failures."
   },
   "prior_behavioral_evidence": {
     "version": "1.7.0 worktree candidate",
     "package_sha256": "ef8240c1b02dcc40b57b1f00b6df46acf18687ae025574de634c5db018c3ee6b",
-    "evidence": "Private development evidence; not distributed in this public snapshot.",
+    "evidence": "output/career-coach-issue-18-step5-validation-2026-10-11.json",
     "transfer_basis": "Stage 6 changed plugin version, README overview, matching test version assertion, and added this results artifact. Behavioral instructions and validator are unchanged from stage 5."
   },
   "limitations": [

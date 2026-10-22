@@ -31,7 +31,7 @@ def load_suite() -> dict:
 def test_routing_suite_has_explicit_context_protocol() -> None:
     suite = load_suite()
     assert suite["suite"] == "teach-me-routing"
-    assert suite["version"] == "1.0.0"
+    assert suite["version"] == "1.1.0"
     protocol = suite["fixture_protocol"]
     assert set(protocol) == {"context", "turns", "expected_mode_by_turn"}
     assert set(protocol["context"]) == {
@@ -62,7 +62,7 @@ def test_routing_suite_has_explicit_context_protocol() -> None:
         assert case["failure_criteria"]
 
 
-def test_routing_suite_covers_candidate_b_boundaries_and_additions() -> None:
+def test_routing_suite_covers_interaction_modes_and_research_routes() -> None:
     suite = load_suite()
     ids = {case["id"] for case in suite["cases"]}
     required = {
@@ -160,30 +160,56 @@ def test_bundled_teach_me_contains_the_mode_gate() -> None:
     assert "does not end **LEARNING** mode" in personality
 
 
-def test_routing_rubric_has_independent_dimensions_and_blocking_gates() -> None:
+def test_routing_rubric_scopes_current_research_acceptance() -> None:
     rubric = read(RUBRIC_PATH)
-    for phrase in (
-        "Activation and routing",
-        "Mode continuity",
-        "Learner reasoning",
-        "Scaffold choice",
-        "Evidence and uncertainty",
-        "User control and stopping",
-        "Critical",
-        "Major",
-        "Moderate",
-        "Minor",
-        "Critical failures and explicit mode-control failures are acceptance blockers",
-        "Run the baseline before editing",
-        "three independent trials",
-        "Do not represent fixture presence as behavioral validation",
-        "For a case marked **AMBIGUOUS**",
-    ):
-        assert phrase in rubric
+    for heading in ("## Cases", "## Scoring", "## Execution", "## Acceptance"):
+        assert heading in rubric
+    for stale in ("Candidate B", "Historical interaction-mode", "Run the baseline before editing"):
+        assert stale not in rubric
+    cases = {case["id"] for case in load_suite()["cases"]}
+    referenced = {line.split("`", 2)[1] for line in rubric.splitlines() if line.startswith("- `route-")}
+    assert referenced <= cases
+    assert len(referenced) == 7
+    assert "Do not represent fixture presence as behavioral validation" in rubric
 
 
 def test_plugin_validator_includes_routing_validation() -> None:
     assert load_validator().validate_teach_me_routing() is None
+
+
+def test_research_prompt_routing_is_caller_owned() -> None:
+    skill = read(ROOT / "skills" / "teach-me" / "SKILL.md")
+    research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
+    contract = read(ROOT / "shared" / "handoff-contracts.md")
+    teaching_contract = contract.split("## Teach Me to Research Briefing\n", 1)[1].split("\n## ", 1)[0]
+    other_contract = contract.split("## Superb Skills to Research Briefing\n", 1)[1].split("\n## ", 1)[0]
+    plan = read(ROOT / "skills" / "teach-me" / "references" / "learning-plan-research.md")
+    assert "invoke `research-briefing` through the canonical contract" in skill
+    assert "this contract supplies no receiver-specific exception" in teaching_contract
+    assert "actual authorization and its scope" in teaching_contract
+    assert "| User confirmation | Required." in other_contract
+    assert "teach-me" not in research
+    assert "bounded automatic-research exception" not in research
+    assert "Also omit the checkpoint when the current request explicitly waives it" in research
+    assert "tailored research prompt" in teaching_contract
+    assert "When external research is needed" in plan
+    assert "use the parent skill's research route" in plan.lower()
+    assert "do not execute research when the user requested preparation only" in plan
+    cases = {case["id"]: case for case in load_suite()["cases"]}
+    for case_id in (
+        "route-plan-research-prompt",
+        "route-plan-research-checkpoint",
+        "route-plan-prompt-only",
+        "route-research-direct-checkpoint",
+        "route-research-caller-label-negative",
+        "route-plan-supplied-material",
+    ):
+        assert case_id in cases
+    assert "research-briefing" in cases["route-plan-research-prompt"]["expected_skills"]
+    assert "skip research-scope confirmation" in cases["route-plan-research-prompt"]["input"].lower()
+    assert "skip research-scope confirmation" not in cases["route-plan-research-checkpoint"]["input"].lower()
+    assert "research-briefing" not in cases["route-plan-prompt-only"]["expected_skills"]
+    assert "research-briefing" not in cases["route-plan-supplied-material"]["expected_skills"]
 
 
 def test_entire_bundled_plugin_validator_passes() -> None:

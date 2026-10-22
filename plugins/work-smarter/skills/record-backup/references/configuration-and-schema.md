@@ -21,6 +21,7 @@ destination:
   provider: github
   repository: <owner/repository>
   branch: <branch>
+  exclusions: []
 schedule:
   timezone: <IANA timezone>
   daily: null # null for manual-only operation; otherwise scheduler-owned expression
@@ -36,6 +37,53 @@ reporting:
 ```
 
 The profile must identify the source authority and the destination; it must not contain access tokens, private keys, passwords, recovery codes, or copied record contents. Validate repository identity and private visibility before any write. Require explicit authorization immediately before a first publication, branch change, deletion, or restoration.
+
+## Destination-directory exclusions
+
+`destination.exclusions` is optional and defaults to an empty list. It contains literal repository-relative directory roots whose files are independently managed in the destination repository:
+
+```yaml
+destination:
+  provider: github
+  repository: <owner/repository>
+  branch: <branch>
+  exclusions:
+    - separately-managed/research
+    - archive/vendor-files/
+```
+
+One trailing slash is accepted and removed during normalization. Matching uses complete path components, so `archive/vendor-files` does not cover `archive/vendor-files-old`. These rules affect only the validator's extra-file coverage check. They do not change source discovery, required records, hashes, permission decisions, or publication authority, and excluded files are not represented as verified Library backups. An absent directory is allowed; an existing exclusion root must be a directory.
+
+Use safe literal directory paths. Empty/root, absolute, drive-qualified, traversal, backslash, dot or repeated-separator, wildcard, duplicate, nested, and case-colliding rules fail closed. Rules may not overlap `records/`, previous or proposed managed paths, the indexed profile, `receipts/`, `README.md`, `.git`, the manifest, or another operational path. Symlinks and paths escaping the staging root remain errors, including inside an excluded directory. Files outside configured roots continue to fail as unindexed extras.
+
+The run derives a disposable JSON policy packet from a fresh canonical YAML read; the JSON is input evidence, never a second profile. The packet has exactly this shape:
+
+```json
+{
+  "schema_version": 1,
+  "profile": {
+    "provider": "<provider>",
+    "container": "<container ID>",
+    "id": "<stable profile identity>",
+    "path": "<canonical YAML path>",
+    "repository_path": "records/configuration/backup-profile.yaml",
+    "sha256": "<64 lowercase hex characters of the exact profile bytes>"
+  },
+  "destination": {"repository": "<owner/repository>", "branch": "<branch>"},
+  "context": "snapshot-validation",
+  "exclusions": ["separately-managed/research", "archive/vendor-files/"]
+}
+```
+
+Pass it with a separate `--policy-expectations` JSON derived from independently evidenced fresh profile and destination reads. Expectations contain `profile` with the same six fields, `destination`, `context`, `managed_paths` (the union of old and proposed manifest record paths), and `exclusions` extracted and normalized from the fresh canonical YAML. Retain the profile-read and extraction evidence; the helper does not parse YAML or prove that the supplied extraction is fresh or faithful. The validator compares the packet's normalized exclusion roots to this independently derived set, then checks the other bindings, indexed profile record identity, staged profile hash, exact path overlaps, and the manifest's matching `capture_policy` metadata. New exclusion-aware snapshots record the normalized exclusions and profile/destination binding in that metadata for historical interpretation; it does not grant current write authority.
+
+```text
+python scripts/validate_snapshot.py STAGING_ROOT \
+  --destination-policy RUN_INPUT/policy.json \
+  --policy-expectations RUN_INPUT/policy-expectations.json
+```
+
+Both JSON files are disposable run inputs. Supplying only one fails. Without a packet, the validator retains strict legacy behavior even if a historical manifest has capture-policy metadata. An empty exclusion list also exempts no files. This validation proves scoped manifest coverage only; it does not prove separately managed destination files were preserved during staging or publication.
 
 ## Sensitive-record permission
 

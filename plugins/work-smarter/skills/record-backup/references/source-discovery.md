@@ -2,6 +2,8 @@
 
 Inventory only configured providers, containers, roots, and authorized pointers. Include the canonical profile explicitly even when outside those roots. An index or previous manifest is a discovery aid, not proof of coverage.
 
+`destination.exclusions` applies only to extra-file checks and preservation in the GitHub destination. It does not remove any configured source root, authorize skipping source reads, or turn a source retrieval miss into a deletion.
+
 - Maintain one run-local inventory keyed by `(provider, container, immutable ID)`, with the strongest documented fallback when IDs are unavailable. Track root/page cursors and visited pointer identities separately. Deduplicate overlapping roots and aliases before fetching content; preserve all relevant path mappings and report conflicting identities.
 - Complete each listing's pagination once during the initial pass. Follow pointers within authorized scope; record out-of-scope targets without expanding scope. Skip already visited targets and record actual cycles; a repeated alias or a fully traversed cycle alone is not a coverage gap. Repeated pagination cursors, inaccessible pages, or truncated results may prevent complete enumeration: resolve them or mark the run incomplete, never infer deletion.
 - Batch metadata and content reads when the provider supports it. Fetch each included identity once per capture phase, reusing the resulting bytes and hashes within that phase. Daily runs may reuse verified bytes when trustworthy versions match; otherwise read and hash. Weekly runs start with a fresh inventory and read all included bytes independently of the daily cache.

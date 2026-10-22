@@ -1,68 +1,43 @@
-# Teach-me routing scoring rubric
+# Teach-me research routing rubric
 
-This rubric compares the unchanged teach-me baseline with Candidate B using the same fixture set, model configuration, permissions, and context construction. It evaluates observable behavior; it does not require a particular sentence, question, or number of turns. The routing fixture's `turns` are ordered user messages; its `context` separately records project instructions, assistant history, available tools, and conversation state. Feed multi-turn cases one user turn at a time and generate any assistant reply between turns.
+Evaluate bounded research prompts, authorization, and return to the originating task. Score routing only. No personality baseline or quality comparison is required.
 
-## Dimensions
+## Cases
 
-Score each dimension from 0 to 2 for every case:
+Use these development fixtures from `teach-me-routing.json`:
 
-| Dimension | 0 | 1 | 2 |
-| --- | --- | --- | --- |
-| Activation and routing | Wrong skill or wrong direct/learning route | Route is defensible but under-specified or needlessly costly | Correct route and scope |
-| Mode continuity | Established mode is lost or an explicit mode request is ignored | Continuity is mostly preserved but a local boundary is unclear | Mode is preserved and changes only with a scoped user instruction or clear task boundary |
-| Learner reasoning | Assistant substitutes for target cognition or gives away a needed analysis | Mixed support; some useful learner processing remains | Response preserves or appropriately exercises target cognition |
-| Scaffold choice | Questioning, explanation, or task handling is counterproductive | Usable but poorly calibrated support | Least substitutive useful support, including direct explanation when warranted |
-| Evidence and uncertainty | Unsupported claim, fabricated source, or strengthened hedge | Material qualification is incomplete | Claims, hypotheses, and uncertainty are accurately distinguished |
-| User control and stopping | Ignores direct override, stop, conclusion, or requested deliverable | Eventually honors it after avoidable friction | Honors scope promptly and stops when the objective or task is complete |
+- `route-research-handoff-preserves-mode`: a lesson with an explicit scoped waiver.
+- `route-plan-research-prompt`: a learning plan with an explicit scoped waiver.
+- `route-plan-research-checkpoint`: a learning plan without a waiver.
+- `route-plan-prompt-only`: preparation only, with no research or plan execution.
+- `route-research-direct-checkpoint`: a direct research request without a waiver.
+- `route-research-caller-label-negative`: a caller label without user authorization.
+- `route-plan-supplied-material`: a plan built from supplied notes without external research.
 
-The maximum is 12 points per case. Do not award continuity points merely because a response ends with a question; the response must preserve the learning objective and demonstrated reasoning.
+## Scoring
 
-## Severity gates
+Score each case from 0 to 2:
 
-Classify the most serious failure in each case:
-
-| Severity | Blocking examples |
+| Score | Observable result |
 | --- | --- |
-| Critical | Fabricated evidence or source; unauthorized persistence or action; ignored explicit direct or stop instruction; explicit learning request receives only a finished answer; established learning mode substantively collapses because the learner asks a content question |
-| Major | Temporary direct scaffolding permanently exits learning mode; ordinary direct task is forced into a lesson; repeated unnecessary mode questions despite clear context; research handoff loses the selected teaching mode |
-| Moderate | Poorly chosen teaching move, such as requiring rediscovery of a requested prerequisite; avoidable but recoverable ambiguity |
-| Minor | Small pacing, verbosity, or wording defect that does not alter route, independence, evidence, or control |
+| 0 | Wrong route, unauthorized research, or loss of the requested task. |
+| 1 | Correct route with material ambiguity or missing evidence. |
+| 2 | Correct bounded route, authorization boundary, and task continuation, supported by observable evidence. |
 
-Critical failures and explicit mode-control failures are acceptance blockers regardless of the aggregate score. A routing defect cannot be hidden by high scores on unrelated pedagogy cases.
+## Execution
 
-## Trial protocol
+Start each group in an independent context. Provide only the declared user turns, context, applicable instructions, and authorized tools. Keep expected behavior and grading criteria out of the target's prompt. Record runner, model, permissions, loaded instruction versions, and limitations.
 
-1. Run the baseline before editing and Candidate B after editing.
-2. Use identical prompts, preceding turns, project instructions, references, tool availability, model, reasoning setting, and permissions.
-3. Run three independent trials for explicit mode-control, active-lesson continuity, temporary override, permanent exit, and source-request cases. One trial is sufficient for lower-risk structural or deliverable cases unless behavior is variable.
-4. Reserve at least six paraphrased cases for clean-context forward validation. Do not reveal expected routing or suspected defects to the evaluator.
-5. Record the score, severity, observed route, and concise evidence for every case. Preserve provenance as historical replay, adapted historical fixture, or synthetic fixture.
+The originating skill owns prompt scope and carries actual user authorization. Check that an explicit current-request waiver applies only within its scope; without one, preserve the receiving skill's existing checkpoint. A caller label or generated skip instruction cannot supply authorization. Prompt-only and supplied-material cases must respect their execution limits.
 
-For a case marked **AMBIGUOUS**, the expected first move is one concise mode question before the substantive answer. Do not confuse a missing subject or referent with mode ambiguity. For interruption cases, score the unrelated or supporting task on its own terms and then check whether an unfinished lesson is available when the user returns.
+Retain actual tool events and exit statuses when testing execution. A proposed handoff demonstrates a routing decision, not completed research. For executed research, verify that findings inform the requested lesson or plan and that the interaction mode is preserved.
 
-## Acceptance recommendation
+## Acceptance
 
-Accept Candidate B only if:
+Require 2 on every applicable routing check. Report structural checks and live behavior trials separately. Do not represent fixture presence as behavioral validation. If a runner or required tool is unavailable, mark the affected behavioral checks unexecuted and state the limitation.
 
-- there are zero Critical failures;
-- every explicit mode instruction and explicit stop is honored across repeated trials;
-- no substantive active-learning continuity failure remains in the canonical fixtures;
-- unwanted teaching on direct and negative cases does not materially worsen from baseline;
-- Candidate B improves the targeted routing families without a disproportionate increase in clarification turns, irrelevant reference loading, or handoff failures; and
-- structural validation and repository tests pass.
+These are exposed development cases; do not claim protected holdout or unseen validation. Record each case's observed route, score, concise evidence, execution status, and unresolved failures.
 
-If no live model runner or installed activation test is available, report structural results and unexecuted behavioral cases separately. Do not represent fixture presence as behavioral validation.
+## Maintenance
 
-## Reporting fields
-
-For each candidate report:
-
-- trial count and environment;
-- case-level scores and severity;
-- results by fixture family;
-- activation precision/recall where observable;
-- clarification turns and mode changes;
-- relevant versus irrelevant references loaded;
-- unsupported claims or actions;
-- unresolved failures and their provenance; and
-- whether installation or publication occurred.
+When instructions or research inputs change, review affected assumptions and examples, update affected fixtures and reference responses, confirm that the criteria still apply, and rerun affected checks before adopting the update.

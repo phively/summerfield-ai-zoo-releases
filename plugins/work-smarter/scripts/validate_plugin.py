@@ -105,8 +105,36 @@ def validate_remember_me() -> None:
         "RMH-YYYY-MM-DD-NN",
     ):
         require(phrase in records, f"remember-me records missing: {phrase}")
+    require((root / "references" / "transcript-sources.md").is_file(), "Missing transcript workflow")
+    require("setup_confirmed" in records and "ordinary-save-verification" in skill,
+            "Missing canonical setup/save procedure")
+    require("allow_implicit_invocation: true" in read(root / "agents" / "openai.yaml"),
+            "Static implicit policy must remain enabled")
+    require(not (root / "sources").exists(), "Packaged skill must not contain user sources")
     require(not (root / "index.md").exists(), "Packaged skill must not contain personal index data")
     require(not (root / "history.md").exists(), "Packaged skill must not contain personal history data")
+
+
+def validate_save_trials() -> None:
+    base = ROOT / "evals" / "remember-me-save"
+    for name in ("manifest.json", "store.py", "check_trial.py", "protocol.md"):
+        require((base / name).is_file(), f"Missing save-trial support: {name}")
+    manifest = json.loads(read(base / "manifest.json"))
+    require(manifest["schema_version"] == 1, "Unsupported save-trial schema")
+    ids, coverage = set(), set()
+    for case in manifest["cases"]:
+        require(case["id"] not in ids, "Duplicate save-trial case")
+        ids.add(case["id"])
+        coverage.update(case["acceptance"])
+        require(set(case["public"]) == {"prompt", "selected_container", "tools", "tool_contract"},
+                "Public packet exposes unexpected controller data")
+        for field in ("initial", "expected", "faults"):
+            require(isinstance(case[field], dict), f"Invalid trial {field}")
+        require(set(case["expected"]) <= set(case["allowed_writes"]), "Expected writes lack declared scope")
+        for identity, record in case["initial"].items():
+            require(record["id"] == identity, "Fixture identity mismatch")
+            require(all(record.get(k) for k in ("provider", "container", "path", "owner")), "Incomplete fixture identity")
+    require(coverage == {f"AE{i}" for i in range(1, 11)}, "Save trials must cover AE1-AE10")
 
 
 def validate_record_backup() -> None:
@@ -172,7 +200,7 @@ def validate_teach_me() -> None:
         require(phrase in philosophy, f"teach-me philosophy missing: {phrase}")
     for phrase in (
         "Current synthesis",
-        "Initial source register",
+        "Source register",
         "Candidate-source intake",
         "User-supplied claims remain attributed",
         "A due date means review is due; it does not authorize research",
@@ -343,7 +371,7 @@ def validate_evals() -> None:
 def validate_teach_me_routing() -> None:
     suite = json.loads(read(ROOT / "evals" / "teach-me-routing.json"))
     require(suite["suite"] == "teach-me-routing", "Unexpected teach-me routing suite")
-    require(suite["version"] == "1.0.0", "Unexpected teach-me routing suite version")
+    require(suite["version"] == "1.1.0", "Unexpected teach-me routing suite version")
     require(suite.get("purpose"), "Teach-me routing suite has no purpose")
     protocol = suite.get("fixture_protocol")
     require(isinstance(protocol, dict), "Teach-me routing fixture protocol is missing")
@@ -395,12 +423,9 @@ def validate_teach_me_routing() -> None:
 
     rubric = read(ROOT / "evals" / "teach-me-routing-scoring.md")
     for phrase in (
-        "Activation and routing", "Mode continuity", "Learner reasoning", "Scaffold choice",
-        "Evidence and uncertainty", "User control and stopping", "Critical", "Major",
-        "Moderate", "Minor", "Critical failures and explicit mode-control failures are acceptance blockers",
-        "Run the baseline before editing", "three independent trials",
+        "## Cases", "## Scoring", "## Execution", "## Acceptance",
+        "Require 2 on every applicable routing check",
         "Do not represent fixture presence as behavioral validation",
-        "For a case marked **AMBIGUOUS**",
     ):
         require(phrase in rubric, f"Teach-me routing rubric missing: {phrase}")
 
@@ -408,7 +433,7 @@ def validate_teach_me_routing() -> None:
 def main() -> int:
     checks = (
         validate_manifest, validate_skills, validate_links,
-        validate_contract, validate_remember_me, validate_record_backup, validate_teach_me, validate_memory_priorities,
+        validate_contract, validate_remember_me, validate_save_trials, validate_record_backup, validate_teach_me, validate_memory_priorities,
         validate_memory_audit_guidance, validate_instruction_design, validate_evals,
         validate_teach_me_routing,
     )

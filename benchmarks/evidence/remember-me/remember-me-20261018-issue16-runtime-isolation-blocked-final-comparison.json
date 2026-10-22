@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "study_id": "20261018-issue16-runtime-isolation-blocked",
+  "status": "blocked-incomplete",
+  "decision": "no-candidate-selected",
+  "decision_scope": "retain-current-remember-me-thresholds-and-index-layout-pending-valid-evidence",
+  "candidate_matrix": [
+    {
+      "id": "A",
+      "index_representation": "detailed",
+      "retrieval_strategy": "full"
+    },
+    {
+      "id": "B",
+      "index_representation": "compact",
+      "retrieval_strategy": "full"
+    },
+    {
+      "id": "C",
+      "index_representation": "detailed",
+      "retrieval_strategy": "headings"
+    },
+    {
+      "id": "D",
+      "index_representation": "compact",
+      "retrieval_strategy": "headings"
+    }
+  ],
+  "identity": {
+    "repository": "phively/summerfield-ai-zoo",
+    "plan": "private planning record (omitted from public snapshot)",
+    "suite_id": "remember-me-memory-benchmark-development",
+    "suite_version": "1.0.0",
+    "rubric_id": "remember-me-recall-and-retrieval-cost",
+    "rubric_version": "1.0.0",
+    "candidate_status": "deterministic trial builder emits candidate-specific retrieval instructions; no model session was run",
+    "target": {
+      "skill": "plugins/work-smarter/skills/remember-me/SKILL.md",
+      "record_management": "plugins/work-smarter/skills/remember-me/references/record-management.md",
+      "policy_change": false,
+      "exact_content_hashes": "see evidence index"
+    },
+    "corpus": {
+      "mode": "synthetic-development-only",
+      "source_commit": "ce276b13c47061347080168d7a87583e8d3d633f",
+      "source_index_blob_sha": "72c992d7c979cc8d478cfa277df70ea630d935e5",
+      "source_payload_retained": false,
+      "declared_scenarios": 24,
+      "final_holdout": "not-defined-or-run"
+    },
+    "partition": {
+      "status": "not-created",
+      "reason": "no independent behavioral execution; development fixtures are not a protected final validation set"
+    },
+    "requested_runtime": {
+      "model": "GPT-6 Luna",
+      "reasoning_effort": "xhigh",
+      "speed_mode": "standard",
+      "faster_1_5x": false
+    },
+    "observed_runtime": null
+  },
+  "execution": {
+    "attempts": [],
+    "model_sessions_started": 0,
+    "holdout_cases_exposed": 0,
+    "raw_model_attempts": 0,
+    "blocker": "The installed Codex CLI exposes one-shot command execution that available configuration cannot disable. Trial processes could inspect controller and grading files, so the required isolation boundary is unavailable on this host.",
+    "synthetic_adapter": "development control only; not an observed model or live Library run"
+  },
+  "metrics": {
+    "recall": null,
+    "critical_omissions": null,
+    "actual_input_tokens": null,
+    "actual_output_tokens": null,
+    "total_tokens": null,
+    "adapter_operation_bytes": null,
+    "adapter_operation_time": null,
+    "end_to_end_latency": null,
+    "amortized_cost": null,
+    "uncertainty_intervals": null,
+    "sample_count": 0,
+    "interpretation": "Unavailable because no model trials ran; null does not mean zero."
+  },
+  "verification": {
+    "development_fixture_controls": "reported separately from behavioral evidence",
+    "exact_pytest_suite": "blocked: pytest is not installed in this environment",
+    "runtime_isolation_pilot": "blocked before model execution",
+    "live_library_section_reads": "not tested",
+    "amortized_save_audit": "synthetic authorized save, readback and audit controls are implemented and deterministically tested; model and live-provider performance remain unavailable because no trials ran",
+    "daily_manual_weekly_restore_behavior": "not exercised as activated-skill or mode-level runtime behavior; deterministic helper tests only",
+    "independent_remote_publication": "not performed",
+    "stdlib_pytest_compatibility_fallback": {
+      "status": "passed",
+      "test_functions_executed": 317,
+      "failures": 0,
+      "modules": [
+        "test_remember_me_benchmark.py",
+        "test_record_backup_destination_policy.py",
+        "test_work_smarter.py",
+        "test_record_backup_reporting.py",
+        "test_record_backup_permissions_and_downloads.py",
+        "test_record_backup_manual_verification.py",
+        "test_remember_me_save_trials.py"
+      ],
+      "method": "manual stdlib runner with a limited pytest compatibility shim",
+      "note": "This is not pytest and does not satisfy the exact pytest verification gate."
+    }
+  },
+  "limitations": [
+    "No baseline or candidate behavioral results exist.",
+    "No candidate-selection, recall, token-saving, latency, or threshold-effect claim is supported.",
+    "No update/audit model trials ran; deterministic synthetic save controls do not establish behavioral or performance results.",
+    "Structural calibration comes from one illustrative pinned snapshot and is not a population estimate.",
+    "A deterministic synthetic adapter cannot establish activated-skill behavior, host activation, live connector behavior, or remote publication correctness.",
+    "The 317-function stdlib compatibility run is not the pytest runner and does not replace the exact pytest gate or mode-level runtime evidence."
+  ],
+  "artifact_paths": {
+    "html": "benchmarks/remember-me-20261018-issue16-runtime-isolation-blocked-final-comparison.html",
+    "json": "benchmarks/remember-me-20261018-issue16-runtime-isolation-blocked-final-comparison.json",
+    "evidence_index": "benchmarks/remember-me-20261018-issue16-runtime-isolation-blocked-evidence-index.json",
+    "review": "plugins/work-smarter/evals/remember-me-benchmark-review.md"
+  }
+}

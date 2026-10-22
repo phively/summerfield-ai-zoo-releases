@@ -6,6 +6,8 @@ Read this reference before creating or changing the index or a topic file, selec
 
 - [Canonical records](#canonical-records)
 - [Resource identity](#resource-identity)
+- [Setup permission](#setup-permission)
+- [Ordinary-save verification](#ordinary-save-verification)
 - [Index schema](#index-schema)
 - [Topic ownership and taxonomy](#topic-ownership-and-taxonomy)
 - [Topic-file schema](#topic-file-schema)
@@ -24,6 +26,7 @@ Use a dedicated `remember-me/` folder in the user's selected accessible library.
 | `index.md` | `remember-me` | Topic registry, routing, ownership, source identity, and freshness | Any skill needing relevant personal context | `remember-me` only |
 | Remember-me topic file | `remember-me` | Detailed current state for that topic | Relevant skills, using targeted retrieval | `remember-me` only |
 | External canonical source | Identified specialist skill | Detailed current state for its domain | As allowed by the owner's contract | The external owner only |
+| Requested transcript source | `remember-me` | Historical evidence only; never current topic authority | Targeted, authorized readers | `remember-me` only |
 | `history.md` | `remember-me` | Material prior state only | `remember-me`, under a targeted retrieval condition | `remember-me` only |
 
 Do not package or prepopulate these user records in the plugin repository. Create them only at runtime in an authorized library location.
@@ -41,6 +44,27 @@ Identify a library resource with the strongest fields the provider exposes, in t
 For a local filesystem without provider identifiers or permalinks, use the resolved durable path plus a stable internal entry identifier. A rename changes fallback metadata rather than authority. After a move, verify that the provider-scoped identifier still resolves and update the permalink or fallback path when needed. Treat a copy as a new identity unless the provider explicitly preserves identity semantics.
 
 If an identifier or permalink stops resolving, try the other canonical field, then use the fallback metadata to locate candidates and verify the identity before use. Never select among same-named candidates by filename alone. Do not replace the canonical identity with a newly found candidate until authority is verified.
+
+## Setup permission
+
+Use the existing canonical index metadata representation for the additive boolean `setup_confirmed: true`; do not introduce a second settings file, permission ledger, or pending-content journal. Bind its meaning to the independently resolved provider, library/container and index identity. A copied/moved index must have its identity reverified; a copied flag alone cannot transfer permission. A missing, false, inaccessible or mismatched flag means setup is unknown.
+
+Preserve legacy index contents and unrelated metadata. A direct read-only request writes no flag. On a direct authorized setup or save, resolve the selected existing authority (or the user-selected library for a genuinely absent index), apply required sensitive-content consent, record present setup permission, and reread the canonical index identity and boolean. Invent no historical setup date. If no destination is selected, ask a focused destination question. Do not create an alternative index because the existing one is inaccessible.
+
+Only a matching readback establishes durable setup. Failed setup readback leaves setup unverified for later sessions; do not treat an acknowledged write as proof. Verified setup and a failed content save are separate outcomes. The entrypoint's first-use gate precedes substantive index/topic use by callers as well as this skill.
+
+## Ordinary-save verification
+
+This is the authoritative procedure for ordinary saves, setup metadata, owner-mediated updates, sources, and deletions. The sequence is a bounded coherence operation, not provider-wide atomicity or automatic rollback.
+
+1. **Bound intent and consent.** Capture the exact approved content/change, evidence class, attribution, effective date when known, sensitivity, destination and owner. Ordinary direct requests need no generic reconfirmation; sensitive content needs a specific preview plus confirmation. Reuse sufficient wrap-up approval once. Reject silence as permission. Resolve materially changed scope/destination or missing approval context before writing. Keep proposals only in conversation.
+2. **Resolve and read.** Verify provider/container, immutable record ID and canonical permalink when supplied (resolved durable path otherwise) for every affected target. Read current affected fields, dependent pointers and metadata. Follow identity through renames; ambiguous same-title candidates require a focused authority question. Preserve current unrelated fields and exact constraints. Confirm no competing authority is being created.
+3. **Write through the owner.** Update only the bounded Remember Me authority or ask the external owner with exact approved content and destination. Preserve useful prior state in `remember-me/history.md` only under its existing material-history gate; never archive forgotten information. Capture each attempted operation and its acknowledgement, timeout or error separately. Do not write specialist records directly.
+4. **Read back fresh canonical content.** After each change retrieve that exact changed canonical record and compare returned identity, intended content, attribution, provenance, justified freshness and relevant pointers. Provider-native returned fields/content supply the evidence; a universal file-hash rule would not prove their semantics. A pre-write read, write acknowledgement, stale cache, filename match, or bare owner completion claim is insufficient. A fresh, inspectable external-owner tool readback may suffice when direct access is unavailable: require returned provider/container/record identity, changed fields, tool operation/result and freshness/order tied to this update. Otherwise mark the authoritative outcome unverified and its dependent summary stale/unverified rather than laundering “done” into success.
+5. **Reconcile dependents.** Refresh only justified index summaries, identities, provenance, source pointers, last-verified/refreshed fields, and justified history links after their underlying content is verified. Reread every changed index/topic/history/source record and resolve affected stable pointer targets. Metadata describes work actually verified; preserve `last-audited`, audit baselines and other audit-completion fields unless an audit actually completed. An authorized save may note an audit is due, but is not an audit.
+6. **Report evidence and recover narrowly.** Report a verified save with destination only when all required changed authorities, dependent metadata and affected pointers match. For a committed topic and failed index write, identify both operations and the stale/unresolved index; never call the combined result coherent or complete. Missing/mismatched readback means unverified, not proof of no write. Distinguish setup verification from content verification. State outstanding checks and a bounded next step.
+
+After a timeout, lost acknowledgement, interrupted session or partial write, reread exact targets before retrying. Compare observed state with the intended approved change; do not append a fact or create a source again when already committed. Resolve an uncertain creation by its canonical identity/stable source ID. Attempt only outstanding authorized changes, preserving newer content; stop the affected retry on a consequential conflicting newer fact and obtain the applicable confirmation. Never infer rollback, atomicity, exactly-once delivery or fresh approval from a retry. If verification/access remains unavailable, retain an honest partial/unverified result.
 
 ## Index schema
 
@@ -100,7 +124,7 @@ Keep each current topic file operationally complete without history. Include whe
 - source attribution and household-member attribution; and
 - targeted historical pointers only when justified.
 
-Consolidate duplicate active formulations. Do not store complete conversation transcripts, routine task state, externally owned domain detail, unsupported conclusions, or a one-time choice presented as a stable preference.
+Consolidate duplicate active formulations. Keep requested transcripts in [separate sources](transcript-sources.md), cited by canonical source identity and a stable turn/section anchor when useful. Historical source statements do not override current topic facts. Do not store complete conversation transcripts, routine task state, externally owned domain detail, unsupported conclusions, or a one-time choice presented as a stable preference.
 
 ## External summaries
 
@@ -141,8 +165,6 @@ After consequential changes or an audit, verify that every index pointer resolve
 
 Record `last-audited` in `index.md`. At an authorized write, explicit audit, or consequential use, make an audit due when any of these conditions is visible from routing metadata or file statistics:
 
-- `index.md` exceeds 8 KiB;
-- a remember-me-owned current topic file exceeds 16 KiB;
 - 180 days have elapsed since `last-audited` or the date is missing;
 - 25 material changes have accumulated since audit, or a record has grown by 25 percent since audit, when that metadata is inexpensive to maintain;
 - a persistent-record compaction, split, merge, deduplication, archive migration, schema migration, or ownership transfer is proposed;
@@ -150,7 +172,9 @@ Record `last-audited` in `index.md`. At an authorized write, explicit audit, or 
 - a required resource identifier, permalink, stable entry identifier, or pointer no longer resolves; or
 - a stale index or structure aid, repeated bounded retrieval miss, or routine need to load substantial unrelated content shows that targeted retrieval is failing.
 
-These numerical thresholds are conservative default design heuristics, not universal research findings. They bound routine context while avoiding constant maintenance. A table of contents or section map is a conditional retrieval aid, not a requirement or trigger by itself. Do not read every topic merely to test a trigger, do not treat elapsed time as evidence that stable content is stale, and do not take a lifecycle action from any trigger alone. If an audit is due but no write is authorized, report it and continue read-only when reliable.
+These numerical thresholds are conservative default design heuristics, not universal research findings. Use the 180-day interval for routine staleness and cleanup review. An `index.md` over 8 KiB or a remember-me-owned current topic over 16 KiB is an advisory signal to consider retrieval quality, not an independent audit trigger. An unchanged healthy oversized file does not make another audit due after a completed review. A table of contents or section map is a conditional retrieval aid, not a requirement or trigger by itself. Do not read every topic merely to test a trigger, do not treat elapsed time as evidence that stable content is stale, and do not take a lifecycle action from any trigger alone. If an audit is due but no write is authorized, report it and continue read-only when reliable.
+
+After all required audit checks complete, an audit may conclude that no content changes are needed. With write authorization, record and read back `last-audited` and any maintained growth/change baselines, including after that outcome. Incomplete or failed audits preserve the prior audit-completion metadata and remain due; ordinary saves do not reset it. Only a completed review of the full Remember Me file set and its required checks advances the index's audit date. Check due status when invoked; these instructions do not schedule background reviews.
 
 Conversation-context compaction is not persistent-record compaction. After conversation compaction, refresh the current conversational brief and recheck exact constraints against their authoritative sources. Audit the persistent remember-me records only when one of the record triggers above is met.
 

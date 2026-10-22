@@ -1,7 +1,7 @@
 {
   "name": "work-smarter",
-  "version": "1.12.1",
-  "description": "Evidence-grounded research with direct adjacent-task handling and pre-draft verification, adaptive teaching including visual-art learning, reusable instruction design and calibrated evaluation planning, personal-context indexing with authoritative record routing, and verified GitHub backup intake, reconciliation, and restoration for durable records.",
+  "version": "1.15.0",
+  "description": "Evidence-grounded research with direct adjacent-task handling and pre-draft verification, adaptive teaching and advice with research-backed learning plans, reusable instruction design and calibrated evaluation planning, personal-context indexing with authoritative record routing, and verified GitHub backup intake, reconciliation, and restoration for durable records.",
   "author": {
     "name": "Paul Hively"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Work Smarter",
     "shortDescription": "Research, teaching, context, and backups",
-    "longDescription": "Investigate substantive questions with current, high-quality evidence and explicit uncertainty. Build durable understanding and skills through adaptive, source-grounded teaching, practice, and learning plans. Design, refine, and test prompts, instructions, skills, plugins, contracts, evaluations, and working-memory systems. Maintain a durable personal-context index that routes topics to their authoritative records. Run verified daily and weekly GitHub backups of configured durable records.",
+    "longDescription": "Investigate substantive questions with current, high-quality evidence and explicit uncertainty. Build durable understanding and skills through adaptive teaching, practice, and research-backed learning plans. Provide evidence-grounded advice through applicable domain modules. Design, refine, and test prompts, instructions, skills, plugins, contracts, evaluations, and working-memory systems. Maintain a durable personal-context index that routes topics to their authoritative records. Run verified daily and weekly GitHub backups of configured durable records.",
     "developerName": "Paul Hively",
     "category": "Productivity",
     "capabilities": [

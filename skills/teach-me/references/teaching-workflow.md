@@ -39,6 +39,10 @@ Commitment may be small. Do not require a complete unaided solution when predict
 
 ## Run the adaptive loop
 
+Before selecting a teaching move, compare consequential factual premises from both the learner and the assistant with the completed research, its scope, and its uncertainty. Correct or qualify an unsupported premise before affirming it or building a question around it. Keep source identities and material findings in current conversational context, without creating a durable learner record.
+
+Reuse findings while they remain applicable. When a follow-up introduces a newly material factual claim, a changed date, jurisdiction, version, or other condition that existing findings do not cover, obtain targeted research under the parent skill's rules before teaching that claim as established. Preserve the learning objective and interaction mode across research. If verification is unavailable or prohibited, label the affected premise unverified and continue only with reliable portions. Pure reasoning, hypothetical examples, and already supported claims do not require repeated searches merely because another turn occurred.
+
 For each meaningful exchange:
 
 1. **Elicit:** Ask the learner to retrieve, predict, explain, discriminate, complete, judge, or attempt; or present an example and elicit active processing within it.
@@ -73,7 +77,7 @@ Treat interpretable errors as material for diagnosis, contrast, correction, and 
 
 For a curriculum or training recommendation:
 
-1. read `learning-philosophy.md` and any applicable domain reference;
+1. read `learning-philosophy.md`, [learning-plan-research.md](learning-plan-research.md), and any applicable domain reference; when external research is needed, formulate and show the tailored prompt, complete it under the parent skill's rules, and ground the plan in the returned findings; otherwise build from the supplied material or derivation;
 2. define observable target capabilities and independence boundaries;
 3. sequence prerequisites, examples, supported practice, fading, independent practice, and transfer;
 4. include retrieval and revisiting appropriate to the desired retention period;

@@ -1,11 +1,22 @@
 ---
 name: remember-me
-description: Maintain and query a durable personal-context index in the user's accessible library, route topics to authoritative records owned by other skills, and manage remember-me-owned Markdown topic files and targeted history. Use when the user asks to remember, update, forget, locate, summarize, audit, or refresh reusable information about themselves. Do not use for a merely one-time preference or for specialist-domain work unless durable personal context must be consulted or changed.
+description: Maintain and query a durable personal-context index in the user's accessible library, route topics to authoritative records owned by other skills, and manage remember-me-owned Markdown topic files and targeted history. Use when the user asks to remember, update, forget, locate, summarize, audit, or refresh reusable information about themselves. Require direct first use; after verified setup, offer topic updates at explicit wrap-up only with acceptance. Do not use for a merely one-time preference or for specialist-domain work unless durable personal context must be consulted or changed.
 ---
 
 # Remember Me
 
 Maintain useful personal context without creating competing copies of authoritative records.
+
+## Gate first use and save consent
+
+Apply this gate before bootstrap, personal-topic retrieval, or a bundled caller's consultation. Static implicit invocation may load instructions; it does not authorize first use or guarantee wrap-up activation.
+
+- First use requires a direct user invocation, including a natural-language remember/update request. For incidental conversation or implicit consultation with unknown setup, inspect only bounded existing identity/setup metadata when available, then continue neutrally. Create no persistence artifacts and offer no unsolicited setup, topic, history, transcript, or backup save.
+- Establish setup only from `setup_confirmed: true` read back at the verified canonical provider, library/container, and index identity. Missing, false, inaccessible, copied, or identity-mismatched metadata is unknown setup. Follow [setup permission](references/record-management.md#setup-permission) for legacy records and authorized setup. Never infer permission from a filename or copied flag.
+- A direct read-only request may retrieve its specifically authorized context without writing setup metadata. A direct ordinary remember/update request authorizes that bounded persistence without a generic second permission prompt. Resolve destination and any material ambiguity first.
+- After verified setup, an **explicit wrap-up** with useful unsaved facts calls for a proposed concise topic update and its destination. Await acceptance. Rejection or silence writes nothing. Do not infer wrap-up from inactivity, session closure, or context compaction; do not offer a transcript during ordinary wrap-up.
+- Before sensitive retention, preview the specific minimized content and exact destination, then obtain confirmation. One wrap-up acceptance that already covers both is sufficient; do not ask twice. Keep pending proposals in conversation only. Material changes to content, sensitivity, or destination require the missing consent before writing; lost approval context is not permission.
+- Start [transcript sources](references/transcript-sources.md) only on a specific transcript request. A transcript request alone does not authorize topic changes.
 
 ## Resolve the request
 
@@ -42,12 +53,7 @@ Maintain useful personal context without creating competing copies of authoritat
 
 ## Update coherently
 
-1. Confirm the new current state, evidence class, source, and effective date when material.
-2. Preserve prior state in `remember-me/history.md` only when it retains explanatory, evidentiary, audit, or restoration value.
-3. Update the authoritative remember-me-owned topic file or obtain the domain owner's completed update; never write an external owner's record directly.
-4. Refresh the index summary, canonical identity, provenance, freshness, retrieval condition, and unresolved issues.
-5. Add or revise a history pointer only when later retrieval could materially help.
-6. Verify that no contradictory active formulation or competing authority remains.
+Follow the single [ordinary-save verification procedure](references/record-management.md#ordinary-save-verification) for every authorized change, including setup, topic/index metadata, justified `remember-me/history.md` entries, requested sources, and owner-mediated changes. Capture intended content and destination, write through the proper owner, and read back each changed canonical record before reporting a verified save. An acknowledgement or an owner's bare “done” is insufficient. Preserve unrelated fields and keep dependent summaries and pointers coherent; ordinary saves do not advance audit-only metadata.
 
 For a request to forget information, resolve the exact target before deletion when scope is ambiguous. Remove it from current records and summaries; do not preserve information in history when that would defeat the user's request. Report what was removed and whether any externally owned or inaccessible copy remains outside this skill's control.
 
@@ -55,7 +61,7 @@ For a request to forget information, resolve the exact target before deletion wh
 
 Refresh a summary when the source is newer, the user reports a change, a contradiction appears, an identity or pointer no longer resolves, bounded retrieval fails, the topic is about to affect a consequential decision and may be stale, or its justified review condition is met. Do not refresh solely because time elapsed when the topic is stable and no decision needs it.
 
-At an authorized write, explicit audit, or consequential use, check the measurable maintenance triggers in [record management](references/record-management.md) without loading unrelated topic contents. A due trigger requires review, not automatic refresh, deletion, compaction, or splitting.
+At an authorized write, explicit audit, or consequential use, check the measurable maintenance triggers in [record management](references/record-management.md) without loading unrelated topic contents. Use elapsed time for routine cleanup review; absolute file size is advisory. A due trigger requires review, not automatic refresh, deletion, compaction, or splitting.
 
 During an audit, apply the general loss-controlled process in [working memory](../superb-skills/references/working-memory.md#loss-controlled-audits), then the user-record rules in record management. Verify topic ownership, canonical identities, source access, freshness, unresolved conflicts, broken pointers, unnecessary duplication, sensitive-data minimization, and whether the taxonomy still supports targeted retrieval. Propose repairs before making consequential authority or deletion decisions. Never replace the canonical records unless the staged before/after comparison passes; keep the original recoverable until the written state is verified.
 
@@ -69,4 +75,4 @@ During an audit, apply the general loss-controlled process in [working memory](.
 
 ## Return the result
 
-Answer retrieval requests with the smallest sufficient set of relevant current context and source identity. After a write, summarize the topic, record identity, fields changed, provenance, freshness or history effects, and anything that remains proposed or unresolved without reproducing the complete personal record.
+Answer retrieval requests with the smallest sufficient set of relevant current context and source identity. After a write, identify the destination and canonical record, bounded fields changed, provenance, freshness/history effects, and verification evidence without reproducing the complete personal record. Distinguish verified setup from the content outcome. Report verified, partial, or unverified operations separately; say which readback or dependent update remains unresolved. Failed verification does not establish that nothing was written. Never claim a complete coherent save without all required canonical readbacks.

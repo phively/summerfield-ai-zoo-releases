@@ -112,6 +112,77 @@ def test_receipt_rejects_false_or_inconsistent_success(change):
         reporting.validate_receipt(value, "run-1")
 
 
+def test_destination_exclusions_require_separate_preservation_evidence():
+    value = receipt()
+    value["destination_exclusions"] = ["separately-managed/research"]
+    with pytest.raises(ValueError, match="require separate preservation evidence"):
+        reporting.validate_receipt(value, "run-1")
+
+    value["destination_preservation"] = {
+        "status": "content_preserved",
+        "protected_roots": ["separately-managed/research"],
+        "baseline_commit": "b" * 40,
+        "content_commit": "a" * 40,
+    }
+    assert reporting.validate_receipt(value, "run-1")["destination_preservation"]["status"] == "content_preserved"
+
+    legacy = copy.deepcopy(value)
+    legacy["destination_preservation"] = {
+        "status": "preserved",
+        "protected_roots": ["separately-managed/research"],
+        "baseline_commit": "b" * 40,
+        "content_commit": "a" * 40,
+        "operational_commit": "d" * 40,
+    }
+    assert reporting.validate_receipt(legacy, "run-1")["destination_preservation"]["status"] == "preserved"
+
+
+def test_verified_receipt_rejects_mismatched_destination_content_commit():
+    value = receipt()
+    value["destination_exclusions"] = ["separately-managed/research"]
+    value["destination_preservation"] = {
+        "status": "content_preserved",
+        "protected_roots": ["separately-managed/research"],
+        "baseline_commit": "b" * 40,
+        "content_commit": "c" * 40,
+    }
+
+    with pytest.raises(ValueError, match="content_commit to match snapshot_commit"):
+        reporting.validate_receipt(value, "run-1")
+
+
+@pytest.mark.parametrize("preservation_status", ["staged_preserved", "unverified", "failed"])
+def test_verified_receipt_rejects_partial_destination_preservation(preservation_status):
+    value = receipt()
+    value["destination_exclusions"] = ["separately-managed/research"]
+    value["destination_preservation"] = {
+        "status": preservation_status,
+        "protected_roots": ["separately-managed/research"],
+        "baseline_commit": "b" * 40,
+        "content_commit": "c" * 40 if preservation_status != "staged_preserved" else None,
+    }
+
+    with pytest.raises(ValueError, match="verified receipt requires complete destination preservation"):
+        reporting.validate_receipt(value, "run-1")
+
+
+def test_readme_summary_displays_preservation_separately_from_snapshot_status():
+    value = receipt()
+    value["mode"] = "weekly"
+    value["restore_test"] = "synthetic recovery evidence"
+    value["destination_exclusions"] = ["separately-managed/research"]
+    value["destination_preservation"] = {
+        "status": "content_preserved",
+        "protected_roots": ["separately-managed/research"],
+        "baseline_commit": "b" * 40,
+        "content_commit": "a" * 40,
+    }
+    text = reporting.render_block([value])
+
+    assert "| Preservation |" in text
+    assert "| content\\_preserved |" in text
+
+
 def test_snapshot_rejects_unindexed_files_and_stale_summary(tmp_path):
     snapshot(tmp_path)
     reporting.process(tmp_path, write=True)
