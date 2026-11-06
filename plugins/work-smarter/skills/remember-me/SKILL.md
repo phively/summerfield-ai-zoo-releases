@@ -68,6 +68,7 @@ During an audit, apply the general loss-controlled process in [working memory](.
 ## Protect personal information
 
 - Retain only information with plausible future value.
+- Keep Record Backup's source-selection and data-type approvals separate from Remember Me's retention and source-write consent. A direct file mention or backup-profile designation only makes an identity eligible for backup review; it does not authorize a new Remember Me topic, transcript, citation, or canonical write. Follow the [Record Backup boundary](references/record-management.md#record-backup-boundary) when the workflows meet.
 - Never store passwords, authentication secrets, financial credentials, or unnecessary sensitive detail.
 - Require confirmation before persisting an inference, replacing an explicit preference, resolving a consequential conflict, or retaining information whose sensitivity creates material privacy, safety, or misuse risk.
 - Preserve household-member attribution and do not generalize one person's preference to another.

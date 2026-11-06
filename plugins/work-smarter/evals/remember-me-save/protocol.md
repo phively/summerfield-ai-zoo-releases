@@ -126,6 +126,5 @@ available. A controller keeps future approval turns outside the agent context.
 Run every manifest case. AE1-AE10 are coverage labels, not ten automatic passes.
 The negative/fault cases must demonstrate truthful partial/unverified behavior,
 including bare owner “done,” lost acknowledgements, and failure after topic save.
-Record results in `../remember-me-save-review.md` with exact candidate hashes,
-case hashes, evidence paths and limitations. Preserve historical `results.json`.
+Keep raw trial captures, case scores, receipts and candidate snapshots under ignored root `output/remember-me-save/`. Maintain a separate internal acceptance review with the conclusions, candidate identity, coverage and limitations needed in a fresh checkout. Historical generated `results.json` receipts belong in ignored output; preserve their recorded bytes and identities.
 Any required blocked/not-run trial leaves implementation completion pending.

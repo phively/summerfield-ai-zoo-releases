@@ -111,6 +111,10 @@ Create a file only when useful durable information exists. Keep related interest
 
 Temporary unavailability does not erase an established external owner's authority. If no specialist currently exists and `remember-me` owns a topic that a later specialist can handle, migrate only with user authorization and a verified destination; then update the index and remove or archive the prior current authority so no parallel copy remains.
 
+## Record Backup boundary
+
+Remember Me owns canonical personal-context identity, topic ownership, and consent to retain or write its records. Record Backup owns source eligibility and permission to copy selected bytes to the configured backup destination. A canonical Remember Me record may route backup discovery through its verified source identities and direct file mentions; a supporting file is eligible only when directly mentioned by a canonical record or explicitly designated in the backup profile. Root membership, topic similarity, and a prior mirror do not qualify it. A Record Backup designation or data-type approval does not authorize a Remember Me topic update, transcript save, source citation, or canonical write. A Remember Me route or summary does not itself designate an arbitrary linked or similarly named file for backup. Read [Record Backup source eligibility](../../record-backup/references/source-discovery.md) when a backup run needs this boundary.
+
 ## Topic-file schema
 
 Keep each current topic file operationally complete without history. Include when applicable:

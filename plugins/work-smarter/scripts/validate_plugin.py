@@ -354,18 +354,8 @@ def validate_evals() -> None:
         "teach-visual-reference-study",
     ):
         require(case_id in ids, f"Missing required eval: {case_id}")
-    results = json.loads(read(ROOT / "evals" / "results.json"))
     manifest = json.loads(read(ROOT / ".codex-plugin" / "plugin.json"))
-    version_pattern = re.compile(r"^\d+\.\d+\.\d+$")
-    results_version = results["plugin_version"]
-    manifest_version = manifest["version"]
-    require(version_pattern.fullmatch(results_version), "Invalid results version")
-    require(version_pattern.fullmatch(manifest_version), "Invalid manifest version")
-    require(
-        tuple(map(int, results_version.split("."))) <= tuple(map(int, manifest_version.split("."))),
-        "Results version cannot be newer than manifest version",
-    )
-    require(len(results["forward_tests"]) >= 4, "Missing forward-test results")
+    require(re.fullmatch(r"\d+\.\d+\.\d+", manifest["version"]), "Invalid manifest version")
 
 
 def validate_teach_me_routing() -> None:

@@ -14,6 +14,10 @@ import re
 
 START = "<!-- record-backup:start -->"
 END = "<!-- record-backup:end -->"
+SOURCE_IDENTITY = ("source_provider", "source_container", "source_id")
+ADDITION_FIELDS = {
+    "identity", "display_reference", "data_types", "inclusion_basis", "approval_ids"
+}
 
 
 def _load_destination_policy():
@@ -36,6 +40,228 @@ def timestamp(value):
     if result.tzinfo is None:
         raise ValueError("receipt timestamp requires a timezone")
     return result
+
+
+def _identity(value, label):
+    if not isinstance(value, dict) or any(
+        not isinstance(value.get(field), str) or not value[field].strip()
+        for field in SOURCE_IDENTITY
+    ):
+        raise ValueError(f"{label} requires a complete scoped source identity")
+    return {field: value[field] for field in SOURCE_IDENTITY}
+
+
+def _identity_key(value):
+    return tuple(value[field] for field in SOURCE_IDENTITY)
+
+
+def _display_reference(identity):
+    raw = json.dumps([identity[field] for field in SOURCE_IDENTITY], ensure_ascii=False,
+                     separators=(",", ":")).encode("utf-8")
+    return "record-" + hashlib.sha256(raw).hexdigest()[:16]
+
+
+def _manifest_identities(manifest, label):
+    if not isinstance(manifest, dict) or not isinstance(manifest.get("records"), list):
+        raise ValueError(f"{label} manifest requires a records list")
+    records = {}
+    for index, record in enumerate(manifest["records"]):
+        identity = _identity(record, f"{label} manifest records[{index}]")
+        if "selection_status" in record and record["selection_status"] != "retained-out-of-scope":
+            raise ValueError(f"{label} manifest records[{index}] has invalid selection_status")
+        key = _identity_key(identity)
+        if key in records:
+            raise ValueError(f"{label} manifest contains duplicate scoped identities")
+        records[key] = record
+    return records
+
+
+def _addition_basis(basis, label):
+    if not isinstance(basis, list) or not basis:
+        raise ValueError(f"{label} requires inclusion provenance")
+    result = []
+    for index, item in enumerate(basis):
+        if not isinstance(item, dict):
+            raise ValueError(f"{label} inclusion_basis[{index}] must be an object")
+        kind = item.get("kind")
+        if kind == "canonical-profile" and set(item) == {"kind"}:
+            safe = {"kind": kind}
+        elif kind == "canonical-record" and set(item) == {"kind", "owner", "reference"}:
+            if (not isinstance(item["owner"], str) or not item["owner"].strip()
+                    or not isinstance(item["reference"], str) or not item["reference"].strip()):
+                raise ValueError(f"{label} canonical-record provenance requires owner and reference")
+            safe = {"kind": kind, "owner": item["owner"]}
+        elif kind == "canonical-mention" and set(item) == {"kind", "from", "reference"}:
+            if not isinstance(item["reference"], str) or not item["reference"].strip():
+                raise ValueError(f"{label} canonical mention requires a reference")
+            safe = {"kind": kind, "from": _identity(item["from"], f"{label} mention owner")}
+        elif kind == "user-designation" and set(item) == {"kind", "reference"}:
+            if not isinstance(item["reference"], str) or not item["reference"].strip():
+                raise ValueError(f"{label} user designation requires a reference")
+            safe = {"kind": kind}
+        else:
+            raise ValueError(f"{label} has invalid or unsupported inclusion provenance")
+        result.append(safe)
+    original = [json.dumps(item, sort_keys=True, separators=(",", ":")) for item in basis]
+    if len(set(original)) != len(original):
+        raise ValueError(f"{label} has duplicate inclusion provenance")
+    encoded = [json.dumps(item, sort_keys=True, separators=(",", ":")) for item in result]
+    return [json.loads(item) for item in sorted(set(encoded))]
+
+
+def validate_personal_data_additions(additions):
+    """Validate the closed metadata shape without asserting remote verification."""
+    if not isinstance(additions, list):
+        raise ValueError("personal_data_additions must be a list")
+    seen = set()
+    for index, entry in enumerate(additions):
+        label = f"personal_data_additions[{index}]"
+        if not isinstance(entry, dict) or set(entry) != ADDITION_FIELDS:
+            raise ValueError(f"{label} has an invalid closed metadata shape")
+        identity = _identity(entry.get("identity"), f"{label}.identity")
+        key = _identity_key(identity)
+        if key in seen:
+            raise ValueError("personal_data_additions contains duplicate scoped identities")
+        seen.add(key)
+        if entry.get("display_reference") != _display_reference(identity):
+            raise ValueError(f"{label} has an invalid neutral display_reference")
+        for field in ("data_types", "approval_ids"):
+            values = entry.get(field)
+            if (not isinstance(values, list) or not values
+                    or any(not isinstance(value, str) or not value.strip() for value in values)
+                    or len(values) != len(set(values))):
+                raise ValueError(f"{label}.{field} must be a nonempty unique string list")
+            if field == "data_types" and len({value.strip().casefold() for value in values}) != len(values):
+                raise ValueError(f"{label}.data_types must be unique without regard to case")
+        basis = entry.get("inclusion_basis")
+        if not isinstance(basis, list) or not basis:
+            raise ValueError(f"{label}.inclusion_basis must be a nonempty list")
+        basis_keys = set()
+        for item in basis:
+            if not isinstance(item, dict):
+                raise ValueError(f"{label}.inclusion_basis entries must be objects")
+            kind = item.get("kind")
+            if kind == "canonical-profile" and set(item) == {"kind"}:
+                pass
+            elif kind == "canonical-record" and set(item) == {"kind", "owner"}:
+                if not isinstance(item["owner"], str) or not item["owner"].strip():
+                    raise ValueError(f"{label} canonical-record owner must be nonempty")
+            elif kind == "canonical-mention" and set(item) == {"kind", "from"}:
+                _identity(item["from"], f"{label} mention owner")
+            elif kind == "user-designation" and set(item) == {"kind"}:
+                pass
+            else:
+                raise ValueError(f"{label} has invalid receipt inclusion provenance")
+            encoded = json.dumps(item, sort_keys=True, separators=(",", ":"))
+            if encoded in basis_keys:
+                raise ValueError(f"{label} has duplicate receipt inclusion provenance")
+            basis_keys.add(encoded)
+    return additions
+
+
+def derive_personal_data_additions(prior_snapshot, current_snapshot, included_records,
+                                   authorization_results):
+    """Derive notices from a verified manifest identity diff and declared gates.
+
+    Callers establish snapshot verification independently. This helper performs
+    no provider or GitHub reads and treats unknown prior state as unknown, never
+    as an empty baseline.
+    """
+    if not isinstance(prior_snapshot, dict) or prior_snapshot.get("state") not in {
+        "verified", "verified-empty", "unknown"
+    }:
+        raise ValueError("prior snapshot state must be verified, verified-empty, or unknown")
+    if not isinstance(current_snapshot, dict) or current_snapshot.get("state") not in {
+        "verified", "staged", "unverified", "failed", "unknown"
+    }:
+        raise ValueError("current snapshot state is invalid")
+    if not isinstance(included_records, list) or not isinstance(authorization_results, list):
+        raise ValueError("included_records and authorization_results must be lists")
+
+    if current_snapshot["state"] != "verified":
+        return {
+            "personal_data_additions": [],
+            "coverage_limits": ["Personal-data additions omitted because the current snapshot is not independently verified."],
+        }
+    commit = current_snapshot.get("snapshot_commit")
+    if not isinstance(commit, str) or not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", commit):
+        raise ValueError("verified current snapshot requires a full snapshot commit SHA")
+    current = _manifest_identities(current_snapshot.get("manifest"), "current")
+    if prior_snapshot["state"] == "verified-empty":
+        if not isinstance(prior_snapshot.get("evidence_reference"), str) or not prior_snapshot["evidence_reference"].strip():
+            raise ValueError("verified-empty prior state requires an evidence reference")
+        prior_keys = set()
+    elif prior_snapshot["state"] == "unknown":
+        prior_keys = None
+    else:
+        prior_commit = prior_snapshot.get("snapshot_commit")
+        if not isinstance(prior_commit, str) or not re.fullmatch(r"[0-9a-f]{40}|[0-9a-f]{64}", prior_commit):
+            raise ValueError("verified prior snapshot requires a full snapshot commit SHA")
+        prior = _manifest_identities(prior_snapshot.get("manifest"), "prior")
+        prior_keys = set(prior)
+
+    authorizations = {}
+    for index, result in enumerate(authorization_results):
+        if not isinstance(result, dict) or type(result.get("allowed")) is not bool:
+            raise ValueError(f"authorization_results[{index}] requires a boolean allowed result")
+        identity = _identity(result.get("identity"), f"authorization_results[{index}]")
+        key = _identity_key(identity)
+        if key in authorizations:
+            raise ValueError("authorization_results contains duplicate scoped identities")
+        authorizations[key] = result
+
+    included = {}
+    for index, record in enumerate(included_records):
+        identity = _identity(record, f"included_records[{index}]")
+        key = _identity_key(identity)
+        if key in included:
+            raise ValueError("included_records contains duplicate scoped identities")
+        included[key] = (identity, record)
+
+    additions = []
+    unknown_baseline_candidates = 0
+    for key in sorted(included):
+        identity, record = included[key]
+        current_record = current.get(key)
+        if current_record is None:
+            raise ValueError("included personal record is absent from the verified current manifest")
+        if (record.get("selection_status") == "retained-out-of-scope"
+                or current_record.get("selection_status") == "retained-out-of-scope"):
+            continue
+        data_types = record.get("data_types")
+        if (not isinstance(data_types, list) or not data_types
+                or any(not isinstance(value, str) or not value.strip() for value in data_types)
+                or len(data_types) != len(set(data_types))):
+            raise ValueError("included personal record requires unique declared data_types")
+        basis = _addition_basis(record.get("inclusion_basis"), "included personal record")
+        auth = authorizations.get(key)
+        if auth is None or auth["allowed"] is not True:
+            raise ValueError("included personal record requires a matching successful authorization")
+        approval_ids = auth.get("approval_ids")
+        if approval_ids is None and isinstance(auth.get("grant_id"), str):
+            approval_ids = [auth["grant_id"]]
+        if (not isinstance(approval_ids, list) or not approval_ids
+                or any(not isinstance(value, str) or not value.strip() for value in approval_ids)
+                or len(approval_ids) != len(set(approval_ids))):
+            raise ValueError("successful authorization requires actual approval or grant IDs")
+        if prior_keys is None:
+            unknown_baseline_candidates += 1
+            continue
+        if key in prior_keys:
+            continue
+        additions.append({
+            "identity": identity,
+            "display_reference": _display_reference(identity),
+            "data_types": sorted(data_types),
+            "inclusion_basis": basis,
+            "approval_ids": sorted(approval_ids),
+        })
+
+    validate_personal_data_additions(additions)
+    limits = []
+    if prior_keys is None and unknown_baseline_candidates:
+        limits.append("Personal-data additions omitted because prior verified snapshot state is unknown.")
+    return {"personal_data_additions": additions, "coverage_limits": limits}
 
 
 def validate_receipt(value, stem, *, discovery_keys=None):
@@ -140,6 +366,13 @@ def validate_receipt(value, stem, *, discovery_keys=None):
         raise ValueError("failed/incomplete receipt cannot claim completeness")
     if value["status"] == "verified-no-change" and (value["counts"]["changed"] or value["counts"]["deleted"]):
         raise ValueError("no-change receipt contains changes")
+    if "personal_data_additions" in value:
+        additions = validate_personal_data_additions(value["personal_data_additions"])
+        if additions and (
+            value["status"] == "failed" or not sha
+            or not checks["local_snapshot"] or not checks["remote_snapshot"]
+        ):
+            raise ValueError("personal-data additions require independently verified snapshot content")
     return value
 
 
@@ -333,11 +566,29 @@ def process(root, write=False, migration_plan=None):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("root", type=Path)
+    parser.add_argument("root", nargs="?", type=Path)
     parser.add_argument("--write", action="store_true", help="replace only the README status block")
     parser.add_argument("--migration-plan", type=Path, help="preview reviewed legacy-log removals; --write applies them locally")
+    parser.add_argument("--derive-additions", type=Path, metavar="INPUT.json",
+                        help="derive personal-data additions from verified snapshot and authorization context")
     args = parser.parse_args()
     try:
+        if args.derive_additions is not None:
+            if args.root is not None or args.write or args.migration_plan is not None:
+                parser.error("--derive-additions cannot be combined with ROOT, --write, or --migration-plan")
+            packet = json.loads(args.derive_additions.read_text(encoding="utf-8"))
+            if not isinstance(packet, dict) or set(packet) != {
+                "prior_snapshot", "current_snapshot", "included_records", "authorization_results"
+            }:
+                raise ValueError("addition input requires prior_snapshot, current_snapshot, included_records, and authorization_results")
+            result = derive_personal_data_additions(
+                packet["prior_snapshot"], packet["current_snapshot"],
+                packet["included_records"], packet["authorization_results"],
+            )
+            print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+            return
+        if args.root is None:
+            parser.error("ROOT is required unless --derive-additions is used")
         plan = json.loads(args.migration_plan.read_text(encoding="utf-8")) if args.migration_plan else None
         count = process(args.root, args.write, plan)
     except (ValueError, OSError) as exc:

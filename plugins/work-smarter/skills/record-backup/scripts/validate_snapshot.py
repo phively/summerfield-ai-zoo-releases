@@ -116,6 +116,8 @@ def validate(
         profiles = [r for r in records if isinstance(r, dict) and r.get("repository_path") == profile_path]
         if len(profiles) != 1 or profiles[0].get("classification") != "configuration":
             raise SnapshotError("operational layout requires one indexed configuration profile")
+        if profiles[0].get("selection_status") is not None:
+            raise SnapshotError("canonical profile cannot be retained out of scope")
         if Path(profile_path).suffix.lower() not in {".yaml", ".yml"}:
             raise SnapshotError("configuration profile must retain its YAML extension")
     if destination_policy is None and policy_expectations is not None:
@@ -134,6 +136,8 @@ def validate(
     for number, record in enumerate(records, start=1):
         if not isinstance(record, dict):
             raise SnapshotError(f"record {number} is not an object")
+        if "selection_status" in record and record["selection_status"] != "retained-out-of-scope":
+            raise SnapshotError(f"record {number} has invalid selection_status")
         missing = [field for field in required if field not in record]
         if missing:
             raise SnapshotError(f"record {number} missing: {', '.join(missing)}")

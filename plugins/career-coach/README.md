@@ -36,7 +36,7 @@ Before publication, run [validate_opportunity_posting.py](scripts/validate_oppor
 python scripts/validate_opportunity_posting.py --provider GitHub --operation add --message "Added 1 canonical career-opportunities record(s)" "path/to/O-2026-10-11-01 -- Employer -- Role.md"
 ```
 
-Run from this plugin directory and supply the actual proposed files. The validator checks metadata, identity/path/link consistency, content presence, addition count, and generic empty-body messages. It does not establish privacy, summary authorization, actual staged changes, provider access, or successful persistence; the owning workflow must verify those separately. Version-specific validation evidence is recorded under `evals/`, with historical results retained.
+Run from this plugin directory and supply the actual proposed files. The validator checks metadata, identity/path/link consistency, content presence, addition count, and generic empty-body messages. It does not establish privacy, summary authorization, actual staged changes, provider access, or successful persistence; the owning workflow must verify those separately. Reusable evaluation cases remain under `evals/`. Save generated validation receipts under ignored repository-root `output/`; the historical receipts are retained there as supplementary local-only archives.
 
 ## Choose a skill
 

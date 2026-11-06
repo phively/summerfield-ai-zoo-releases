@@ -244,7 +244,12 @@ def test_symlink_inside_excluded_directory_is_rejected(tmp_path):
     excluded.mkdir()
     target = tmp_path / "outside.bin"
     target.write_bytes(b"outside")
-    (excluded / "link.bin").symlink_to(target)
+    try:
+        (excluded / "link.bin").symlink_to(target)
+    except OSError as error:
+        if getattr(error, "winerror", None) == 1314:
+            pytest.skip("native symlink creation requires Windows privilege; portable rejection covered separately")
+        raise
 
     with pytest.raises(validator.SnapshotError, match="symlinks are not supported"):
         validate(snapshot, policy, expectations)
@@ -254,7 +259,12 @@ def test_symlink_ancestor_of_excluded_directory_is_rejected(tmp_path):
     snapshot, policy, expectations = make_snapshot(tmp_path, ["linked-area/subdir"])
     target = tmp_path / "safe-target"
     (target / "subdir").mkdir(parents=True)
-    (tmp_path / "linked-area").symlink_to(target, target_is_directory=True)
+    try:
+        (tmp_path / "linked-area").symlink_to(target, target_is_directory=True)
+    except OSError as error:
+        if getattr(error, "winerror", None) == 1314:
+            pytest.skip("native symlink creation requires Windows privilege; portable rejection covered separately")
+        raise
 
     with pytest.raises(validator.SnapshotError, match="symlinks are not supported"):
         validate(snapshot, policy, expectations)
@@ -265,6 +275,8 @@ def test_case_collision_inside_excluded_directory_is_rejected(tmp_path):
     excluded = tmp_path / "independent-area"
     excluded.mkdir()
     (excluded / "item.bin").write_bytes(b"lower")
+    if (excluded / "ITEM.bin").exists():
+        pytest.skip("native collision fixture needs case-sensitive storage; portable rejection covered separately")
     (excluded / "ITEM.bin").write_bytes(b"upper")
 
     with pytest.raises(validator.SnapshotError, match="case-colliding stored paths"):
@@ -276,10 +288,45 @@ def test_case_collision_between_directories_is_rejected_even_with_different_file
     lower = tmp_path / "independent-area" / "nested"
     upper = tmp_path / "independent-area" / "NESTED"
     lower.mkdir(parents=True)
+    if upper.exists():
+        pytest.skip("native collision fixture needs case-sensitive storage; portable rejection covered separately")
     upper.mkdir(parents=True)
     (lower / "one.bin").write_bytes(b"lower")
     (upper / "two.bin").write_bytes(b"upper")
 
+    with pytest.raises(validator.SnapshotError, match="case-colliding stored paths"):
+        validate(snapshot, policy, expectations)
+
+
+@pytest.mark.parametrize("kind", ["file", "ancestor"])
+def test_reported_symlink_is_rejected_without_host_symlink_privilege(tmp_path, monkeypatch, kind):
+    exclusion = "independent-area" if kind == "file" else "linked-area/subdir"
+    snapshot, policy, expectations = make_snapshot(tmp_path, [exclusion])
+    link = tmp_path / ("independent-area/link.bin" if kind == "file" else "linked-area")
+    link.parent.mkdir(parents=True, exist_ok=True)
+    if kind == "file":
+        link.write_bytes(b"synthetic link entry")
+    else:
+        (link / "subdir").mkdir(parents=True)
+    real_is_symlink = Path.is_symlink
+    monkeypatch.setattr(Path, "is_symlink", lambda path: path == link or real_is_symlink(path))
+    with pytest.raises(validator.SnapshotError, match="symlinks are not supported"):
+        validate(snapshot, policy, expectations)
+
+
+@pytest.mark.parametrize("directories", [False, True])
+def test_reported_case_collision_is_rejected_on_any_filesystem(tmp_path, monkeypatch, directories):
+    snapshot, policy, expectations = make_snapshot(tmp_path, ["independent-area"])
+    lower = tmp_path / "independent-area" / ("nested" if directories else "item.bin")
+    lower.parent.mkdir(parents=True)
+    if directories:
+        lower.mkdir()
+        (lower / "one.bin").write_bytes(b"lower")
+    else:
+        lower.write_bytes(b"lower")
+    upper = lower.with_name(lower.name.upper())
+    tree_paths = list(validator._tree_paths(tmp_path))
+    monkeypatch.setattr(validator, "_tree_paths", lambda root: iter([*tree_paths, upper]))
     with pytest.raises(validator.SnapshotError, match="case-colliding stored paths"):
         validate(snapshot, policy, expectations)
 

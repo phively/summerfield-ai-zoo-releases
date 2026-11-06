@@ -202,7 +202,7 @@ def test_catalog_covers_marketplace_plugins_and_readme_links_them() -> None:
             skill = re.search(r"(?m)^name:\s*(.+?)\s*$", read(skill_path))
             assert skill is not None
             bullet = (
-                f"â€¢ [{skill.group(1)}]({relative}) - "
+                f"• [{skill.group(1)}]({relative}) - "
                 f"{skill_short_description(skill_path)}"
             )
             assert bullet in readme

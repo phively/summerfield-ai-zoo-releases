@@ -28,7 +28,7 @@
   ],
   "identity": {
     "repository": "phively/summerfield-ai-zoo",
-    "plan": "private planning record (omitted from public snapshot)",
+    "plan": "docs/plans/2026-10-18-1700-feat-memory-benchmarks-backup-exclusions-plan.md",
     "suite_id": "remember-me-memory-benchmark-development",
     "suite_version": "1.0.0",
     "rubric_id": "remember-me-recall-and-retrieval-cost",

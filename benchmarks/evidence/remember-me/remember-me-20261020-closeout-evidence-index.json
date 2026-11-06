@@ -64,7 +64,7 @@
           }
         ],
         "source_hashes": {
-          "private planning record (omitted from public snapshot)": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
+          "docs/plans/2026-10-18-1700-feat-memory-benchmarks-backup-exclusions-plan.md": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
           "plugins/work-smarter/evals/remember-me-benchmark/adapter.py": "8b9e0227e9592fe936fe5e0d23823610146b2e186146a55363e2c56380e8a3ee",
           "plugins/work-smarter/evals/remember-me-benchmark/fixtures.py": "67db3143d0b8478cf4dfde3a28a270dfb3f8bc83f5ed46d2a4d71d5f75c65451",
           "plugins/work-smarter/evals/remember-me-benchmark/manifest.json": "ff7e851e375052d2c02b69bfdf6d7c6fb5530140d09ce86f2dc7bdff2c4eadd7",
@@ -367,7 +367,7 @@
           "recovery_starts_remaining": 2
         },
         "source_hashes": {
-          "private planning record (omitted from public snapshot)": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
+          "docs/plans/2026-10-18-1700-feat-memory-benchmarks-backup-exclusions-plan.md": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
           "plugins/work-smarter/evals/remember-me-benchmark/adapter.py": "8b9e0227e9592fe936fe5e0d23823610146b2e186146a55363e2c56380e8a3ee",
           "plugins/work-smarter/evals/remember-me-benchmark/fixtures.py": "67db3143d0b8478cf4dfde3a28a270dfb3f8bc83f5ed46d2a4d71d5f75c65451",
           "plugins/work-smarter/evals/remember-me-benchmark/manifest.json": "ff7e851e375052d2c02b69bfdf6d7c6fb5530140d09ce86f2dc7bdff2c4eadd7",
@@ -731,7 +731,7 @@
         "schema_version": 1,
         "study_id": "20261020-closeout",
         "status": "frozen-before-first-model-launch",
-        "work_source": "private planning record (omitted from public snapshot)",
+        "work_source": "docs/plans/2026-10-18-1700-feat-memory-benchmarks-backup-exclusions-plan.md",
         "requested_runtime": {
           "cli": "codex-cli 0.163.0",
           "model": "gpt-6-luna",
@@ -764,7 +764,7 @@
           "behavioral_retries": false
         },
         "source_hashes": {
-          "private planning record (omitted from public snapshot)": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
+          "docs/plans/2026-10-18-1700-feat-memory-benchmarks-backup-exclusions-plan.md": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
           "plugins/work-smarter/evals/remember-me-benchmark/adapter.py": "8b9e0227e9592fe936fe5e0d23823610146b2e186146a55363e2c56380e8a3ee",
           "plugins/work-smarter/evals/remember-me-benchmark/fixtures.py": "67db3143d0b8478cf4dfde3a28a270dfb3f8bc83f5ed46d2a4d71d5f75c65451",
           "plugins/work-smarter/evals/remember-me-benchmark/manifest.json": "ff7e851e375052d2c02b69bfdf6d7c6fb5530140d09ce86f2dc7bdff2c4eadd7",
@@ -1045,12 +1045,12 @@
   ],
   "source_authority": {
     "plan": {
-      "plan": "private planning record (omitted from public snapshot)",
+      "plan": "docs/plans/2026-10-18-1700-feat-memory-benchmarks-backup-exclusions-plan.md",
       "plan_sha256": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
       "approved_scope": "retain production policy; complete bounded descriptive U2; U3 and U6 close through saved evidence/instruction review; strict holdout, threshold selection, and fresh activated backup runs are not closure gates"
     },
     "initial_freeze_sources": {
-      "private planning record (omitted from public snapshot)": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
+      "docs/plans/2026-10-18-1700-feat-memory-benchmarks-backup-exclusions-plan.md": "176202de9b13b4c3a4195689b49b0d87207de97293d84d9df789196adddbf780",
       "plugins/work-smarter/evals/remember-me-benchmark/adapter.py": "8b9e0227e9592fe936fe5e0d23823610146b2e186146a55363e2c56380e8a3ee",
       "plugins/work-smarter/evals/remember-me-benchmark/fixtures.py": "67db3143d0b8478cf4dfde3a28a270dfb3f8bc83f5ed46d2a4d71d5f75c65451",
       "plugins/work-smarter/evals/remember-me-benchmark/manifest.json": "ff7e851e375052d2c02b69bfdf6d7c6fb5530140d09ce86f2dc7bdff2c4eadd7",

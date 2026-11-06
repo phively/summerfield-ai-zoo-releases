@@ -127,6 +127,7 @@ def test_prompt_bundles_and_hashes_public_record_and_audit_instructions(tmp_path
 
     prompt = pilot.prompt_for(root, phase='prepare')
     hashes = pilot.source_hashes()
+    assert all('\\' not in relative for relative in hashes)
     required = {
         'plugins/work-smarter/skills/remember-me/SKILL.md',
         'plugins/work-smarter/skills/remember-me/references/record-management.md',
@@ -140,6 +141,12 @@ def test_prompt_bundles_and_hashes_public_record_and_audit_instructions(tmp_path
         assert relative in prompt
         assert path.read_text(encoding='utf-8') in prompt
         assert hashes[relative] == hashlib.sha256(path.read_bytes()).hexdigest()
+
+    for relative in pilot.SOURCE_FILES:
+        path = pilot.HERE / relative
+        if path.is_file():
+            key = path.resolve().relative_to(pilot.REPO_ROOT).as_posix()
+            assert hashes[key] == hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 @pytest.mark.parametrize('exit_code,answer', [(7, '{}'), (0, 'invalid JSON')])
@@ -155,7 +162,7 @@ def test_failed_process_or_malformed_answer_cannot_pass_and_evidence_is_retained
         f'sys.exit({exit_code})\n')
     executable.chmod(0o755)
     root = tmp_path / 'trial'
-    result = pilot.run_trial(root, 'index-40k', 'A', codex=str(executable), timeout=10)
+    result = pilot.run_trial(root, 'index-40k', 'A', codex=[sys.executable, str(executable)], timeout=10)
     assert result['status'] == 'failed'
     assert result['exit_code'] == exit_code
     assert result['served_model'] == 'unverified'
@@ -185,7 +192,7 @@ def test_resumed_turn_uses_supported_flags_and_original_trial_directory(tmp_path
     agent_dir.mkdir(parents=True)
 
     result = pilot.launch_turn(
-        root, 'continue the exact session', codex=str(executable),
+        root, 'continue the exact session', codex=[sys.executable, str(executable)],
         resume_session_id='session-42', persistent_session=True, turn='resume')
     captured = json.loads(capture.read_text())
 
@@ -217,7 +224,8 @@ def test_launch_turn_terminates_and_reaps_process_group_on_interrupt(tmp_path, m
     process = InterruptedProcess()
     signals = []
     monkeypatch.setattr(pilot.subprocess, 'Popen', lambda *args, **kwargs: process)
-    monkeypatch.setattr(pilot.os, 'killpg', lambda pid, sig: signals.append((pid, sig)))
+    monkeypatch.setattr(pilot.platform_support, 'IS_WINDOWS', False)
+    monkeypatch.setattr(pilot.os, 'killpg', lambda pid, sig: signals.append((pid, sig)), raising=False)
     root = tmp_path / 'trial'
     root.mkdir()
 
@@ -233,20 +241,19 @@ def test_completed_run_without_usage_never_invents_token_counts():
 
 
 def test_tool_waits_for_other_process_and_returns_unique_receipts(tmp_path):
-    fcntl = pytest.importorskip('fcntl')
     pilot = load()
     root = tmp_path / 'trial'
     pilot.load('adapter').initialize_trial(root, pilot.load('fixtures').build_trial('index-40k', 'C'))
     command = [sys.executable, str(PILOT), 'tool', '--root', str(root),
                '--request', '{"op":"read_heading_map","record_id":"index"}']
     with (root / 'controller/pilot-tool.lock').open('a') as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
+        pilot.platform_support.acquire_lock(lock)
         process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
             with pytest.raises(subprocess.TimeoutExpired):
                 process.communicate(timeout=0.3)
         finally:
-            fcntl.flock(lock, fcntl.LOCK_UN)
+            pilot.platform_support.release_lock(lock)
             stdout, stderr = process.communicate(timeout=10)
     assert process.returncode == 0, stderr
     assert json.loads(stdout)['evidence']['event_seq'] == 1

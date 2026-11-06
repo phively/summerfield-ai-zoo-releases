@@ -1,34 +1,12 @@
 # Superb Skills evaluation protocol
 
-Status: Evaluation design and partition protection are reconciled; local deterministic and command-smoke paths are validated for their stated scope. The current acceptance matrix in ignored `output/` is the single Phase 1–7 checklist. Existing T5/T6/T8 task pages have been adjudicated read-only and remain qualified because their output bytes are unavailable. T8's task-reported one preflight, one smoke, and four-attempt comparison are not model-quality or holdout evidence. Installed-entry-point activation remains unobserved; actual Cloud model/effort remain unknown under the accepted qualification. Overall Phase 1–7 acceptance remains incomplete.
-
 The product being tested is Superb Skills' reusable ability to design and evaluate other skills, including itself. This suite is an initial development fixture, not the shipped general protocol. Extend it with other-skill design tasks, inspect the generated instructions and test plans, and define separate target runtime trials. Shipped guidance belongs in Superb Skills' conditional references and tools and must operate without this repository's evidence files.
 
 This protocol establishes trustworthy tests and result provenance before changing live Superb Skills behavior. The machine-readable suite is [superb-skills-evaluation.json](superb-skills-evaluation.json). It is a test design artifact, not a benchmark result and not an instruction or memory authority.
 
-## Scope and evidence sources
+## Scope
 
 The suite covers scope control, conditional routing, preference intake, ownership, recurring operational errors, candidate comparison, unavailable runners, source-input delivery gates, result persistence, and icon requirements. Its two source-delivery cases distinguish diagnosis of an unexecuted gate from designing a verifiable handoff. It includes negative cases for a one-time prompt rewrite and ordinary style editing: neither should trigger a benchmark or create a durable record.
-
-The four user-supplied shared conversations are retained as pointers to user-reported failure symptoms. They were reviewed in the authenticated browser on 2026-09-21. The summaries below record what is visible without treating a conversation as an independent reproduction:
-
-| Evidence | Failure symptom used for testing | What it does not establish |
-| --- | --- | --- |
-| `conv-1` (private locator omitted) | A phased plugin redesign propagated redundant “no history file” statements into several files. | It does not independently reproduce a clean-context delegated-skill failure or authorize reconstructing unavailable history. |
-| `conv-2` (private locator omitted) | A substantial teach-me implementation was reported complete before a follow-up supplied the missing `1.8.1` version decision and synchronization work. | It does not establish a universal versioning rule beyond the target repository's conventions. |
-| `conv-3` (private locator omitted) | A Meal Planner implementation was followed by a separate request for the parent-plugin version bump and README update. | It does not replace deterministic manifest, catalog, and synchronization checks. |
-| `conv-4` (private locator omitted) | Evaluation progressed with unresolved runner/output controls, and the user later corrected that permission to rerun the test suite had not been given. | It does not authorize a new run or prove a particular runner configuration. |
-
-No conversation transcript is copied into the repository. Any later execution must record whether each source remains accessible. Independent red-light reproduction is `not_run` for all four sources.
-
-### Reviewed evidence ledger
-
-| Evidence | Instruction or context | Observed response/action | Correction or lesson | Reproduction status |
-| --- | --- | --- | --- | --- |
-| `conv-1` | Continue a phased plugin redesign with current lifecycle boundaries. | Repeated “no history file” statements were added to multiple Career Coach files, duplicating an existing audit authority. | Keep lifecycle rules in the canonical audit reference and pass missing context explicitly; do not create explanatory duplication. | `not_run`; no clean-context delegated invocation is shown. |
-| `conv-2` | Review and implement approved teach-me visual-art changes. | Completion and validation were reported before a user follow-up supplied the `1.8.1` version decision; plugin and mirrored metadata were then updated. | Make version decisions and applicable mirror synchronization part of the completion gate. | `not_run`; no separate release checklist artifact is supplied. |
-| `conv-3` | Implement the approved Meal Planner formatting plan. | The implementation completed before a separate follow-up requested the parent-plugin version bump and README update. | Check version, metadata, catalog scope, and validation before declaring completion. | `not_run`; no pre-follow-up completion checklist is supplied. |
-| `conv-4` | Complete a controlled comparison and continue remaining evaluation work. | Some runner limits, output/collection conditions, and authorization boundaries remained unresolved; the user explicitly corrected an unauthorized rerun. | Smoke-test permission, runner identity, output completeness, and result integrity; retain valid attempts and retry only failed/invalid work under the frozen configuration. | `not_run`; provider-credit and local-runtime failures are environment-specific. |
 
 ## Test classes
 

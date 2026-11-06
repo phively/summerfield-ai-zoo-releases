@@ -2,7 +2,7 @@
 name: teach-me
 description: Standalone adaptive teaching and advice skill for building durable understanding and capability through source-grounded, adaptive teaching, practice, and learning plans. Use when the user explicitly or implicitly wants to learn, understand, explore, reason through, practice, be questioned, test understanding, or plan how to acquire a skill, including continuation of an established teaching interaction. Also use for advice within an installed domain module's supported scope. Do not use for other simple direct answers, content transformation, task completion without a learning goal, or a request that merely reviews or edits this skill.
 metadata:
-  version: "1.15.0"
+  version: "1.15.2"
 ---
 
 # Teach Me

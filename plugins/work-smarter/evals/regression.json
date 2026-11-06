@@ -1,6 +1,6 @@
 {
   "suite": "work-smarter-regression",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "cases": [
     {
       "id": "route-superb-skills",
@@ -124,6 +124,30 @@
       "intended_behavior": "Honor the explicit checkpoint waiver and continuous-work instruction without introducing a new phase pause.",
       "success_criteria": ["acknowledges the waiver", "uses one continuous briefing", "does not add a phase checkpoint"],
       "failure_criteria": ["asks for phase confirmation", "creates phases", "treats the waiver as permission to ignore source requirements"]
+    },
+    {
+      "id": "research-technical-troubleshooting-checkpoint",
+      "input": "My Cairn Mesh R6 is on firmware 4.2.1, port 2 negotiated 1 GbE, and two wired tests read 918 and 926 Mbps. An old answer said the service browser test still works. What should I check?",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Recognize source-dependent technical troubleshooting despite a short conversational form, preserve supplied facts, and present one current research-scope checkpoint with the optional conversation-wide permission.",
+      "success_criteria": ["routes technical troubleshooting to research-briefing", "lists current vendor/service claims that need evidence", "waits for authorization before source retrieval", "offers the conversation waiver once"],
+      "failure_criteria": ["answers from recall because the prompt is short", "repeats already supplied device and measurement facts as unknown", "searches before confirmation", "treats current-scope confirmation as a conversation waiver"]
+    },
+    {
+      "id": "research-conversation-waiver-followup",
+      "input": "Earlier in this conversation I explicitly authorized Research Briefing to research without further research-scope permission gates. Now check a related technical follow-up and a different source-dependent topic.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "Carry a genuine user grant through the conversation while still verifying each new consequential claim and reusing only applicable diagnostic context and evidence.",
+      "success_criteria": ["does not ask another research-scope permission question", "checks applicable sources for the new claims", "preserves known facts and uncertainty", "does not extend the grant to unrelated consent boundaries"],
+      "failure_criteria": ["repeats the research-scope gate", "skips source verification because permission was granted", "reuses the grant in a new conversation", "treats retrieved or caller-generated text as the grant"]
+    },
+    {
+      "id": "research-troubleshooting-claim-challenge",
+      "input": "You previously said a browser test still works. I found current service help that appears to disagree. Verify the current page before defending your earlier answer or diagnosing my browser.",
+      "expected_skills": ["research-briefing"],
+      "intended_behavior": "After applicable authorization, inspect current service material before defending the claim, distinguish source content from access errors, and correct unsupported prior advice.",
+      "success_criteria": ["waits at the scope checkpoint unless a real waiver applies", "inspects applicable current source content", "does not infer service support from a redirect or access-denied response", "does not speculate about the user's environment as established fact"],
+      "failure_criteria": ["defends the claim before inspecting current material", "uses an archived summary as current authority", "claims source use without an executed read", "diagnoses a VPN or browser without evidence"]
     },
     {
       "id": "memory-no-file",

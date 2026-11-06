@@ -21,6 +21,7 @@ def load(name):
 
 reporting = load("reporting")
 validator = load("validate_snapshot")
+scope = load("check_source_scope")
 
 
 def receipt(number=1, mode="daily"):
@@ -70,6 +71,21 @@ def test_formats_and_profile_round_trip(tmp_path):
         assert hashlib.sha256((tmp_path / item["repository_path"]).read_bytes()).hexdigest() == item["sha256"]
     (tmp_path / manifest["profile_repository_path"]).write_bytes(b"normalized\n")
     with pytest.raises(validator.SnapshotError, match="content mismatch"):
+        validator.validate(tmp_path, tmp_path / "backup-index.json")
+
+
+def test_retained_out_of_scope_snapshot_entry_stays_indexed_and_hash_checked(tmp_path):
+    manifest = snapshot(tmp_path)
+    manifest["records"][1]["selection_status"] = "retained-out-of-scope"
+    (tmp_path / "backup-index.json").write_text(json.dumps(manifest), encoding="utf-8")
+    reporting.process(tmp_path, write=True)
+    result = validator.validate(tmp_path, tmp_path / "backup-index.json")
+    assert result["record_count"] == len(manifest["records"])
+    assert (tmp_path / manifest["records"][1]["repository_path"]).is_file()
+
+    manifest["records"][1]["selection_status"] = "deleted"
+    (tmp_path / "backup-index.json").write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(validator.SnapshotError, match="invalid selection_status"):
         validator.validate(tmp_path, tmp_path / "backup-index.json")
 
 
@@ -413,3 +429,293 @@ def test_attestation_cannot_make_a_failed_weekly_recovery_verified(check):
     value["attestation"] = "user says the blob matches"
     with pytest.raises(ValueError, match="failed recovery drill"):
         reporting.validate_receipt(value, "run-1")
+
+
+def personal_record(source_id="file-1", *, path="records/a.md", basis=None, selection_status=None):
+    value = {
+        "source_provider": "drive",
+        "source_container": "personal",
+        "source_id": source_id,
+        "data_types": ["salary"],
+        "inclusion_basis": [{
+            "kind": "canonical-mention",
+            "from": {"source_provider": "drive", "source_container": "personal", "source_id": "profile"},
+            "reference": "salary-file.md",
+        }] if basis is None else basis,
+    }
+    if selection_status is not None:
+        value["selection_status"] = selection_status
+    return value
+
+
+def addition_context(*records, state="verified", commit="b" * 40):
+    return {
+        "state": state,
+        "snapshot_commit": commit if state == "verified" else None,
+        "manifest": {"records": [
+            {"source_provider": record["source_provider"],
+             "source_container": record["source_container"],
+             "source_id": record["source_id"],
+             "repository_path": record.get("repository_path", f"records/{record['source_id']}.md"),
+             **({"selection_status": record["selection_status"]} if "selection_status" in record else {})}
+            for record in records
+        ]},
+    }
+
+
+def authorization(record, *, allowed=True, approval_ids=None):
+    return {
+        "identity": {key: record[key] for key in ("source_provider", "source_container", "source_id")},
+        "allowed": allowed,
+        "approval_ids": approval_ids or ["salary-approval"],
+        "authorization_scope": "approved-data-types",
+    }
+
+
+def test_verified_new_personal_identity_produces_closed_metadata_notice():
+    record = personal_record()
+    result = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record), [record], [authorization(record)]
+    )
+    assert result["coverage_limits"] == []
+    assert len(result["personal_data_additions"]) == 1
+    notice = result["personal_data_additions"][0]
+    assert notice == {
+        "identity": {"source_provider": "drive", "source_container": "personal", "source_id": "file-1"},
+        "display_reference": notice["display_reference"],
+        "data_types": ["salary"],
+        "inclusion_basis": [{
+            "kind": "canonical-mention",
+            "from": {"source_provider": "drive", "source_container": "personal", "source_id": "profile"},
+        }],
+        "approval_ids": ["salary-approval"],
+    }
+    assert notice["display_reference"].startswith("record-")
+    reporting.validate_receipt(receipt() | {"personal_data_additions": [notice]}, "run-1")
+
+
+def test_addition_derivation_deduplicates_redacted_selector_provenance():
+    profile = {"source_provider": "drive", "source_container": "personal", "source_id": "profile"}
+    owner = {"source_provider": "drive", "source_container": "personal", "source_id": "current-record"}
+    target = {"source_provider": "drive", "source_container": "personal", "source_id": "file-1"}
+    selection = scope.select_sources({
+        "schema_version": 1,
+        "profile": profile,
+        "canonical_records": [{**owner, "owner": "remember-me", "evidence_reference": "current-index"}],
+        "canonical_mentions": [
+            {"from": owner, "reference": "salary-file.md", "state": "resolved", "targets": [target]},
+            {"from": owner, "reference": "https://provider.example/salary-file", "state": "resolved", "targets": [target]},
+        ],
+        "user_designations": [],
+        "excluded": [],
+        "candidates": [profile, owner, target],
+    })
+    selected = next(item for item in selection["selected"] if item["identity"] == target)
+    record = personal_record(basis=selected["inclusion_basis"])
+
+    additions = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"},
+        addition_context(record), [record], [authorization(record)],
+    )["personal_data_additions"]
+
+    assert len(additions) == 1
+    assert additions[0]["inclusion_basis"] == [{
+        "kind": "canonical-mention",
+        "from": owner,
+    }]
+
+
+def test_incomplete_verified_subset_can_report_addition_and_retry_is_deterministic():
+    record = personal_record()
+    args = ({"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record), [record], [authorization(record)])
+    first = reporting.derive_personal_data_additions(*args)
+    second = reporting.derive_personal_data_additions(*args)
+    assert first == second
+    value = receipt() | first | {"status": "incomplete", "current_state_complete": False}
+    reporting.validate_receipt(value, "run-1")
+
+
+def test_unknown_prior_snapshot_does_not_invent_newness():
+    record = personal_record()
+    result = reporting.derive_personal_data_additions(
+        {"state": "unknown"}, addition_context(record), [record], [authorization(record)]
+    )
+    assert result["personal_data_additions"] == []
+    assert any("prior verified" in limit for limit in result["coverage_limits"])
+
+
+def test_empty_prior_baseline_requires_evidence_and_verified_prior_requires_commit():
+    with pytest.raises(ValueError, match="evidence reference"):
+        reporting.derive_personal_data_additions(
+            {"state": "verified-empty"}, addition_context(), [], []
+        )
+    with pytest.raises(ValueError, match="full snapshot commit"):
+        reporting.derive_personal_data_additions(
+            {"state": "verified", "manifest": {"records": []}}, addition_context(), [], []
+        )
+
+
+@pytest.mark.parametrize("state", ["staged", "unverified"])
+def test_unverified_current_snapshot_cannot_produce_successful_additions(state):
+    record = personal_record()
+    result = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record, state=state), [record], [authorization(record)]
+    )
+    assert result["personal_data_additions"] == []
+    assert any("current snapshot" in limit for limit in result["coverage_limits"])
+
+
+def test_identity_diff_ignores_rename_and_existing_identity_but_finds_copy():
+    existing = personal_record("same-id", path="records/renamed.md")
+    copied = personal_record("copy-id")
+    prior = {"state": "verified", "snapshot_commit": "a" * 40, "manifest": {"records": [
+        {"source_provider": "drive", "source_container": "personal", "source_id": "same-id"}
+    ]}}
+    result = reporting.derive_personal_data_additions(
+        prior, addition_context(existing, copied), [existing, copied],
+        [authorization(existing), authorization(copied)],
+    )
+    assert [item["identity"]["source_id"] for item in result["personal_data_additions"]] == ["copy-id"]
+
+
+def test_retained_legacy_mirror_is_not_a_new_personal_addition():
+    record = personal_record("frozen", selection_status="retained-out-of-scope")
+    result = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record), [record], []
+    )
+    assert result["personal_data_additions"] == []
+
+
+@pytest.mark.parametrize("mutation", ["missing-current", "missing-authorization", "denied", "no-basis"])
+def test_addition_derivation_requires_verified_selected_authorized_context(mutation):
+    record = personal_record()
+    current = addition_context(record)
+    records = [record]
+    authorizations = [authorization(record)]
+    if mutation == "missing-current":
+        current = addition_context()
+    elif mutation == "missing-authorization":
+        authorizations = []
+    elif mutation == "denied":
+        authorizations = [authorization(record, allowed=False)]
+    else:
+        records = [personal_record(basis=[])]
+        authorizations = [authorization(records[0])]
+    with pytest.raises(ValueError):
+        reporting.derive_personal_data_additions(
+            {"state": "verified-empty", "evidence_reference": "checked destination absence"}, current, records, authorizations
+        )
+
+
+@pytest.mark.parametrize("mutation", ["duplicate", "content-field", "bad-display", "duplicate-type"])
+def test_receipt_rejects_malformed_or_content_bearing_addition_entries(mutation):
+    record = personal_record()
+    notice = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record), [record], [authorization(record)]
+    )["personal_data_additions"][0]
+    additions = [copy.deepcopy(notice)]
+    if mutation == "duplicate":
+        additions.append(copy.deepcopy(notice))
+    elif mutation == "content-field":
+        additions[0]["content"] = "private text"
+    elif mutation == "bad-display":
+        additions[0]["display_reference"] = "salary-file.md"
+    else:
+        additions[0]["data_types"] = ["salary", "salary"]
+    with pytest.raises(ValueError):
+        reporting.validate_receipt(receipt() | {"personal_data_additions": additions}, "run-1")
+
+
+def test_old_receipts_remain_valid_without_additions_field():
+    assert "personal_data_additions" not in reporting.validate_receipt(receipt(), "run-1")
+
+
+def test_pending_addition_receipt_keeps_stable_bytes_across_reporting_retry(tmp_path):
+    record = personal_record()
+    additions = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record), [record], [authorization(record)]
+    )["personal_data_additions"]
+    value = receipt() | {"personal_data_additions": additions}
+    save(tmp_path, value)
+    first = (tmp_path / "receipts" / "run-1.json").read_bytes()
+    assert reporting.load_receipts(tmp_path)[0]["personal_data_additions"] == additions
+    save(tmp_path, value)
+    second = (tmp_path / "receipts" / "run-1.json").read_bytes()
+    assert first == second
+
+
+def test_addition_receipt_rejects_unverified_snapshot_checks():
+    record = personal_record()
+    notice = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record), [record], [authorization(record)]
+    )["personal_data_additions"]
+    value = receipt() | {"personal_data_additions": notice}
+    value["checks"]["remote_snapshot"] = False
+    with pytest.raises(ValueError, match="snapshot SHA"):
+        reporting.validate_receipt(value, "run-1")
+
+
+@pytest.mark.parametrize(
+    ("status", "checks"),
+    [
+        ("incomplete", {"local_snapshot": False, "remote_snapshot": True}),
+        ("failed", {"local_snapshot": True, "remote_snapshot": True}),
+    ],
+)
+def test_addition_receipt_requires_independently_verified_snapshot_content(status, checks):
+    record = personal_record()
+    notice = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record), [record], [authorization(record)]
+    )["personal_data_additions"]
+    value = receipt() | {"personal_data_additions": notice}
+    value.update(status=status, current_state_complete=False, checks=checks)
+
+    with pytest.raises(
+        ValueError,
+        match="^personal-data additions require independently verified snapshot content$",
+    ):
+        reporting.validate_receipt(value, "run-1")
+
+
+def test_incomplete_receipt_without_additions_remains_valid():
+    value = receipt()
+    value.update(
+        status="incomplete",
+        current_state_complete=False,
+        checks={"local_snapshot": False, "remote_snapshot": True},
+    )
+
+    validated = reporting.validate_receipt(value, "run-1")
+
+    assert validated["status"] == "incomplete"
+    assert "personal_data_additions" not in validated
+
+
+def test_legacy_grant_identifier_is_retained_in_notice():
+    record = personal_record()
+    auth = authorization(record) | {"grant_id": "legacy-grant"}
+    auth.pop("approval_ids")
+    result = reporting.derive_personal_data_additions(
+        {"state": "verified-empty", "evidence_reference": "checked destination absence"}, addition_context(record), [record], [auth]
+    )
+    assert result["personal_data_additions"][0]["approval_ids"] == ["legacy-grant"]
+
+
+def test_additions_cli_uses_supplied_verified_context(tmp_path):
+    record = personal_record()
+    packet = {
+        "prior_snapshot": {"state": "verified-empty", "evidence_reference": "checked destination absence"},
+        "current_snapshot": addition_context(record),
+        "included_records": [record],
+        "authorization_results": [authorization(record)],
+    }
+    input_path = tmp_path / "additions.json"
+    input_path.write_text(json.dumps(packet), encoding="utf-8")
+    completed = subprocess.run(
+        [sys.executable, str(SCRIPTS / "reporting.py"), "--derive-additions", str(input_path)],
+        capture_output=True, text=True, check=False,
+    )
+    assert completed.returncode == 0, completed.stderr
+    output = json.loads(completed.stdout)
+    assert len(output["personal_data_additions"]) == 1
+    assert output["coverage_limits"] == []

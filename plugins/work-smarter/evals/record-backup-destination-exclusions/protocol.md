@@ -1,6 +1,6 @@
 # Record Backup destination-exclusion mode fixtures
 
-Status: Offline deterministic controls cover the policy delta through synthetic packets. The accompanying [evidence review](../record-backup-destination-exclusions-review.md) maps those controls and the instruction boundary to R5-R12 and AE4-AE9. These fixtures do not publish files, enumerate a provider, activate the skill, or demonstrate provider behavior.
+This package defines offline deterministic controls using synthetic packets. These fixtures do not publish files, enumerate a provider, activate the skill, or demonstrate provider behavior.
 
 The fixtures use generated YAML bytes, synthetic source identities, bounded Markdown, and independently managed fixture files. No user records or credentials are read. `write_snapshot` creates an operational-layout snapshot with a profile-bound exclusion packet and captures the exact synthetic profile bytes and digest. `preservation_packet` builds complete synthetic Git tree inventories for baseline, staging, content, and operational phases. Its object IDs are internally consistent; evidence labels identify fixture data, not provider reads.
 
@@ -32,10 +32,8 @@ PYTHONDONTWRITEBYTECODE=1 python -m pytest -p no:cacheprovider \
   plugins/work-smarter/tests/test_record_backup_manual_verification.py
 ```
 
-Listing this command describes the existing controls; it is not a result for the current documentation change.
+Listing this command describes how to run the controls; it is not an execution result.
 
-## R12 evidence boundary
+## Evidence boundary
 
-The approved 2026-10-19 Product Contract decision, **Descriptive evidence with current policy retained**, governs R12. KTD12 reuses the historical/current packet-binding regression and restore instructions. The user's prior personal-context provider publication and restore/recovery exercise is credited as user-attested evidence for unchanged mechanics. This repository does not independently verify that attestation, and it does not show that the prior exercise tested the exclusion delta.
-
-Fresh activated daily, manual, or weekly exclusion-aware runs were not performed. Under the approved R12 scope, those runs were removed as closure gates; they remain unmeasured and must not be described as passed. Offline tests do not activate an agent, connect to a provider, or publish to GitHub. The mode fixtures link deterministic helpers with synthetic state only.
+These controls link deterministic helpers with synthetic state. They do not activate an agent, connect to a provider, publish to GitHub, or demonstrate live exclusion-aware behavior. Keep observed acceptance, user attestations and historical scope decisions in separate internal evidence records. A helper-test pass does not establish an activated workflow pass or authorize publication.

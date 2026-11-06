@@ -1,7 +1,7 @@
 {
   "name": "work-smarter",
-  "version": "1.15.0",
-  "description": "Evidence-grounded research with direct adjacent-task handling and pre-draft verification, adaptive teaching and advice with research-backed learning plans, reusable instruction design and calibrated evaluation planning, personal-context indexing with authoritative record routing, and verified GitHub backup intake, reconciliation, and restoration for durable records.",
+  "version": "1.15.2",
+  "description": "Evidence-grounded research, technical troubleshooting continuity, direct adjacent-task handling, and pre-draft verification; adaptive teaching and advice with research-backed learning plans; reusable instruction design and calibrated evaluation planning; personal-context indexing with authoritative record routing; and verified GitHub backup intake, reconciliation, and restoration for durable records.",
   "author": {
     "name": "Paul Hively"
   },

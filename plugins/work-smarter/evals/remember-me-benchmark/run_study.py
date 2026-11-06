@@ -9,6 +9,9 @@ import time
 
 
 HERE = Path(__file__).resolve().parent
+_platform_spec = importlib.util.spec_from_file_location('evaluation_platform_support', HERE.parent / 'platform_support.py')
+platform_support = importlib.util.module_from_spec(_platform_spec)
+_platform_spec.loader.exec_module(platform_support)
 MAX_PROCESS_STARTS = 26
 MAX_INFRASTRUCTURE_RECOVERY_STARTS = 2
 RETRIEVAL_SCENARIOS = frozenset((
@@ -32,55 +35,51 @@ def _atomic_json(path, value):
     temporary = path.with_name(f'.{path.name}.tmp')
     temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False) + '\n',
                          encoding='utf-8')
-    temporary.replace(path)
+    platform_support.atomic_replace(temporary, path)
 
 
 def _locked_ledger(study_root):
-    import fcntl
-
     study_root = Path(study_root)
     study_root.mkdir(parents=True, exist_ok=True)
     lock_path = study_root / 'launch-ledger.lock'
     lock = lock_path.open('a+', encoding='utf-8')
-    fcntl.flock(lock, fcntl.LOCK_EX)
-    ledger_path = study_root / 'launch-ledger.json'
     try:
-        ledger = json.loads(ledger_path.read_text(encoding='utf-8'))
-    except FileNotFoundError:
-        manifest = _manifest()
-        budget = manifest.get('closeout_launch_budget', {})
-        ledger = {
-            'schema_version': 1,
-            'maximum_process_starts': budget.get(
-                'maximum_additional_process_starts', MAX_PROCESS_STARTS),
-            'maximum_infrastructure_recovery_starts': budget.get(
-                'maximum_infrastructure_recovery_starts',
-                MAX_INFRASTRUCTURE_RECOVERY_STARTS),
-            'behavioral_retries': budget.get('behavioral_retries', False),
-            'launches': [],
-        }
-        _atomic_json(ledger_path, ledger)
-    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
-        fcntl.flock(lock, fcntl.LOCK_UN)
+        platform_support.acquire_lock(lock)
+        ledger_path = study_root / 'launch-ledger.json'
+        try:
+            ledger = json.loads(ledger_path.read_text(encoding='utf-8'))
+        except FileNotFoundError:
+            manifest = _manifest()
+            budget = manifest.get('closeout_launch_budget', {})
+            ledger = {
+                'schema_version': 1,
+                'maximum_process_starts': budget.get(
+                    'maximum_additional_process_starts', MAX_PROCESS_STARTS),
+                'maximum_infrastructure_recovery_starts': budget.get(
+                    'maximum_infrastructure_recovery_starts',
+                    MAX_INFRASTRUCTURE_RECOVERY_STARTS),
+                'behavioral_retries': budget.get('behavioral_retries', False),
+                'launches': [],
+            }
+            _atomic_json(ledger_path, ledger)
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+            raise ValueError('the launch ledger is unreadable') from error
+        if (not isinstance(ledger, dict) or ledger.get('schema_version') != 1
+                or not isinstance(ledger.get('launches'), list)
+                or ledger.get('maximum_process_starts') != MAX_PROCESS_STARTS
+                or ledger.get('maximum_infrastructure_recovery_starts')
+                != MAX_INFRASTRUCTURE_RECOVERY_STARTS
+                or ledger.get('behavioral_retries') is not False):
+            raise ValueError('the launch ledger does not match the closeout budget')
+        return lock, ledger_path, ledger
+    except BaseException:
         lock.close()
-        raise ValueError('the launch ledger is unreadable') from error
-    if (not isinstance(ledger, dict) or ledger.get('schema_version') != 1
-            or not isinstance(ledger.get('launches'), list)
-            or ledger.get('maximum_process_starts') != MAX_PROCESS_STARTS
-            or ledger.get('maximum_infrastructure_recovery_starts')
-            != MAX_INFRASTRUCTURE_RECOVERY_STARTS
-            or ledger.get('behavioral_retries') is not False):
-        fcntl.flock(lock, fcntl.LOCK_UN)
-        lock.close()
-        raise ValueError('the launch ledger does not match the closeout budget')
-    return lock, ledger_path, ledger
+        raise
 
 
 def reserve_launch(study_root, trial_id, turn, *, attempt_kind='behavioral',
                    recovery_for=None, recovery_reason=None):
     """Charge one process start before launching; repeated trial turns are refused."""
-    import fcntl
-
     if attempt_kind not in ('behavioral', 'infrastructure_recovery'):
         raise ValueError('unknown process-start attempt kind')
     if attempt_kind == 'infrastructure_recovery':
@@ -119,14 +118,12 @@ def reserve_launch(study_root, trial_id, turn, *, attempt_kind='behavioral',
         _atomic_json(ledger_path, ledger)
         return sequence
     finally:
-        fcntl.flock(lock, fcntl.LOCK_UN)
+        platform_support.release_lock(lock)
         lock.close()
 
 
 def complete_launch(study_root, sequence, process):
     """Record the observed result of a charged process start."""
-    import fcntl
-
     lock, ledger_path, ledger = _locked_ledger(study_root)
     try:
         launch = next((item for item in ledger['launches']
@@ -142,7 +139,7 @@ def complete_launch(study_root, sequence, process):
         launch['errors'] = list(process.get('errors', []))
         _atomic_json(ledger_path, ledger)
     finally:
-        fcntl.flock(lock, fcntl.LOCK_UN)
+        platform_support.release_lock(lock)
         lock.close()
 
 
@@ -458,7 +455,7 @@ def run_closeout_sequence(study_root, *, scenario='closeout-sequence-40k', candi
             maintenance_approval=approval)
     except (ValueError, OSError, TypeError, KeyError) as error:
         errors.append(f'controller scoring failed: {error}')
-    hashes = {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+    hashes = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
               for path in sorted(root.rglob('*')) if path.is_file()}
     elapsed = time.perf_counter() - started
     ledger = json.loads((study_root / 'launch-ledger.json').read_text(encoding='utf-8'))
@@ -611,7 +608,7 @@ def recover_closeout_resume(study_root, *, trial_id):
     errors.extend(stage_errors)
     ledger = json.loads(ledger_path.read_text(encoding='utf-8'))
     raw_hashes = {
-        str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+        path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in sorted(root.rglob('*')) if path.is_file()
         and path.name not in ('result.json', 'recovered-result.json')
     }

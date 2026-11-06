@@ -15,8 +15,19 @@ profile:
 source:
   provider: <provider name>
   containers: [<provider-scoped container IDs>]
-  roots: [<authorized root or pointer rules>]
+  roots: [<candidate search boundaries; not inclusion rules>]
   exclusions: [<explicit paths, classes, or providers>]
+  canonical_records: # optional verified canonical identities not already supplied by routing metadata
+    - source_provider: <provider>
+      source_container: <provider-scoped container ID>
+      source_id: <immutable identity or documented fallback>
+      owner: <authoritative record owner>
+      evidence_reference: <bounded canonical-routing reference>
+  supporting_records: # optional records explicitly designated by the user
+    - source_provider: <provider>
+      source_container: <provider-scoped container ID>
+      source_id: <immutable identity or documented fallback>
+      designation_reference: <bounded user-designation reference>
 destination:
   provider: github
   repository: <owner/repository>
@@ -35,6 +46,10 @@ reporting:
   fallback: <authorized durable receipt location outside disposable scratch storage>
   freshness_threshold_hours: null # or user-configured positive number
 ```
+
+`source.canonical_records` and `source.supporting_records` are optional additions to schema 1. The canonical profile is always included separately. Verified Remember Me routing metadata or another identified owner may supply canonical identities without copying their contents into this profile. For an existing profile with neither list, resolve canonical identities from a fresh read of that authority. If required authority cannot be read or resolved, ask for the narrow missing identity or report an unattended coverage gap; never promote the rest of a root to canonical scope. A canonical-file mention independently qualifies its resolved target as a supporting record, so it need not be duplicated in `supporting_records`.
+
+`source.roots` bounds candidate enumeration only. A user designation is an identity-scoped record with a bounded provenance reference, not a folder, file extension, topic, or prior-manifest match. A designated supporting record does not make its own links eligible. Keep distinct path mappings and provider identity evidence in run-local inventory; the scope helper receives identities and selection evidence, not file contents.
 
 The profile must identify the source authority and the destination; it must not contain access tokens, private keys, passwords, recovery codes, or copied record contents. Validate repository identity and private visibility before any write. Require explicit authorization immediately before a first publication, branch change, deletion, or restoration.
 
@@ -93,6 +108,25 @@ The user owns backup authorization. Preserve the canonical profile's existing re
 sensitive_backup:
   owner: <user who owns authorization>
   maintainer: <workflow allowed to maintain this canonical profile>
+  approved_data_types:
+    - id: <unique approval ID>
+      data_type: <user-approved type, e.g. salary>
+      source_provider: <provider>
+      source_container: <provider-scoped container ID>
+      destination:
+        repository: <owner/repository>
+        branch: <branch>
+      sensitivity_classes: [<approved non-credential class, e.g. financial>]
+      authorized_by: <user identity>
+      authorization_reference: <bounded reference to the explicit approval, not its contents>
+      granted_at: <ISO-8601 timestamp with timezone>
+      expires_at: null # explicitly approved duration; or an ISO-8601 expiry
+      revoked: false
+      first_approved_record: # optional provenance; never a matching restriction
+        source_provider: <provider>
+        source_container: <provider-scoped container ID>
+        source_id: <immutable file ID or documented strongest identity fallback>
+        reference: <bounded recovery reference>
   grants:
     - id: <unique grant ID>
       source_provider: <provider>
@@ -112,13 +146,24 @@ sensitive_backup:
       revoked: false
 ```
 
-Use `content_scope: {mode: future-versions}` only when the user explicitly authorizes future versions of the same identity within the named sensitivity classes and destination. New identity, additional sensitivity, changed destination, or content outside an exact-hash grant needs new authorization. Record a path/container fallback limitation when immutable identities are unavailable; a rename must not silently authorize a different file. Grants contain metadata, not record contents or credentials. Never describe them as a guarantee that external approval review will accept a publication.
+An `approved_data_types` entry authorizes future eligible records and versions containing the named type within its exact source provider, source container, destination repository, and branch. `data_type` identifies content such as `salary`; `sensitivity_classes` classifies handling and does not imply a data type. The workflow must declare every type and class from authorized evidence. Compatible approvals may combine to cover all declared types and classes. Two effective approvals for the same type and scope are ambiguous. The optional `first_approved_record` documents how the approval began; a missing, renamed, or inaccessible first file does not restrict later matching. It is provenance, not authority or a per-file allowlist.
 
-Precedence: authentication prohibitions and configured exclusions apply first, then explicit revocation. An exact current-task grant can override missing, expired or narrower persistent permission for that task, but cannot override exclusions or revocation; reinstatement needs an authorized canonical profile update. Otherwise reuse the single applicable persistent grant without repeated confirmation. Multiple matching persistent grants are ambiguous. Never turn a task-only grant into a durable grant without exact save authorization.
+`grants` remains the legacy identity-specific authorization list and may be omitted when `approved_data_types` is present. A legacy grant still authorizes only its exact source identity, destination, classes, and declared content scope. Use `content_scope: {mode: future-versions}` only when the user explicitly authorizes future versions of that same identity. A different identity may use only a matching type approval or its own record grant. An exact-hash mismatch or narrower class restriction on an identity cannot be bypassed by a type approval. A changed destination needs an applicable new authorization. Record a path/container fallback limitation when immutable identities are unavailable; a rename must not silently authorize a different file. Both approval forms contain metadata, not record contents or credentials. Never describe them as a guarantee that external approval review will accept a publication.
+
+Apply permission in this order:
+
+1. Require eligible source identity and inclusion provenance, resolved data classification when using type approvals, explicit exclusion and credential decisions, and the existing content hash. A grant cannot make an ineligible candidate eligible.
+2. An applicable record revocation or revocation of a required data type denies publication, including task-only approval. Reinstatement needs an authorized canonical profile update.
+3. A valid exact current-task grant may override missing, expired, or narrower persistent permission for that task. It is never persisted automatically and cannot override exclusions, credentials, or revocation.
+4. An applicable identity-specific legacy grant keeps its existing owner, class, version/hash, time, destination, and ambiguity restrictions. A type approval cannot bypass any restriction on that identity. A matching expired or narrow record grant still requires focused reauthorization.
+5. With no applicable identity restriction, compatible effective type approvals may combine to cover every declared data type and sensitivity class in scope.
+6. Missing coverage, duplicate or conflicting applicable approvals, or unresolved metadata denies affected inclusion. An expired approval for an unrelated type does not veto a separate effective approval.
+
+Never turn a task-only grant into a durable grant without exact save authorization.
 
 Reload the current canonical profile each run and before publication if it changed. Known sensitive records without sufficient permission stop affected inclusion; preserve their previous backups and report incomplete coverage rather than treating omission as deletion. Unknown classification needs focused input. In unattended mode report missing identity, class or grant and stop the affected operation. Do not scan or summarize unrelated records to infer blanket permission.
 
-For a deterministic check, serialize the freshly parsed YAML profile and the declared record metadata to run-local JSON and use `scripts/check_permission.py INPUT.json`. The packet contains `profile`, `record`, `destination`, `at`, and optional `task_grant` with the same grant shape. Record metadata uses the three manifest identity fields, current `sha256`, `sensitivity_classes`, and explicit `excluded: false` and `credential_material: false` classifications established by the run. Exit 0 means the supplied grant matches; exit 1 denies inclusion. This checks declared metadata, not profile freshness, actual consent, secret absence, or publication authority. The JSON is disposable input, never a replacement canonical profile.
+For a deterministic check, serialize the freshly parsed YAML profile and the declared record metadata to run-local JSON and use `scripts/check_permission.py INPUT.json`. The packet contains `profile`, `record`, `destination`, `at`, and optional `task_grant` with the legacy grant shape. Record metadata uses the three manifest identity fields, `inclusion_basis` from the source selector, current `sha256`, declared `data_types` when using type approvals, `sensitivity_classes`, and explicit `excluded: false` and `credential_material: false` classifications established by the run. Legacy profiles without `data_types` may use a matching legacy grant; type approvals require resolved data types and inclusion provenance. Exit 0 means the declared authorization matches; exit 1 denies inclusion. This checks declared metadata, not profile freshness, actual consent, secret absence, classification quality, or publication authority. The JSON is disposable input, never a replacement canonical profile.
 
 Update the profile only with exact persistence authorization through its established owner. Read the latest complete record, preserve unrelated values, write the narrow change, and reread it. If unavailable or partially writable, preserve the last verified authority, mark persistence uncertain, and do not fall back to a stale permission copy. Revocation governs future publication; deleting current backup copies or removing Git history requires its separate applicable authorization.
 
@@ -133,6 +178,8 @@ README.md                            # generated status block plus preserved use
 ```
 
 Keep record contents and credentials out of receipts and README. See [receipts and reporting](receipts-and-reporting.md) for publication order, failure fallback, and schema. The seven-row README limit never deletes historical receipts.
+
+Schema-1 receipts may add the optional `personal_data_additions` field. It reports eligible personal-data identities newly present in a verified current snapshot, with declared data types, redacted selection provenance, and the exact approval or grant IDs used. Unknown prior verification state does not count as an empty baseline; a verified-empty baseline requires a bounded reference to evidence of the check. See [personal-data addition notices](receipts-and-reporting.md#personal-data-addition-notices) for the closed entry shape, verification boundary, and retry behavior. This receipt extension does not change `backup-index.json` or the README summary table; older receipts remain valid without it.
 
 ## `backup-index.json`
 
@@ -154,6 +201,8 @@ Use `schema_version: 1` and a `records` array. New snapshots also declare `opera
 ```
 
 `source_version` may be absent when the provider does not expose one. `source_id` is required when the provider exposes an immutable identity; otherwise record the strongest available identity and label the limitation in the receipt. Keep paths relative, deterministic, and reversible. Reject absolute paths, `..`, path separators that can change meaning across platforms, reserved names, case collisions, duplicate `(source_provider, source_container, source_id)` identities, duplicate repository paths, and unindexed files except the layout's defined operational files. Legacy snapshots may retain direct receipt JSON files; a root operational README must pass the same reporting check as layout 1. The same source ID may occur in different provider/container scopes when its complete scoped identity differs.
+
+A newly captured current record omits `selection_status`. A prior indexed record that fresh inventory confirms is no longer eligible under the corrected scope may remain byte-for-byte as a frozen mirror with `selection_status: retained-out-of-scope`. Its identity, path, version, size, hash, and stored bytes remain indexed and validated, and its bytes remain in snapshot counts. It is excluded from current eligible-source completeness, fresh permission checks, and `personal_data_additions`. Report its retention as a coverage limit using a neutral reference. Do not assign this status to records omitted only because a manual run was limited, whose source is inaccessible or missing, or whose current permission is denied; preserve those copies under their existing incomplete/uncertain outcome. Removing a frozen mirror needs separate authorization and the applicable retention/history procedure. Historical snapshots without this marker remain unchanged.
 
 For operational layout 1, the only unindexed files allowed are validated direct receipt JSON files and the root README, whose generated block must match the receipts. Validate these with the snapshot validator. Arbitrary operational files are not exempt. Preserve existing layout markers; adding compatibility evidence does not require a new layout or archive namespace.
 

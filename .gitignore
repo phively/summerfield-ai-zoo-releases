@@ -3,3 +3,5 @@
 *.zip
 error.log
 output/
+__pycache__/
+*.py[cod]

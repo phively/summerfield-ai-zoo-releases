@@ -12,6 +12,7 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 EVALS = ROOT / "evals" / "record-backup-destination-exclusions"
+SCOPE_EVALS = ROOT / "evals" / "record-backup-source-scope"
 
 
 def load_fixtures():
@@ -29,6 +30,13 @@ validator = fixtures.load_script("validate_snapshot")
 preservation = fixtures.load_script("check_destination_preservation")
 reporting = fixtures.load_script("reporting")
 
+scope_spec = importlib.util.spec_from_file_location(
+    "record_backup_scope_eval_fixtures", SCOPE_EVALS / "fixtures.py"
+)
+assert scope_spec is not None and scope_spec.loader is not None
+scope_fixtures = importlib.util.module_from_spec(scope_spec)
+scope_spec.loader.exec_module(scope_fixtures)
+
 
 def validate(snapshot):
     return validator.validate(
@@ -37,6 +45,24 @@ def validate(snapshot):
         destination_policy=snapshot["policy"],
         policy_expectations=snapshot["expectations"],
     )
+
+
+@pytest.mark.parametrize("mode", ["daily", "manual", "weekly"])
+def test_synthetic_scope_permission_snapshot_and_receipt_flow_all_modes(tmp_path, mode):
+    result = scope_fixtures.run_synthetic_flow(mode, tmp_path / mode)
+
+    assert "xfinity-neighbor" not in result["selected_ids"]
+    assert "xfinity-neighbor" in result["outside_scope_ids"]
+    assert result["permission_checked_ids"] == ["salary-file"]
+    assert result["snapshot_record_count"] == 5
+    assert result["retained_mirror"]["selection_status"] == "retained-out-of-scope"
+    for field in ("source_provider", "source_container", "source_id", "repository_path",
+                  "source_path", "source_version", "byte_size", "sha256"):
+        assert result["retained_mirror"][field] == result["prior_mirror"][field]
+    assert result["receipt"]["personal_data_additions"][0]["identity"]["source_id"] == "salary-file"
+    assert result["receipt"]["personal_data_additions"][0]["approval_ids"] == ["salary-approval-1"]
+    assert result["remote_operations"] == ["stub_remote_tree_read", "manifest_size_and_sha256_check"]
+    assert "GitHub was not contacted" in result["remote_verification"]
 
 
 def test_daily_snapshot_and_both_publications_preserve_independent_destination_files(tmp_path):

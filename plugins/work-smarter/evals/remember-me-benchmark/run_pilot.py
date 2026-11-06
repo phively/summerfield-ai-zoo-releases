@@ -13,6 +13,9 @@ import time
 
 
 HERE = Path(__file__).resolve().parent
+_platform_spec = importlib.util.spec_from_file_location('evaluation_platform_support', HERE.parent / 'platform_support.py')
+platform_support = importlib.util.module_from_spec(_platform_spec)
+_platform_spec.loader.exec_module(platform_support)
 REPO_ROOT = HERE.parents[3]
 INSTRUCTION_FILES = (
     Path('plugins/work-smarter/skills/remember-me/SKILL.md'),
@@ -24,13 +27,13 @@ INSTRUCTION_FILES = (
 SOURCE_FILES = (
     Path('run_pilot.py'), Path('run_study.py'), Path('fixtures.py'),
     Path('adapter.py'), Path('score.py'), Path('manifest.json'),
+    Path('../platform_support.py'),
 )
 
 
 def source_hashes():
-    paths = {str(relative): REPO_ROOT / relative for relative in INSTRUCTION_FILES}
-    code_root = Path('plugins/work-smarter/evals/remember-me-benchmark')
-    paths.update({str(code_root / name): HERE / name for name in SOURCE_FILES
+    paths = {relative.as_posix(): REPO_ROOT / relative for relative in INSTRUCTION_FILES}
+    paths.update({(HERE / name).resolve().relative_to(REPO_ROOT).as_posix(): HERE / name for name in SOURCE_FILES
                   if (HERE / name).is_file()})
     return {relative: hashlib.sha256(path.read_bytes()).hexdigest()
             for relative, path in sorted(paths.items())}
@@ -54,20 +57,21 @@ def load(name):
 
 
 def run_locked_tool(root, request):
-    import fcntl
-
     with (root / 'controller/pilot-tool.lock').open('a') as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
-        adapter = load('adapter').FixtureAdapter(root)
-        result = adapter.call(json.loads(request))
-        event = adapter.trace[-1]
-        print(json.dumps({
-            'result': result,
-            'evidence': {
-                'event_seq': event['seq'], 'response_sha256': event['response_sha256'],
-                'record_id': event['record_id'], 'version': event['record_version'],
-            },
-        }))
+        platform_support.acquire_lock(lock)
+        try:
+            adapter = load('adapter').FixtureAdapter(root)
+            result = adapter.call(json.loads(request))
+            event = adapter.trace[-1]
+            print(json.dumps({
+                'result': result,
+                'evidence': {
+                    'event_seq': event['seq'], 'response_sha256': event['response_sha256'],
+                    'record_id': event['record_id'], 'version': event['record_version'],
+                },
+            }))
+        finally:
+            platform_support.release_lock(lock)
 
 
 def cli_usage(events):
@@ -184,18 +188,7 @@ def cli_session_id(events):
 
 
 def _terminate_process_group(process):
-    try:
-        os.killpg(process.pid, signal.SIGTERM)
-    except ProcessLookupError:
-        pass
-    try:
-        process.communicate(timeout=5)
-    except subprocess.TimeoutExpired:
-        try:
-            os.killpg(process.pid, signal.SIGKILL)
-        except ProcessLookupError:
-            pass
-        process.communicate()
+    return platform_support.terminate_process_group(process)
 
 
 def launch_turn(root, prompt, *, codex='codex', model='gpt-6-luna', effort='high',
@@ -209,7 +202,8 @@ def launch_turn(root, prompt, *, codex='codex', model='gpt-6-luna', effort='high
         events_path, stderr_path, answer_path = (
             root / f'cli-events-{turn}.jsonl', root / f'stderr-{turn}.txt',
             root / f'answer-{turn}.json')
-    argv = [codex, '--ask-for-approval', 'never', 'exec']
+    argv = [*([codex] if isinstance(codex, str) else codex),
+            '--ask-for-approval', 'never', 'exec']
     if resume_session_id:
         argv.extend(['resume', resume_session_id])
     argv.extend(['--ignore-user-config', '--skip-git-repo-check', '--json', '-m', model,
@@ -233,8 +227,8 @@ def launch_turn(root, prompt, *, codex='codex', model='gpt-6-luna', effort='high
     with events_path.open('w', encoding='utf-8') as stdout, stderr_path.open(
             'w', encoding='utf-8') as stderr:
         try:
-            process = subprocess.Popen(argv, stdin=subprocess.PIPE, stdout=stdout,
-                                       stderr=stderr, text=True, start_new_session=True,
+            process = platform_support.start_process(argv, stdin=subprocess.PIPE, stdout=stdout,
+                                       stderr=stderr, text=True, encoding='utf-8',
                                        cwd=process_cwd)
             process_started = True
             try:
@@ -245,6 +239,8 @@ def launch_turn(root, prompt, *, codex='codex', model='gpt-6-luna', effort='high
             except BaseException:
                 _terminate_process_group(process)
                 raise
+            finally:
+                platform_support.close_process(process)
             exit_code = process.returncode
         except OSError as error:
             errors.append(f'model launch failed: {error}')
@@ -307,7 +303,7 @@ def run_trial(root, scenario='index-40k', candidate='C', *, codex='codex',
             trace=observed.trace, answer=answer, usage=cli_usage(process['events']))
     except (ValueError, OSError, TypeError, KeyError) as error:
         errors.append(f'controller scoring failed: {error}')
-    hashes = {str(path.relative_to(root)): hashlib.sha256(path.read_bytes()).hexdigest()
+    hashes = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest()
               for path in sorted(root.rglob('*')) if path.is_file()}
     result = {
         'schema_version': 1, 'evidence_kind': 'exposed-synthetic-development-pilot',
