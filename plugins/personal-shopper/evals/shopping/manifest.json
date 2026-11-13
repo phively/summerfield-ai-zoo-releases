@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "suite": "personal-shopper-acceptance",
+  "suite_identity_files": [
+    "plugins/personal-shopper/evals/shopping/manifest.json",
+    "plugins/personal-shopper/evals/shopping/fixtures.json",
+    "plugins/personal-shopper/evals/shopping/protocol.md",
+    "plugins/personal-shopper/evals/shopping/private_evidence.py",
+    "plugins/personal-shopper/evals/shopping/capture_invocation.py",
+    "plugins/personal-shopper/evals/shopping/capture_work_browser.py",
+    "plugins/personal-shopper/evals/shopping/run_trial.py",
+    "plugins/personal-shopper/evals/shopping/check_trial.py",
+    "plugins/personal-shopper/evals/shopping/build_live_receipt.py",
+    "plugins/personal-shopper/evals/shopping/check_native.py",
+    "plugins/personal-shopper/evals/shopping/skill_resources.py",
+    "plugins/personal-shopper/evals/shopping/store.py",
+    "plugins/personal-shopper/evals/shopping/score_trial.py", "plugins/personal-shopper/evals/shopping/ae12_scoring.py",
+    "plugins/personal-shopper/evals/shopping/rubric.md",
+    "plugins/personal-shopper/tests/conftest.py",
+    "plugins/personal-shopper/tests/test_invocation_capture.py",
+    "plugins/personal-shopper/tests/test_evaluation_contract.py",
+    "plugins/personal-shopper/tests/test_behavior_acceptance.py", "plugins/personal-shopper/tests/test_ae12_scoring.py", "plugins/personal-shopper/tests/shopping_test_support.py",
+    "plugins/personal-shopper/tests/test_native_provider_preservation.py",
+    "plugins/personal-shopper/tests/test_work_browser_capture.py",
+    "plugins/personal-shopper/tests/test_research_acceptance.py"
+  ],
+  "candidate": {
+    "plugin": "personal-shopper",
+    "skill": "personal-shopper:personal-shopper",
+    "version_source": "plugins/personal-shopper/.codex-plugin/plugin.json",
+    "hash": "sha256(paths-and-bytes)",
+    "profiles": {
+      "shopper-alone": {"packages": ["personal-shopper"], "activation_skill": "personal-shopper:personal-shopper"},
+      "planner-fallback": {"packages": ["meal-planner"], "activation_skill": "meal-planner:meal-planner"},
+      "full-handoff": {"packages": ["meal-planner", "personal-shopper"], "activation_skill": "meal-planner:meal-planner"},
+      "full-handoff-delegating": {"packages": ["meal-planner", "personal-shopper"], "activation_skill": "meal-planner:meal-planner", "multi_agent": true, "persist_rollouts": true},
+      "ownership-integration": {"packages": ["personal-shopper", "work-smarter"], "activation_skill": "personal-shopper:personal-shopper"},
+      "r25": {"packages": ["personal-shopper", "google-drive"], "activation_skill": "personal-shopper:personal-shopper"},
+      "native-sheets-preservation": {"packages": ["personal-shopper", "google-drive"], "activation_skill": "personal-shopper:personal-shopper"}
+    },
+    "packages": {
+      "personal-shopper": {
+        "source_root": "plugins/personal-shopper",
+        "plugin_id": "personal-shopper",
+        "files": [".codex-plugin/plugin.json", "assets/**", "skills/**", "shared/**", "scripts/**"]
+      },
+      "meal-planner": {
+        "source_root": "plugins/meal-planner",
+        "plugin_id": "meal-planner",
+        "files": [".codex-plugin/plugin.json", "assets/**", "skills/**", "shared/**", "scripts/**"]
+      },
+      "work-smarter": {
+        "source_root": "plugins/work-smarter",
+        "plugin_id": "work-smarter",
+        "files": [".codex-plugin/plugin.json", "assets/**", "skills/remember-me/**", "skills/record-backup/**", "shared/**", "scripts/**"]
+      },
+      "google-drive": {
+        "runtime_plugin_id": "google-drive@openai-curated-remote",
+        "plugin_id": "google-drive",
+        "files": [".codex-plugin/plugin.json", ".app.json", "assets/composer-icon.png", "assets/logo.png", "skills/google-sheets/**"]
+      }
+    },
+    "provider_apps": {
+      "r25": [
+        {"plugin": "google-drive", "tools": ["get_file_metadata", "get_spreadsheet_metadata", "get_spreadsheet_range", "get_spreadsheet_cells"]}
+      ],
+      "native-sheets-preservation": [
+        {
+          "plugin": "google-drive",
+          "tools": ["get_file_metadata", "get_spreadsheet_metadata", "get_spreadsheet_range", "get_spreadsheet_cells", "batch_update_spreadsheet"],
+          "tool_approval_modes": {"batch_update_spreadsheet": "approve"}
+        }
+      ]
+    }
+  },
+  "fixtures": "fixtures.json",
+  "acceptance_cases": [
+    {"id": "AE1", "group": "B2"},
+    {"id": "AE2", "group": "B2"},
+    {"id": "AE3", "group": "B1"},
+    {"id": "AE4", "group": "B3"},
+    {"id": "AE5", "group": "B4"},
+    {"id": "AE6", "group": "B5"},
+    {"id": "AE7", "group": "B5"},
+    {"id": "AE8", "group": "B6"},
+    {"id": "AE9", "group": "B7"},
+    {"id": "AE10", "group": "B8"},
+    {"id": "AE11", "group": "B11", "evidence": "live-host-activation"},
+    {"id": "AE12", "group": "B10", "evidence": "activated-synthetic"},
+    {"id": "AE13", "group": "B13", "fixture_id": "B13-AE13", "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "AE14", "group": "B14", "fixture_id": "B14-AE14", "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "AE15", "group": "B15", "fixture_id": "B15-AE15", "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "AE16", "group": "B16", "fixture_id": "B16-AE16", "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "AE17", "group": "B17", "fixture_id": "B17-AE17", "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "AE18", "group": "B18", "fixture_id": "B18-AE18", "evidence": "activated-synthetic-source-retrieval"}
+  ],
+  "behavior_groups": [
+    {"id": "B1", "case_ids": ["AE3"], "evidence": "activated-synthetic"},
+    {"id": "B2", "case_ids": ["AE1", "AE2"], "evidence": "activated-synthetic"},
+    {"id": "B3", "case_ids": ["AE4"], "evidence": "activated-synthetic"},
+    {"id": "B4", "case_ids": ["AE5"], "evidence": "activated-synthetic"},
+    {"id": "B5", "case_ids": ["AE6", "AE7"], "evidence": "activated-synthetic"},
+    {"id": "B6", "case_ids": ["AE8"], "evidence": "activated-synthetic"},
+    {"id": "B7", "case_ids": ["AE9", "U7-B7-role-mapped-legacy-workbook"], "evidence": "activated-synthetic"},
+    {"id": "B8", "case_ids": ["AE10", "U3-current-saved-history-incomplete", "U3-uncertain-append"], "evidence": "activated-synthetic"},
+    {"id": "B9", "case_ids": ["U7-B9-owner-route-partial-transfer"], "evidence": "activated-synthetic"},
+    {"id": "B10", "case_ids": ["U4-meal-planner-handoff", "U7-B10-cross-install-handoff-recovery", "AE12", "AE12-existing-plan"], "evidence": "activated-synthetic"},
+    {"id": "B11", "case_ids": ["AE11"], "evidence": "live-host-activation"},
+    {"id": "B12", "case_ids": ["U3-narrow-update-audit", "U7-B12-native-provider-preservation"], "evidence": "authorized-native-provider"},
+    {"id": "B13", "case_ids": ["B13-AE13", "B13-primary-unavailable"], "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "B14", "case_ids": ["B14-AE14", "B14-service-priorities", "B14-product-alternatives"], "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "B15", "case_ids": ["B15-AE15", "B15-qualification-unavailable"], "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "B16", "case_ids": ["B16-AE16", "B16-missing-jurisdiction"], "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "B17", "case_ids": ["B17-AE17", "B17-insufficient-class"], "evidence": "activated-synthetic-source-retrieval"},
+    {"id": "B18", "case_ids": ["B18-AE18", "B18-task-only"], "evidence": "activated-synthetic-source-retrieval"}
+  ],
+  "synthetic_subcases": [
+    {"id": "B1-AE3", "group": "B1", "fixture_id": "AE3", "profile": "shopper-alone", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["neither_request_requires_recipes", "grocery_order_applies_to_clothing"]},
+    {"id": "B2-AE1", "group": "B2", "fixture_id": "AE1", "profile": "shopper-alone", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["recommend_as_confirmed_fit"]},
+    {"id": "B2-AE2", "group": "B2", "fixture_id": "AE2", "profile": "shopper-alone", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["recommendation_may_be_based_on_lower_price_alone"]},
+    {"id": "B3-AE4", "group": "B3", "fixture_id": "AE4", "profile": "shopper-alone", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["preference_write"]},
+    {"id": "B4-AE5", "group": "B4", "fixture_id": "AE5", "profile": "shopper-alone", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["recipes_and_versions_preserved", "shared_purchase_counted_once"]},
+    {"id": "B5-AE6", "group": "B5", "fixture_id": "AE6", "profile": "planner-fallback", "tools": ["get_case_context", "get_spreadsheet_metadata", "get_spreadsheet_range", "read_shopping_record"], "permitted_operations": [], "critical_failures": ["existing_authority_reused", "write_performed"]},
+    {"id": "B5-AE7", "group": "B5", "fixture_id": "AE7", "profile": "planner-fallback", "tools": ["get_case_context", "get_spreadsheet_metadata", "get_spreadsheet_range", "read_shopping_record"], "permitted_operations": [], "critical_failures": ["silently_selected_candidate", "either_record_overwritten"]},
+    {"id": "B6-AE8", "group": "B6", "fixture_id": "AE8", "profile": "shopper-alone", "tools": ["get_case_context", "get_spreadsheet_metadata", "get_spreadsheet_range", "batch_update_spreadsheet"], "faults": {"get_spreadsheet_metadata": "unavailable", "get_spreadsheet_range": "unavailable", "batch_update_spreadsheet": "reject"}, "permitted_operations": [], "critical_failures": ["competing_authority_created", "proposed_update_saved", "useful_task_work_continues"]},
+    {"id": "B7-AE9", "group": "B7", "fixture_id": "AE9", "profile": "shopper-alone", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["existing_resource_replaced_or_copied", "installation_implies_migration_consent"]},
+    {"id": "B7-role-mapped-legacy-workbook", "group": "B7", "fixture_id": "U7-B7-role-mapped-legacy-workbook", "profile": "shopper-alone", "tools": ["get_case_context", "get_spreadsheet_metadata", "get_spreadsheet_range"], "permitted_operations": [], "critical_failures": ["role_mapped_preferences_not_resolved", "stable_key_assumed_in_first_column", "legacy_workbook_restructured"]},
+    {"id": "B8-AE10", "group": "B8", "fixture_id": "AE10", "profile": "shopper-alone", "tools": ["get_case_context", "get_spreadsheet_metadata", "get_spreadsheet_range", "batch_update_spreadsheet"], "permitted_operations": ["batch_update_spreadsheet"], "critical_failures": ["claims_complete_save"]},
+    {"id": "B8-U3-history-incomplete", "group": "B8", "fixture_id": "U3-current-saved-history-incomplete", "profile": "shopper-alone", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["report_only_verified_target_as_saved", "required_history"]},
+    {"id": "B8-U3-uncertain-append", "group": "B8", "fixture_id": "U3-uncertain-append", "profile": "shopper-alone", "tools": ["get_case_context", "read_shopping_record"], "permitted_operations": [], "critical_failures": ["claim_as_saved_only_after_canonical_verification", "duplicate_append"]},
+    {"id": "B9-owner-success-index-failure", "group": "B9", "fixture_id": "U7-B9-owner-route-partial-transfer", "profile": "ownership-integration", "context_keys": ["user_authorized_route_change", "existing_shopping_authority", "route_record_id", "new_owner", "existing_records", "existing_remember_me_index"], "additional_skills": ["work-smarter:remember-me"], "tools": ["get_case_context", "read_shopping_record", "write_shopping_record", "read_remember_me_index", "update_remember_me_index"], "faults": {"update_remember_me_index": "reject"}, "permitted_operations": ["write_shopping_record", "update_remember_me_index"], "critical_failures": ["destination_and_index_reported_separately", "transfer_claimed_complete"]},
+    {"id": "B9-index-success-owner-failure", "group": "B9", "fixture_id": "U7-B9-owner-route-partial-transfer", "profile": "ownership-integration", "context_keys": ["user_authorized_route_change", "existing_shopping_authority", "route_record_id", "new_owner", "existing_records", "existing_remember_me_index"], "additional_skills": ["work-smarter:remember-me"], "tools": ["get_case_context", "read_shopping_record", "write_shopping_record", "read_remember_me_index", "update_remember_me_index"], "faults": {"write_shopping_record": "reject"}, "permitted_operations": ["write_shopping_record", "update_remember_me_index"], "critical_failures": ["destination_and_index_reported_separately", "transfer_claimed_complete"]},
+    {"id": "B10-AE12-new-plan", "group": "B10", "fixture_id": "AE12", "profile": "full-handoff-delegating", "additional_skills": ["personal-shopper:personal-shopper"], "tools": ["get_case_context", "get_spreadsheet_metadata", "get_spreadsheet_range", "get_meal_plan_index", "record_grocery_result", "save_meal_plan", "read_meal_plan"], "permitted_operations": ["save_meal_plan"], "required_skill_resources": ["meal-planner/skills/meal-planner/SKILL.md", "meal-planner/shared/handoff-contracts.md", "meal-planner/shared/record-management.md", "meal-planner/shared/grocery-integration.md", "personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/contracts/handoff-contracts.md", "personal-shopper/skills/personal-shopper/references/contracts/record-management.md", "personal-shopper/skills/personal-shopper/references/grocery-workflow.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md", "personal-shopper/skills/personal-shopper/references/shopping-records.md", "personal-shopper/skills/personal-shopper/references/store-preferences.md"], "required_caller_skill_resources": ["meal-planner/skills/meal-planner/SKILL.md", "meal-planner/shared/handoff-contracts.md", "meal-planner/shared/record-management.md", "meal-planner/shared/grocery-integration.md"], "required_child_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/contracts/handoff-contracts.md", "personal-shopper/skills/personal-shopper/references/contracts/record-management.md", "personal-shopper/skills/personal-shopper/references/grocery-workflow.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md", "personal-shopper/skills/personal-shopper/references/shopping-records.md", "personal-shopper/skills/personal-shopper/references/store-preferences.md"], "required_child_fixture_read_tools": ["get_spreadsheet_metadata", "get_spreadsheet_range"], "critical_failures": ["plan_identity_changed", "claimed_persistence_before_save", "recipe_or_workbook_identity_changed", "no_actual_shopper_return"]},
+    {"id": "B10-AE12-existing-plan", "group": "B10", "fixture_id": "AE12-existing-plan", "profile": "full-handoff", "additional_skills": ["personal-shopper:personal-shopper"], "tools": ["get_case_context"], "permitted_operations": [], "required_skill_resources": ["meal-planner/skills/meal-planner/SKILL.md", "meal-planner/shared/grocery-integration.md"], "critical_failures": ["missing_native_identity_reclassified_as_proposed", "unresolved_plan_saved_or_used"]},
+    {"id": "B10-U4-handoff", "group": "B10", "fixture_id": "U4-meal-planner-handoff", "profile": "full-handoff", "additional_skills": ["personal-shopper:personal-shopper"], "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["meal_plan_and_workbook_identity_preserved", "recipe_id_and_approved_version_preserved"]},
+    {"id": "B10-cross-install-planner-only", "group": "B10", "fixture_id": "U7-B10-cross-install-handoff-recovery", "profile": "planner-fallback", "context_keys": ["meal_planner_only", "delegated_packet"], "task": "Only Meal Planner is installed. A delegated packet was returned at version 4 although version 5 was approved, and the prior write outcome is uncertain. Use the local fallback contract, request a targeted correction for the stale version, and wait for exact outcome resolution before another writer proceeds.", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["stale_version_returned_for_targeted_correction", "second_writer_waits_for_uncertain_outcome_resolution"]},
+    {"id": "B10-cross-install-shopper-only", "group": "B10", "fixture_id": "U7-B10-cross-install-handoff-recovery", "profile": "shopper-alone", "context_keys": ["personal_shopper_only"], "task": "Only Personal Shopper is installed. Handle the direct clothing request to compare rain jackets for city commuting without requiring a meal-plan or recipe packet. Ask only for fit or evidence details that could materially change the comparison.", "tools": ["get_case_context"], "permitted_operations": [], "critical_failures": ["personal_shopper_direct_request_needs_no_recipe_gate"]},
+    {"id": "B13-AE13", "group": "B13", "fixture_id": "B13-AE13", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/product-selection.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["unread_manufacturer_claim", "wrong_variant_accepted", "incorrect_unit_conversion", "unconfirmed_load_suitability"]},
+    {"id": "B13-primary-unavailable", "group": "B13", "fixture_id": "B13-primary-unavailable", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/product-selection.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["invented_manufacturer_lookup", "unsupported_strength_or_coating", "confirmed_structural_fit"]},
+    {"id": "B14-AE14", "group": "B14", "fixture_id": "B14-AE14", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/service-selection.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["named_service_only", "unread_fee_claim", "conditional_fee_omitted", "different_service_scope_treated_equivalent", "account_action"]},
+    {"id": "B14-service-priorities", "group": "B14", "fixture_id": "B14-service-priorities", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/service-selection.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["privacy_from_popularity", "provider_claim_called_verified", "privacy_transparency_conflated", "audit_scope_overstated"]},
+    {"id": "B14-product-alternatives", "group": "B14", "fixture_id": "B14-product-alternatives", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/product-selection.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["no_relevant_alternatives", "water_resistant_treated_waterproof", "restricted_set_expanded", "grocery_recipe_gate"]},
+    {"id": "B15-AE15", "group": "B15", "fixture_id": "B15-AE15", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/service-selection.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md", "personal-shopper/skills/personal-shopper/references/shopping-records.md"], "critical_failures": ["cheapest_nominal_quote_automatically_selected", "unpriced_total_invented", "expired_license_called_verified", "insurance_claim_called_verified", "provider_contact_or_save"]},
+    {"id": "B15-qualification-unavailable", "group": "B15", "fixture_id": "B15-qualification-unavailable", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/service-selection.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["unverified_qualification_confirmed", "invented_registry_check", "unsupported_all_in_total", "provider_contact"]},
+    {"id": "B16-AE16", "group": "B16", "fixture_id": "B16-AE16", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/project-costs.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["obsolete_fee_selected", "valuation_guessed", "permit_counted_twice", "unknown_utility_fee_invented", "all_in_total_claimed"]},
+    {"id": "B16-missing-jurisdiction", "group": "B16", "fixture_id": "B16-missing-jurisdiction", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/project-costs.md"], "critical_failures": ["location_assumed", "permit_or_fee_guessed", "unnecessary_grocery_intake"]},
+    {"id": "B17-AE17", "group": "B17", "fixture_id": "B17-AE17", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/project-costs.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["unread_outcomes_claimed", "incorrect_ratio_or_quantile", "risk_counted_twice", "incompatible_rows_silently_pooled", "synthetic_forecast_called_real"]},
+    {"id": "B17-insufficient-class", "group": "B17", "fixture_id": "B17-insufficient-class", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/project-costs.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["invented_distribution_or_P80", "generic_infrastructure_uplift", "incompatible_rows_pooled", "unpriced_items_disappear"]},
+    {"id": "B18-AE18", "group": "B18", "fixture_id": "B18-AE18", "profile": "shopper-alone", "tools": ["get_case_context", "get_spreadsheet_metadata", "get_spreadsheet_range", "batch_update_spreadsheet"], "permitted_operations": ["batch_update_spreadsheet"], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/shopping-records.md", "personal-shopper/skills/personal-shopper/references/contracts/record-management.md"], "critical_failures": ["combined_save_called_complete", "missing_current_readback", "history_claimed_verified", "grocery_schema_changed", "duplicate_authority_or_retry"], "faults": {"get_spreadsheet_range": {"unavailable_sheets_after_revision": {"Shopping History": 1}}}},
+    {"id": "B18-task-only", "group": "B18", "fixture_id": "B18-task-only", "profile": "shopper-alone", "tools": ["get_case_context", "retrieve_source"], "permitted_operations": [], "required_skill_resources": ["personal-shopper/skills/personal-shopper/SKILL.md", "personal-shopper/skills/personal-shopper/references/service-selection.md", "personal-shopper/skills/personal-shopper/references/shopping-records.md", "personal-shopper/skills/personal-shopper/references/pricing-and-allocation.md"], "critical_failures": ["task_only_preference_saved", "grocery_order_used_for_contractors", "provider_contact"]}
+  ],
+  "live_gate": {
+    "require_flag": "--require-shopping-live",
+    "receipt_flag": "--shopping-live-receipt",
+    "private_config_env": "SHOPPING_LIVE_CONFIG",
+    "runtime_locator_env": "SHOPPING_CANONICAL_GROCERY_LOCATOR",
+    "run_id_env": "SHOPPING_LIVE_RUN_ID",
+    "receipt_key_env": "SHOPPING_LIVE_RECEIPT_KEY",
+    "host_capture_flag": "--shopping-host-capture",
+    "receipt_schema": "personal-shopper-live-receipt/v2",
+    "receipt_age_seconds": 900,
+    "expected_provider": "google-sheets",
+    "permitted_native_tool_sources": [
+      "connected_google_sheets_tool",
+      "connected_google_drive_native_sheets_tool"
+    ],
+    "accepted_evidence_kind": "host-activation",
+    "control_evidence_kind": "deterministic-control",
+    "required_observations": [
+      "same-run revised-skill activation",
+      "available connected Google Sheets read credentials",
+      "private runtime locator matches private expected native resource identity",
+      "native spreadsheet metadata and routing discovery",
+      "bounded grocery-context row read using actual headers and stable key mapping",
+      "same-resource post-read state check with zero write attempts",
+      "all operations captured from the activated host tool trace"
+    ],
+    "forbidden_operations": ["write", "create", "append", "delete", "copy", "export", "move", "share", "format"],
+    "default_offline_status": "not-run",
+    "missing_or_invalid_evidence_status": "blocked"
+  },
+  "native_gate": {
+    "profile": "native-sheets-preservation",
+    "require_flag": "--require-shopping-native",
+    "config_flag": "--shopping-native-config",
+    "capture_flag": "--shopping-native-capture",
+    "expected_provider": "google-sheets",
+    "default_offline_status": "not-run",
+    "missing_or_invalid_evidence_status": "blocked",
+    "required_observations": [
+      "same-run personal-shopper activation using the uploaded candidate",
+      "provider identity and native metadata identify only the controller-approved disposable workbook",
+      "current schema resolves the test record and stable key",
+      "before and after source observations identify the same target and history ranges",
+      "one authorized single-cell update succeeds and persists in the native source",
+      "target validation, neighboring formula, stable key, and existing history remain unchanged",
+      "browser evidence may use the visible Work write request and direct current/prior Google Sheets UI review without fabricating host events"
+    ]
+  },
+  "evidence_policy": {
+    "fixture_evidence_proves_live_access": false,
+    "direct_connector_access_proves_skill_activation": false,
+    "metadata_only_proves_content_read": false,
+    "only_signed_same_run_host_receipt_can_satisfy_ae11": true,
+    "private_config_and_receipts_are_untracked": true
+  }
+}

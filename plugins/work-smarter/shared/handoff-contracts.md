@@ -1,30 +1,12 @@
 # Inter-skill handoff contracts
 
-This file is the canonical contract for coordination between bundled skills. Read it directly before initiating or accepting a cross-skill handoff. Do not create skill-local copies or competing contract definitions.
+This file is the canonical contract for Work Smarter coordination and Remember Me's receiving boundaries. Read it before initiating a covered Work Smarter handoff or accepting an external request. External callers use their own public handoff contracts; do not duplicate caller-specific procedures here.
 
 When a contract requests a canonical resource identity, return the provider and library or container scope, immutable resource or object identifier, and canonical permalink when the system exposes them. Treat a visible filename, title, path, and search terms as human recovery fallbacks rather than the primary identity. For a local filesystem without provider identifiers or permalinks, use the resolved durable path and stable internal entry identifier.
 
 ## Bundled research provenance
 
 The plugin format observed during creation supports bundled skills but exposes no supported dependency field for another skill; `agents/openai.yaml` dependencies are limited to MCP tools. Therefore `work-smarter` bundles and maintains the authoritative `research-briefing` skill under `skills/research-briefing`. Treat that bundled behavior as authoritative and update the complete skill directory rather than maintaining a separate copy.
-
-## Superb Skills to Research Briefing
-
-| Contract field | Requirement |
-| --- | --- |
-| Invoking skill | `superb-skills` |
-| Receiving skill | `research-briefing` |
-| Trigger | One or more factual, technical, scientific, historical, legal, medical, programming, economic, statistical, current, niche, disputed, or high-stakes claims require verification, source evaluation, citations, or current documentation and the result could materially affect the package. |
-| Exceptions | Do not hand off purely stylistic editing, deterministic transformations, direct analysis of supplied text without factual validation, stable incidental facts, or work that gains no material value from external evidence. |
-| Required input | State the exact claims or questions to research; the decision they affect; relevant current context only; user-provided facts labeled as supplied; claims requiring verification labeled separately; known jurisdiction, version, date, or scope; and unresolved questions. |
-| Expected output | Return evidence and direct citations near supported claims; quantitative results when useful; competing interpretations; limitations; unresolved questions; and explicit labels for verified facts, source claims, reasonable inferences, unknowns, and recommendations. For factual or evaluative comparisons, identify the reference set and supporting evidence; otherwise return only the supported absolute property and reasons. |
-| Authority and provenance | Preserve source identities and dates. User-provided facts remain attributed to the user unless independently verified. Research evidence may inform package design but cannot silently override the user's stated goals, supplied requirements, or the authoritative current-state record. |
-| Uncertainty | Preserve material uncertainty and conflicts. Do not collapse mixed evidence into a single confident claim. Return any question that prevents a consequential conclusion to `superb-skills` for focused clarification. |
-| Failure behavior | If research, a required source, or the receiving skill is unavailable, identify the affected claims as unverified or unknown, avoid format or factual assertions that depend on them, and continue only with work that remains reliable. Do not fabricate citations or imply that research occurred. |
-| Information not to pass | Do not pass unrelated conversation history, complete archives, secrets, credentials, privileged material unnecessary to the research question, unsupported conclusions presented as facts, or duplicate copies of canonical records. |
-| User confirmation | Required. `research-briefing` must present its research-scope checkpoint and wait for the user to confirm or revise it before searching or answering, unless the user explicitly waived that checkpoint for the current session or request under the receiving skill's rules. The invoking skill must not treat initiation of the handoff as confirmation. |
-
-After the research result returns, `superb-skills` must integrate only supported findings, retain the evidence classifications and unresolved uncertainty, and distinguish evidence from design judgment.
 
 ## Teach Me to Research Briefing
 
@@ -44,11 +26,11 @@ After the research result returns, `superb-skills` must integrate only supported
 
 After the research result returns, `teach-me` must correct consequential false premises before questioning from them, integrate only supported findings, and keep citations proportionate to the learning interaction while preserving decisive source identities for the conclusion. Return the findings to the originating lesson, plan, or advice request without changing its interaction mode. A plan must use the findings to justify evidence-dependent choices; a research report alone does not complete the requested plan. Apply targeted follow-up research only when existing findings no longer cover a consequential claim.
 
-## Bundled Skills to Remember Me: targeted consultation
+## Work Smarter and Career Coach to Remember Me: targeted consultation
 
 | Contract field | Requirement |
 | --- | --- |
-| Invoking skill | `superb-skills`, `research-briefing`, `teach-me`, or an available Career Coach skill |
+| Invoking skill | `research-briefing`, `teach-me`, or an available Career Coach skill |
 | Receiving skill | `remember-me` |
 | Trigger | Stable personal goals, preferences, constraints, prior decisions, or output choices could materially affect the current workflow and the answer is not already supplied in the current request. |
 | Exceptions | Do not consult for incidental personal facts, ordinary one-time instructions, context that cannot change the work, or information outside the user's authorized accessible sources. Do not load the complete profile by default. |
@@ -62,15 +44,15 @@ After the research result returns, `teach-me` must correct consequential false p
 
 Before any implicit personal-context consultation, verify established setup through bounded canonical identity/setup metadata only. Missing, false, inaccessible, copied, or identity-mismatched `setup_confirmed` means unknown setup: no personal-topic use, persistence artifacts, unsolicited setup/save offer, or competing index. Continue neutrally. A direct read-only request may authorize its bounded retrieval without a setup-flag write. Loading instructions or a bundled handoff is not direct first use. The Remember Me entrypoint and record-management reference own the gate and save procedure.
 
-The invoking skill must apply only relevant context. `research-briefing` may use it to shape scope, tradeoffs, and presentation, but never as external evidence or as a predetermined conclusion. `superb-skills` may use it for discretionary design and communication choices, but never to override supported conventions or validation evidence. `teach-me` may use it for pacing, examples, accessibility, and learning goals, but never as external evidence or proof of mastery. Career Coach may use it only for stable personal context outside Career Coach ownership; Career Coach records remain authoritative for career-domain state.
+The invoking skill must apply only relevant context. `research-briefing` may use it to shape scope, tradeoffs, and presentation, but never as external evidence or as a predetermined conclusion. `teach-me` may use it for pacing, examples, accessibility, and learning goals, but never as external evidence or proof of mastery. Career Coach may use it only for stable personal context outside Career Coach ownership; Career Coach records remain authoritative for career-domain state.
 
-## Bundled Skills to Remember Me: durable update request
+## External callers to Remember Me: durable update request
 
 | Contract field | Requirement |
 | --- | --- |
-| Invoking skill | `superb-skills`, `research-briefing`, or `teach-me` |
+| Invoking skill | An external skill using its own public caller contract |
 | Receiving skill | `remember-me` |
-| Trigger | The workflow reveals a new or changed personal fact, durable preference, reusable constraint, correction, or explicit forget request that belongs in personal context beyond the current task. |
+| Trigger | The workflow reveals a new or changed non-specialist personal fact, durable preference, reusable constraint, correction, or explicit forget request that belongs in Remember Me beyond the current task. Specialist-owned values remain with their owner. |
 | Exceptions | Do not request persistence for task-specific instructions, unconfirmed inferences, external research claims about the user, routine process events, or domain state owned by another specialist. Route specialist-owned changes to that owner. |
 | Required input | Provide the exact proposed change or deletion target, user statement or source, evidence classification, topic, reuse rationale, effective date when known, confirmation status, sensitivity, exact approved content and destination, the user approval turn/scope, and any visible current record identity. A changed content/destination requires the missing consent; a caller cannot manufacture direct invocation or first-use permission. |
 | Expected output | Return the canonical record identity, completed or proposed changes, provenance, freshness and history effects, unresolved conflicts, and exact persistence status, with inspectable fresh canonical readback identity/content and affected pointer checks for each verified change. An acknowledgement alone supplies no verification. |
@@ -87,23 +69,27 @@ Other bundled skills must not maintain competing personal-profile files. A curre
 | Contract field | Requirement |
 | --- | --- |
 | Invoking skill | `remember-me` |
-| Receiving skill | An available specialist owner, including `career-coach:career-direction`, `meal-planner:meal-planner`, `meal-planner:personal-chef`, or `meal-planner:personal-shopper` when its domain applies |
+| Receiving skill | An available specialist owner, including `career-coach:career-direction`, `dev-tools:coding-preferences`, `meal-planner:meal-planner`, `meal-planner:personal-chef`, or `personal-shopper:personal-shopper` when its domain applies |
 | Trigger | A user asks to discover, refresh, update, or retrieve a topic handled by the specialist, or a potentially stale external summary is about to affect consequential work. |
 | Exceptions | Do not invoke every specialist during routine retrieval, repeat a refresh while the summary remains fit for use, or simulate an unavailable skill. Temporary unavailability does not transfer established ownership. |
 | Required input | State the exact topic and purpose; request the smallest sufficient current summary, canonical record identity, owner, last-updated date when visible, evidence classifications, uncertainty, refresh trigger, and retrieval condition. Request additional relevant detail when a bounded summary cannot preserve reliable recall. For an update, include the user's exact statement, confirmation status and approval scope/turn, bounded approved content and exact destination, effective date, lifecycle intent, and required fresh readback evidence. |
 | Expected output | Return the requested bounded summary and metadata or the specialist's completed or proposed update status under its own canonical record-management contract. For verified updates return inspectable fresh tool evidence: provider/container/record identity, changed content, operation/result and readback order tied to the approved update; bare 'done' is insufficient. |
 | Authority and provenance | The specialist's canonical current record remains authoritative for domain detail. The Remember Me summary is a cache and pointer only. Preserve exact workbook, tab, file, record, and household-member identities. |
 | Uncertainty | Preserve missing sources, inaccessible history, stale state, conflicting candidates, inference labels, and unresolved questions. A retrieval miss is not evidence that a source does not exist. |
-| Failure behavior | Mark the index summary unavailable or stale as appropriate and continue only with reliable information. Do not copy the external record into `remember-me`, write it directly, invent a response, or claim a refresh succeeded. |
+| Failure behavior | Mark the index summary unavailable or stale as appropriate and continue only with reliable information. Do not copy the external record into `remember-me`, write it directly, invent a response, or claim a refresh succeeded. If Personal Shopper is unavailable, retain the established external authority, report a pending owner update, and do not create a parallel Remember Me topic. |
 | Information not to pass | Do not pass unrelated profile topics, complete histories, secrets, credentials, unsupported interpretations, or duplicate copies of another owner's record. |
 | User confirmation | Follow the receiving specialist's persistence and safety gates. A targeted read of an already authorized accessible record needs no additional confirmation; domain writes, consequential conflict resolution, sensitive retention, and ownership transfer require the applicable user authorization. |
 
 The receiving owner's consent and safety gates remain authoritative. Remember Me never writes that owner's records. Verify the owner's returned canonical readback or independently retrieve the changed canonical content when accessible; otherwise report the authoritative change unverified and dependent summaries stale/unverified. Read back changed index metadata and affected pointers before reporting a coherent save. Preserve audit-only metadata on ordinary saves. After uncertain writes, reread exact targets and retry only outstanding authorized changes, preserving newer state and stopping consequential conflicting retries.
 
-Use the external owner's canonical contract directly rather than copying its schema into `work-smarter`: [Career Coach](../../career-coach/shared/handoff-contracts.md) and [Meal Planner](../../meal-planner/shared/handoff-contracts.md).
+For shopping-context handoffs to `personal-shopper:personal-shopper`, pass the following bounded fields when they apply: product category and request; product/equipment identity and exact measurement identity, value, unit, and confirmation status; discount or membership eligibility with its evidence and confirmation status; source and evidence for each supplied preference or observation; authorization scope including whether persistence was requested and the exact approved change; and the exact native destination, including provider/container, immutable resource identity and permalink when available, plus the target tab or worksheet and stable record key. Preserve unknowns as unknown; an unconfirmed measurement or discount is not an established preference.
 
-Career Coach's optional handoffs to `teach-me`, `research-briefing`, and targeted `remember-me` consultation are governed by the canonical [Career Coach handoff contract](../../career-coach/shared/handoff-contracts.md). That contract defines the invoking-skill boundaries, minimum context, authority, uncertainty, failure behavior, and confirmation requirements; this file remains authoritative for the receiving Work Smarter capability's behavior.
+If the owner route changes, require explicit user authorization, keep the existing shopping authority in place, and verify the exact destination. A successful destination readback does not complete the change when the dependent index write fails: identify the verified destination and failed index operation separately, keep the owner update pending, and state that the transfer remains incomplete.
 
-## No reverse handoff
+To apply an external owner's detailed rules, invoke the qualified owner skill when available and let it use its own canonical contract. Do not read another plugin's source or cache path. This file defines Work Smarter's receiving boundaries and bounded handoff data; each external owner retains its own record procedure.
 
-`research-briefing` remains an independent entry point and has no automatic handoff to `superb-skills` or `teach-me`. Use coordinated skills only when the user's request includes their distinct goals; completing research does not automatically begin a lesson or an instruction-design workflow.
+Career Coach's optional handoffs to `teach-me`, `research-briefing`, and targeted `remember-me` consultation follow its current contract. When one of those paths applies, invoke `career-coach:career-direction` so its installed instructions govern the caller boundaries; this file remains authoritative for Work Smarter's receiving behavior.
+
+## No automatic continuation
+
+`research-briefing` remains an independent entry point and does not automatically start an unrelated workflow. Use coordinated skills only when the user's request includes their distinct goals; completing research does not automatically begin a lesson or instruction-design work.

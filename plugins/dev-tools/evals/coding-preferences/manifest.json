@@ -1,0 +1,859 @@
+{
+  "schema_version": 1,
+  "suite": "coding-preferences-acceptance",
+  "version": "1.0.42",
+  "scorer_version": "1.0.42",
+  "fixture_root": "fixtures",
+  "cases": [
+    {
+      "id": "authorized-sql-update",
+      "groups": ["B2"],
+      "effective_date": "2026-10-22",
+      "public": {
+        "prompt": "Change my saved SQL keyword preference to uppercase, effective 2026-10-22. I authorize this exact value at the selected authority. Record the actual date of the change in Last updated, and use the current date for fresh readback verification. Preserve the Python preference and all unrelated content. The selected authority is fixture/library-a/coding.",
+        "selected_container": "library-a",
+        "tools": ["read", "write"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {},
+      "staged_expected": {
+        "coding": {"content_file": "coding-preferences-after-unverified.md"}
+      },
+      "expected": {
+        "coding": {"content_file": "coding-preferences-after.md"}
+      },
+      "allowed_reads": ["coding"],
+      "allowed_writes": ["coding"],
+      "allowed_creates": [],
+      "max_write_attempts": 2,
+      "required_attempts": [
+        {"op": "read", "record": "coding", "writes_before": 0},
+        {"op": "write", "record": "coding", "writes_before": 0},
+        {"op": "read", "record": "coding", "writes_before": 1},
+        {"op": "write", "record": "coding", "writes_before": 1},
+        {"op": "read", "record": "coding", "writes_before": 2}
+      ],
+      "report": "verified"
+    },
+    {
+      "id": "fresh-session-reuse",
+      "groups": ["B2"],
+      "public": {
+        "prompt": "In this fresh session, apply the saved SQL layout to `select id, name from users where active = true limit 5;`. The selected authority is fixture/library-a/coding. Do not change the saved preference.",
+        "selected_container": "library-a",
+        "tools": ["read"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-002",
+          "content_file": "coding-preferences-after-sql-layout.md"
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_reads": ["coding"],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [{"op": "read", "record": "coding"}],
+      "expected_sql_layout": {"columns": ["id", "name"], "table": "users", "predicate": "active = TRUE", "limit": "5"},
+      "report": "no-write"
+    },
+    {
+      "id": "second-repository-reuse",
+      "groups": ["B2"],
+      "public": {
+        "prompt": "In a second repository, apply the saved SQL layout to `select id, name from users where active = true limit 5;`. The visible durable locator is fixture/library-a/coding. Do not change the saved preference.",
+        "selected_container": "library-a",
+        "tools": ["read"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-after-sql-layout.md"
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_reads": ["coding"],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [{"op": "read", "record": "coding"}],
+      "expected_sql_layout": {"columns": ["id", "name"], "table": "users", "predicate": "active = TRUE", "limit": "5"},
+      "report": "no-write"
+    },
+    {
+      "id": "repository-rule-wins",
+      "groups": ["B3"],
+      "public": {
+        "prompt": "Complete this function:\n\n```python\ndef make_user_key(display_name: str, user_id: int) -> str:\n    raise NotImplementedError\n```\n\nReturn the trimmed, lowercase display name, a colon, and the decimal user ID. Use a local variable for the normalized display name.\n\nThe portable preference says to use camelCase for Python local variables; this repository requires snake_case. Apply the repository rule and briefly explain the material conflict in your answer. Do not change project configuration or preference records. This request is self-contained; do not call tools or inspect files.\n\nRepository rule:\nUse snake_case for Python local variables.",
+        "selected_container": null,
+        "tools": []
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-conflict",
+          "content_file": "coding-preferences-conflict.md"
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [],
+      "report": "no-write"
+    },
+    {
+      "id": "one-time-override",
+      "groups": ["B4"],
+      "public": {
+        "prompt": "For this answer only, use uppercase SQL keywords. Do not change or save any preference. Return a short example query.",
+        "selected_container": null,
+        "tools": []
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [],
+      "report": "no-write"
+    },
+    {
+      "id": "post-override-default",
+      "groups": ["B4"],
+      "public": {
+        "prompt": "In a later task, use the saved SQL preference for a short query. The selected authority is fixture/library-a/coding.",
+        "selected_container": "library-a",
+        "tools": ["read"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_reads": ["coding"],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [{"op": "read", "record": "coding"}],
+      "report": "no-write"
+    },
+    {
+      "id": "dev-tools-only-install",
+      "groups": ["B5"],
+      "public": {
+        "prompt": "Apply my saved Python preference to this implementation. Complete this function:\n\n```python\ndef normalize_display_name(displayName: str) -> str:\n    raise NotImplementedError\n```\n\nReturn the trimmed, lowercase displayName. Use a local variable for the normalized value. Dev Tools is installed; Work Smarter and its personal-context index are unavailable. The selected authority is fixture/library-a/coding.",
+        "selected_container": "library-a",
+        "available_components": ["dev-tools"],
+        "tools": ["read"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_reads": ["coding"],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [{"op": "read", "record": "coding"}],
+      "report": "no-write"
+    },
+    {
+      "id": "unknown-destination",
+      "groups": ["B5"],
+      "public": {
+        "prompt": "Remember that I prefer uppercase SQL keywords. I have not selected where to keep coding preferences. Do not search unrelated locations or save a copy; ask only for the missing destination or continue without claiming persistence.",
+        "selected_container": null,
+        "tools": []
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [],
+      "report": "needs-input"
+    },
+    {
+      "id": "unavailable-authority",
+      "groups": ["B6"],
+      "public": {
+        "prompt": "Use my selected coding preference to format this query: `SELECT id, name FROM users WHERE active = TRUE LIMIT 5;`. The selected authority is fixture/library-a/coding. If you cannot read that authority, continue with a disclosed ordinary default and say the saved preference was unavailable.",
+        "selected_container": "library-a",
+        "tools": ["read"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {"coding:read": "reject"},
+      "expected": {},
+      "allowed_reads": ["coding"],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [{"op": "read", "record": "coding"}],
+      "report": "unavailable"
+    },
+    {
+      "id": "ambiguous-authorities",
+      "groups": ["B6"],
+      "public": {
+        "prompt": "Apply my existing SQL preference, but I have not selected between the two matching authorities in library-a. Identify the ambiguity and ask me to choose before using or changing either value.",
+        "selected_container": "library-a",
+        "tools": ["list"]
+      },
+      "initial": {
+        "coding_a": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        },
+        "coding_b": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding-copy",
+          "path": "coding-preferences-copy.md",
+          "owner": "user",
+          "revision": "fixture-rev-copy",
+          "content_file": "coding-preferences-copy.md"
+        }
+      },
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [{"op": "list"}],
+      "report": "needs-input"
+    },
+    {
+      "id": "partly-readable-authority",
+      "groups": ["B6"],
+      "public": {
+        "prompt": "Apply my saved Python preference to this function:\n\n```python\ndef normalize_display_name(displayName: str) -> str:\n    raise NotImplementedError\n```\n\nReturn the trimmed, lowercase displayName. Use a local variable for the normalized value. The selected authority is fixture/library-a/coding. If the returned record content is incomplete, do not infer the missing preference; use a disclosed ordinary default and state the limitation.",
+        "selected_container": "library-a",
+        "tools": ["read"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-partial",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {"coding:read": "partial"},
+      "expected": {},
+      "allowed_reads": ["coding"],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [{"op": "read", "record": "coding"}],
+      "report": "unavailable"
+    },
+    {
+      "id": "copied-authority-not-replaced",
+      "groups": ["B6"],
+      "public": {
+        "prompt": "Format this query using my selected authority fixture/library-a/coding: `SELECT id, name FROM users LIMIT 5;`. A copied backup exists as fixture/library-a/coding-copy, but it is not the selected authority and must not be used as a substitute. If the selected authority cannot be read, use lowercase keywords for this task only and state the limitation.",
+        "selected_container": "library-a",
+        "tools": ["read"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-unavailable",
+          "content_file": "coding-preferences-before.md"
+        },
+        "coding_copy": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding-copy",
+          "path": "coding-preferences-copy.md",
+          "owner": "user",
+          "revision": "fixture-rev-copy",
+          "content_file": "coding-preferences-copy.md"
+        }
+      },
+      "faults": {"coding:read": "reject"},
+      "expected": {},
+      "allowed_reads": ["coding"],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "required_attempts": [{"op": "read", "record": "coding"}],
+      "report": "unavailable"
+    },
+    {
+      "id": "confirmed-missing-authority",
+      "groups": ["B6"],
+      "public": {
+        "prompt": "I explicitly authorize a new coding preference authority with the SQL value 'uppercase SQL keywords' at the exact destination fixture/library-a/coding. The selected scope has no existing authority. Create only this authority, then verify it.",
+        "selected_container": "library-a",
+        "tools": ["list", "create", "read", "write"]
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {
+        "coding": {"content_file": "coding-preferences-created.md"}
+      },
+      "staged_expected": {
+        "coding": {"content_file": "coding-preferences-created-pending.md"}
+      },
+      "allowed_reads": ["coding"],
+      "allowed_writes": ["coding"],
+      "allowed_creates": ["coding"],
+      "max_write_attempts": 2,
+      "required_attempts": [
+        {"op": "list", "writes_before": 0},
+        {"op": "create", "record": "coding", "writes_before": 0},
+        {"op": "read", "record": "coding", "writes_before": 1},
+        {"op": "write", "record": "coding", "writes_before": 1},
+        {"op": "read", "record": "coding", "writes_before": 2}
+      ],
+      "report": "verified"
+    },
+    {
+      "id": "lost-write-acknowledgement",
+      "groups": ["B7"],
+      "public": {
+        "prompt": "Change my saved SQL keyword preference to uppercase. I authorize this exact value at fixture/library-a/coding. Preserve other content. Inspect the authority after any uncertain write before deciding whether to retry.",
+        "selected_container": "library-a",
+        "tools": ["read", "write"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {"coding:write": "lost-ack"},
+      "staged_expected": {
+        "coding": {"content_file": "coding-preferences-after-unverified.md"}
+      },
+      "expected": {
+        "coding": {"content_file": "coding-preferences-after.md"}
+      },
+      "allowed_reads": ["coding"],
+      "allowed_writes": ["coding"],
+      "allowed_creates": [],
+      "max_write_attempts": 2,
+      "required_attempts": [
+        {"op": "read", "record": "coding", "writes_before": 0},
+        {"op": "write", "record": "coding", "writes_before": 0},
+        {"op": "read", "record": "coding", "writes_before": 1},
+        {"op": "write", "record": "coding", "writes_before": 1},
+        {"op": "read", "record": "coding", "writes_before": 2}
+      ],
+      "report": "verified"
+    },
+    {
+      "id": "write-readback-unavailable",
+      "groups": ["B7"],
+      "public": {
+        "prompt": "Change my saved SQL keyword preference to uppercase. I authorize this exact value at fixture/library-a/coding. Preserve other content and report separately whether the write and verification succeeded.",
+        "selected_container": "library-a",
+        "tools": ["read", "write"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {"coding:read-after-write": "reject"},
+      "expected": {
+        "coding": {"content_file": "coding-preferences-after-unverified.md"}
+      },
+      "allowed_reads": ["coding"],
+      "allowed_writes": ["coding"],
+      "allowed_creates": [],
+      "max_write_attempts": 1,
+      "required_attempts": [
+        {"op": "read", "record": "coding"},
+        {"op": "write", "record": "coding"},
+        {"op": "read", "record": "coding", "after_write": true}
+      ],
+      "report": "unverified"
+    },
+    {
+      "id": "write-readback-mismatch",
+      "groups": ["B7"],
+      "public": {
+        "prompt": "Change my saved SQL keyword preference to uppercase. I authorize this exact value at fixture/library-a/coding. Preserve other content. Do not claim verification if the returned content disagrees with the requested update.",
+        "selected_container": "library-a",
+        "tools": ["read", "write"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {"coding:read-after-write": "mismatch"},
+      "expected": {
+        "coding": {"content_file": "coding-preferences-after-unverified.md"}
+      },
+      "allowed_reads": ["coding"],
+      "allowed_writes": ["coding"],
+      "allowed_creates": [],
+      "max_write_attempts": 1,
+      "required_attempts": [
+        {"op": "read", "record": "coding"},
+        {"op": "write", "record": "coding"},
+        {"op": "read", "record": "coding", "after_write": true}
+      ],
+      "report": "unverified"
+    },
+    {
+      "id": "concurrent-preference-conflict",
+      "groups": ["B7"],
+      "public": {
+        "prompt": "Change my saved SQL preference to uppercase. I authorize this exact value at fixture/library-a/coding. If a newer conflicting edit appears, preserve it and ask me to resolve the conflict.",
+        "selected_container": "library-a",
+        "tools": ["read", "write"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {
+        "coding:write": "conflict",
+        "external_content_file": "coding-preferences-concurrent.md"
+      },
+      "expected": {
+        "coding": {"content_file": "coding-preferences-concurrent.md"}
+      },
+      "allowed_reads": ["coding"],
+      "allowed_writes": ["coding"],
+      "allowed_creates": [],
+      "max_write_attempts": 1,
+      "required_attempts": [
+        {"op": "read", "record": "coding"},
+        {"op": "write", "record": "coding"},
+        {"op": "read", "record": "coding", "after_write": true}
+      ],
+      "report": "needs-input"
+    },
+    {
+      "id": "remember-me-transfer-pointer-failure",
+      "groups": ["B8"],
+      "public": {
+        "prompt": "Transfer the coding preference from fixture/library-a/coding to the explicitly selected fixture/repository-b/coding-new authority. The existing routing pointer is fixture/library-a/locator and currently names fixture/library-a/coding. I authorize copying the preference to the selected destination and updating that pointer. Create the destination record with identity fields that match fixture/repository-b/coding-new while preserving preference values and provenance. Public handoff contract: preserve the source until the destination is created and read back with matching identity and content; after that readback, update the destination verification metadata and read back the final destination again. Change the existing pointer to fixture/repository-b/coding-new only after the second destination readback, then read the pointer back. If pointer update fails, leave the source and old pointer unchanged, report the destination as verified and the pointer as unchanged, and do not claim the transfer completed. Do not read the destination before creating it; the destination is confirmed absent.",
+        "selected_container": "repository-b",
+        "tools": ["read", "write", "create"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        },
+        "locator": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "locator",
+          "path": "selected-coding-authority",
+          "owner": "user",
+          "revision": "pointer-rev-001",
+          "content": "fixture/library-a/coding"
+        }
+      },
+      "faults": {"locator:write": "reject"},
+      "expected": {
+        "coding": {"content_file": "coding-preferences-before.md"},
+        "locator": {"content": "fixture/library-a/coding"},
+        "coding-new": {"content_file": "coding-preferences-transfer-target.md"}
+      },
+      "report_aliases": {"locator": ["pointer", "routing pointer", "routing metadata"]},
+      "allowed_reads": ["coding", "locator", "coding-new"],
+      "allowed_writes": ["coding-new", "locator"],
+      "allowed_creates": ["coding-new"],
+      "max_write_attempts": 3,
+      "staged_expected": {
+        "coding-new": {"content_file": "coding-preferences-transfer-pending.md"}
+      },
+      "required_attempts": [
+        {"op": "read", "record": "coding"},
+        {"op": "read", "record": "locator"},
+        {"op": "create", "record": "coding-new"},
+        {"op": "read", "record": "coding-new", "after_write": true, "count": 2},
+        {"op": "write", "record": "coding-new", "first_attempt_after_verified_create": "coding-new"},
+        {"op": "write", "record": "locator", "first_attempt_after_verified_write": "coding-new"}
+      ],
+      "report": "partial"
+    },
+    {
+      "id": "remember-me-transfer-destination-readback-unavailable",
+      "groups": ["B8"],
+      "public": {
+        "prompt": "Transfer the coding preference from fixture/library-a/coding to the explicitly selected fixture/repository-b/coding-new authority. The existing routing pointer is fixture/library-a/locator and currently names fixture/library-a/coding. I authorize copying the preference to the selected destination and updating that pointer. Create the destination record with identity fields that match fixture/repository-b/coding-new while preserving preference values and provenance. Public handoff contract: preserve the source until the destination is created and read back with matching identity and content; after that readback, update the destination verification metadata and read back the final destination again. Change the existing pointer only after the second destination readback, then read the pointer back. If the first destination readback fails, leave the source and old pointer unchanged, report the destination status as unverified, and do not claim the transfer completed. The destination is confirmed absent.",
+        "selected_container": "repository-b",
+        "tools": ["read", "write", "create"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        },
+        "locator": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "locator",
+          "path": "selected-coding-authority",
+          "owner": "user",
+          "revision": "pointer-rev-001",
+          "content": "fixture/library-a/coding"
+        }
+      },
+      "faults": {"coding-new:read-after-write": "reject"},
+      "expected": {
+        "coding": {"content_file": "coding-preferences-before.md"},
+        "locator": {"content": "fixture/library-a/coding"},
+        "coding-new": {"content_file": "coding-preferences-transfer-target.md"}
+      },
+      "report_aliases": {"locator": ["pointer", "routing pointer", "routing metadata"]},
+      "allowed_reads": ["coding", "locator", "coding-new"],
+      "allowed_writes": ["locator"],
+      "allowed_creates": ["coding-new"],
+      "max_write_attempts": 2,
+      "required_attempts": [
+        {"op": "read", "record": "coding"},
+        {"op": "read", "record": "locator"},
+        {"op": "create", "record": "coding-new"},
+        {"op": "read", "record": "coding-new", "after_write": true}
+      ],
+      "report": "unverified"
+    },
+    {
+      "id": "remember-me-transfer-pointer-success",
+      "groups": ["B8"],
+      "public": {
+        "prompt": "Transfer the coding preference from fixture/library-a/coding to the explicitly selected fixture/repository-b/coding-new authority. The existing routing pointer is fixture/library-a/locator and currently names fixture/library-a/coding. I authorize copying the preference to the selected destination and updating that pointer. Create the destination record with identity fields that match fixture/repository-b/coding-new while preserving preference values and provenance. Public handoff contract: preserve the source until the destination is created and read back with matching identity and content; after that readback, update the destination verification metadata and read back the final destination again. Change the existing pointer to fixture/repository-b/coding-new only after the second destination readback, then read the pointer back. Report the verified destination and pointer identities separately. The destination is confirmed absent.",
+        "selected_container": "repository-b",
+        "tools": ["read", "write", "create"]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        },
+        "locator": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "locator",
+          "path": "selected-coding-authority",
+          "owner": "user",
+          "revision": "pointer-rev-001",
+          "content": "fixture/library-a/coding"
+        }
+      },
+      "faults": {},
+      "expected": {
+        "coding": {"content_file": "coding-preferences-before.md"},
+        "locator": {"content": "fixture/repository-b/coding-new"},
+        "coding-new": {"content_file": "coding-preferences-transfer-target.md"}
+      },
+      "staged_expected": {
+        "coding-new": {"content_file": "coding-preferences-transfer-pending.md"}
+      },
+      "report_aliases": {"locator": ["pointer", "routing pointer", "routing metadata"]},
+      "allowed_reads": ["coding", "locator", "coding-new"],
+      "allowed_writes": ["coding-new", "locator"],
+      "allowed_creates": ["coding-new"],
+      "max_write_attempts": 3,
+      "required_attempts": [
+        {"op": "read", "record": "coding"},
+        {"op": "read", "record": "locator"},
+        {"op": "create", "record": "coding-new"},
+        {"op": "read", "record": "coding-new", "after_write": true, "count": 2},
+        {"op": "write", "record": "coding-new", "first_attempt_after_verified_create": "coding-new"},
+        {"op": "write", "record": "locator", "first_attempt_after_verified_write": "coding-new"},
+        {"op": "read", "record": "locator", "after_write": true}
+      ],
+      "report": "verified"
+    },
+    {
+      "id": "writing-context-present",
+      "groups": ["B9"],
+      "public": {
+        "prompt": "Draft a short patch note from this verified, user-approved writing context supplied by Remember Me: lead with the changed behavior, then one sentence on validation. The writing context is read-only for this task. Patch facts: the validator now rejects duplicate preference IDs before writing the record. Validation: the focused test suite passed.",
+        "selected_container": null,
+        "tools": []
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "report": "no-write"
+    },
+    {
+      "id": "writing-context-unavailable",
+      "groups": ["B9", "B12"],
+      "public": {
+        "prompt": "Draft a concise patch note using only these facts: the validator now rejects duplicate preference IDs before writing the record; the focused test suite passed. No writing preference or optional personal-context helper is available. Use a neutral default; do not search, copy a profile, or make unrelated code changes.",
+        "selected_container": null,
+        "available_components": ["dev-tools"],
+        "tools": []
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "report": "no-write"
+    },
+    {
+      "id": "review-only-no-edit",
+      "groups": ["B11"],
+      "public": {
+        "prompt": "Review this small Python function for style only. Do not edit files, run commands, or save a preference.\n\n```python\ndef format_name(firstName, lastName):\n    return firstName + \" \" + lastName\n```",
+        "selected_container": null,
+        "tools": []
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "report": "no-write"
+    },
+    {
+      "id": "explicit-no-tool",
+      "groups": ["B11"],
+      "public": {
+        "prompt": "Without using tools or saved preferences, explain why this Python function names its parameter in camelCase.\n\n```python\ndef greet(firstName):\n    return f\"Hello, {firstName}\"\n```",
+        "selected_container": null,
+        "tools": []
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "report": "no-write"
+    },
+    {
+      "id": "skills-versus-instructions-explanation",
+      "groups": ["B11"],
+      "public": {
+        "prompt": "Explain at a high level how a reusable skill and repository instructions differ in scope and ownership during a coding task. Use only the facts in this request. Do not inspect files, make changes, run commands, or launch an evaluation.",
+        "selected_container": null,
+        "tools": []
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "report": "no-write"
+    },
+    {
+      "id": "benchmark-explanation-no-trial",
+      "groups": ["B11"],
+      "public": {
+        "prompt": "Explain this acceptance result: the synthetic repository-rule case passed because the task supplied a snake_case repository convention that differed from a camelCase portable preference; cross-owner transfer remains blocked, and the full matrix is incomplete. State what the pass demonstrates and one limit. Do not inspect files, edit anything, or launch another trial.",
+        "selected_container": null,
+        "tools": []
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "report": "no-write"
+    },
+    {
+      "id": "unknown-memory-setup-neutral-fallback",
+      "groups": ["B12"],
+      "public": {
+        "prompt": "Draft a concise patch note using only these facts: the validator now rejects duplicate preference IDs before writing; the focused tests passed. Optional personal-context setup is unknown. Do not retrieve or invent context, initialize a memory store, offer to save anything, or change files.",
+        "selected_container": null,
+        "available_components": ["dev-tools"],
+        "tools": []
+      },
+      "initial": {},
+      "faults": {},
+      "expected": {},
+      "allowed_reads": [],
+      "allowed_writes": [],
+      "allowed_creates": [],
+      "report": "no-write"
+    },
+    {
+      "id": "authorized-save-fresh-session-second-repository-chain",
+      "groups": ["B2"],
+      "effective_date": "2026-10-22",
+      "public": {
+        "prompt": "Update my saved SQL layout preference to: use uppercase SQL keywords; put SELECT on its own line; put each projection on a separate indented line; put FROM, WHERE, and LIMIT on separate lines. I authorize this exact value at fixture/library-a/coding. Make it effective on 2026-10-22; record the actual date of the change in Last updated and use the current date for fresh readback verification. Preserve all unrelated content.",
+        "selected_container": "library-a",
+        "tools": ["read", "write"],
+        "sessions": [
+          {
+            "id": "session-1",
+            "prompt": "Update my saved SQL layout preference to: use uppercase SQL keywords; put SELECT on its own line; put each projection on a separate indented line; put FROM, WHERE, and LIMIT on separate lines. I authorize this exact value at fixture/library-a/coding. Make it effective on 2026-10-22; record the actual date of the change in Last updated and use the current date for fresh readback verification. Preserve all unrelated content.",
+            "tools": ["read", "write"]
+          },
+          {
+            "id": "session-2",
+            "prompt": "In this fresh session, apply the saved SQL layout to `select id, name from users where active = true limit 5;`. The visible durable locator is fixture/library-a/coding. Do not change the saved preference.",
+            "tools": ["read"]
+          },
+          {
+            "id": "session-3",
+            "prompt": "In a second repository, apply the saved SQL layout to `select id, email from customers where enabled = true limit 5;`. The visible durable locator is fixture/library-a/coding. Do not change the saved preference.",
+            "tools": ["read"]
+          }
+        ]
+      },
+      "initial": {
+        "coding": {
+          "provider": "fixture",
+          "container": "library-a",
+          "id": "coding",
+          "path": "coding-preferences.md",
+          "owner": "user",
+          "revision": "fixture-rev-001",
+          "content_file": "coding-preferences-before.md"
+        }
+      },
+      "faults": {},
+      "expected": {
+        "coding": {"content_file": "coding-preferences-after-sql-layout.md"}
+      },
+      "staged_expected": {
+        "coding": {"content_file": "coding-preferences-after-sql-layout-unverified.md"}
+      },
+      "expected_sql_layouts": {
+        "session-2": {"columns": ["id", "name"], "table": "users", "predicate": "active = TRUE", "limit": "5"},
+        "session-3": {"columns": ["id", "email"], "table": "customers", "predicate": "enabled = TRUE", "limit": "5"}
+      },
+      "allowed_reads": ["coding"],
+      "allowed_writes": ["coding"],
+      "allowed_creates": [],
+      "max_write_attempts": 2,
+      "required_attempts": [
+        {"op": "read", "record": "coding", "session": "session-1", "writes_before": 0},
+        {"op": "write", "record": "coding", "session": "session-1", "writes_before": 0},
+        {"op": "read", "record": "coding", "session": "session-1", "after_write": true},
+        {"op": "write", "record": "coding", "session": "session-1", "writes_before": 1},
+        {"op": "read", "record": "coding", "session": "session-1"},
+        {"op": "read", "record": "coding", "session": "session-2"},
+        {"op": "read", "record": "coding", "session": "session-3"}
+      ],
+      "report": "verified"
+    }
+  ]
+}

@@ -2,7 +2,7 @@
 name: research-briefing
 description: Standalone research and briefing skill for answering substantive questions objectively using the strongest available evidence, current verification when warranted, quantitative results, explicit uncertainty, and direct citations. Use when the user invokes research-briefing or asks for an evidence-based investigation, fact-check, literature review, source-supported technical explanation or troubleshooting, including follow-ups, comparison of competing claims, or assessment of a current, uncertain, niche, or high-stakes topic.
 metadata:
-  version: "1.15.2"
+  version: "2.0.0"
 ---
 
 # Research Briefing

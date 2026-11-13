@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate a staged Meal Planner workbook audit from native structure snapshots."""
+"""Validate a staged workbook audit from native structure snapshots."""
 
 from __future__ import annotations
 

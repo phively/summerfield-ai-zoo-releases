@@ -182,12 +182,10 @@ def test_research_prompt_routing_is_caller_owned() -> None:
     research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
     contract = read(ROOT / "shared" / "handoff-contracts.md")
     teaching_contract = contract.split("## Teach Me to Research Briefing\n", 1)[1].split("\n## ", 1)[0]
-    other_contract = contract.split("## Superb Skills to Research Briefing\n", 1)[1].split("\n## ", 1)[0]
     plan = read(ROOT / "skills" / "teach-me" / "references" / "learning-plan-research.md")
     assert "invoke `research-briefing` through the canonical contract" in skill
     assert "this contract supplies no receiver-specific exception" in teaching_contract
     assert "actual authorization and its scope" in teaching_contract
-    assert "| User confirmation | Required." in other_contract
     assert "teach-me" not in research
     assert "bounded automatic-research exception" not in research
     assert "Also omit the checkpoint when the current request explicitly waives it" in research

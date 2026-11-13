@@ -1,7 +1,7 @@
 {
   "name": "meal-planner",
-  "version": "1.5.0",
-  "description": "Drive-native household meal planning with verified formatted meal and recipe documents, preserved preference history, grocery consolidation, and cost estimation.",
+  "version": "2.0.0",
+  "description": "Plan safe household meals with verified recipes and bounded grocery work; maintain canonical recipes, feedback, and half-step ratings.",
   "author": {
     "name": "Paul Hively"
   },
@@ -9,7 +9,7 @@
   "interface": {
     "displayName": "Meal Planner",
     "shortDescription": "Plan and track meals, recipes, groceries, and costs",
-    "longDescription": "Review previously made meals before planning, maintain formatted Drive-native household and recipe records with verified named links, preserve records during cleanup or migration, and coordinate safe plans, groceries, and costs.",
+    "longDescription": "Review previously made meals before planning, maintain formatted Drive-native household and recipe records with verified named links, preserve records during cleanup or migration, and coordinate safe plans with full shopper-backed groceries or a bounded local grocery fallback.",
     "developerName": "Paul Hively",
     "category": "Productivity",
     "capabilities": [

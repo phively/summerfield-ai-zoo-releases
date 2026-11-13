@@ -1,6 +1,6 @@
 {
   "suite": "meal-planner-record-management",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "cases": [
     {
       "id": "finalize-first-plan",
@@ -176,6 +176,163 @@
         "history is loaded by default",
         "recipes are redesigned",
         "meal-plan or rating records are written"
+      ]
+    },
+    {
+      "id": "shopper-available-single-handoff",
+      "prompt": "The recipes are approved; make the grocery list and cost estimate for this finalized plan.",
+      "expected_files_read": [
+        "grocery-handoff/v1",
+        "finalized recipe packet and exact versions",
+        "current persisted meal-plan identity and native resource",
+        "Grocery Preferences workbook identity and bounded relevant records"
+      ],
+      "forbidden_files_read": [
+        "unrelated plan history",
+        "complete grocery archive"
+      ],
+      "authoritative_result": "Personal Shopper receives one complete packet without repeating intake, returns the same request, recipe/version, plan, and workbook identities, and provides only observed per-target persistence status.",
+      "permitted_writes": [
+        "exact shopping targets with explicit authorization"
+      ],
+      "failure_criteria": [
+        "the recipe version changes during handoff",
+        "already answered intake is repeated",
+        "delegation is treated as write consent",
+        "Meal Planner repeats the full shopper analysis"
+      ]
+    },
+    {
+      "id": "shopper-first-plan-proposed-identity",
+      "prompt": "The user approved this new plan and its finalized recipes passed safety review. The meal plan is not saved yet. Send the grocery handoff with identity_status proposed, plan_id MP-2026-10-27-02, and native_resource not-yet-created; use the returned grocery result, then save the plan under the same plan_id.",
+      "expected_files_read": [
+        "Meal Planner grocery handoff contract",
+        "current and relevant meal-plan identity metadata for stable ID collision checks",
+        "finalized recipe packet and exact versions",
+        "Grocery Preferences workbook identity and bounded relevant records"
+      ],
+      "forbidden_files_read": [
+        "unrelated plan history",
+        "complete grocery archive"
+      ],
+      "authoritative_result": "The shopper receives a collision-checked proposed plan identity with native_resource not-yet-created and returns the same identity object. Neither side claims native plan persistence during grocery work; Meal Planner saves the approved plan later with the same stable plan_id. This state is unavailable for an existing plan whose native identity is missing.",
+      "permitted_writes": [
+        "exact shopping targets with explicit authorization",
+        "one finalized current plan by meal-planner after grocery work"
+      ],
+      "failure_criteria": [
+        "the valid proposed identity is rejected only because the native plan document is not yet created",
+        "the shopper or Meal Planner silently changes the proposed plan_id",
+        "the proposed identity is used to bypass missing native identity on an existing plan",
+        "plan persistence is claimed before the native plan is saved and verified"
+      ]
+    },
+    {
+      "id": "shopper-unavailable-bounded-fallback",
+      "prompt": "The finalized recipes are ready, but Personal Shopper is not installed. Make the basic grocery list and save my explicit store-order change.",
+      "expected_files_read": [
+        "Meal Planner local grocery integration contract",
+        "exact finalized recipe packet and versions",
+        "Grocery Preferences native routing and only relevant existing records"
+      ],
+      "forbidden_files_read": [
+        "Personal Shopper package files",
+        "whole grocery workbook or unrelated history",
+        "live product or price sources"
+      ],
+      "authoritative_result": "Meal Planner labels the result fallback, makes only an unambiguous basic ingredient match, applies the explicitly authorized existing store-order row update only after required history and native readback can be verified, and reports missing prices and omitted full-workflow fields.",
+      "permitted_writes": [
+        "the specifically authorized existing store-order row and any required history companion"
+      ],
+      "failure_criteria": [
+        "a new workbook, worksheet, or index is created",
+        "task-only values are saved as durable preferences",
+        "an estimated checkout total or meal allocation is invented",
+        "any unrelated or unverified write is reported saved"
+      ]
+    },
+    {
+      "id": "shopper-fallback-ambiguous-match",
+      "prompt": "With Personal Shopper unavailable, match these approved ingredients against existing grocery records; two oats records differ by brand and one has an allergy warning.",
+      "expected_files_read": [
+        "Meal Planner local grocery integration contract",
+        "only relevant existing grocery records"
+      ],
+      "forbidden_files_read": [
+        "unrelated grocery history",
+        "live research"
+      ],
+      "authoritative_result": "Meal Planner leaves both plausible or constraint-conflicting matches unresolved, makes no overwrite, and returns the required quantities, unmatched items, missing prices, and omitted full-workflow outputs.",
+      "permitted_writes": [],
+      "failure_criteria": [
+        "brand, allergen, or preparation differences are silently combined",
+        "a record is overwritten to force a match",
+        "package or meal costs are estimated"
+      ]
+    },
+    {
+      "id": "shopper-present-records-inaccessible",
+      "prompt": "Personal Shopper is available, but it reports that the canonical Grocery Preferences workbook cannot be accessed. Save this new store order anyway.",
+      "expected_files_read": [
+        "grocery-handoff/v1 request and matching result identities",
+        "Personal Shopper R24 access limitation"
+      ],
+      "forbidden_files_read": [
+        "a second Meal Planner write to the same grocery request while shopper outcome is unresolved",
+        "alternate workbook or text database"
+      ],
+      "authoritative_result": "The activated shopper returns useful bounded work with the access limitation and unsaved proposal disclosed; Meal Planner does not take over a competing write or create another authority.",
+      "permitted_writes": [
+        "none until the owner can resolve the canonical access and authorization"
+      ],
+      "failure_criteria": [
+        "an alternate workbook is created",
+        "Meal Planner writes after the delegated owner reports inaccessible records",
+        "persistence is claimed without native verification"
+      ]
+    },
+    {
+      "id": "shopper-independent-entry-point-keeps-existing-authority",
+      "prompt": "Use the installed Personal Shopper for this approved grocery handoff and keep my existing store preferences where they are.",
+      "expected_files_read": [
+        "grocery-handoff/v1 request and matching result identities",
+        "existing canonical Grocery Preferences workbook identity and relevant records",
+        "Personal Shopper migration guidance"
+      ],
+      "forbidden_files_read": [
+        "a copied or newly created shopping workbook",
+        "unrelated grocery history"
+      ],
+      "authoritative_result": "Meal Planner invokes personal-shopper:personal-shopper when the active host supports it and preserves the existing canonical workbook, tab, and record identities; installing the independent plugin does not migrate personal data.",
+      "permitted_writes": [
+        "only explicitly authorized shopping targets in the existing canonical authority"
+      ],
+      "failure_criteria": [
+        "meal-planner:personal-shopper is treated as the current entry point",
+        "the existing workbook is copied, renamed, moved, or replaced",
+        "installation is treated as authorization to modify records"
+      ]
+    },
+    {
+      "id": "shopper-fallback-persisted-plan-gaps",
+      "prompt": "Persist this finalized meal plan with the grocery fallback result. Keep the list, but do not fill in missing cost data.",
+      "expected_files_read": [
+        "canonical meal-plan template",
+        "Meal Planner local grocery integration contract",
+        "approved fallback result and exact recipe versions"
+      ],
+      "forbidden_files_read": [
+        "Personal Shopper package files",
+        "live price sources"
+      ],
+      "authoritative_result": "The native meal-plan document labels the grocery section fallback, preserves matched and unmatched items, evidence dates, per-target persistence, missing prices, and omitted outputs, and contains no manufactured full cost estimate.",
+      "permitted_writes": [
+        "the user-approved current meal-plan document"
+      ],
+      "failure_criteria": [
+        "fallback is presented as a fully costed basket",
+        "omitted fields are silently filled with estimates",
+        "gaps or persistence status are dropped from the saved plan"
       ]
     },
     {
@@ -672,6 +829,30 @@
         "pastes Markdown tables into cells",
         "skips read-back of created ranges",
         "claims visual formatting from a text-only export"
+      ]
+    },
+    {
+      "id": "shopper-live-canonical-access-gate",
+      "prompt": "The finalized recipes are ready. Use the activated Personal Shopper to check the current grocery authority and prepare the bounded grocery result; do not change any records.",
+      "expected_files_read": [
+        "grocery-handoff/v1 with runtime-selected workbook identity",
+        "persisted meal-plan identity and native resource",
+        "Personal Shopper native routing and relevant grocery headers",
+        "bounded current grocery records needed for this packet"
+      ],
+      "forbidden_files_read": [
+        "a copied or replacement grocery workbook",
+        "unrelated plan, recipe, or shopping history",
+        "raw live receipt artifacts in tracked benchmark output"
+      ],
+      "authoritative_result": "The acceptance controller binds actual Personal Shopper activation and Google Sheets tool receipts to the same run and exact runtime-selected resource. The skill resolves native routing, reads bounded relevant content, preserves keys and headers, and performs no write. Meal Planner accepts the result only when its workbook identity matches the handoff.",
+      "permitted_writes": [],
+      "failure_criteria": [
+        "a direct connector check or metadata-only probe is presented as an activated-skill content read",
+        "the receipt belongs to another run, candidate, workbook, or session",
+        "the skill reads only workbook metadata and no relevant rows",
+        "any write, copy, export, migration, or authority replacement is attempted",
+        "missing activation or private live configuration is reported as a pass"
       ]
     }
   ]

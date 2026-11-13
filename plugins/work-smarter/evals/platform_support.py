@@ -1,4 +1,3 @@
-"""Host file locks and owned process trees for offline evaluation runners."""
 import errno
 import os
 import signal
@@ -41,6 +40,11 @@ def release_lock(handle):
 if IS_WINDOWS:
     import ctypes
     from ctypes import wintypes
+
+    JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE = 0x2000
+    TH32CS_SNAPTHREAD = 0x00000004
+    THREAD_SUSPEND_RESUME = 0x0002
+    CREATE_SUSPENDED = 0x00000004
 
     class _BasicLimits(ctypes.Structure):
         _fields_ = [
@@ -92,7 +96,7 @@ if IS_WINDOWS:
             self.handle = _checked(_kernel.CreateJobObjectW(None, None))
             try:
                 limits = _ExtendedLimits()
-                limits.basic.flags = 0x2000  # JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE
+                limits.basic.flags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE
                 _checked(_kernel.SetInformationJobObject(
                     self.handle, 9, ctypes.byref(limits), ctypes.sizeof(limits)))
             except BaseException:
@@ -103,7 +107,7 @@ if IS_WINDOWS:
             _checked(_kernel.AssignProcessToJobObject(self.handle, int(process._handle)))
             # Popen closes the primary thread handle. The child is still suspended,
             # so it has exactly one thread; reopen it before allowing any code to run.
-            snapshot = _kernel.CreateToolhelp32Snapshot(4, 0)  # TH32CS_SNAPTHREAD
+            snapshot = _kernel.CreateToolhelp32Snapshot(TH32CS_SNAPTHREAD, 0)
             if snapshot == ctypes.c_void_p(-1).value:
                 raise ctypes.WinError(ctypes.get_last_error())
             try:
@@ -112,7 +116,7 @@ if IS_WINDOWS:
                 found = _kernel.Thread32First(snapshot, ctypes.byref(entry))
                 while found:
                     if entry.process_id == process.pid:
-                        thread = _checked(_kernel.OpenThread(2, False, entry.thread_id))
+                        thread = _checked(_kernel.OpenThread(THREAD_SUSPEND_RESUME, False, entry.thread_id))
                         try:
                             previous = _kernel.ResumeThread(thread)
                             if previous == 0xFFFFFFFF:
@@ -143,8 +147,7 @@ def start_process(command, **kwargs):
     job = _WindowsJob()
     process = None
     try:
-        # Bind to the job before any child code can spawn descendants.
-        flags = 0x00000004 | subprocess.CREATE_NO_WINDOW  # CREATE_SUSPENDED
+        flags = CREATE_SUSPENDED | subprocess.CREATE_NO_WINDOW
         process = subprocess.Popen(command, creationflags=flags, **kwargs)
         process._evaluation_job = job
         job.assign_and_resume(process)

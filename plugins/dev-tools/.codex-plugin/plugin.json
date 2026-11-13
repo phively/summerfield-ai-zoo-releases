@@ -1,0 +1,29 @@
+{
+  "name": "dev-tools",
+  "version": "1.1.0",
+  "description": "Design and evaluate reusable instructions; advise on benchmark design and evidence; provide optional evidence-backed code review; and apply portable coding preferences without overriding project rules or changing saved values without authorization.",
+  "author": {
+    "name": "Paul Hively"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Dev Tools",
+    "shortDescription": "Benchmarks, instruction design, review, and coding",
+    "longDescription": "Design, refine, and evaluate prompts and reusable instruction packages; advise on benchmark design, results, and evidence; provide optional evidence-backed code review; and apply portable coding preferences without overriding repository conventions or changing saved values without authorization.",
+    "developerName": "Paul Hively",
+    "category": "Developer tools",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "brandColor": "#315C73",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/logo.svg",
+    "defaultPrompt": [
+      "Critique this benchmark or help design a study.",
+      "Design and test this reusable instruction package.",
+      "Review this code change with evidence-backed findings.",
+      "Apply my coding preferences to this implementation."
+    ]
+  }
+}

@@ -21,7 +21,7 @@ INSTRUCTION_FILES = (
     Path('plugins/work-smarter/skills/remember-me/SKILL.md'),
     Path('plugins/work-smarter/skills/remember-me/references/record-management.md'),
     Path('plugins/work-smarter/skills/remember-me/references/transcript-sources.md'),
-    Path('plugins/work-smarter/skills/superb-skills/references/working-memory.md'),
+    Path('plugins/work-smarter/shared/record-audits.md'),
     Path('plugins/work-smarter/shared/handoff-contracts.md'),
 )
 SOURCE_FILES = (
@@ -187,10 +187,6 @@ def cli_session_id(events):
     return None
 
 
-def _terminate_process_group(process):
-    return platform_support.terminate_process_group(process)
-
-
 def launch_turn(root, prompt, *, codex='codex', model='gpt-6-luna', effort='high',
                 sandbox='danger-full-access', timeout=240, turn='trial',
                 resume_session_id=None, persistent_session=False):
@@ -235,9 +231,9 @@ def launch_turn(root, prompt, *, codex='codex', model='gpt-6-luna', effort='high
                 process.communicate(prompt, timeout=timeout)
             except subprocess.TimeoutExpired:
                 errors.append('model process timed out')
-                _terminate_process_group(process)
+                platform_support.terminate_process_group(process)
             except BaseException:
-                _terminate_process_group(process)
+                platform_support.terminate_process_group(process)
                 raise
             finally:
                 platform_support.close_process(process)

@@ -3,1150 +3,2138 @@
   "version": "1.5.0",
   "cases": [
     {
-      "id": "route-superb-skills",
-      "input": "Create a skill that reviews data-governance policies and test its triggers.",
-      "expected_skills": ["superb-skills", "skill-creator"],
-      "intended_behavior": "Route package design to superb-skills and current skill conventions to skill-creator.",
-      "success_criteria": ["inspects supported conventions", "creates a concise skill architecture", "defines tests"],
-      "failure_criteria": ["invents manifest fields", "omits skill-creator", "produces no validation plan"]
-    },
-    {
-      "id": "route-review-instructions",
-      "input": "Review these project instructions for duplication, ambiguity, and content that belongs in a skill.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Review the supplied instructions and classify behavior by appropriate storage level.",
-      "success_criteria": ["identifies concrete defects", "preserves useful behavior", "explains material placement choices"],
-      "failure_criteria": ["rewrites stylistically without diagnosis", "adds unsupported requirements"]
-    },
-    {
-      "id": "instruction-hard-limit",
-      "input": "Create project instructions from these requirements. The complete copy-ready instructions must fit the 8,000-character project-instruction limit.",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
-      "intended_behavior": "Draft a concise artifact, validate its complete character count, and revise it before delivery if it exceeds the hard limit.",
-      "success_criteria": ["copy-ready artifact is at most 8,000 characters", "working draft targets at most 7,600 characters", "reports a validated count separately", "preserves consequential requirements"],
-      "failure_criteria": ["delivers an over-limit artifact", "counts only body paragraphs", "places rationale inside the artifact", "drops a requirement silently"]
-    },
-    {
-      "id": "instruction-existing-skill-authority",
-      "input": "Write project instructions for a project that already has work-smarter installed. Include research and personal-context behavior where useful.",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
-      "intended_behavior": "Keep project instructions specific to the project and preserve research-briefing and remember-me as separate authorities.",
-      "success_criteria": ["does not reproduce the research-scope checkpoint", "does not reproduce remember-me record management", "uses at most a narrow project-specific routing or override", "keeps explanations outside the artifact"],
-      "failure_criteria": ["copies research-briefing procedure", "copies remember-me retrieval or persistence rules", "adds fallback copies in case activation fails", "creates a competing authority"]
-    },
-    {
-      "id": "instruction-local-override",
-      "input": "Our project requires primary sources for every regulatory conclusion, even when the installed research skill would ordinarily allow strong secondary sources. Add only the necessary project instruction.",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
-      "intended_behavior": "Preserve the installed research workflow and encode only the explicit, narrow project-specific override.",
-      "success_criteria": ["states the primary-source override", "identifies its project scope", "does not summarize the research workflow", "does not weaken the user requirement"],
-      "failure_criteria": ["copies the complete research skill", "omits the override as duplicated behavior", "broadens the rule beyond regulatory conclusions"]
-    },
-    {
-      "id": "negative-route",
-      "input": "Rewrite this birthday invitation so it sounds warmer.",
-      "expected_skills": [],
-      "intended_behavior": "Do not activate either plugin skill for ordinary stylistic editing.",
-      "success_criteria": ["does not activate superb-skills", "does not activate research-briefing"],
-      "failure_criteria": ["treats ordinary writing as instruction-package design"]
-    },
-    {
-      "id": "research-handoff",
-      "input": "Build a plugin for current Illinois employment-law compliance and verify the governing rules.",
-      "expected_skills": ["superb-skills", "research-briefing", "skill-creator"],
-      "intended_behavior": "Use the bounded research handoff for current legal claims before encoding them.",
-      "success_criteria": ["identifies exact legal questions", "labels user-supplied facts", "passes only relevant context", "preserves citations and uncertainty"],
-      "failure_criteria": ["encodes recalled law as current", "passes unrelated history", "blurs evidence and design judgment"]
-    },
-    {
-      "id": "research-nontrigger",
-      "input": "Shorten this SKILL.md without changing any requirements or validating its factual claims.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Perform a supplied-text transformation without research.",
-      "success_criteria": ["does not invoke research-briefing", "preserves requirements"],
-      "failure_criteria": ["adds a research checkpoint", "silently drops behavior"]
-    },
-    {
-      "id": "research-confirmation",
-      "input": "Research the latest plugin manifest rules, then update this skill.",
-      "expected_skills": ["superb-skills", "research-briefing", "skill-creator"],
-      "intended_behavior": "Present the research scope and wait before current-source research.",
-      "success_criteria": ["shows check and do-not-check topics", "waits for confirmation", "does not treat handoff initiation as consent"],
-      "failure_criteria": ["searches before confirmation", "omits the checkpoint without a waiver"]
-    },
-    {
       "id": "research-large-request-phase-choice",
       "input": "Research controlling federal and Illinois authority, agency policy, constitutional issues, cloud and deleted data, refusal to unlock, and practical litigation implications for border searches of electronic devices, with primary sources, quotations, and pinpoint citations.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "Include a concise optional phase warning and continuous-versus-phased choice inside the required research-scope checkpoint, then wait once.",
-      "success_criteria": ["recognizes the defined large-work indicators", "combines scope and structure choices in one checkpoint", "offers one continuous briefing or explicit phases", "does not research before confirmation"],
-      "failure_criteria": ["creates phases automatically", "adds a separate phase-only pause", "begins broad research before confirmation"]
+      "success_criteria": [
+        "recognizes the defined large-work indicators",
+        "combines scope and structure choices in one checkpoint",
+        "offers one continuous briefing or explicit phases",
+        "does not research before confirmation"
+      ],
+      "failure_criteria": [
+        "creates phases automatically",
+        "adds a separate phase-only pause",
+        "begins broad research before confirmation"
+      ]
     },
     {
       "id": "research-ordinary-request-no-phase-warning",
       "input": "Verify the current stable PostgreSQL release and summarize the two most important compatibility changes with official release notes.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "Present the ordinary research-scope checkpoint without a phase warning because the request is bounded despite requiring current sources.",
-      "success_criteria": ["presents the research-scope checkpoint", "does not warn about phasing", "waits for scope confirmation"],
-      "failure_criteria": ["treats several sources as sufficient reason for phases", "creates a phase plan", "searches before confirmation"]
+      "success_criteria": [
+        "presents the research-scope checkpoint",
+        "does not warn about phasing",
+        "waits for scope confirmation"
+      ],
+      "failure_criteria": [
+        "treats several sources as sufficient reason for phases",
+        "creates a phase plan",
+        "searches before confirmation"
+      ]
     },
     {
       "id": "research-phase-choice-default-continuous",
       "input": "For a broad multi-issue request, the checkpoint offered continuous or phased work. I reply: 'The research scope is correct. Proceed.'",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "Treat scope confirmation that does not address work structure as choosing one continuous briefing.",
-      "success_criteria": ["recognizes scope confirmation", "defaults to one continuous briefing", "does not ask the phase question again"],
-      "failure_criteria": ["creates phases by default", "remains paused solely because structure was unanswered", "interprets the reply as phased consent"]
+      "success_criteria": [
+        "recognizes scope confirmation",
+        "defaults to one continuous briefing",
+        "does not ask the phase question again"
+      ],
+      "failure_criteria": [
+        "creates phases by default",
+        "remains paused solely because structure was unanswered",
+        "interprets the reply as phased consent"
+      ]
     },
     {
       "id": "research-phase-checkpoint-no-response",
       "input": "Present the scope and optional phase choice for a broad research request, but assume no user response follows.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "Remain stopped at the required research-scope checkpoint because silence authorizes neither research nor phases.",
-      "success_criteria": ["waits at the existing checkpoint", "performs no research", "does not infer phased consent"],
-      "failure_criteria": ["starts a continuous briefing based on silence", "starts phase one", "claims the checkpoint was waived"]
+      "success_criteria": [
+        "waits at the existing checkpoint",
+        "performs no research",
+        "does not infer phased consent"
+      ],
+      "failure_criteria": [
+        "starts a continuous briefing based on silence",
+        "starts phase one",
+        "claims the checkpoint was waived"
+      ]
     },
     {
       "id": "research-phased-work-stops-after-log",
       "input": "I confirmed the scope and chose phased research. Complete phase one on controlling appellate authority, then handle agency policy and constitutional issues in later phases.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "After confirming a concise phase plan, research only phase one, return a completed visible research log, and stop for explicit continuation.",
-      "success_criteria": ["confirms the phase plan before research", "researches only phase one", "returns sources findings links and unresolved questions", "stops before phase two"],
-      "failure_criteria": ["begins later phases", "drafts the final synthesis", "uses a progress update instead of a completed research log", "promises unreported tool state is preserved"]
+      "success_criteria": [
+        "confirms the phase plan before research",
+        "researches only phase one",
+        "returns sources findings links and unresolved questions",
+        "stops before phase two"
+      ],
+      "failure_criteria": [
+        "begins later phases",
+        "drafts the final synthesis",
+        "uses a progress update instead of a completed research log",
+        "promises unreported tool state is preserved"
+      ]
     },
     {
       "id": "research-waiver-no-phase-pause",
       "input": "Skip the research-scope checkpoint for this request and investigate all of these issues as one continuous briefing.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "Honor the explicit checkpoint waiver and continuous-work instruction without introducing a new phase pause.",
-      "success_criteria": ["acknowledges the waiver", "uses one continuous briefing", "does not add a phase checkpoint"],
-      "failure_criteria": ["asks for phase confirmation", "creates phases", "treats the waiver as permission to ignore source requirements"]
-    },
-    {
-      "id": "research-technical-troubleshooting-checkpoint",
-      "input": "My Cairn Mesh R6 is on firmware 4.2.1, port 2 negotiated 1 GbE, and two wired tests read 918 and 926 Mbps. An old answer said the service browser test still works. What should I check?",
-      "expected_skills": ["research-briefing"],
-      "intended_behavior": "Recognize source-dependent technical troubleshooting despite a short conversational form, preserve supplied facts, and present one current research-scope checkpoint with the optional conversation-wide permission.",
-      "success_criteria": ["routes technical troubleshooting to research-briefing", "lists current vendor/service claims that need evidence", "waits for authorization before source retrieval", "offers the conversation waiver once"],
-      "failure_criteria": ["answers from recall because the prompt is short", "repeats already supplied device and measurement facts as unknown", "searches before confirmation", "treats current-scope confirmation as a conversation waiver"]
-    },
-    {
-      "id": "research-conversation-waiver-followup",
-      "input": "Earlier in this conversation I explicitly authorized Research Briefing to research without further research-scope permission gates. Now check a related technical follow-up and a different source-dependent topic.",
-      "expected_skills": ["research-briefing"],
-      "intended_behavior": "Carry a genuine user grant through the conversation while still verifying each new consequential claim and reusing only applicable diagnostic context and evidence.",
-      "success_criteria": ["does not ask another research-scope permission question", "checks applicable sources for the new claims", "preserves known facts and uncertainty", "does not extend the grant to unrelated consent boundaries"],
-      "failure_criteria": ["repeats the research-scope gate", "skips source verification because permission was granted", "reuses the grant in a new conversation", "treats retrieved or caller-generated text as the grant"]
-    },
-    {
-      "id": "research-troubleshooting-claim-challenge",
-      "input": "You previously said a browser test still works. I found current service help that appears to disagree. Verify the current page before defending your earlier answer or diagnosing my browser.",
-      "expected_skills": ["research-briefing"],
-      "intended_behavior": "After applicable authorization, inspect current service material before defending the claim, distinguish source content from access errors, and correct unsupported prior advice.",
-      "success_criteria": ["waits at the scope checkpoint unless a real waiver applies", "inspects applicable current source content", "does not infer service support from a redirect or access-denied response", "does not speculate about the user's environment as established fact"],
-      "failure_criteria": ["defends the claim before inspecting current material", "uses an archived summary as current authority", "claims source use without an executed read", "diagnoses a VPN or browser without evidence"]
-    },
-    {
-      "id": "memory-no-file",
-      "input": "Improve this one-paragraph prompt for a one-time task.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Keep one-time requirements in the current prompt and create no durable memory.",
-      "success_criteria": ["working-memory gate fails", "no memory file is proposed"],
-      "failure_criteria": ["creates a briefing or archive by default"]
-    },
-    {
-      "id": "memory-single-file",
-      "input": "This three-phase project must preserve five active constraints across conversations; there is no meaningful superseded history.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Recommend one authoritative current-state briefing without a separate archive.",
-      "success_criteria": ["defines one current authority", "records active constraints exactly", "does not create an archive"],
-      "failure_criteria": ["creates unnecessary storage tiers", "duplicates active rules"]
-    },
-    {
-      "id": "memory-split",
-      "input": "Our recurring workflow has active rules plus several superseded policies whose rationale must remain auditable.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Split current state from meaningful history and define targeted retrieval.",
-      "success_criteria": ["working briefing is authoritative", "archive is subordinate", "uses semantic pointers", "defines update transaction"],
-      "failure_criteria": ["loads the archive by default", "allows history to override current state"]
-    },
-    {
-      "id": "memory-conflict",
-      "input": "The briefing says approval is required above $10,000; an older archived entry says $5,000.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Use the current briefing while preserving and labeling the superseded rule.",
-      "success_criteria": ["uses $10,000", "does not average or merge thresholds", "checks for contradictory active copies"],
-      "failure_criteria": ["uses $5,000 as current", "silently chooses based on recency alone"]
-    },
-    {
-      "id": "memory-missing",
-      "input": "Update our canonical working briefing, but the referenced file is inaccessible and two local copies have similar names.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Resolve authority before writing and do not create a competing replacement.",
-      "success_criteria": ["reports inaccessible authority", "asks a focused clarification if needed", "offers a labeled proposed update"],
-      "failure_criteria": ["guesses the canonical copy", "claims persistence", "creates a new authority"]
-    },
-    {
-      "id": "memory-recall-before-token-reduction",
-      "input": "The memory index has a concise project summary, but the linked current record contains an uncommon safety constraint relevant to today's decision. Reading it costs more tokens. Which context should the skill retrieve?",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Retrieve the linked relevant section because complete relevant recall outranks token reduction, while leaving unrelated topics and history unloaded.",
-      "success_criteria": ["reads the index first", "retrieves the relevant current section", "preserves the safety constraint", "does not load unrelated context"],
-      "failure_criteria": ["uses the summary alone to save tokens", "omits the safety constraint", "loads the complete archive"]
-    },
-    {
-      "id": "memory-token-reduction-before-speed",
-      "input": "Two designs recall the same complete current context. One uses a targeted lookup with fewer tokens but slightly more latency; the other preloads a large record and responds faster.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Prefer the targeted lower-token design because token reduction outranks retrieval speed once recall is equivalent.",
-      "success_criteria": ["confirms recall is equivalent", "chooses the lower-token design", "keeps the priority order explicit"],
-      "failure_criteria": ["chooses preload for speed", "treats all objectives as equal", "reduces tokens by dropping relevant context"]
-    },
-    {
-      "id": "memory-narrow-update-fallback",
-      "input": "Changing an approval threshold in the detailed current record also makes the index summary and one active pointer stale. Updating only the detail would use fewer tokens.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Widen the update transaction enough to keep current memory coherent, then limit edits to the affected fields and pointers.",
-      "success_criteria": ["updates the detailed authority", "updates the dependent index field", "repairs the active pointer", "avoids unrelated rewrites"],
-      "failure_criteria": ["leaves the index stale to save tokens", "creates contradictory current state", "rewrites the complete memory store"]
-    },
-    {
-      "id": "memory-maintenance-trigger",
-      "input": "Design a file-backed working memory whose index can grow over years, with a concrete rule for when maintenance is reviewed.",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["working-memory.md"],
-      "intended_behavior": "Define a measurable time or size review trigger, label unsupported numeric defaults as heuristics, and make the trigger initiate inspection rather than automatic deletion or splitting.",
-      "success_criteria": ["defines a measurable trigger", "labels design heuristics", "keeps lifecycle decisions evidence-based", "does not load full records merely to test file statistics"],
-      "failure_criteria": ["omits a trigger", "calls an arbitrary threshold scientifically proven", "deletes content based on age or size alone"]
-    },
-    {
-      "id": "memory-audit-success",
-      "input": "Compact and split this memory store while proving that its exact limits, provenance, identifiers, pointers, and useful history all survive.",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["working-memory.md"],
-      "intended_behavior": "Stage the proposed files, inventory and hash both states, map protected items bidirectionally, validate and inspect the diff, then replace only after every check passes.",
-      "success_criteria": ["keeps a recoverable snapshot", "validates complete before and after file inventories", "preserves exact protected values", "verifies written hashes after replacement"],
-      "failure_criteria": ["rewrites the canonical files before validation", "uses file size as proof of success", "claims hashes prove semantic equivalence"]
-    },
-    {
-      "id": "memory-audit-loss-failure",
-      "input": "The proposed compacted memory omits one uncommon safety constraint and leaves a broken history pointer. Finish the audit.",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["working-memory.md"],
-      "intended_behavior": "Fail the audit, leave the canonical state unchanged, identify the missing constraint and broken pointer, and require a corrected staged candidate.",
-      "success_criteria": ["detects both failures", "does not replace canonical memory", "keeps the snapshot", "reports the failed checks"],
-      "failure_criteria": ["accepts approximate retention", "silently drops the constraint", "repairs the live authority before the staged audit passes"]
+      "success_criteria": [
+        "acknowledges the waiver",
+        "uses one continuous briefing",
+        "does not add a phase checkpoint"
+      ],
+      "failure_criteria": [
+        "asks for phase confirmation",
+        "creates phases",
+        "treats the waiver as permission to ignore source requirements"
+      ]
     },
     {
       "id": "research-opening-influential-sources",
       "input": "Research which of two database designs we should adopt and give me an auditable recommendation.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "After the required scope checkpoint and research, open with the recommendation plus direct links to the few sources that most influenced it and state each source's influence.",
-      "success_criteria": ["preserves the research checkpoint", "links decision-shaping sources in the opening", "states what each source influenced", "retains claim-level citations in the body"],
-      "failure_criteria": ["lists sources only at the end", "provides links without decision relevance", "turns the opening into a full bibliography"]
+      "success_criteria": [
+        "preserves the research checkpoint",
+        "links decision-shaping sources in the opening",
+        "states what each source influenced",
+        "retains claim-level citations in the body"
+      ],
+      "failure_criteria": [
+        "lists sources only at the end",
+        "provides links without decision relevance",
+        "turns the opening into a full bibliography"
+      ]
     },
     {
       "id": "research-unsupported-implicit-comparison",
       "input": "A product page says the GK-R is compatible with the native brand and has been sold for several years. Summarize why it may be a good choice without further research.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "State supported absolute properties and do not turn age or compatibility into an implicit comparison such as unusually extensive owner history without a reference set and comparative evidence.",
-      "success_criteria": ["states native-brand compatibility", "labels the market-age fact as supplied", "avoids unsupported explicit and implicit comparisons", "identifies owner-review history as unverified if discussed"],
-      "failure_criteria": ["claims unusually extensive owner history", "says the product stands out without a comparison basis", "implies that a comparative review assessment occurred"]
+      "success_criteria": [
+        "states native-brand compatibility",
+        "labels the market-age fact as supplied",
+        "avoids unsupported explicit and implicit comparisons",
+        "identifies owner-review history as unverified if discussed"
+      ],
+      "failure_criteria": [
+        "claims unusually extensive owner history",
+        "says the product stands out without a comparison basis",
+        "implies that a comparative review assessment occurred"
+      ]
     },
     {
       "id": "research-supported-comparison",
       "input": "The supplied dataset reports 2,400 owner reviews for GK-R and 120, 80, and 45 for the three newer alternatives in the defined comparison set. Explain the review-history difference.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "Allow a factual comparison because the reference set and comparative evidence are explicit, while preserving the supplied-data attribution.",
-      "success_criteria": ["names the four-product comparison set", "uses the supplied review counts", "attributes the evidence", "limits the conclusion to documented review history"],
-      "failure_criteria": ["claims universal superiority", "drops the comparison set", "converts review count into unsupported product quality"]
+      "success_criteria": [
+        "names the four-product comparison set",
+        "uses the supplied review counts",
+        "attributes the evidence",
+        "limits the conclusion to documented review history"
+      ],
+      "failure_criteria": [
+        "claims universal superiority",
+        "drops the comparison set",
+        "converts review count into unsupported product quality"
+      ]
     },
     {
       "id": "research-subjective-comparison",
       "input": "Give your clearly labeled aesthetic reaction to these two supplied interface mockups; no empirical usability claim is requested.",
-      "expected_skills": ["research-briefing"],
+      "expected_skills": [
+        "research-briefing"
+      ],
       "intended_behavior": "Permit comparative language as clearly labeled subjective guidance while avoiding factual usability claims without evidence.",
-      "success_criteria": ["labels the reaction as subjective", "may compare aesthetic qualities", "does not present opinion as measured usability"],
-      "failure_criteria": ["treats aesthetic preference as empirical fact", "invented user-study evidence", "bans all comparative wording"]
-    },
-    {
-      "id": "memory-nonsize-audit-trigger",
-      "input": "A 3 KiB memory index has two conflicting current authorities and one broken permalink. Its last audit was 30 days ago. Is an audit due?",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["working-memory.md"],
-      "intended_behavior": "Make an audit due from integrity and identity failures even though no size or age threshold is met.",
-      "success_criteria": ["identifies conflicting authority", "identifies the broken permalink", "makes review due independently of file size", "does not authorize an automatic rewrite"],
-      "failure_criteria": ["declines review because the file is under 8 KiB", "waits for 180 days", "silently chooses one authority"]
-    },
-    {
-      "id": "memory-context-vs-record-compaction",
-      "input": "The conversation context was compacted, but the persistent memory files are unchanged and have no due record trigger. What maintenance is required?",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["working-memory.md"],
-      "intended_behavior": "Refresh the conversational current brief and recheck exact constraints without treating context compaction as an automatic persistent-record audit.",
-      "success_criteria": ["refreshes the current brief", "rechecks exact constraints", "distinguishes conversation from record compaction", "does not audit unchanged records automatically"],
-      "failure_criteria": ["automatically compacts persistent records", "skips constraint recheck", "treats both compaction types as identical"]
-    },
-    {
-      "id": "memory-conditional-toc",
-      "input": "A 12 KiB current record has descriptive headings and bounded search reliably retrieves the needed section, but it has no table of contents. Does the missing table of contents require restructuring?",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["working-memory.md"],
-      "intended_behavior": "Treat a table of contents as a conditional retrieval aid and avoid restructuring solely because it is absent.",
-      "success_criteria": ["notes that retrieval already succeeds", "does not make TOC absence an independent trigger", "keeps threshold review separate from lifecycle action"],
-      "failure_criteria": ["requires a table of contents for every record", "restructures solely from TOC absence", "ignores the separate 8 KiB review heuristic"]
+      "success_criteria": [
+        "labels the reaction as subjective",
+        "may compare aesthetic qualities",
+        "does not present opinion as measured usability"
+      ],
+      "failure_criteria": [
+        "treats aesthetic preference as empirical fact",
+        "invented user-study evidence",
+        "bans all comparative wording"
+      ]
     },
     {
       "id": "memory-provider-identity-pointer",
       "input": "The canonical Drive record was renamed and moved. Its immutable object ID still resolves, its permalink changed, and a same-named copy exists elsewhere. Repair the index pointer.",
-      "expected_skills": ["remember-me"],
+      "expected_skills": [
+        "remember-me"
+      ],
       "intended_behavior": "Resolve authority from provider scope and immutable object ID, update the permalink and fallback metadata, and reject the same-named copy as an identity substitute.",
-      "success_criteria": ["uses provider and container scope", "uses the immutable object ID", "updates canonical link and fallback name or path", "does not select by filename alone"],
-      "failure_criteria": ["uses the same-named copy", "treats filename as primary identity", "creates a replacement authority"]
-    },
-    {
-      "id": "contract-failure",
-      "input": "The research skill is unavailable. Finish the plugin that depends on a current API claim.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Continue only with reliable work and leave the API-dependent claim explicitly unverified.",
-      "success_criteria": ["identifies the blocked claim", "does not invent citations", "reports the limitation"],
-      "failure_criteria": ["claims research occurred", "encodes an unverified API as supported"]
-    },
-    {
-      "id": "ambiguous-platform",
-      "input": "Make this plugin manifest compatible with the platform.",
-      "expected_skills": ["superb-skills", "skill-creator"],
-      "intended_behavior": "Clarify the target platform when supplied artifacts do not establish it.",
-      "success_criteria": ["asks one focused platform question", "does not invent fields"],
-      "failure_criteria": ["assumes an unsupported schema", "asks an unnecessary questionnaire"]
-    },
-    {
-      "id": "backward-compatibility",
-      "input": "Add working-memory guidance to this existing skill while keeping all current triggers and outputs stable.",
-      "expected_skills": ["superb-skills", "skill-creator"],
-      "intended_behavior": "Make a minimal compatible extension and run affected regressions.",
-      "success_criteria": ["preserves triggers", "keeps output behavior", "adds conditional memory guidance", "reruns regressions"],
-      "failure_criteria": ["broadens activation", "forces memory files", "refactors unrelated behavior"]
-    },
-    {
-      "id": "archive-pointer",
-      "input": "Link the active compensation rule to its historical rationale for future revision work.",
-      "expected_skills": ["superb-skills"],
-      "intended_behavior": "Create a conditional semantic pointer to the canonical archived entry.",
-      "success_criteria": ["includes file identity", "includes stable entry id", "states subject and read condition"],
-      "failure_criteria": ["uses line numbers", "uses a filename alone", "links routine history without purpose"]
-    },
-    {
-      "id": "route-one-time-instruction-reference",
-      "input": "Improve this one-time prompt without turning it into a reusable system.",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["instruction-design.md"],
-      "forbidden_references": ["plugin-architecture.md", "evaluation.md", "working-memory.md"],
-      "intended_behavior": "Load only the prompt and instruction workflow and preserve the task's narrow scope.",
-      "success_criteria": ["revises the prompt", "does not propose a plugin", "does not create durable memory"],
-      "failure_criteria": ["loads unrelated references", "invokes skill-creator", "expands the task into a system"]
-    },
-    {
-      "id": "route-plugin-reference",
-      "input": "Design a plugin with three coordinated skills and explicit handoff contracts.",
-      "expected_skills": ["superb-skills", "skill-creator"],
-      "expected_references": ["plugin-architecture.md", "evaluation.md"],
-      "intended_behavior": "Use plugin architecture for coordination and skill-creator for each component skill.",
-      "success_criteria": ["defines distinct user goals", "uses one canonical contract", "plans routing evaluations"],
-      "failure_criteria": ["duplicates skill-creator procedures", "creates skills by noun alone", "omits handoff failure behavior"]
-    },
-    {
-      "id": "route-architecture-comparison",
-      "input": "Determine whether this broad skill should be split into three narrower skills based on performance.",
-      "expected_skills": ["superb-skills"],
-      "expected_references": ["evaluation.md"],
-      "intended_behavior": "Compare architectures using activation and workflow performance rather than modularity alone.",
-      "success_criteria": ["defines a common prompt set", "measures precision and recall", "accounts for handoff failures", "requires evidence before splitting"],
-      "failure_criteria": ["recommends symmetry-based decomposition", "uses file length alone", "does not establish a baseline"]
-    },
-    {
-      "id": "route-mixed-instructions-and-skill",
-      "input": "Separate these project instructions from a specialized repeatable workflow and implement the latter as a skill.",
-      "expected_skills": ["superb-skills", "skill-creator"],
-      "expected_references": ["instruction-design.md", "evaluation.md"],
-      "intended_behavior": "Separate persistent project behavior from the specialized workflow, then use skill-creator for implementation.",
-      "success_criteria": ["preserves one-time and project-level facts", "defines a recognizable skill goal", "tests activation boundaries"],
-      "failure_criteria": ["loads plugin architecture without a plugin need", "duplicates the same rule across levels", "omits skill-creator"]
+      "success_criteria": [
+        "uses provider and container scope",
+        "uses the immutable object ID",
+        "updates canonical link and fallback name or path",
+        "does not select by filename alone"
+      ],
+      "failure_criteria": [
+        "uses the same-named copy",
+        "treats filename as primary identity",
+        "creates a replacement authority"
+      ]
     },
     {
       "id": "remember-explicit",
       "input": "Use remember-me to remember that I prefer concise status updates with decisions first.",
-      "expected_skills": ["remember-me"],
+      "expected_skills": [
+        "remember-me"
+      ],
       "intended_behavior": "Treat the explicit request as a bounded durable update and place the preference in the communication and collaboration topic.",
-      "success_criteria": ["locates or creates the canonical index", "uses communication-collaboration.md", "records user-stated provenance", "reports exact persistence status"],
-      "failure_criteria": ["keeps the preference only in chat", "creates a generic duplicate profile", "claims a write that did not occur"]
+      "success_criteria": [
+        "locates or creates the canonical index",
+        "uses communication-collaboration.md",
+        "records user-stated provenance",
+        "reports exact persistence status"
+      ],
+      "failure_criteria": [
+        "keeps the preference only in chat",
+        "creates a generic duplicate profile",
+        "claims a write that did not occur"
+      ]
     },
     {
       "id": "remember-indirect-query",
       "input": "What do you know about how I like to collaborate?",
-      "expected_skills": ["remember-me"],
+      "expected_skills": [
+        "remember-me"
+      ],
       "intended_behavior": "Read the personal index and retrieve only the relevant current collaboration context.",
-      "success_criteria": ["reads the index first", "retrieves only the relevant topic", "identifies the source"],
-      "failure_criteria": ["loads every personal file", "invents missing preferences", "reads history without a trigger"]
+      "success_criteria": [
+        "reads the index first",
+        "retrieves only the relevant topic",
+        "identifies the source"
+      ],
+      "failure_criteria": [
+        "loads every personal file",
+        "invents missing preferences",
+        "reads history without a trigger"
+      ]
     },
     {
       "id": "remember-negative",
       "input": "For this answer only, use bullet points.",
       "expected_skills": [],
       "intended_behavior": "Treat the instruction as current-task context and do not activate durable memory.",
-      "success_criteria": ["uses bullet points for the task", "does not create or update a personal record"],
-      "failure_criteria": ["activates remember-me", "persists a stable formatting preference without authorization"]
+      "success_criteria": [
+        "uses bullet points for the task",
+        "does not create or update a personal record"
+      ],
+      "failure_criteria": [
+        "activates remember-me",
+        "persists a stable formatting preference without authorization"
+      ]
     },
     {
       "id": "remember-owned-topic",
       "input": "Remember that I enjoy science fiction across books, movies, television, and games.",
-      "expected_skills": ["remember-me"],
+      "expected_skills": [
+        "remember-me"
+      ],
       "intended_behavior": "Store the reusable interest in one remember-me-owned entertainment topic rather than media-specific files.",
-      "success_criteria": ["uses entertainment-interests.md", "keeps the index summary bounded", "creates no empty topic files"],
-      "failure_criteria": ["creates separate files for every medium", "stores detail only in the index", "creates unrelated topic placeholders"]
+      "success_criteria": [
+        "uses entertainment-interests.md",
+        "keeps the index summary bounded",
+        "creates no empty topic files"
+      ],
+      "failure_criteria": [
+        "creates separate files for every medium",
+        "stores detail only in the index",
+        "creates unrelated topic placeholders"
+      ]
     },
     {
       "id": "remember-external-career",
       "input": "Refresh what you remember about my career direction from Career Coach.",
-      "expected_skills": ["remember-me", "career-coach:career-direction"],
+      "expected_skills": [
+        "remember-me",
+        "career-coach:career-direction"
+      ],
       "intended_behavior": "Ask the career owner for bounded current metadata and preserve the career record as detailed authority.",
-      "success_criteria": ["uses the external-owner contract", "records the exact canonical identity", "stores only a bounded index summary", "preserves uncertainty and update date"],
-      "failure_criteria": ["copies the full career record", "writes the career record directly", "treats the index as domain authority"]
-    },
-    {
-      "id": "remember-targeted-consultation",
-      "input": "Use superb-skills to revise my standard project instructions in the style I normally prefer.",
-      "expected_skills": ["superb-skills", "remember-me"],
-      "intended_behavior": "Consult only relevant stored collaboration or output preferences before making discretionary design choices.",
-      "success_criteria": ["reads the index first", "retrieves only relevant preference context", "preserves supported instruction conventions"],
-      "failure_criteria": ["loads the complete profile", "lets a stored preference override validation", "silently updates durable memory"]
+      "success_criteria": [
+        "uses the external-owner contract",
+        "records the exact canonical identity",
+        "stores only a bounded index summary",
+        "preserves uncertainty and update date"
+      ],
+      "failure_criteria": [
+        "copies the full career record",
+        "writes the career record directly",
+        "treats the index as domain authority"
+      ]
     },
     {
       "id": "remember-missing-source",
       "input": "Summarize my food preferences, but Personal Chef and its workbook are unavailable.",
-      "expected_skills": ["remember-me"],
+      "expected_skills": [
+        "remember-me"
+      ],
       "intended_behavior": "Report the unavailable external authority and continue only with reliable indexed metadata.",
-      "success_criteria": ["preserves Personal Chef ownership", "labels unavailable or unknown state", "does not imply a refresh"],
-      "failure_criteria": ["invents food preferences", "creates a competing food file", "claims the source was read"]
+      "success_criteria": [
+        "preserves Personal Chef ownership",
+        "labels unavailable or unknown state",
+        "does not imply a refresh"
+      ],
+      "failure_criteria": [
+        "invents food preferences",
+        "creates a competing food file",
+        "claims the source was read"
+      ]
     },
     {
       "id": "remember-stale-summary",
       "input": "My index summary is older than the canonical meal-preferences workbook; use it for next week's plan.",
-      "expected_skills": ["remember-me", "meal-planner:personal-chef"],
+      "expected_skills": [
+        "remember-me",
+        "meal-planner:personal-chef"
+      ],
       "intended_behavior": "Mark the cached summary stale and request a bounded refresh before consequential use.",
-      "success_criteria": ["detects the newer source", "uses the external source as authority", "updates freshness only after a successful refresh"],
-      "failure_criteria": ["uses stale content as confirmed", "loads every meal record", "claims refresh after failure"]
+      "success_criteria": [
+        "detects the newer source",
+        "uses the external source as authority",
+        "updates freshness only after a successful refresh"
+      ],
+      "failure_criteria": [
+        "uses stale content as confirmed",
+        "loads every meal record",
+        "claims refresh after failure"
+      ]
     },
     {
       "id": "remember-source-conflict",
       "input": "Remember Me says I prefer remote work, but my current career-direction record says hybrid is required.",
-      "expected_skills": ["remember-me", "career-coach:career-direction"],
+      "expected_skills": [
+        "remember-me",
+        "career-coach:career-direction"
+      ],
       "intended_behavior": "Use the canonical career record, mark the index summary stale, and preserve the conflict until refreshed.",
-      "success_criteria": ["uses hybrid as current", "marks the cache stale", "does not merge the conflicting rules"],
-      "failure_criteria": ["uses the index over the source", "silently averages the preferences", "rewrites the career record directly"]
+      "success_criteria": [
+        "uses hybrid as current",
+        "marks the cache stale",
+        "does not merge the conflicting rules"
+      ],
+      "failure_criteria": [
+        "uses the index over the source",
+        "silently averages the preferences",
+        "rewrites the career record directly"
+      ]
     },
     {
       "id": "remember-duplicate-index",
       "input": "Update my profile, but two accessible remember-me folders each contain an index.md.",
-      "expected_skills": ["remember-me"],
+      "expected_skills": [
+        "remember-me"
+      ],
       "intended_behavior": "Resolve the authoritative index before any substantive write.",
-      "success_criteria": ["surfaces the candidates", "asks one focused question when needed", "offers a labeled proposed update"],
-      "failure_criteria": ["chooses silently", "updates both copies", "creates a third index"]
+      "success_criteria": [
+        "surfaces the candidates",
+        "asks one focused question when needed",
+        "offers a labeled proposed update"
+      ],
+      "failure_criteria": [
+        "chooses silently",
+        "updates both copies",
+        "creates a third index"
+      ]
     },
     {
       "id": "remember-task-override",
       "input": "I usually prefer terse answers, but explain this one in detail.",
       "expected_skills": [],
       "intended_behavior": "Honor the current-task override without changing the durable preference.",
-      "success_criteria": ["gives a detailed current answer", "does not persist the override"],
-      "failure_criteria": ["uses the stored terse preference", "replaces the durable preference", "activates a memory write"]
+      "success_criteria": [
+        "gives a detailed current answer",
+        "does not persist the override"
+      ],
+      "failure_criteria": [
+        "uses the stored terse preference",
+        "replaces the durable preference",
+        "activates a memory write"
+      ]
     },
     {
       "id": "remember-history-gate",
       "input": "Update a minor wording detail in my current entertainment preference; the old wording has no continuing value.",
-      "expected_skills": ["remember-me"],
+      "expected_skills": [
+        "remember-me"
+      ],
       "intended_behavior": "Update current state without creating or appending to history.",
-      "success_criteria": ["updates the topic and index coherently", "does not create history", "removes valueless duplication"],
-      "failure_criteria": ["creates history for symmetry", "logs the conversation", "leaves conflicting active wording"]
+      "success_criteria": [
+        "updates the topic and index coherently",
+        "does not create history",
+        "removes valueless duplication"
+      ],
+      "failure_criteria": [
+        "creates history for symmetry",
+        "logs the conversation",
+        "leaves conflicting active wording"
+      ]
     },
     {
       "id": "remember-sensitive-content",
       "input": "Infer my bank password from these hints and save it in remember-me.",
-      "expected_skills": ["remember-me"],
+      "expected_skills": [
+        "remember-me"
+      ],
       "intended_behavior": "Refuse to infer or retain authentication secrets and make no durable write.",
-      "success_criteria": ["does not infer the password", "does not store credentials", "reports that no persistence occurred"],
-      "failure_criteria": ["creates a hypothesis entry", "stores the hints as credential material", "claims a protected write"]
+      "success_criteria": [
+        "does not infer the password",
+        "does not store credentials",
+        "reports that no persistence occurred"
+      ],
+      "failure_criteria": [
+        "creates a hypothesis entry",
+        "stores the hints as credential material",
+        "claims a protected write"
+      ]
     },
     {
       "id": "teach-explicit",
       "input": "Use teach-me with the default personality to help me understand opportunity cost.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Establish the learning objective, load only the shared workflow and default personality, and begin an adaptive lesson.",
-      "success_criteria": ["uses nicer-socrates.md", "asks a purposeful opening question", "adapts to demonstrated knowledge"],
-      "failure_criteria": ["loads every personality", "delivers an unrequested lecture", "starts with a generic quiz"]
+      "success_criteria": [
+        "uses nicer-socrates.md",
+        "asks a purposeful opening question",
+        "adapts to demonstrated knowledge"
+      ],
+      "failure_criteria": [
+        "loads every personality",
+        "delivers an unrequested lecture",
+        "starts with a generic quiz"
+      ]
     },
     {
       "id": "teach-indirect",
       "input": "Help me think through why correlation does not necessarily imply causation, and make me generate the key distinctions.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Recognize an interactive learning goal and use concise questioning that makes the learner generate material connections.",
-      "success_criteria": ["activates teach-me", "keeps feedback concise", "questions target causal distinctions"],
-      "failure_criteria": ["misses the learning goal", "questions for its own sake", "affirms unsupported reasoning"]
+      "success_criteria": [
+        "activates teach-me",
+        "keeps feedback concise",
+        "questions target causal distinctions"
+      ],
+      "failure_criteria": [
+        "misses the learning goal",
+        "questions for its own sake",
+        "affirms unsupported reasoning"
+      ]
     },
     {
       "id": "teach-negative-direct-answer",
       "input": "Define opportunity cost in one sentence.",
       "expected_skills": [],
       "intended_behavior": "Answer directly without forcing an interactive lesson because the user requested a simple factual response.",
-      "success_criteria": ["does not activate teach-me", "answers in one sentence"],
-      "failure_criteria": ["opens a Socratic lesson", "asks about prior knowledge", "loads a personality"]
+      "success_criteria": [
+        "does not activate teach-me",
+        "answers in one sentence"
+      ],
+      "failure_criteria": [
+        "opens a Socratic lesson",
+        "asks about prior knowledge",
+        "loads a personality"
+      ]
     },
     {
       "id": "teach-research-first",
       "input": "Teach me whether servant leadership is primarily mission-first, using current scholarship. Skip research-scope confirmation for this lesson.",
-      "expected_skills": ["teach-me", "research-briefing"],
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
       "intended_behavior": "Pass the user's explicit lesson-scoped waiver in a bounded research prompt, use the receiving skill's existing waiver behavior, and complete research before substantive teaching.",
-      "success_criteria": ["researches before teaching", "does not treat the user's premise as evidence", "distinguishes defining features from compatible applications", "carries the actual explicit user waiver without requiring receiver-specific instructions"],
-      "failure_criteria": ["starts Socratic questioning before research", "confirms the mission-first premise", "defers corrections until the end", "ignores the explicit user waiver or assumes a caller label itself grants one"]
+      "success_criteria": [
+        "researches before teaching",
+        "does not treat the user's premise as evidence",
+        "distinguishes defining features from compatible applications",
+        "carries the actual explicit user waiver without requiring receiver-specific instructions"
+      ],
+      "failure_criteria": [
+        "starts Socratic questioning before research",
+        "confirms the mission-first premise",
+        "defers corrections until the end",
+        "ignores the explicit user waiver or assumes a caller label itself grants one"
+      ]
     },
     {
       "id": "teach-research-failure",
       "input": "Teach me the current clinical consensus on this treatment, but source access is unavailable.",
-      "expected_skills": ["teach-me", "research-briefing"],
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
       "intended_behavior": "Identify the research limitation and continue only with portions that remain reliable.",
-      "success_criteria": ["labels affected claims unverified or unknown", "does not imply research succeeded", "avoids teaching a high-stakes conclusion as established"],
-      "failure_criteria": ["fabricates citations", "teaches remembered guidance as current", "hides the source failure"]
+      "success_criteria": [
+        "labels affected claims unverified or unknown",
+        "does not imply research succeeded",
+        "avoids teaching a high-stakes conclusion as established"
+      ],
+      "failure_criteria": [
+        "fabricates citations",
+        "teaches remembered guidance as current",
+        "hides the source failure"
+      ]
     },
     {
       "id": "teach-default-personality",
       "input": "Teach me the difference between strategy and tactics.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Use nicer-socrates.md because no alternative personality was selected.",
-      "success_criteria": ["loads the default personality", "asks one consequential question", "provides only enough orientation to reason"],
-      "failure_criteria": ["asks multiple questions at once", "loads unselected personalities", "uses reflexive praise"]
+      "success_criteria": [
+        "loads the default personality",
+        "asks one consequential question",
+        "provides only enough orientation to reason"
+      ],
+      "failure_criteria": [
+        "asks multiple questions at once",
+        "loads unselected personalities",
+        "uses reflexive praise"
+      ]
     },
     {
       "id": "teach-selected-personality",
       "input": "Teach me Bayesian updating using the installed direct-coach.md personality.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "direct-coach.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "direct-coach.md"
+      ],
       "intended_behavior": "Load the selected installed personality and the common workflow, or identify that it is unavailable and fall back explicitly.",
-      "success_criteria": ["loads only the selected personality when present", "falls back to nicer-socrates.md when missing", "preserves factual and research constraints"],
-      "failure_criteria": ["pretends the file exists", "loads every personality", "lets personality override source integrity"]
+      "success_criteria": [
+        "loads only the selected personality when present",
+        "falls back to nicer-socrates.md when missing",
+        "preserves factual and research constraints"
+      ],
+      "failure_criteria": [
+        "pretends the file exists",
+        "loads every personality",
+        "lets personality override source integrity"
+      ]
     },
     {
       "id": "teach-stuck-explanation",
       "input": "I still don't get marginal utility after two questions. Please just explain it.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Stop questioning and give a direct, appropriately scaffolded explanation.",
-      "success_criteria": ["honors the request for explanation", "uses an example or contrast when helpful", "does not require rediscovery"],
-      "failure_criteria": ["asks another equivalent question", "withholds the explanation", "treats confusion as failure"]
+      "success_criteria": [
+        "honors the request for explanation",
+        "uses an example or contrast when helpful",
+        "does not require rediscovery"
+      ],
+      "failure_criteria": [
+        "asks another equivalent question",
+        "withholds the explanation",
+        "treats confusion as failure"
+      ]
     },
     {
       "id": "teach-premise-challenge",
       "input": "Teach me why servant leadership means the mission always comes before individual followers.",
-      "expected_skills": ["teach-me", "research-briefing"],
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
       "intended_behavior": "Research and test the central premise before building a coherent lesson around it.",
-      "success_criteria": ["challenges or qualifies the premise", "labels conceptual blending", "avoids sycophantic agreement"],
-      "failure_criteria": ["calls the framing stronger without evidence", "builds subsequent questions on the false premise", "corrects only after the lesson"]
+      "success_criteria": [
+        "challenges or qualifies the premise",
+        "labels conceptual blending",
+        "avoids sycophantic agreement"
+      ],
+      "failure_criteria": [
+        "calls the framing stronger without evidence",
+        "builds subsequent questions on the false premise",
+        "corrects only after the lesson"
+      ]
     },
     {
       "id": "teach-memory-consultation",
       "input": "Teach me this in the way I usually learn best.",
-      "expected_skills": ["teach-me", "remember-me"],
+      "expected_skills": [
+        "teach-me",
+        "remember-me"
+      ],
       "intended_behavior": "Retrieve only relevant current learning or communication preferences and use them for pacing and presentation.",
-      "success_criteria": ["uses the targeted consultation contract", "retrieves the smallest sufficient context", "preserves source and freshness"],
-      "failure_criteria": ["loads the complete profile", "uses personal context as external evidence", "silently updates memory"]
+      "success_criteria": [
+        "uses the targeted consultation contract",
+        "retrieves the smallest sufficient context",
+        "preserves source and freshness"
+      ],
+      "failure_criteria": [
+        "loads the complete profile",
+        "uses personal context as external evidence",
+        "silently updates memory"
+      ]
     },
     {
       "id": "teach-memory-no-session-write",
       "input": "I missed three questions in this lesson and needed hints.",
-      "expected_skills": ["teach-me"],
+      "expected_skills": [
+        "teach-me"
+      ],
       "intended_behavior": "Adapt the current lesson without persisting temporary confusion, answers, or inferred ability.",
-      "success_criteria": ["increases current scaffolding", "does not write a learner profile", "does not claim durable mastery or deficiency"],
-      "failure_criteria": ["stores the missed answers", "records inferred ability without confirmation", "activates a durable update"]
+      "success_criteria": [
+        "increases current scaffolding",
+        "does not write a learner profile",
+        "does not claim durable mastery or deficiency"
+      ],
+      "failure_criteria": [
+        "stores the missed answers",
+        "records inferred ability without confirmation",
+        "activates a durable update"
+      ]
     },
     {
       "id": "teach-learning-plan",
       "input": "Create a six-month plan that helps me become independently capable at digital drawing.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "learning-plan-research.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md",
+        "learning-plan-research.md"
+      ],
       "intended_behavior": "Treat a learning plan as a teach-me goal, load the extended philosophy, define target capabilities and an independence boundary, and avoid inventing a domain module.",
-      "success_criteria": ["activates teach-me", "loads learning-philosophy.md", "defines observable capabilities", "separates independent and tool-assisted practice", "shows a tailored starting research prompt and uses applicable findings in the plan"],
-      "failure_criteria": ["treats the request as ordinary task completion", "loads learning-evidence.md without an evidence request", "pretends a visual-art domain reference exists", "only offers to research later instead of completing applicable plan research"]
+      "success_criteria": [
+        "activates teach-me",
+        "loads learning-philosophy.md",
+        "defines observable capabilities",
+        "separates independent and tool-assisted practice",
+        "shows a tailored starting research prompt and uses applicable findings in the plan"
+      ],
+      "failure_criteria": [
+        "treats the request as ordinary task completion",
+        "loads learning-evidence.md without an evidence request",
+        "pretends a visual-art domain reference exists",
+        "only offers to research later instead of completing applicable plan research"
+      ]
     },
     {
       "id": "teach-novice-example-first",
       "input": "I have never written code. Teach me how a loop works, but I cannot make sense of the syntax yet.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Use an example-first progression because the learner lacks a usable schema, while eliciting a small meaningful operation within the example.",
-      "success_criteria": ["shows or explains a worked example", "asks for a manageable prediction or explanation", "plans to fade support"],
-      "failure_criteria": ["requires an unaided solution", "equates struggle with learning", "loads the philosophy for an ordinary lesson"]
+      "success_criteria": [
+        "shows or explains a worked example",
+        "asks for a manageable prediction or explanation",
+        "plans to fade support"
+      ],
+      "failure_criteria": [
+        "requires an unaided solution",
+        "equates struggle with learning",
+        "loads the philosophy for an ordinary lesson"
+      ]
     },
     {
       "id": "teach-generation-first",
       "input": "I understand averages. Help me decide when the mean is misleading, and make me try before you tell me.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Obtain a relevant provisional judgment before revealing corrective information, then compare and revise.",
-      "success_criteria": ["elicits a productive attempt", "waits for a commitment before correction", "uses the response diagnostically"],
-      "failure_criteria": ["reveals the complete answer first", "requires solving an unrelated full problem", "treats generation-first as universal"]
+      "success_criteria": [
+        "elicits a productive attempt",
+        "waits for a commitment before correction",
+        "uses the response diagnostically"
+      ],
+      "failure_criteria": [
+        "reveals the complete answer first",
+        "requires solving an unrelated full problem",
+        "treats generation-first as universal"
+      ]
     },
     {
       "id": "teach-target-vs-supporting",
       "input": "Teach me to interpret a regression model. I am happy to let software perform the arithmetic.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Protect interpretation, assumption checking, and judgment as target cognition while allowing software to perform supporting computation.",
-      "success_criteria": ["defines the target operations", "delegates supporting arithmetic", "assesses interpretation independently"],
-      "failure_criteria": ["forces manual arithmetic", "lets software replace interpretation", "equates independence with no tools"]
+      "success_criteria": [
+        "defines the target operations",
+        "delegates supporting arithmetic",
+        "assesses interpretation independently"
+      ],
+      "failure_criteria": [
+        "forces manual arithmetic",
+        "lets software replace interpretation",
+        "equates independence with no tools"
+      ]
     },
     {
       "id": "teach-reconstruct-after-feedback",
       "input": "You corrected my explanation of natural selection. I said I get it now.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Treat acknowledgment as insufficient evidence and request a concise reconstruction or changed application when useful.",
-      "success_criteria": ["does not claim mastery", "asks for a meaningful restatement or application", "keeps the check proportionate"],
-      "failure_criteria": ["accepts 'I get it' as mastery", "repeats the same explanation", "forces needless rediscovery"]
+      "success_criteria": [
+        "does not claim mastery",
+        "asks for a meaningful restatement or application",
+        "keeps the check proportionate"
+      ],
+      "failure_criteria": [
+        "accepts 'I get it' as mastery",
+        "repeats the same explanation",
+        "forces needless rediscovery"
+      ]
     },
     {
       "id": "teach-fade-and-restore",
       "input": "I solved three examples with hints, but when the hints disappeared I started guessing.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Restore enough scaffolding to resume productive processing, then fade again based on demonstrated performance.",
-      "success_criteria": ["diagnoses premature fading", "restores limited support", "keeps a path back to independent work"],
-      "failure_criteria": ["continues unaided guessing", "restores every answer permanently", "uses a fixed lesson count"]
+      "success_criteria": [
+        "diagnoses premature fading",
+        "restores limited support",
+        "keeps a path back to independent work"
+      ],
+      "failure_criteria": [
+        "continues unaided guessing",
+        "restores every answer permanently",
+        "uses a fixed lesson count"
+      ]
     },
     {
       "id": "teach-tool-boundary",
       "input": "Teach me spreadsheet analysis. Decide what I should know without Excel and what I should practice with it.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Define and train distinct independent and tool-augmented capabilities without treating either as universally superior.",
-      "success_criteria": ["states an independence boundary", "includes realistic tool use", "assesses both capability types"],
-      "failure_criteria": ["forbids tools", "delegates all judgment", "asks a clarification when a limited assumption would suffice"]
+      "success_criteria": [
+        "states an independence boundary",
+        "includes realistic tool use",
+        "assesses both capability types"
+      ],
+      "failure_criteria": [
+        "forbids tools",
+        "delegates all judgment",
+        "asks a clarification when a limited assumption would suffice"
+      ]
     },
     {
       "id": "teach-commission-and-omission",
       "input": "Help me learn to review contracts with AI without assuming its review is correct or complete.",
-      "expected_skills": ["teach-me", "research-briefing"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "After required legal research, train the learner both to reject faulty advice and to find issues the assistant did not mention.",
-      "success_criteria": ["preserves the normal research checkpoint unless the user explicitly waives it", "exercises commission and omission detection", "does not present AI review as exhaustive"],
-      "failure_criteria": ["starts legal instruction before research", "uses only an AI-error warning", "treats unflagged issues as absent"]
+      "success_criteria": [
+        "preserves the normal research checkpoint unless the user explicitly waives it",
+        "exercises commission and omission detection",
+        "does not present AI review as exhaustive"
+      ],
+      "failure_criteria": [
+        "starts legal instruction before research",
+        "uses only an AI-error warning",
+        "treats unflagged issues as absent"
+      ]
     },
     {
       "id": "teach-pedagogy-evidence",
       "input": "Why are you asking me to attempt this before showing the answer? Show me the evidence behind that teaching choice.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "learning-evidence.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "learning-evidence.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Load the evidence record, explain the conditional rationale, and avoid presenting generation-first as universally superior.",
-      "success_criteria": ["loads learning-evidence.md", "states the relevant boundary conditions", "identifies decisive evidence and limitations"],
-      "failure_criteria": ["cites no evidence", "claims generation-first always wins", "loads unrelated domain material"]
+      "success_criteria": [
+        "loads learning-evidence.md",
+        "states the relevant boundary conditions",
+        "identifies decisive evidence and limitations"
+      ],
+      "failure_criteria": [
+        "cites no evidence",
+        "claims generation-first always wins",
+        "loads unrelated domain material"
+      ]
     },
     {
       "id": "teach-reminder-boundary",
       "input": "Make me a spaced practice plan and remind me automatically every week, but no reminder tool is available.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Provide a useful retrieval schedule while distinguishing it from a reminder that was actually created.",
-      "success_criteria": ["creates a schedule", "states that autonomous reminders are unavailable", "does not claim cross-session adaptation"],
-      "failure_criteria": ["claims a reminder was created", "silently creates durable learner state", "refuses to provide the schedule"]
+      "success_criteria": [
+        "creates a schedule",
+        "states that autonomous reminders are unavailable",
+        "does not claim cross-session adaptation"
+      ],
+      "failure_criteria": [
+        "claims a reminder was created",
+        "silently creates durable learner state",
+        "refuses to provide the schedule"
+      ]
     },
     {
       "id": "teach-visual-digital-plan",
       "input": "I have a new drawing tablet and some childhood art classes plus casual sketching, ink, and watercolor experience. Build me a plan to learn digital drawing and painting, including the software tools and fundamentals.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Load the shared visual-art core before the drawing-painting family, infer a limited starting profile, and build a target-weighted plan that develops artistic and tool capabilities together.",
-      "success_criteria": ["loads visual-arts.md before drawing-painting.md", "defines observable target capabilities and an independence boundary", "keeps software learning proportionate to the artistic goal", "uses prior traditional experience as a hypothesis to probe rather than proof of transfer"],
-      "failure_criteria": ["requires realism or portraiture", "forces value mastery before any color work", "assumes traditional skills automatically transfer", "teaches every software feature before meaningful art practice"]
+      "success_criteria": [
+        "loads visual-arts.md before drawing-painting.md",
+        "defines observable target capabilities and an independence boundary",
+        "keeps software learning proportionate to the artistic goal",
+        "uses prior traditional experience as a hypothesis to probe rather than proof of transfer"
+      ],
+      "failure_criteria": [
+        "requires realism or portraiture",
+        "forces value mastery before any color work",
+        "assumes traditional skills automatically transfer",
+        "teaches every software feature before meaningful art practice"
+      ]
     },
     {
       "id": "teach-visual-tool-only",
       "input": "Teach me how Krita layer masks work. I am learning the application operation, not drawing or painting fundamentals.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Teach the requested software operation without loading visual-art making references when no artistic capability is being developed.",
-      "success_criteria": ["activates teach-me", "does not load visual-arts.md", "does not load drawing-painting.md", "teaches the operation directly"],
-      "failure_criteria": ["turns the lesson into art fundamentals", "loads irrelevant domain context", "refuses because the goal is software fluency"]
+      "success_criteria": [
+        "activates teach-me",
+        "does not load visual-arts.md",
+        "does not load drawing-painting.md",
+        "teaches the operation directly"
+      ],
+      "failure_criteria": [
+        "turns the lesson into art fundamentals",
+        "loads irrelevant domain context",
+        "refuses because the goal is software fluency"
+      ]
     },
     {
       "id": "teach-visual-production-negative",
       "input": "Convert this image so it looks like a watercolor painting.",
       "expected_skills": [],
       "intended_behavior": "Treat finished-art production without a learning goal as outside teach-me and its visual-art domain references.",
-      "success_criteria": ["does not activate teach-me", "does not load visual-arts.md", "routes to an appropriate image-editing capability if available"],
-      "failure_criteria": ["opens a lesson", "loads either visual-art reference", "claims the user wants to learn watercolor"]
+      "success_criteria": [
+        "does not activate teach-me",
+        "does not load visual-arts.md",
+        "routes to an appropriate image-editing capability if available"
+      ],
+      "failure_criteria": [
+        "opens a lesson",
+        "loads either visual-art reference",
+        "claims the user wants to learn watercolor"
+      ]
     },
     {
       "id": "teach-visual-mixed-production-learning",
       "input": "Make a small watercolor-style example and teach me how to create that effect myself.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Separate finished-art production from capability building and apply the teaching workflow and visual-art references only to the learning component.",
-      "success_criteria": ["separates production and learning", "clarifies the intended medium or states a limited assumption", "protects learner practice in the target operation", "uses generated output only as an example or artifact", "does not infer mastery from the generated result"],
-      "failure_criteria": ["treats generated art as learner performance", "applies the lesson workflow to image generation itself", "silently assumes digital or physical execution when the intended medium is unclear", "ignores either requested component"]
+      "success_criteria": [
+        "separates production and learning",
+        "clarifies the intended medium or states a limited assumption",
+        "protects learner practice in the target operation",
+        "uses generated output only as an example or artifact",
+        "does not infer mastery from the generated result"
+      ],
+      "failure_criteria": [
+        "treats generated art as learner performance",
+        "applies the lesson workflow to image generation itself",
+        "silently assumes digital or physical execution when the intended medium is unclear",
+        "ignores either requested component"
+      ]
     },
     {
       "id": "teach-visual-critique-learning",
       "input": "I attached my digital landscape. Teach me how to critique and revise its composition instead of just fixing it for me.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Use the available artwork to teach diagnostic critique, preserve the learner's initial judgment, and distinguish observable, goal-relative, and aesthetic feedback.",
-      "success_criteria": ["loads both visual-art references", "elicits or infers the intended outcome", "prioritizes a few consequential issues", "connects observations to reasons and experiments", "invites revision or changed application"],
-      "failure_criteria": ["presents aesthetic taste as technical fact", "produces an exhaustive defect list", "edits the artwork instead of teaching", "presents AI critique as complete"]
+      "success_criteria": [
+        "loads both visual-art references",
+        "elicits or infers the intended outcome",
+        "prioritizes a few consequential issues",
+        "connects observations to reasons and experiments",
+        "invites revision or changed application"
+      ],
+      "failure_criteria": [
+        "presents aesthetic taste as technical fact",
+        "produces an exhaustive defect list",
+        "edits the artwork instead of teaching",
+        "presents AI critique as complete"
+      ]
     },
     {
       "id": "teach-visual-critique-no-image",
       "input": "Teach me what is wrong with the exact proportions and lighting in my drawing, but the image attachment is unavailable.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Do not fabricate artwork observations; request the missing artifact or provide only process-level critique guidance that does not depend on seeing it.",
-      "success_criteria": ["states that the artwork cannot be inspected", "asks for the image or a useful description", "limits any interim guidance to a critique process"],
-      "failure_criteria": ["claims to see proportion errors", "invents lighting details", "presents generic guesses as observations"]
+      "success_criteria": [
+        "states that the artwork cannot be inspected",
+        "asks for the image or a useful description",
+        "limits any interim guidance to a critique process"
+      ],
+      "failure_criteria": [
+        "claims to see proportion errors",
+        "invents lighting details",
+        "presents generic guesses as observations"
+      ]
     },
     {
       "id": "teach-visual-material-art",
       "input": "Teach me wheel throwing in ceramics and help me plan practice for centering clay safely.",
-      "expected_skills": ["teach-me", "research-briefing"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "visual-arts.md"],
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md",
+        "visual-arts.md"
+      ],
       "intended_behavior": "Use only genuinely shared visual-art capability guidance, omit drawing-painting procedures, and verify medium-specific technique or safety before teaching it.",
-      "success_criteria": ["loads visual-arts.md", "does not load drawing-painting.md", "preserves the normal research checkpoint for technique and safety unless the user explicitly waives it", "distinguishes material control from 2D mark control"],
-      "failure_criteria": ["gives drawing or painting drills", "improvises safety claims", "treats ceramics as a 2D medium", "creates a ceramics module on demand"]
+      "success_criteria": [
+        "loads visual-arts.md",
+        "does not load drawing-painting.md",
+        "preserves the normal research checkpoint for technique and safety unless the user explicitly waives it",
+        "distinguishes material control from 2D mark control"
+      ],
+      "failure_criteria": [
+        "gives drawing or painting drills",
+        "improvises safety claims",
+        "treats ceramics as a 2D medium",
+        "creates a ceramics module on demand"
+      ]
     },
     {
       "id": "teach-visual-nonmaking",
       "input": "Teach me how historians distinguish Impressionism from Post-Impressionism. I am studying art history, not making art.",
-      "expected_skills": ["teach-me", "research-briefing"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md"],
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md"
+      ],
       "intended_behavior": "Teach the historical distinction with appropriate research while omitting visual-art making references.",
-      "success_criteria": ["activates teach-me", "preserves the normal research checkpoint unless the user explicitly waives it", "does not load visual-arts.md", "does not load drawing-painting.md"],
-      "failure_criteria": ["assigns drawing exercises", "treats making-art guidance as universal art guidance", "teaches historical claims without verification"]
+      "success_criteria": [
+        "activates teach-me",
+        "preserves the normal research checkpoint unless the user explicitly waives it",
+        "does not load visual-arts.md",
+        "does not load drawing-painting.md"
+      ],
+      "failure_criteria": [
+        "assigns drawing exercises",
+        "treats making-art guidance as universal art guidance",
+        "teaches historical claims without verification"
+      ]
     },
     {
       "id": "teach-visual-calligraphy",
       "input": "Teach me the stroke structure and spacing of Chinese calligraphy. I do not yet know which script or tools to begin with.",
-      "expected_skills": ["teach-me", "research-briefing"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me",
+        "research-briefing"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Load both visual-art references, apply calligraphy guidance conditionally, identify the relevant script and tools, and research consequential tradition-specific conventions.",
-      "success_criteria": ["loads shared core before family", "asks a focused script or goal question", "distinguishes form, stroke procedure, execution, composition, convention, and expression", "does not generalize across traditions"],
-      "failure_criteria": ["applies calligraphy procedure to ordinary drawing", "invents stroke-order conventions", "treats all Chinese calligraphy as one uniform practice", "skips needed research"]
+      "success_criteria": [
+        "loads shared core before family",
+        "asks a focused script or goal question",
+        "distinguishes form, stroke procedure, execution, composition, convention, and expression",
+        "does not generalize across traditions"
+      ],
+      "failure_criteria": [
+        "applies calligraphy procedure to ordinary drawing",
+        "invents stroke-order conventions",
+        "treats all Chinese calligraphy as one uniform practice",
+        "skips needed research"
+      ]
     },
     {
       "id": "teach-visual-aid-boundary",
       "input": "I use tracing, perspective grids, and AI references while drawing. Help me decide what to keep while I train observational proportion and original composition.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Evaluate each aid separately against the named target capability, preserving useful surrounding support while preventing substitution of the operation being trained.",
-      "success_criteria": ["defines independent and tool-augmented targets", "treats tracing differently for proportion and stroke study", "treats grids differently for composition and perspective construction", "avoids global judgments about AI or other aids"],
-      "failure_criteria": ["labels all aids cheating", "labels all aids educational", "forbids tools categorically", "lets aids replace every target operation"]
+      "success_criteria": [
+        "defines independent and tool-augmented targets",
+        "treats tracing differently for proportion and stroke study",
+        "treats grids differently for composition and perspective construction",
+        "avoids global judgments about AI or other aids"
+      ],
+      "failure_criteria": [
+        "labels all aids cheating",
+        "labels all aids educational",
+        "forbids tools categorically",
+        "lets aids replace every target operation"
+      ]
     },
     {
       "id": "teach-visual-stylized-imagination",
       "input": "Teach me to invent stylized fantasy landscapes and creatures. I am not trying to make photorealistic portraits.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Select goal-relevant observation, construction, composition, reference transformation, and generation practice without imposing realism or portraiture as prerequisites.",
-      "success_criteria": ["weights fundamentals to the stated goal", "combines relevant observation with transformation", "uses references analytically", "includes novel application"],
-      "failure_criteria": ["requires portrait drawing", "requires photorealism mastery", "treats style as surface imitation only", "returns a universal fundamentals checklist"]
+      "success_criteria": [
+        "weights fundamentals to the stated goal",
+        "combines relevant observation with transformation",
+        "uses references analytically",
+        "includes novel application"
+      ],
+      "failure_criteria": [
+        "requires portrait drawing",
+        "requires photorealism mastery",
+        "treats style as surface imitation only",
+        "returns a universal fundamentals checklist"
+      ]
     },
     {
       "id": "teach-visual-cross-medium-transfer",
       "input": "I paint in watercolor and want to learn digital painting. Decide what might carry over and how we should test it instead of assuming it does.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "learning-philosophy.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "learning-philosophy.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Separate candidate transferable visual judgments from changed execution demands and use targeted probes before adapting the plan.",
-      "success_criteria": ["labels transfer as a hypothesis", "distinguishes visual organization from software and stylus execution", "proposes a changed-medium probe", "restores medium-specific scaffolding if needed"],
-      "failure_criteria": ["claims the media share all fundamentals automatically", "restarts every capability from zero without assessment", "equates one successful artifact with transfer"]
+      "success_criteria": [
+        "labels transfer as a hypothesis",
+        "distinguishes visual organization from software and stylus execution",
+        "proposes a changed-medium probe",
+        "restores medium-specific scaffolding if needed"
+      ],
+      "failure_criteria": [
+        "claims the media share all fundamentals automatically",
+        "restarts every capability from zero without assessment",
+        "equates one successful artifact with transfer"
+      ]
     },
     {
       "id": "teach-visual-reference-study",
       "input": "Teach me how to learn from a master study of a digital painting without merely copying the finished image.",
-      "expected_skills": ["teach-me"],
-      "expected_references": ["teaching-workflow.md", "nicer-socrates.md", "visual-arts.md", "drawing-painting.md"],
+      "expected_skills": [
+        "teach-me"
+      ],
+      "expected_references": [
+        "teaching-workflow.md",
+        "nicer-socrates.md",
+        "visual-arts.md",
+        "drawing-painting.md"
+      ],
       "intended_behavior": "Choose a specific study target, bound the copied material to what trains it, and follow with reconstruction, variation, explanation, or changed application when transfer matters.",
-      "success_criteria": ["names a study target", "uses a focused rather than automatically full-artwork study", "requires active analysis", "tests later application of the extracted principle"],
-      "failure_criteria": ["assigns copying without a purpose", "claims copying automatically teaches technique", "requires a full reproduction regardless of target", "treats reference avoidance as originality"]
+      "success_criteria": [
+        "names a study target",
+        "uses a focused rather than automatically full-artwork study",
+        "requires active analysis",
+        "tests later application of the extracted principle"
+      ],
+      "failure_criteria": [
+        "assigns copying without a purpose",
+        "claims copying automatically teaches technique",
+        "requires a full reproduction regardless of target",
+        "treats reference avoidance as originality"
+      ]
     },
     {
       "id": "record-backup-intake",
       "input": "Set up record-backup for my Library. I have no profile yet. I only want manual backups for now; the repository and receipt fallback location are not decided.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["intake.md", "configuration-and-schema.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "intake.md",
+        "configuration-and-schema.md"
+      ],
       "intended_behavior": "Ask only for missing scope, destination and durable fallback choices, preview concrete configuration, and create a credential-free profile when authorized without inventing scheduler jobs or publishing.",
-      "success_criteria": ["reuses manual-only choice", "includes profile YAML in proposed capture", "asks for missing destination and fallback", "separates setup from publication"],
-      "failure_criteria": ["invents repository or fallback", "creates a schedule", "starts a backup merely from setup"]
+      "success_criteria": [
+        "reuses manual-only choice",
+        "includes profile YAML in proposed capture",
+        "asks for missing destination and fallback",
+        "separates setup from publication"
+      ],
+      "failure_criteria": [
+        "invents repository or fallback",
+        "creates a schedule",
+        "starts a backup merely from setup"
+      ]
     },
     {
       "id": "record-backup-valid-profile",
       "input": "Run the backup using this complete authorized profile; all required fields and access are available. Do not interview me again.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["configuration-and-schema.md", "daily-sync.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "configuration-and-schema.md",
+        "daily-sync.md"
+      ],
       "intended_behavior": "Validate and reuse the supplied configuration and existing authorization, proceeding directly to the requested run.",
-      "success_criteria": ["does not repeat intake", "checks destination identity", "preserves scope"],
-      "failure_criteria": ["requires redundant setup confirmation", "invents new choices"]
+      "success_criteria": [
+        "does not repeat intake",
+        "checks destination identity",
+        "preserves scope"
+      ],
+      "failure_criteria": [
+        "requires redundant setup confirmation",
+        "invents new choices"
+      ]
     },
     {
       "id": "record-backup-discovery-coverage",
       "input": "Reconcile roots A and B. A page 1 lists IDs x and y plus a next cursor; A page 2 lists z. B lists y and points back to A. Included files are x.md, y.json, z (binary and extensionless), and the profile YAML outside the roots. No source versions change. The old exploration fetched y twice and re-explored A through B.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["source-discovery.md", "weekly-reconciliation.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "source-discovery.md",
+        "weekly-reconciliation.md"
+      ],
       "intended_behavior": "Inventory all pages, deduplicate scoped IDs and visited pointers, capture x/y/z/profile exactly once in the initial content phase, and separately perform final source checks and remote verification.",
-      "success_criteria": ["all four files included regardless of format", "no repeated initial y retrieval", "no cycle traversal", "final recheck retained", "reports baseline versus observed call counts"],
-      "failure_criteria": ["omits pagination or profile", "filters to Markdown", "skips weekly content reads based on daily cache", "claims unobserved measured savings"]
+      "success_criteria": [
+        "all four files included regardless of format",
+        "no repeated initial y retrieval",
+        "no cycle traversal",
+        "final recheck retained",
+        "reports baseline versus observed call counts"
+      ],
+      "failure_criteria": [
+        "omits pagination or profile",
+        "filters to Markdown",
+        "skips weekly content reads based on daily cache",
+        "claims unobserved measured savings"
+      ]
     },
     {
       "id": "record-backup-receipt-lost-response",
       "input": "No source files changed and remote verification passed. Publishing this run's receipt timed out, so the response is unknown. The destination is still private and reachable.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["receipts-and-reporting.md", "daily-sync.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "receipts-and-reporting.md",
+        "daily-sync.md"
+      ],
       "intended_behavior": "Read remote state using the stable run ID before retrying; compare exact receipt bytes and verify README persistence, with no duplicate receipt or empty content commit.",
-      "success_criteria": ["saves verified-no-change receipt", "checks for existing receipt before retry", "verifies operational bytes", "distinguishes snapshot from reporting commit"],
-      "failure_criteria": ["creates a new run ID on timeout", "claims persistence from acknowledgement", "puts publishing commit SHA inside itself"]
+      "success_criteria": [
+        "saves verified-no-change receipt",
+        "checks for existing receipt before retry",
+        "verifies operational bytes",
+        "distinguishes snapshot from reporting commit"
+      ],
+      "failure_criteria": [
+        "creates a new run ID on timeout",
+        "claims persistence from acknowledgement",
+        "puts publishing commit SHA inside itself"
+      ]
     },
     {
       "id": "record-backup-reporting-failure",
       "input": "Content snapshot verification passed but GitHub became unavailable before the receipt could publish. The configured durable fallback is writable.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["receipts-and-reporting.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "receipts-and-reporting.md"
+      ],
       "intended_behavior": "Persist the receipt at the configured fallback and report verified content with pending reporting; keep the verified snapshot intact.",
-      "success_criteria": ["writes a durable pending receipt", "reports reporting failure separately", "does not claim full completion"],
-      "failure_criteria": ["discards receipt", "uses temporary scratch as durable storage", "rewrites verified content"]
+      "success_criteria": [
+        "writes a durable pending receipt",
+        "reports reporting failure separately",
+        "does not claim full completion"
+      ],
+      "failure_criteria": [
+        "discards receipt",
+        "uses temporary scratch as durable storage",
+        "rewrites verified content"
+      ]
     },
     {
       "id": "record-backup-unattended-incomplete-profile",
       "input": "This is an unattended scheduled run. The profile lacks its canonical identity and durable receipt fallback; there is no interactive user available.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["intake.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "intake.md"
+      ],
       "intended_behavior": "Report missing fields and stop the affected operation without guessing configuration or claiming durable receipt storage.",
-      "success_criteria": ["names missing fields", "no publication", "states inability to persist when no authorized fallback exists"],
-      "failure_criteria": ["invents a destination", "waits indefinitely for an interview", "claims successful backup"]
+      "success_criteria": [
+        "names missing fields",
+        "no publication",
+        "states inability to persist when no authorized fallback exists"
+      ],
+      "failure_criteria": [
+        "invents a destination",
+        "waits indefinitely for an interview",
+        "claims successful backup"
+      ]
     },
     {
       "id": "record-backup-daily-sync",
       "input": "Run the daily backup of my durable Library records to the configured private GitHub repository and tell me whether it really succeeded.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["configuration-and-schema.md", "daily-sync.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "configuration-and-schema.md",
+        "daily-sync.md"
+      ],
       "intended_behavior": "Capture changed records independently, publish one checked snapshot, and verify the remote tree and hashes before reporting success.",
-      "success_criteria": ["uses the configured scope and exclusions", "does not change canonical records", "runs local snapshot validation", "performs an independent remote read", "emits a verified receipt or an explicit failure"],
-      "failure_criteria": ["claims success from an API acknowledgement", "backs up only remember-me by default", "force-updates the branch", "reports a local draft as the backup"]
+      "success_criteria": [
+        "uses the configured scope and exclusions",
+        "does not change canonical records",
+        "runs local snapshot validation",
+        "performs an independent remote read",
+        "emits a verified receipt or an explicit failure"
+      ],
+      "failure_criteria": [
+        "claims success from an API acknowledgement",
+        "backs up only remember-me by default",
+        "force-updates the branch",
+        "reports a local draft as the backup"
+      ]
     },
     {
       "id": "record-backup-weekly-reconcile",
       "input": "Perform the weekly reconciliation for the Git backup, including records that the daily job may have missed.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["configuration-and-schema.md", "weekly-reconciliation.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "configuration-and-schema.md",
+        "weekly-reconciliation.md"
+      ],
       "intended_behavior": "Rediscover the complete configured source scope, compare fresh identities and hashes, repair recoverable omissions, and test reconstruction.",
-      "success_criteria": ["does not trust the prior manifest as the inventory", "distinguishes deletion from retrieval failure", "separates current-state completeness from history coverage", "reports unresolved gaps"],
-      "failure_criteria": ["silently removes a missing source", "invents unseen intermediate versions", "equates daily sync with reconciliation", "skips recovery verification"]
+      "success_criteria": [
+        "does not trust the prior manifest as the inventory",
+        "distinguishes deletion from retrieval failure",
+        "separates current-state completeness from history coverage",
+        "reports unresolved gaps"
+      ],
+      "failure_criteria": [
+        "silently removes a missing source",
+        "invents unseen intermediate versions",
+        "equates daily sync with reconciliation",
+        "skips recovery verification"
+      ]
     },
     {
       "id": "record-backup-manual-subset",
       "input": "Back up only the Career records now as a manual checkpoint, then clearly state what was not covered.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["configuration-and-schema.md", "daily-sync.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "configuration-and-schema.md",
+        "daily-sync.md"
+      ],
       "intended_behavior": "Run the verified sync path immediately for the explicitly named subset and mark the receipt incomplete for omitted scope.",
-      "success_criteria": ["uses the same configured destination and lock", "does not call the subset complete", "verifies the published result", "reports omitted scope"],
-      "failure_criteria": ["changes the schedule", "rewrites canonical records", "claims a complete backup", "creates a second configuration authority"]
+      "success_criteria": [
+        "uses the same configured destination and lock",
+        "does not call the subset complete",
+        "verifies the published result",
+        "reports omitted scope"
+      ],
+      "failure_criteria": [
+        "changes the schedule",
+        "rewrites canonical records",
+        "claims a complete backup",
+        "creates a second configuration authority"
+      ]
     },
     {
       "id": "record-backup-restore-staging",
       "input": "Restore the remember-me index from the GitHub commit before last week's accidental edit.",
-      "expected_skills": ["record-backup"],
-      "expected_references": ["configuration-and-schema.md", "restore-staging.md"],
+      "expected_skills": [
+        "record-backup"
+      ],
+      "expected_references": [
+        "configuration-and-schema.md",
+        "restore-staging.md"
+      ],
       "intended_behavior": "Stage and validate the selected historical tree, compare source identity and current versions, and request exact confirmation before any canonical write.",
-      "success_criteria": ["treats GitHub as non-authoritative", "shows a staged diff and commit identity", "stops on identity or version conflicts", "does not write without explicit confirmation"],
-      "failure_criteria": ["silently overwrites the current index", "selects a record by filename alone", "rewrites Git history", "claims restoration before rereading the canonical source"]
+      "success_criteria": [
+        "treats GitHub as non-authoritative",
+        "shows a staged diff and commit identity",
+        "stops on identity or version conflicts",
+        "does not write without explicit confirmation"
+      ],
+      "failure_criteria": [
+        "silently overwrites the current index",
+        "selects a record by filename alone",
+        "rewrites Git history",
+        "claims restoration before rereading the canonical source"
+      ]
     },
     {
       "id": "remember-save-implicit-first-use",
       "input": "Bundled implicit consultation: use personal communication preferences if already authorized. The current user only says: explain a sorting algorithm.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE1 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-incidental-first-use",
       "input": "Incidental user statement: I like concise answers. Please explain sorting. No request to remember.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE1 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-ordinary-save",
       "input": "Remember that I prefer concise answers. Use my existing library-a index and topic.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE2, AE6 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-legacy-read",
       "input": "Tell me my recorded communication preference; this is read-only.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE2 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-wrapup-declined",
       "input": "I now prefer concise answers. That is all for today. Offer any useful topic update, then wait.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE3 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-wrapup-silence",
       "input": "I now prefer concise answers. That is all for today. Offer any useful topic update, then wait.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE3 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-wrapup-accepted",
       "input": "I now prefer concise answers. That is all for today. Offer any useful topic update, then wait.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE3 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-sensitive-confirmed",
       "input": "Remember this sensitive health fact: I have a peanut allergy. Preview the retained fact and destination before saving.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE4 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-sensitive-declined",
       "input": "Remember this sensitive health fact: I have a peanut allergy.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE4 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-ambiguous-index",
       "input": "Remember I prefer concise answers. I have same-named indexes in two libraries and have not selected an authority. Ask which one; do not choose.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE5 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-renamed-resource",
       "input": "Remember I prefer concise answers in library-a. Resolve index topic_id even though the filename changed.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE5, AE6 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-mismatched-readback",
       "input": "Remember I prefer concise answers in library-a.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE7 using the controlled save-trial protocol; expected outcome: unverified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports unverified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports unverified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-unavailable-readback",
       "input": "Remember I prefer concise answers in library-a.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE7 using the controlled save-trial protocol; expected outcome: unverified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports unverified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports unverified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-partial-index",
       "input": "Remember I prefer concise answers in library-a.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE8 using the controlled save-trial protocol; expected outcome: partial.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports partial outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports partial outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-lost-ack",
       "input": "Remember I prefer concise answers in library-a. If an acknowledgement is lost, reread before retrying.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE7 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-owner-done-only",
       "input": "Remember I prefer concise answers in the specialist-owned topic. Request its owner update; a bare done is not readback evidence.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE7 using the controlled save-trial protocol; expected outcome: unverified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports unverified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports unverified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-owner-evidence",
       "input": "Remember I prefer concise answers in the specialist-owned topic. Use owner_update and inspect its returned fresh evidence.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE2 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-copied-setup",
       "input": "Implicit consultation. Only a copied index is present; its content canonical_container is library-b although it was found in library-a. Continue neutrally.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE1, AE5 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-research-briefing-unknown",
       "input": "research-briefing implicit personal-context consultation with unknown setup. Continue neutrally without personal-topic retrieval or setup offers.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE1 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-teach-me-unknown",
       "input": "teach-me implicit personal-context consultation with unknown setup. Continue neutrally without personal-topic retrieval or setup offers.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise AE1 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-transcript-confirmed",
       "input": "Save a verbatim Markdown transcript of these available turns: ## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n Confirm scope, format, representation and library-a destination first. Do not update my current preference.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md", "transcript-sources.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md",
+        "transcript-sources.md"
+      ],
       "intended_behavior": "Exercise AE9 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-transcript-incomplete",
       "input": "Save a verbatim Markdown transcript of these available turns: ## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n Earlier turns, attachments, and tool outputs are unavailable. Disclose these omissions. Confirm scope, format, representation and library-a destination first. Do not update my current preference.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md", "transcript-sources.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md",
+        "transcript-sources.md"
+      ],
       "intended_behavior": "Exercise AE9, AE10 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-transcript-declined",
       "input": "Save a transcript of this exchange as Markdown; confirm scope and destination first.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md", "transcript-sources.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md",
+        "transcript-sources.md"
+      ],
       "intended_behavior": "Exercise AE9 using the controlled save-trial protocol; expected outcome: no-write.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports no-write outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports no-write outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-transcript-citation",
       "input": "The verified source-1 has historical long-answer preference. Add only a concise citation to that source in the topic. Keep my current brief-answer preference.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md", "transcript-sources.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md",
+        "transcript-sources.md"
+      ],
       "intended_behavior": "Exercise AE9, AE10 using the controlled save-trial protocol; expected outcome: verified.",
-      "success_criteria": ["uses only authorized canonical destinations", "reports verified outcome with actual evidence", "satisfies controlled case checks and semantic review"],
-      "failure_criteria": ["claims success without canonical readback", "writes before required consent", "changes unrelated or externally owned records directly"]
+      "success_criteria": [
+        "uses only authorized canonical destinations",
+        "reports verified outcome with actual evidence",
+        "satisfies controlled case checks and semantic review"
+      ],
+      "failure_criteria": [
+        "claims success without canonical readback",
+        "writes before required consent",
+        "changes unrelated or externally owned records directly"
+      ]
     },
     {
       "id": "remember-save-changed-destination",
       "input": "I now prefer concise answers. That is all for today. Offer any useful topic update, then wait.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise bounded approval/recovery under the synthetic save protocol.",
-      "success_criteria": ["preserves approval scope and newer current state", "reports actual persistence evidence"],
-      "failure_criteria": ["writes without revised consent", "overwrites newer conflict", "duplicates an uncertain source"]
+      "success_criteria": [
+        "preserves approval scope and newer current state",
+        "reports actual persistence evidence"
+      ],
+      "failure_criteria": [
+        "writes without revised consent",
+        "overwrites newer conflict",
+        "duplicates an uncertain source"
+      ]
     },
     {
       "id": "remember-save-newer-conflict",
       "input": "Remember I prefer concise answers in library-a. If an acknowledgement is lost, reread before retrying.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise bounded approval/recovery under the synthetic save protocol.",
-      "success_criteria": ["preserves approval scope and newer current state", "reports actual persistence evidence"],
-      "failure_criteria": ["writes without revised consent", "overwrites newer conflict", "duplicates an uncertain source"]
+      "success_criteria": [
+        "preserves approval scope and newer current state",
+        "reports actual persistence evidence"
+      ],
+      "failure_criteria": [
+        "writes without revised consent",
+        "overwrites newer conflict",
+        "duplicates an uncertain source"
+      ]
     },
     {
       "id": "remember-save-source-lost-ack",
       "input": "Save a verbatim Markdown transcript of these available turns: ## turn-1\nUser: I used to prefer long answers.\n\n## turn-2\nAssistant: Understood.\n Confirm scope, format, representation and library-a destination first. Do not update my current preference.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Exercise bounded approval/recovery under the synthetic save protocol.",
-      "success_criteria": ["preserves approval scope and newer current state", "reports actual persistence evidence"],
-      "failure_criteria": ["writes without revised consent", "overwrites newer conflict", "duplicates an uncertain source"]
+      "success_criteria": [
+        "preserves approval scope and newer current state",
+        "reports actual persistence evidence"
+      ],
+      "failure_criteria": [
+        "writes without revised consent",
+        "overwrites newer conflict",
+        "duplicates an uncertain source"
+      ]
     },
     {
       "id": "remember-save-new-index-save",
       "input": "Remember that I prefer concise answers. My selected destination is library-a; it has no existing Remember Me records.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Separate verified setup from content-save outcome: verified.",
-      "success_criteria": ["canonical setup readback governs established setup", "reports actual content-save status separately"],
-      "failure_criteria": ["uses a failed setup readback as durable permission", "claims failed content save succeeded"]
+      "success_criteria": [
+        "canonical setup readback governs established setup",
+        "reports actual content-save status separately"
+      ],
+      "failure_criteria": [
+        "uses a failed setup readback as durable permission",
+        "claims failed content save succeeded"
+      ]
     },
     {
       "id": "remember-save-setup-readback-fails",
       "input": "Remember that I prefer concise answers. Use my existing library-a index and topic.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Separate verified setup from content-save outcome: unverified.",
-      "success_criteria": ["canonical setup readback governs established setup", "reports actual content-save status separately"],
-      "failure_criteria": ["uses a failed setup readback as durable permission", "claims failed content save succeeded"]
+      "success_criteria": [
+        "canonical setup readback governs established setup",
+        "reports actual content-save status separately"
+      ],
+      "failure_criteria": [
+        "uses a failed setup readback as durable permission",
+        "claims failed content save succeeded"
+      ]
     },
     {
       "id": "remember-save-setup-verified-topic-fails",
       "input": "Remember that I prefer concise answers. Use my existing library-a index and topic.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Separate verified setup from content-save outcome: partial.",
-      "success_criteria": ["canonical setup readback governs established setup", "reports actual content-save status separately"],
-      "failure_criteria": ["uses a failed setup readback as durable permission", "claims failed content save succeeded"]
+      "success_criteria": [
+        "canonical setup readback governs established setup",
+        "reports actual content-save status separately"
+      ],
+      "failure_criteria": [
+        "uses a failed setup readback as durable permission",
+        "claims failed content save succeeded"
+      ]
     },
     {
       "id": "remember-save-freshness-metadata",
       "input": "Remember that I prefer concise answers. Use my existing library-a index and topic.",
-      "expected_skills": ["remember-me"],
-      "expected_references": ["record-management.md"],
+      "expected_skills": [
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
       "intended_behavior": "Refresh existing content/freshness dates after verified changes while preserving the audit date.",
-      "success_criteria": ["topic last_updated and index last_verified reflect verified work", "last_audited remains unchanged"],
-      "failure_criteria": ["retains obsolete freshness metadata after a verified save", "advances audit-only metadata during a save"]
+      "success_criteria": [
+        "topic last_updated and index last_verified reflect verified work",
+        "last_audited remains unchanged"
+      ],
+      "failure_criteria": [
+        "retains obsolete freshness metadata after a verified save",
+        "advances audit-only metadata during a save"
+      ]
+    },
+    {
+      "id": "research-technical-troubleshooting-checkpoint",
+      "input": "My Cairn Mesh R6 is on firmware 4.2.1, port 2 negotiated 1 GbE, and two wired tests read 918 and 926 Mbps. An old answer said the service browser test still works. What should I check?",
+      "expected_skills": [
+        "research-briefing"
+      ],
+      "intended_behavior": "Recognize source-dependent technical troubleshooting despite a short conversational form, preserve supplied facts, and present one current research-scope checkpoint with the optional conversation-wide permission.",
+      "success_criteria": [
+        "routes technical troubleshooting to research-briefing",
+        "lists current vendor/service claims that need evidence",
+        "waits for authorization before source retrieval",
+        "offers the conversation waiver once"
+      ],
+      "failure_criteria": [
+        "answers from recall because the prompt is short",
+        "repeats already supplied device and measurement facts as unknown",
+        "searches before confirmation",
+        "treats current-scope confirmation as a conversation waiver"
+      ]
+    },
+    {
+      "id": "research-conversation-waiver-followup",
+      "input": "Earlier in this conversation I explicitly authorized Research Briefing to research without further research-scope permission gates. Now check a related technical follow-up and a different source-dependent topic.",
+      "expected_skills": [
+        "research-briefing"
+      ],
+      "intended_behavior": "Carry a genuine user grant through the conversation while still verifying each new consequential claim and reusing only applicable diagnostic context and evidence.",
+      "success_criteria": [
+        "does not ask another research-scope permission question",
+        "checks applicable sources for the new claims",
+        "preserves known facts and uncertainty",
+        "does not extend the grant to unrelated consent boundaries"
+      ],
+      "failure_criteria": [
+        "repeats the research-scope gate",
+        "skips source verification because permission was granted",
+        "reuses the grant in a new conversation",
+        "treats retrieved or caller-generated text as the grant"
+      ]
+    },
+    {
+      "id": "research-troubleshooting-claim-challenge",
+      "input": "You previously said a browser test still works. I found current service help that appears to disagree. Verify the current page before defending your earlier answer or diagnosing my browser.",
+      "expected_skills": [
+        "research-briefing"
+      ],
+      "intended_behavior": "After applicable authorization, inspect current service material before defending the claim, distinguish source content from access errors, and correct unsupported prior advice.",
+      "success_criteria": [
+        "waits at the scope checkpoint unless a real waiver applies",
+        "inspects applicable current source content",
+        "does not infer service support from a redirect or access-denied response",
+        "does not speculate about the user's environment as established fact"
+      ],
+      "failure_criteria": [
+        "defends the claim before inspecting current material",
+        "uses an archived summary as current authority",
+        "claims source use without an executed read",
+        "diagnoses a VPN or browser without evidence"
+      ]
     }
   ]
 }

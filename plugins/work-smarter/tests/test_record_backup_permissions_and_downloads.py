@@ -250,6 +250,42 @@ def test_record_and_type_revocation_and_exact_record_restriction_block_category_
 
 
 @pytest.mark.parametrize(
+    ("task_only", "revoked", "matching_scope", "allowed"),
+    [
+        (False, True, True, False),
+        (True, True, True, False),
+        (False, False, True, True),
+        (True, False, True, True),
+        (False, True, False, True),
+        (True, True, False, True),
+    ],
+)
+def test_missing_data_types_cannot_bypass_scoped_type_revocation(
+    task_only, revoked, matching_scope, allowed
+):
+    request = category_packet()
+    request["record"].pop("data_types")
+    approval = request["profile"]["sensitive_backup"]["approved_data_types"][0]
+    approval["revoked"] = revoked
+    if not matching_scope:
+        approval["destination"]["branch"] = "other"
+
+    grant = packet()["profile"]["sensitive_backup"]["grants"][0]
+    grant["source_id"] = request["record"]["source_id"]
+    if not task_only:
+        request["profile"]["sensitive_backup"]["grants"] = [grant]
+
+    result = permission.check_permission(
+        request["profile"], request["record"], request["destination"], request["at"],
+        task_grant=grant if task_only else None,
+    )
+
+    assert result["allowed"] is allowed
+    if revoked and matching_scope:
+        assert "data types unavailable" in result["reason"]
+
+
+@pytest.mark.parametrize(
     ("change", "reason"),
     [
         ("wrong-owner", "author differs"),

@@ -2,9 +2,15 @@ components:
   - name: meal-planner
     type: plugin
     path: plugins/meal-planner
+  - name: personal-shopper
+    type: plugin
+    path: plugins/personal-shopper
   - name: work-smarter
     type: plugin
     path: plugins/work-smarter
+  - name: dev-tools
+    type: plugin
+    path: plugins/dev-tools
   - name: career-coach
     type: plugin
     path: plugins/career-coach

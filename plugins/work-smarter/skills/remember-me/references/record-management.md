@@ -89,13 +89,14 @@ Use the index as a low-token routing layer, not as a ceiling on recall. Retrieve
 
 ## Topic ownership and taxonomy
 
-Prefer a specialist owner whenever an available skill has a canonical record-management workflow for the topic. Read the external owner's contract before relying on or requesting changes to its record:
+Prefer a specialist owner whenever an available skill has a canonical record-management workflow for the topic. Before relying on or requesting a change to an external owner's record, invoke the qualified owner skill when available and let it apply its canonical contract. Do not read another plugin's contract through a source-tree or cache path:
 
-- Career direction, goals, constraints, and related coaching context: `career-coach:career-direction`; use the canonical [Career Coach contract](../../../../career-coach/shared/handoff-contracts.md).
+- Career direction, goals, constraints, and related coaching context: `career-coach:career-direction`.
 - Household planning and safety constraints: `meal-planner:meal-planner`.
 - Culinary preferences, ingredient evidence, and recipe feedback: `meal-planner:personal-chef`.
-- Store order, grocery preferences, and pricing observations: `meal-planner:personal-shopper`.
-- For Meal Planner topics, use the canonical [Meal Planner contract](../../../../meal-planner/shared/handoff-contracts.md) and preserve its workbook, tab, record, and household-member identities.
+- Store order, grocery preferences, product-category preferences, equipment measurements, discounts, and price evidence: `personal-shopper:personal-shopper`.
+- Coding conventions: `dev-tools:coding-preferences`, when available. That skill remains the owner; Remember Me must not claim ownership or create a competing set of coding preferences.
+- For household planning, safety, recipe, or ingredient topics, invoke the appropriate qualified Meal Planner skill and preserve its workbook, tab, record, and household-member identities.
 
 When no specialist handles a useful topic, choose the narrowest fitting file from this default taxonomy:
 
@@ -109,7 +110,9 @@ When no specialist handles a useful topic, choose the narrowest fitting file fro
 
 Create a file only when useful durable information exists. Keep related interests together; for example, do not split entertainment into book, movie, television, and game files unless scale or retrieval failures justify it. Create a new topic filename only when none of the defaults fits and a separate authority materially improves retrieval or ownership clarity.
 
-Temporary unavailability does not erase an established external owner's authority. If no specialist currently exists and `remember-me` owns a topic that a later specialist can handle, migrate only with user authorization and a verified destination; then update the index and remove or archive the prior current authority so no parallel copy remains.
+Temporary unavailability does not erase an established external owner's authority. If Personal Shopper is unavailable, retain the established external authority and its canonical identity, and report a pending owner update without creating a parallel Remember Me topic. If no specialist currently exists and `remember-me` owns a topic that a later specialist can handle, migrate only with user authorization. Write and verify the new specialist authority first, retain the old authority and pointer until that succeeds, then reconcile the old current value and routing metadata under this lifecycle. Read back each changed resource and report partial outcomes per target; never leave two declared current authorities or claim a coherent transfer while either side remains uncertain.
+
+If a user authorizes changing a shopping owner route, do not move or recreate the shopping records as part of that route change. Resolve the exact existing native authority and verify it remains the same destination. A successful destination readback with a failed dependent index write is a partial outcome: report each target separately, leave the owner update pending, and do not claim the transfer complete.
 
 ## Record Backup boundary
 
@@ -182,7 +185,7 @@ After all required audit checks complete, an audit may conclude that no content 
 
 Conversation-context compaction is not persistent-record compaction. After conversation compaction, refresh the current conversational brief and recheck exact constraints against their authoritative sources. Audit the persistent remember-me records only when one of the record triggers above is met.
 
-For an authorized audit, use the canonical loss-controlled protocol in [Superb Skills working memory](../../superb-skills/references/working-memory.md#loss-controlled-audits). Inventory the complete remember-me file set plus every protected semantic item before drafting. Stage the candidate outside the canonical folder, map all before and after items bidirectionally, run `../../../scripts/validate_memory_audit.py`, and inspect the full diff. A compaction or split must preserve exact constraints, numerical rules, provenance, stable identifiers, required pointer targets, meaningful history, attribution, uncertainty, and ownership. Rewording a protected non-exact item requires a recorded semantic-equivalence review; factual changes require the applicable confirmation and must remain distinct from maintenance.
+For an authorized audit, use the canonical [Work Smarter record-audit protocol](../../../shared/record-audits.md#loss-controlled-audits). Inventory the complete Remember Me file set plus every protected semantic item before drafting. Stage the candidate outside the canonical folder, map all before and after items bidirectionally, run `python scripts/validate_memory_audit.py`, and inspect the full diff. A compaction or split must preserve exact constraints, numerical rules, provenance, stable identifiers, required pointer targets, meaningful history, attribution, uncertainty, and ownership. Rewording a protected non-exact item requires a recorded semantic-equivalence review; factual changes require the applicable confirmation and must remain distinct from maintenance.
 
 Replace the canonical files only after validation succeeds, then verify the written hashes and pointer resolution. Retain the recoverable snapshot until that check passes. On any unexplained omission, semantic uncertainty, broken pointer, competing authority, inaccessible source, or partial write, leave the original authority unchanged, record which check failed, and offer a proposed repair.
 

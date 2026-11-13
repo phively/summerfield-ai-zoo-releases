@@ -37,7 +37,9 @@ Avoid repeating full instructions for a planned leftover night. Refer back to th
 
 ### Grocery list
 
-Use the validated `personal-shopper` handoff when available. Combine duplicate ingredients and group them under:
+Use a validated `grocery-handoff/v1` result. Preserve its `full` or `fallback` capability label and exact recipe/version, meal-plan, and workbook identities.
+
+For a valid full Personal Shopper result, use its list, combine duplicate ingredients, and group them under:
 
 - Produce
 - Meat
@@ -48,11 +50,13 @@ Use the validated `personal-shopper` handoff when available. Combine duplicate i
 - Bakery
 - Miscellaneous
 
-Distinguish `buy` from `check pantry`. Show required quantity, purchase quantity or packages, estimated purchase price or range, meals using the item, and material notes. Do not fabricate store prices or package sizes.
+Distinguish `buy` from `check pantry`. Show required quantity, purchase quantity or packages, price or range, meals using the item, and material notes. Do not fabricate store prices or package sizes.
 
-### Cost estimate
+When Personal Shopper is unavailable, show only the local fallback's basic ingredient list, confirmed pantry deductions, unambiguous existing-record matches, matched record identities and observation dates, unmatched or ambiguous ingredients, missing prices, write status, and omitted full-workflow fields. Use a dated price observation only as historical evidence; it is not a newly verified offer. Do not add package quantities, estimated checkout prices, or cost allocations that the fallback did not produce.
 
-State the price region, store or estimate basis, date, currency, discounts, exclusions, and confidence. Report estimated checkout spending separately from pantry contribution and unpriced items. Provide estimated cost by meal and per serving without double-counting shared ingredients; label partial totals and likely package surplus.
+### Cost estimate (full shopper result only)
+
+Include this section only when a valid full Personal Shopper result provides the corresponding evidence. State the price region, store or estimate basis, date, currency, discounts, exclusions, and confidence. Report estimated checkout spending separately from pantry contribution and unpriced items. Provide estimated cost by meal and per serving without double-counting shared ingredients; label partial totals and likely package surplus. If the handoff omitted any field, keep it unknown or label it omitted; do not infer a total from incomplete evidence.
 
 ### Batch prep
 

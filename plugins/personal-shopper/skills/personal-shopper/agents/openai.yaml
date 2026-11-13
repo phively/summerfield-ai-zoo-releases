@@ -1,0 +1,8 @@
+interface:
+  display_name: "Personal Shopper"
+  short_description: "Compare products, services, project costs and groceries"
+  default_prompt: "Use $personal-shopper to compare products, services or contractors, research project costs, or continue Meal Planner's approved grocery-handoff/v1 packet."
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+policy:
+  allow_implicit_invocation: true

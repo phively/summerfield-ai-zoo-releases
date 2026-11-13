@@ -176,6 +176,13 @@ def test_shared_handoffs_preserve_record_identity_and_evidence_limits() -> None:
     assert "Never create skill-local static copies" in shared
 
 
+def test_optional_instruction_design_route_names_only_its_public_interface() -> None:
+    shared = read(SHARED_HANDOFF)
+    assert "`dev-tools:superb-skills` is an optional public entry point" in shared
+    assert "not a Career Coach dependency" in shared
+    assert "preferences-and-lessons.md" not in shared
+
+
 def test_two_tier_authority_and_retrieval_contract() -> None:
     shared = read(SHARED_HANDOFF)
     detail = read(RECORD_MANAGEMENT)

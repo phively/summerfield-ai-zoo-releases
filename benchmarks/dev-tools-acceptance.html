@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dev Tools acceptance — Issue 20</title>
+  <style>
+    :root { color-scheme: light; --ink: #17212b; --muted: #50616e; --line: #d6dee5; --soft: #f3f6f8; --pass: #17643b; --pending: #7a4b00; }
+    body { margin: 0 auto; padding: 2rem 1.25rem 4rem; max-width: 72rem; color: var(--ink); font: 16px/1.55 system-ui, sans-serif; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 1.5rem; margin-bottom: 2rem; }
+    h1 { line-height: 1.15; font-size: clamp(2rem, 5vw, 3.2rem); margin: .25rem 0 .75rem; }
+    h2 { margin-top: 2.4rem; border-bottom: 1px solid var(--line); padding-bottom: .35rem; }
+    p { max-width: 78ch; }
+    a { color: #075ea8; }
+    code { font: .92em ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+    .eyebrow, .meta { color: var(--muted); }
+    .status { border-left: 4px solid var(--pass); background: #eff8f2; padding: .8rem 1rem; }
+    .pending-status { border-color: var(--pending); background: #fff8e8; }
+    .pass { color: var(--pass); font-weight: 650; }
+    .pending { color: var(--pending); font-weight: 650; }
+    table { border-collapse: collapse; width: 100%; margin: 1rem 0 1.5rem; font-size: .95rem; }
+    th, td { border: 1px solid var(--line); padding: .65rem .75rem; text-align: left; vertical-align: top; }
+    th { background: var(--soft); }
+    .callout { background: var(--soft); padding: .8rem 1rem; border-radius: .35rem; }
+    @media (max-width: 48rem) { table { display: block; overflow-x: auto; } }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Dev Tools · Issue 20 · Acceptance report</p>
+    <h1>Issue 20 acceptance status</h1>
+    <p class="status"><strong>Decision:</strong> The frozen r7 Coding Preferences candidate passed all 28 required behavior cases under checker 1.0.42. Issue 20 acceptance is complete for the tested scope. Public 3.0 readiness still depends on the separate shopping plan's acceptance under R24.</p>
+    <p class="meta">Report date: 2026-10-23 · Tested candidate: <code>dev-tools-coding-preferences-issue20-r7-2026-10-23</code> · Checker: 1.0.42</p>
+    <p>Each activated case binds the exact task prompt, candidate files, Codex command, and runtime stream. The checker matches tool calls by count and arguments, then checks required operation order against fixture events. The latest attempt for every case passed and received semantic review. Earlier failed attempts remain in ignored output and do not contribute to the 28-of-28 result.</p>
+  </header>
+
+  <main>
+    <section id="results">
+      <h2>Accepted behavior</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Result</th><th>Scope</th></tr></thead>
+        <tbody>
+          <tr><td>Coding Preferences</td><td class="pass">Accepted: 28 of 28 cases</td><td>The tested candidate handled saved-value reuse, task-only overrides, repository conflicts, unavailable or ambiguous authorities, authorized changes, readback failures, transfers, engineering prose, and truthful fallback behavior.</td></tr>
+          <tr><td>Instruction design (B1)</td><td class="pass">Accepted: 2 of 2 subcases</td><td>A one-time prompt task and a separate evaluation-plan task stayed within their supplied resources and planning scope; neither changed target files or ran checks.</td></tr>
+          <tr><td>Code work (B10)</td><td class="pass">Accepted: 2 of 2 subcases</td><td>A focused change fixed a synthetic project check that failed before the change. A separate missing test command was reported accurately without substituting or installing a runner.</td></tr>
+          <tr><td>Audit and read-only use (B13)</td><td class="pass">Accepted: 6 of 6 subcases</td><td>Both user entry paths handled accurate and incomplete source material, including omitted protected information. Responses stayed within available evidence, and read-only use made no changes.</td></tr>
+          <tr><td>Evidence reporting (B14)</td><td class="pass">Accepted: report review</td><td>Package checks are separated from behavior results. Historical results retain their candidate and scope; unobserved behaviors and partial timing data receive no unsupported credit.</td></tr>
+        </tbody>
+      </table>
+      <p>The r7 study produced 50 scored attempts across 28 cases, plus one invalid preflight pilot. The latest attempt for each case passed under checker 1.0.42 and received semantic review. Three early pilots were invalid because their workspaces inherited instructions that affected the run; those pilots and earlier failed attempts remain in a local-only ignored archive and do not count toward acceptance. The 60 r6 attempts remain historical: 37 passed, 22 failed, and 1 was blocked under checker 1.0.39; only the latest attempt per case counted toward its historical 28-of-28 result. The additional B1, B10, and B13 work produced 14 attempts; 10 final subcases were accepted, while 4 pilot or invalid attempts were excluded. At the 2026-10-23 report freeze, their frozen candidate files matched the relevant package files. Later changes are outside that historical evidence.</p>
+      <p>A targeted U8 B10 follow-up on 2026-11-11 used candidate <code>coding-preferences-u8-b10-2026-11-11</code> (SHA-256 <code>28c885fd6382c893fcb6a689265f4b4c5f965728f0332778899182921455ec9e</code>). In the code-fix scenario, the documented unittest command first failed on the casing regression; changing only <code>src/headers.py</code> made both tests pass. In the unavailable-command scenario, <code>./tools/test.sh</code> was absent (exit code 127), and the agent reported verification as unverified without substituting another test command. These two observations cover the red/green and unavailable-command behaviors only; they do not rerun the full matrix or change its historical 28-of-28 result.</p>
+      <p>The earlier report's selected r5 result of 21/22 case entries under checker 1.0.21 remains historical and is not combined with r6 acceptance.</p>
+    </section>
+
+    <section id="checks">
+      <h2>Package checks</h2>
+      <p>At the 2026-10-23 report freeze, the full repository suite passed: 582 tests and 17 subtests. The Dev Tools and Work Smarter validators and <code>git diff --check</code> also passed.</p>
+      <p>These checks establish package consistency. They do not establish activated behavior beyond the cases above.</p>
+      <p>The report HTML parsed successfully at the freeze. On 2026-11-11, the updated page rendered in headless Chromium with no visible or console errors.</p>
+    </section>
+
+    <section id="limits">
+      <h2>Evidence limits and release gate</h2>
+      <table>
+        <thead><tr><th>Area</th><th>Status</th><th>Limit</th></tr></thead>
+        <tbody>
+          <tr><td>Host discovery</td><td class="pending">Not observed</td><td>Trials received the candidate instructions directly; installation discovery was not measured.</td></tr>
+          <tr><td>Live provider</td><td class="pending">Not tested</td><td>Behavior runs used synthetic data and a local test provider.</td></tr>
+          <tr><td>Served model and effort</td><td class="pending">Unverified</td><td>Runs requested <code>gpt-6.1-sol</code> at <code>xhigh</code>; captured runtime settings do not confirm what was served.</td></tr>
+          <tr><td>Performance and cost</td><td class="pending">Not measured</td><td>No matched baseline or comparable complete timing and cost totals were collected. No performance claim is made.</td></tr>
+          <tr><td>Public 3.0 release</td><td class="pending">Separate gate</td><td>Issue 20 acceptance does not satisfy R24 by itself; the separate shopping plan must also reach acceptance.</td></tr>
+        </tbody>
+      </table>
+      <p class="callout">This report records bounded Issue 20 acceptance for the tested candidate. It does not claim universal coding quality, provider reliability, host discovery, or public release readiness.</p>
+    </section>
+
+    <section id="method">
+      <h2>Method</h2>
+      <p>See the <a href="../plugins/dev-tools/evals/coding-preferences/manifest.json">case manifest</a>, <a href="../plugins/dev-tools/evals/coding-preferences/protocol.md">evaluation protocol</a>, <a href="../plugins/dev-tools/evals/coding-preferences/capture_invocation.py">invocation capture helper</a>, and <a href="../plugins/dev-tools/evals/coding-preferences/check_trial.py">evidence checker</a> for the acceptance scope and rules. Raw attempt records remain in ignored working output and are omitted from this report.</p>
+    </section>
+  </main>
+</body>
+</html>

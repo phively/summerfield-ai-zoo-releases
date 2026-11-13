@@ -14,7 +14,7 @@ SHARED_HANDOFF = PLUGIN_ROOT / "shared" / "handoff-contracts.md"
 RECORD_MANAGEMENT = PLUGIN_ROOT / "shared" / "record-management.md"
 WORKBOOK_AUDIT_SCHEMA = PLUGIN_ROOT / "shared" / "workbook-audit-schema.md"
 ARTIFACT_FORMATTING = PLUGIN_ROOT / "shared" / "artifact-formatting.md"
-SKILL_NAMES = ("meal-planner", "personal-chef", "personal-shopper")
+SKILL_NAMES = ("meal-planner", "personal-chef")
 SHARED_LINK = "../../shared/handoff-contracts.md"
 
 
@@ -40,12 +40,17 @@ def test_canonical_plugin_structure() -> None:
     manifest = json.loads(read(manifest_path))
 
     assert manifest["name"] == PLUGIN_ROOT.name == "meal-planner"
+    assert manifest["version"] == "2.0.0"
     assert manifest["skills"] == "./skills/"
     assert re.fullmatch(r"\d+\.\d+\.\d+(?:\+codex\.[0-9A-Za-z.-]+)?", manifest["version"])
     assert manifest["description"]
     assert manifest["author"]["name"]
     assert isinstance(manifest["interface"]["defaultPrompt"], list)
     assert len(manifest["interface"]["defaultPrompt"]) <= 3
+    assert not (SKILLS_ROOT / "personal-shopper").exists()
+    assert {
+        path.name for path in SKILLS_ROOT.iterdir() if path.is_dir()
+    } == set(SKILL_NAMES)
 
     for name in SKILL_NAMES:
         root = SKILLS_ROOT / name
@@ -147,30 +152,6 @@ def test_personal_chef_functionality_contract() -> None:
     )
 
 
-def test_personal_shopper_functionality_contract() -> None:
-    shopper = skill_text("personal-shopper")
-    preferences = read(
-        SKILLS_ROOT / "personal-shopper" / "references" / "store-preferences.md"
-    )
-    pricing = read(
-        SKILLS_ROOT / "personal-shopper" / "references" / "pricing-and-allocation.md"
-    )
-    for requirement in (
-        "Require finalized recipes",
-        "Subtract only confirmed pantry quantities",
-        "checkout estimate based on packages purchased",
-        "meal-cost estimate based on quantities consumed",
-    ):
-        assert requirement in shopper
-    assert "Require the user's explicit consent" in preferences
-    assert "shared by several meals in proportion" in pricing
-    assert "`Grocery Preferences` or a clearly equivalent title" in shopper
-    assert "`Store Preferences`" in preferences
-    assert "`Price Tracker`" in preferences
-    assert "load the saved order from `Store Preferences`" in shopper
-    assert "load the saved order from the grocery price tracker" not in shopper
-
-
 def test_canonical_workbooks_and_tabs_are_shared_through_handoffs() -> None:
     shared = read(SHARED_HANDOFF)
     expected_workbooks = {
@@ -181,7 +162,6 @@ def test_canonical_workbooks_and_tabs_are_shared_through_handoffs() -> None:
             "`Pantry Inventory`",
         ),
         "`Meal Preferences`": ("`Household Preferences`", "`Recipe History`"),
-        "`Grocery Preferences`": ("`Store Preferences`", "`Price Tracker`"),
     }
     for workbook, tabs in expected_workbooks.items():
         assert workbook in shared
@@ -219,7 +199,6 @@ def test_workbook_native_routing_and_format_aware_triggers() -> None:
     for reference in (
         SKILLS_ROOT / "meal-planner" / "references" / "household-profile.md",
         SKILLS_ROOT / "personal-chef" / "references" / "preference-records.md",
-        SKILLS_ROOT / "personal-shopper" / "references" / "store-preferences.md",
     ):
         text = read(reference)
         assert "Record Index" in text
@@ -230,9 +209,6 @@ def test_workbook_native_routing_and_format_aware_triggers() -> None:
 def test_shared_handoff_contract_is_accessible_without_skill_copies() -> None:
     shared = read(SHARED_HANDOFF)
     assert "Personal Chef to Meal Planner" in shared
-    assert "Meal Planner to Personal Shopper" in shared
-    assert "Personal Shopper to Meal Planner" in shared
-
     for name in SKILL_NAMES:
         skill_path = SKILLS_ROOT / name / "SKILL.md"
         assert f"]({SHARED_LINK})" in read(skill_path)
@@ -260,22 +236,6 @@ def test_chef_planner_handoff_preserves_safety_and_recipe_fields() -> None:
     assert "Return a structured handoff" in chef
 
 
-def test_planner_shopper_handoff_preserves_purchase_constraints() -> None:
-    shared = read(SHARED_HANDOFF)
-    planner = skill_text("meal-planner")
-    shopper = skill_text("personal-shopper")
-    for field in (
-        "confirmed pantry quantities",
-        "preferred stores in effective order",
-        "permitted substitutions",
-        "checkout spending",
-        "unpriced items",
-    ):
-        assert field in shared.lower()
-    assert "after recipe selection and safety review are complete" in planner
-    assert "Begin a valid `meal-planner` handoff without re-requesting" in shopper
-
-
 def test_every_skill_accesses_shared_record_contract() -> None:
     for name in SKILL_NAMES:
         skill = skill_text(name)
@@ -295,14 +255,11 @@ def test_record_registry_defines_canonical_authority_and_ownership() -> None:
         "`Ingredient Ratings History`",
         "`Recipe Ratings`",
         "`Recipe History`",
-        "`Store Preferences History`",
-        "`Price Tracker`",
     ):
         assert identity in detail and identity in shared
     assert "All Meal Planner skills" in detail
     assert "only `meal-planner` creates or updates" in shared
     assert "only `personal-chef` creates or updates" in shared
-    assert "only `personal-shopper` creates or updates" in shared
 
 
 def test_meal_plan_lifecycle_and_failure_contract() -> None:
@@ -348,8 +305,6 @@ def test_handoffs_include_record_identity_confirmation_and_boundaries() -> None:
     for heading in (
         "Meal Planner to Personal Chef",
         "Personal Chef to Meal Planner",
-        "Meal Planner to Personal Shopper",
-        "Personal Shopper to Meal Planner",
     ):
         assert heading in shared
     for phrase in (
@@ -513,3 +468,82 @@ def test_record_management_eval_has_required_cases() -> None:
         assert case["authoritative_result"]
         assert isinstance(case["permitted_writes"], list)
         assert case["failure_criteria"]
+
+
+def test_shopper_handoff_and_bounded_fallback_contract() -> None:
+    grocery_contract_path = PLUGIN_ROOT / "shared" / "grocery-integration.md"
+    grocery_contract = read(grocery_contract_path)
+    planner = skill_text("meal-planner")
+    handoffs = read(SHARED_HANDOFF)
+    records = read(RECORD_MANAGEMENT)
+    output = read(SKILLS_ROOT / "meal-planner" / "references" / "output-format.md")
+    template = read(
+        SKILLS_ROOT / "meal-planner" / "references" / "meal-plan-document-template.md"
+    )
+
+    assert "grocery-handoff/v1" in grocery_contract
+    for phrase in (
+        "exact approved version",
+        "request identity",
+        "per-target persistence status",
+        "do not ask intake questions again",
+        "task-only",
+        "exact authorization",
+        "conduct live research",
+        "create a workbook, worksheet, table, index",
+        "same canonical workbook",
+    ):
+        assert phrase.lower() in grocery_contract.lower()
+    assert "`grocery-handoff/v1`" in handoffs
+    assert "exact approved versions" in handoffs
+    assert "per-target persistence" in handoffs
+    assert "Personal Shopper" in records
+    assert "`meal-planner` only under the explicit local fallback" in records
+    assert "Limited Meal Planner grocery fallback" in records
+    assert "`meal-planner` may perform only the exact grocery fallback writes" in handoffs
+    assert "If Personal Shopper cannot be activated" in planner
+    assert "exact approved versions" in planner
+    assert "Do not ask again" in planner
+    assert "Never load Personal Shopper files" in planner
+    assert "plugins/personal-shopper" not in planner + grocery_contract
+    assert "capability label" in output
+    assert "fallback" in output
+    assert "omitted" in output.lower()
+    assert "full Personal Shopper result" in output
+    assert "valid full shopper result" in template
+    assert "Grocery fallback" in template
+
+
+def test_new_plan_grocery_handoff_uses_proposed_identity_until_native_save() -> None:
+    grocery_contract = read(PLUGIN_ROOT / "shared" / "grocery-integration.md")
+    handoffs = read(SHARED_HANDOFF)
+    planner = skill_text("meal-planner")
+    records = read(RECORD_MANAGEMENT)
+    template = read(SKILLS_ROOT / "meal-planner" / "references" / "meal-plan-document-template.md")
+    for text in (grocery_contract, handoffs, planner, records):
+        assert "identity_status: proposed" in text
+        assert "native_resource: not-yet-created" in text
+        assert "collision-checked" in text
+    assert "identity_status: persisted" in grocery_contract
+    assert "existing plan" in grocery_contract
+    assert "same stable `plan_id`" in planner
+    assert "same stable `MP-...` ID" in template
+
+    suite = json.loads(read(PLUGIN_ROOT / "evals" / "record-management.json"))
+    case = next(item for item in suite["cases"] if item["id"] == "shopper-first-plan-proposed-identity")
+    assert "native_resource not-yet-created" in case["prompt"]
+    assert "same identity object" in case["authoritative_result"]
+
+
+def test_meal_planner_fallback_eval_cases_are_present() -> None:
+    suite = json.loads(read(PLUGIN_ROOT / "evals" / "record-management.json"))
+    cases = {case["id"]: case for case in suite["cases"]}
+    for case_id in (
+        "shopper-available-single-handoff",
+        "shopper-first-plan-proposed-identity",
+        "shopper-unavailable-bounded-fallback",
+        "shopper-fallback-ambiguous-match",
+        "shopper-present-records-inaccessible",
+        "shopper-fallback-persisted-plan-gaps",
+    ):
+        assert case_id in cases

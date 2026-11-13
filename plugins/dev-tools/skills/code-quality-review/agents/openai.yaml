@@ -1,0 +1,7 @@
+interface:
+  display_name: "Code Quality Review"
+  short_description: "Evidence-backed review of requested code changes"
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+  brand_color: "#315C73"
+  default_prompt: "Use $code-quality-review to review this code target."

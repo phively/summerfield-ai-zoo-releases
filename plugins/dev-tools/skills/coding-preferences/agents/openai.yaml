@@ -1,0 +1,7 @@
+interface:
+  display_name: "Coding Preferences"
+  short_description: "Preference-aware implementation and review"
+  icon_small: "./assets/icon-small.svg"
+  icon_large: "./assets/icon-large.svg"
+  brand_color: "#315C73"
+  default_prompt: "Use $coding-preferences to apply relevant saved coding preferences."

@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ("remember-me", "research-briefing", "superb-skills", "teach-me", "record-backup")
+SKILLS = ("remember-me", "research-briefing", "teach-me", "record-backup")
 
 
 def require(condition: bool, message: str) -> None:
@@ -82,9 +82,11 @@ def validate_contract() -> None:
         "Failure behavior", "Information not to pass", "User confirmation",
         "research-scope checkpoint", "`work-smarter` bundles and maintains",
         "Teach Me to Research Briefing",
-        "Bundled Skills to Remember Me: targeted consultation",
-        "Bundled Skills to Remember Me: durable update request",
-        "Remember Me to External Domain Owner", "No reverse handoff",
+        "Work Smarter and Career Coach to Remember Me: targeted consultation",
+        "External callers to Remember Me: durable update request",
+        "Remember Me to External Domain Owner", "No automatic continuation",
+        "dev-tools:coding-preferences",
+        "A generated skip instruction, caller label, or handoff is not user authorization",
     ):
         require(phrase in contract, f"Contract missing: {phrase}")
 
@@ -101,7 +103,7 @@ def validate_remember_me() -> None:
         require(phrase in skill, f"remember-me missing behavior: {phrase}")
     for phrase in (
         "communication-collaboration.md", "entertainment-interests.md",
-        "career-coach:career-direction", "meal-planner:personal-chef",
+        "career-coach:career-direction", "dev-tools:coding-preferences", "meal-planner:personal-chef",
         "RMH-YYYY-MM-DD-NN",
     ):
         require(phrase in records, f"remember-me records missing: {phrase}")
@@ -234,36 +236,19 @@ def validate_teach_me() -> None:
     require(skill.index(shared_link) < skill.index(family_link), "teach-me must route shared visual-art core before family")
 
 
-def validate_memory_priorities() -> None:
-    memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
-    remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
-    records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
-    contract = read(ROOT / "shared" / "handoff-contracts.md")
-    priorities = (
-        "1. Preserve reliable recall",
-        "2. Minimize the tokens",
-        "3. Minimize the time",
-    )
-    positions = [memory.index(priority) for priority in priorities]
-    require(positions == sorted(positions), "Memory priorities are out of order")
-    for phrase, artifact in (
-        ("Never improve a lower-ranked objective", memory),
-        ("Reliable recall takes priority", remember),
-        ("Keep the transaction narrow only when", records),
-        ("Expand beyond the index summary", contract),
-    ):
-        require(phrase in artifact, f"Memory priority guidance missing: {phrase}")
-
-
 def validate_memory_audit_guidance() -> None:
-    memory = read(ROOT / "skills" / "superb-skills" / "references" / "working-memory.md")
+    audit = read(ROOT / "shared" / "record-audits.md")
     remember = read(ROOT / "skills" / "remember-me" / "SKILL.md")
     records = read(ROOT / "skills" / "remember-me" / "references" / "record-management.md")
-    research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
     audit_script = ROOT / "scripts" / "validate_memory_audit.py"
     require(audit_script.is_file(), "Missing deterministic memory audit validator")
     for phrase, artifact in (
-        ("conservative default design heuristic", memory),
+        ("staged, fail-closed transaction", audit),
+        ("bidirectional ledger", audit),
+        ("complete after-state file set", audit),
+        ("validator's recursive Markdown inventories", audit),
+        ("SHA-256 hash", audit),
+        ("the validator's ID uniqueness check is ledger-local", audit),
         ("8 KiB", records),
         ("180 days", records),
         ("25 material changes", records),
@@ -271,38 +256,24 @@ def validate_memory_audit_guidance() -> None:
         ("Conversation-context compaction", records),
         ("immutable resource", records),
         ("canonical permalink", records),
-        ("bidirectional ledger", memory),
         ("A due trigger requires review, not automatic", remember),
-        ("explicit or implicit comparison", research),
-        ("supported absolute property", research),
-        ("opening summary name and directly link", research),
-        ("what each reference influenced", research),
-        ("Do not propose or create phases by default", research),
-        ("silence does not authorize research", research),
-        ("A progress update is not a completed checkpoint", research),
+        ("loss-controlled record-audit protocol", remember),
     ):
-        require(phrase in artifact, f"Memory audit or research summary guidance missing: {phrase}")
+        require(phrase in artifact, f"Work Smarter record-audit guidance missing: {phrase}")
 
 
-def validate_instruction_design() -> None:
-    root = ROOT / "skills" / "superb-skills"
-    skill = read(root / "SKILL.md")
-    instruction = read(root / "references" / "instruction-design.md")
-    template = read(root / "references" / "project-instructions-template.md")
-    checker = root / "scripts" / "check_instruction_length.py"
-    require(len(skill) <= 6000, "superb-skills entrypoint exceeds the thin-router budget")
-    require("research-scope checkpoint" not in skill, "superb-skills duplicates research procedure")
-    require("remember-me/index.md" not in skill, "superb-skills duplicates memory retrieval procedure")
-    require("8 KiB" not in skill, "superb-skills duplicates working-memory detail")
+def validate_research_summary_guidance() -> None:
+    research = read(ROOT / "skills" / "research-briefing" / "SKILL.md")
     for phrase in (
-        "8,000-character limit",
-        "7,600 characters",
-        "Revise any artifact above the hard limit before delivery",
-        "Do not copy the procedures of `research-briefing`, `remember-me`, `skill-creator`",
+        "explicit or implicit comparison",
+        "supported absolute property",
+        "opening summary name and directly link",
+        "what each reference influenced",
+        "Do not propose or create phases by default",
+        "silence does not authorize research",
+        "A progress update is not a completed checkpoint",
     ):
-        require(phrase in instruction, f"Instruction artifact contract missing: {phrase}")
-    require("omit unused headings" in template, "Project-instruction template is not selective")
-    require(checker.is_file(), "Missing deterministic instruction-length checker")
+        require(phrase in research, f"Research summary guidance missing: {phrase}")
 
 
 def validate_evals() -> None:
@@ -316,15 +287,6 @@ def validate_evals() -> None:
         for field in ("input", "intended_behavior", "success_criteria", "failure_criteria"):
             require(case.get(field), f"{case['id']} missing {field}")
     for case_id in (
-        "instruction-hard-limit",
-        "instruction-existing-skill-authority",
-        "instruction-local-override",
-        "memory-recall-before-token-reduction",
-        "memory-token-reduction-before-speed",
-        "memory-narrow-update-fallback",
-        "memory-maintenance-trigger",
-        "memory-audit-success",
-        "memory-audit-loss-failure",
         "research-opening-influential-sources",
         "research-large-request-phase-choice",
         "research-ordinary-request-no-phase-warning",
@@ -335,9 +297,6 @@ def validate_evals() -> None:
         "research-unsupported-implicit-comparison",
         "research-supported-comparison",
         "research-subjective-comparison",
-        "memory-nonsize-audit-trigger",
-        "memory-context-vs-record-compaction",
-        "memory-conditional-toc",
         "memory-provider-identity-pointer",
         "teach-visual-digital-plan",
         "teach-visual-tool-only",
@@ -423,8 +382,9 @@ def validate_teach_me_routing() -> None:
 def main() -> int:
     checks = (
         validate_manifest, validate_skills, validate_links,
-        validate_contract, validate_remember_me, validate_save_trials, validate_record_backup, validate_teach_me, validate_memory_priorities,
-        validate_memory_audit_guidance, validate_instruction_design, validate_evals,
+        validate_contract, validate_remember_me, validate_save_trials, validate_record_backup, validate_teach_me,
+        validate_memory_audit_guidance, validate_research_summary_guidance,
+        validate_evals,
         validate_teach_me_routing,
     )
     for check in checks:

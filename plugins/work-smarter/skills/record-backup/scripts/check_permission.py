@@ -195,14 +195,22 @@ def check_permission(profile, record, destination, at, task_grant=None):
         if any(grant["revoked"] for grant in matches):
             return denied("grant revoked; canonical reinstatement required")
 
+        identity_scoped_approvals = [
+            approval for approval in approvals
+            if all(approval[key] == record[key] for key in IDENTITY[:2])
+            and all(approval["destination"][key] == destination[key]
+                    for key in ("repository", "branch"))
+        ]
+        if required_types is None and any(
+            approval["revoked"] for approval in identity_scoped_approvals
+        ):
+            return denied("data types unavailable to evaluate revoked data-type approval")
+
         scoped_approvals = []
         if required_types is not None:
             scoped_approvals = [
-                approval for approval in approvals
+                approval for approval in identity_scoped_approvals
                 if approval["data_type"].strip().casefold() in required_types
-                and all(approval[key] == record[key] for key in IDENTITY[:2])
-                and all(approval["destination"][key] == destination[key]
-                        for key in ("repository", "branch"))
             ]
             if any(approval["revoked"] for approval in scoped_approvals):
                 return denied("data-type approval revoked; canonical reinstatement required")

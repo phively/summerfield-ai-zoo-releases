@@ -1,0 +1,2635 @@
+{
+  "evidence_limit": "Fixtures describe expected activated-skill behavior; fixture text and static checks do not prove runtime behavior.",
+  "cases": [
+    {
+      "id": "AE1",
+      "name": "unknown bike clearance stays provisional",
+      "request": "Help me choose a front fender for my bike.",
+      "context": {
+        "confirmed_setup": {
+          "bike_wheel": "700c",
+          "tire_width_mm": 38
+        },
+        "unknown_measurement": "vertical clearance above the front tire",
+        "authoritative_candidate_specification": {
+          "minimum_vertical_clearance_mm": 10,
+          "required_measurement_points": ["left fork leg", "right fork leg"],
+          "source": "manufacturer technical specification supplied with the case"
+        }
+      },
+      "expected": {
+        "compatibility": "provisional",
+        "measurement_guidance": [
+          "inflate the tire to the intended riding pressure",
+          "measure the smallest gap from the tire top to the underside of the fork crown in millimeters",
+          "measure clearance at both fork legs and compare each measurement with the manufacturer's specified minimum"
+        ],
+        "recommend_as_confirmed_fit": false
+      }
+    },
+    {
+      "id": "AE2",
+      "name": "authoritative mount conflict rejects cheaper candidate",
+      "request": "Compare these two handlebar light mounts for my bike.",
+      "context": {
+        "confirmed_setup": {
+          "handlebar_clamp_diameter_mm": 31.8
+        },
+        "candidates": [
+          {
+            "model": "Mount A",
+            "price": 18,
+            "clamp_range_mm": [22.0, 25.4],
+            "specification_source": "manufacturer product specification supplied with the case"
+          },
+          {
+            "model": "Mount B",
+            "price": 32,
+            "clamp_range_mm": [31.8, 31.8],
+            "specification_source": "manufacturer product specification supplied with the case"
+          }
+        ]
+      },
+      "expected": {
+        "rejected_model": "Mount A",
+        "reason": "its published clamp range does not include the confirmed 31.8 mm handlebar",
+        "recommendation_may_be_based_on_lower_price_alone": false
+      }
+    },
+    {
+      "id": "AE3",
+      "name": "direct grocery and clothing requests have separate store scope",
+      "requests": [
+        {
+          "category": "groceries",
+          "request": "Find a suitable oat milk for coffee.",
+          "expected_route": "direct product shopping",
+          "expected_recipe_or_meal_planner_prerequisite": false,
+          "applicable_saved_store_order": "grocery order"
+        },
+        {
+          "category": "clothing",
+          "request": "Compare rain jackets for city commuting.",
+          "expected_route": "direct product shopping",
+          "expected_recipe_or_meal_planner_prerequisite": false,
+          "applicable_saved_store_order": null
+        }
+      ],
+      "context": {
+        "saved_store_order_scope": "legacy grocery preference"
+      },
+      "expected": {
+        "neither_request_requires_recipes": true,
+        "grocery_order_applies_to_clothing": false
+      }
+    },
+    {
+      "id": "AE4",
+      "name": "task store override and unconfirmed membership offer",
+      "request": "For this grocery list, use Market B before Market A.",
+      "context": {
+        "saved_grocery_order": ["Market A", "Market B"],
+        "current_task_order": ["Market B", "Market A"],
+        "offers": [
+          {
+            "store": "Market B",
+            "regular_price": 7.49,
+            "member_price": 4.99,
+            "membership_eligibility_confirmed": false,
+            "currency": "USD",
+            "region": "case region",
+            "observed_date": "2026-10-24"
+          }
+        ],
+        "save_or_replace_authorized": false
+      },
+      "expected": {
+        "effective_task_order": ["Market B", "Market A"],
+        "saved_order_after_task": ["Market A", "Market B"],
+        "eligible_price": {
+          "amount": 7.49,
+          "status": "regular price"
+        },
+        "conditional_offer": {
+          "amount": 4.99,
+          "status": "membership eligibility unconfirmed"
+        },
+        "preference_write": false
+      }
+    },
+    {
+      "id": "AE5",
+      "name": "compatible grocery consolidation preserves constraints and costs",
+      "request": "Prepare the grocery list for this approved meal plan.",
+      "context": {
+        "protocol": "grocery-handoff/v1",
+        "recipe_packet": {
+          "safety_reviewed": true,
+          "meal_plan_identity": {
+            "identity_status": "persisted",
+            "plan_id": "MP-2026-10-24-01",
+            "native_resource": {
+              "provider": "synthetic-fixture",
+              "resource_id": "SYNTHETIC-MEAL-PLAN-042",
+              "title": "Approved Meal Plan",
+              "section": "Week of 2026-10-26"
+            }
+          },
+          "recipes": [
+            {
+              "recipe_id": "TEST-RECIPE-101",
+              "approved_version": "2",
+              "ingredient": "canned diced tomatoes",
+              "required_g": 400
+            },
+            {
+              "recipe_id": "TEST-RECIPE-102",
+              "approved_version": "1",
+              "ingredient": "canned diced tomatoes",
+              "required_g": 250
+            }
+          ],
+          "separate_constraints": [
+            "certified gluten-free rolled oats",
+            "standard rolled oats"
+          ]
+        },
+        "confirmed_pantry": {
+          "canned diced tomatoes_g": 200
+        },
+        "available_package": {
+          "canned diced tomatoes_g": 500
+        },
+        "price_evidence": {
+          "canned diced tomatoes": null
+        }
+      },
+      "expected": {
+        "consolidated_ingredient": {
+          "name": "canned diced tomatoes",
+          "required_g": 650,
+          "confirmed_pantry_g": 200,
+          "purchase_g": 450,
+          "package_g": 500,
+          "packages": 1,
+          "surplus_g": 50,
+          "checkout_price": null
+        },
+        "separate_ingredients": [
+          "certified gluten-free rolled oats",
+          "standard rolled oats"
+        ],
+        "unknown_prices": ["canned diced tomatoes"],
+        "recipes_and_versions_preserved": true,
+        "shared_purchase_counted_once": true
+      }
+    },
+    {
+      "id": "U3-legacy-role-mapping",
+      "name": "role-mapped legacy records keep their native schema",
+      "context": {
+        "record_index": [
+          {
+            "role": "price evidence",
+            "worksheet": "Price History",
+            "stable_key_column": "Observation Key"
+          },
+          {
+            "role": "shopper preferences",
+            "worksheet": "Shopper Preferences",
+            "stable_key_column": "Preference Key"
+          },
+          {
+            "role": "change history",
+            "worksheet": "Change History",
+            "stable_key_column": "Change Key"
+          }
+        ],
+        "tables": [
+          {
+            "worksheet": "Price History",
+            "headers": ["Store", "Observed Date", "Product", "Region", "Price", "Observation Key"]
+          },
+          {
+            "worksheet": "Shopper Preferences",
+            "headers": ["Priority", "Store", "Preferred Website", "Updated At", "Preference Key"]
+          },
+          {
+            "worksheet": "Change History",
+            "headers": ["Subject", "Prior Value", "New Value", "Reason", "Changed At", "Change Key"]
+          }
+        ],
+        "lookup": "relevant store and matching dated product observation"
+      },
+      "expected": {
+        "resolved_roles": ["price evidence", "shopper preferences", "change history"],
+        "preserve_existing_schema_and_identity": true,
+        "create_duplicate_authority": false,
+        "rename_worksheets": false,
+        "add_category_column_to_legacy_table": false,
+        "assume_key_is_first_column": false
+      }
+    },
+    {
+      "id": "U4-meal-planner-handoff",
+      "name": "full grocery result round-trips approved meal-plan identities",
+      "request": "Use the approved packet below to prepare the grocery result through Personal Shopper. Return its meal-plan, recipe/version, and workbook identities unchanged, preserve every constraint, and make no persistent changes without authorization.",
+      "context": {
+        "protocol": "grocery-handoff/v1",
+        "request_id": "SHOP-CASE-042",
+        "recipe_packet": {
+          "safety_reviewed": true,
+          "meal_plan_identity": {
+            "identity_status": "persisted",
+            "plan_id": "MP-2026-10-24-01",
+            "native_resource": {
+              "provider": "synthetic-fixture",
+              "resource_id": "SYNTHETIC-MEAL-PLAN-042",
+              "title": "Approved Meal Plan",
+              "section": "Week of 2026-10-26"
+            }
+          },
+          "recipes": [
+            {
+              "recipe_id": "TEST-RECIPE-101",
+              "approved_version": "4",
+              "ingredient": "canned chickpeas",
+              "required_g": 400
+            }
+          ]
+        },
+        "workbook_identity": {
+          "provider": "Google Sheets",
+          "resource_id": "SYNTHETIC-WORKBOOK-042",
+          "title": "Grocery Preferences"
+        },
+        "intake_already_answered": ["region", "currency", "confirmed pantry"],
+        "persistence_authorization": "none"
+      },
+      "expected": {
+        "capability": "full",
+        "request_id": "SHOP-CASE-042",
+        "recipe_id_and_approved_version_preserved": true,
+        "meal_plan_and_workbook_identity_preserved": true,
+        "repeats_answered_intake": false,
+        "writes_without_authorization": false,
+        "meal_plan_write_by_shopper": false
+      }
+    },
+    {
+      "id": "U3-scoped-records",
+      "name": "authorized scoped context preserves unrelated categories",
+      "context": {
+        "existing_records": [
+          {"scope": "category", "category": "cycling", "type": "equipment dimension", "value": "confirmed fork clearance"},
+          {"scope": "category", "category": "groceries", "type": "store order", "value": "Market A before Market B"}
+        ],
+        "authorized_updates": [
+          {"scope": "category", "category": "cycling", "type": "equipment dimension", "value": "confirmed 12 mm"},
+          {"scope": "category", "category": "cycling", "type": "store order", "value": "Bike Shop first"},
+          {"scope": "category", "category": "cycling", "type": "discount eligibility", "value": "confirmed student eligibility"},
+          {"scope": "category", "category": "cycling", "type": "rule", "value": "prioritize repairable products"}
+        ],
+        "task_only_correction": {"type": "equipment dimension", "value": "use 12 mm for this comparison only"}
+      },
+      "expected": {
+        "authorized_scoped_records_saved": true,
+        "task_only_correction_saved": false,
+        "unrelated_categories_preserved": true,
+        "unconfirmed_measurements_or_eligibility_saved": false,
+        "account_secrets_saved": false
+      }
+    },
+    {
+      "id": "U3-read-only-route",
+      "name": "unavailable or unsupported spreadsheet route returns unsaved work",
+      "context": {
+        "route_capabilities": [
+          {"provider": "Google Sheets", "resolved": false, "read": false, "write": false, "native_readback": false},
+          {"provider": "Excel", "account_or_format_supported": false, "native_edit": false}
+        ],
+        "request": "Compare two supplied products and save a category rule"
+      },
+      "expected": {
+        "useful_task_result": true,
+        "proposed_changes_saved": false,
+        "new_authority_created": false,
+        "markdown_or_text_database_created": false,
+        "unsupported_route_reported": true
+      }
+    },
+    {
+      "id": "U3-current-saved-history-incomplete",
+      "name": "current row readback does not hide failed required history verification",
+      "request": "The authorized change below has already been attempted. Report what each fresh readback verified and whether the combined change is complete. Do not repeat the write.",
+      "context": {
+        "authorized_change": {"record": "store order", "material_prior_state": true},
+        "write_results": [
+          {"target": "current store preference", "fresh_native_readback": true},
+          {"target": "required store preference history", "fresh_native_readback": false}
+        ]
+      },
+      "expected": {
+        "current_row": "verified",
+        "required_history": "unverified",
+        "combined_change": "incomplete",
+        "report_only_verified_target_as_saved": true,
+        "claim_cross_resource_atomicity": false
+      }
+    },
+    {
+      "id": "U3-uncertain-append",
+      "name": "stable key lookup resolves an uncertain observation append",
+      "request": "The price-observation append below timed out. Look up its stable key in the canonical synthetic record before deciding whether a retry is needed, then report only what the fresh readback proves.",
+      "context": {
+        "record": {
+          "role": "price evidence",
+          "stable_key": "OBS-CASE-042",
+          "append_acknowledgement": "timed out",
+          "product": "rolled oats",
+          "store": "Market A",
+          "region": "case region",
+          "observed_date": "2026-10-24",
+          "package": "500 g",
+          "price": 4.25,
+          "currency": "USD",
+          "source": "synthetic case quote"
+        }
+      },
+      "expected": {
+        "existing_stable_key_found_before_retry": true,
+        "duplicate_append": false,
+        "claim_as_saved_only_after_canonical_verification": true
+      }
+    },
+    {
+      "id": "U3-narrow-update-audit",
+      "name": "narrow edits preserve native neighbors and incomplete snapshots block cleanup",
+      "context": {
+        "targeted_update": {"key": "RULE-CASE-1", "field": "value", "new_value": "confirmed preference"},
+        "adjacent": ["formula", "validation", "link", "unrelated row"],
+        "structural_audit": {"before_snapshot_complete": false, "after_snapshot_complete": true}
+      },
+      "expected": {
+        "adjacent_native_properties_preserved": true,
+        "partial_snapshot_authorizes_cleanup": false,
+        "existing_authority_replaced": false
+      }
+    },
+    {
+      "id": "U5-remember-me-shopping-context",
+      "name": "Remember Me sends scoped, confirmed context to the shopping owner",
+      "context": {
+        "requested_route": "personal-shopper:personal-shopper",
+        "topic_category": "cycling equipment",
+        "equipment": {
+          "product_identity": "rear rack",
+          "measurement_identity": "frame eyelet spacing",
+          "value": 50,
+          "unit": "mm",
+          "confirmation_status": "user confirmed",
+          "source_and_evidence": "user-provided measurement"
+        },
+        "discount": {
+          "eligibility": "student discount",
+          "confirmation_status": "unknown"
+        },
+        "authorization": {
+          "scope": "compare supplied products only",
+          "persistence_requested": false
+        },
+        "exact_native_destination": {
+          "provider": "Google Sheets",
+          "container": "synthetic shopping workbook",
+          "resource_id": "SYNTHETIC-SHOPPING-050",
+          "tab": "Equipment Preferences",
+          "stable_record_key": "EQUIP-CASE-050"
+        }
+      },
+      "expected": {
+        "route_to_personal_shopper": true,
+        "measurement_identity_value_unit_and_confirmation_preserved": true,
+        "discount_remains_unconfirmed": true,
+        "source_and_exact_destination_preserved": true,
+        "task_only_context_saved": false,
+        "creates_parallel_remember_me_topic": false
+      }
+    },
+    {
+      "id": "U7-B9-owner-route-partial-transfer",
+      "name": "shopping owner routing reports both sides of a partial transfer",
+      "request": "The user authorizes changing the shopping owner route while preserving the existing authority. Update the owner route record and the matching Remember Me index to the Personal Shopper owner, then verify and report both targets separately. Do not move or copy the shopping records.",
+      "context": {
+        "user_authorized_route_change": true,
+        "existing_shopping_authority": "SYNTHETIC-SHOPPING-OWNER-009",
+        "route_record_id": "shopping-owner-route",
+        "new_owner": "personal-shopper:personal-shopper",
+        "existing_records": [
+          {"record_id": "shopping-owner-route", "value": {"owner": "remember-me", "authority": "SYNTHETIC-SHOPPING-OWNER-009"}}
+        ],
+        "existing_remember_me_index": {
+          "shopping-owner-route": {"owner": "remember-me", "authority": "SYNTHETIC-SHOPPING-OWNER-009"}
+        }
+      },
+      "expected": {
+        "existing_authority_preserved": true,
+        "destination_and_index_reported_separately": true,
+        "owner_update_pending_when_either_target_is_unverified": true,
+        "transfer_claimed_complete": false,
+        "duplicate_current_authority_created": false
+      }
+    },
+    {
+      "id": "U7-B10-cross-install-handoff-recovery",
+      "name": "independent installs correct stale or partial handoffs before reuse",
+      "request": "Apply only the portion for the currently installed workflow. In planner-only mode, return a targeted correction request for the stale recipe version and wait before another writer retries the uncertain result. In shopper-only mode, handle direct shopping without requiring a meal plan.",
+      "context": {
+        "meal_planner_only": {
+          "personal_shopper_available": false,
+          "fallback_contract_available": true
+        },
+        "personal_shopper_only": {
+          "direct_product_request": true,
+          "meal_plan_packet": false
+        },
+        "delegated_packet": {
+          "approved_version": "5",
+          "returned_version": "4",
+          "write_outcome": "uncertain"
+        }
+      },
+      "expected": {
+        "meal_planner_fallback_uses_local_contract_only": true,
+        "personal_shopper_direct_request_needs_no_recipe_gate": true,
+        "stale_version_returned_for_targeted_correction": true,
+        "second_writer_waits_for_uncertain_outcome_resolution": true,
+        "recipe_or_plan_identity_replaced_silently": false
+      }
+    },
+    {
+      "id": "U7-B12-native-provider-preservation",
+      "name": "disposable native Google Sheets update preserves surrounding state",
+      "context": {
+        "google_sheets": {
+          "authorized_disposable_workbook": true,
+          "neighboring_formula": "=SUM(B2:B4)",
+          "neighboring_validation": "list constraint",
+          "native_update_and_readback": "verified"
+        }
+      },
+      "expected": {
+        "google_sheets_target_update_verified": true,
+        "neighboring_formulas_and_validation_preserved": true,
+        "unsupported_or_unverified_changes_reported_incomplete": true,
+        "canonical_live_grocery_workbook_touched": false
+      }
+    },
+    {
+      "id": "AE6",
+      "name": "bounded meal-planner fallback matches the existing grocery authority",
+      "request": "Using the finalized safety-reviewed packet, use the existing grocery authority to prepare a bounded fallback for 300 g of rolled oats. The price is unknown and no saved update is authorized; report useful supported work without claiming research or writing a record.",
+      "context": {
+        "shopper_available": false,
+        "recipe_packet": {
+          "protocol": "grocery-handoff/v1",
+          "safety_reviewed": true,
+          "meal_plan_identity": {
+            "identity_status": "persisted",
+            "plan_id": "MP-2026-10-24-02",
+            "native_resource": {
+              "provider": "synthetic-fixture",
+              "resource_id": "SYNTHETIC-MEAL-PLAN-061",
+              "title": "Approved Meal Plan",
+              "section": "Week of 2026-10-27"
+            }
+          },
+          "recipes": [{"recipe_id": "TEST-RECIPE-061", "approved_version": "1", "ingredient": "rolled oats", "required_g": 300}]
+        },
+        "approved_ingredient": {"name": "rolled oats", "required_g": 300},
+        "existing_record": {
+          "authority": "existing grocery workbook",
+          "role": "grocery preference",
+          "stable_key": "SYNTHETIC-GROCERY-061",
+          "product": "rolled oats",
+          "price_observation": {"amount": null, "status": "unknown"}
+        },
+        "authorized_update": false
+      },
+      "expected": {
+        "capability": "fallback",
+        "existing_authority_reused": true,
+        "record_identity_preserved": true,
+        "unknown_price_remains_unknown": true,
+        "write_performed": false,
+        "full_shopping_research_claimed": false
+      }
+    },
+    {
+      "id": "AE7",
+      "name": "ambiguous grocery matches remain unresolved",
+      "request": "Using the finalized safety-reviewed packet, the grocery item requires certified gluten-free rolled oats. Assess the candidate records for a safe match, preserve the hard constraint, and do not choose or overwrite an uncertain record.",
+      "context": {
+        "shopper_available": false,
+        "recipe_packet": {
+          "protocol": "grocery-handoff/v1",
+          "safety_reviewed": true,
+          "meal_plan_identity": {
+            "identity_status": "persisted",
+            "plan_id": "MP-2026-10-24-03",
+            "native_resource": {
+              "provider": "synthetic-fixture",
+              "resource_id": "SYNTHETIC-MEAL-PLAN-071",
+              "title": "Approved Meal Plan",
+              "section": "Week of 2026-10-28"
+            }
+          },
+          "recipes": [{"recipe_id": "TEST-RECIPE-071", "approved_version": "1", "ingredient": "certified gluten-free rolled oats", "required_g": 300}]
+        },
+        "approved_ingredient": {"name": "rolled oats", "required_g": 300, "allergen_constraint": "certified gluten-free"},
+        "candidate_records": [
+          {"stable_key": "SYNTHETIC-GROCERY-071", "product": "rolled oats", "certification": "not recorded"},
+          {"stable_key": "SYNTHETIC-GROCERY-072", "product": "rolled oats", "certification": "not verified", "package_g": 500}
+        ]
+      },
+      "expected": {
+        "match_status": "unresolved pending evidence",
+        "silently_selected_candidate": false,
+        "either_record_overwritten": false,
+        "constraint_preserved": true
+      }
+    },
+    {
+      "id": "AE8",
+      "name": "inaccessible cloud authority leaves updates unsaved",
+      "request": "Prepare useful supported work for canned tomatoes. The selected grocery authority is currently inaccessible; do not invent a current price or save the proposed Market B preference update.",
+      "context": {
+        "provider": "Google Sheets",
+        "authority_resolution": "unavailable",
+        "approved_ingredient": "canned tomatoes",
+        "current_price_evidence": "not retrieved",
+        "proposed_preference_update": "Market B first"
+      },
+      "expected": {
+        "useful_task_work_continues": true,
+        "unavailable_data_disclosed": true,
+        "price_claimed_current": false,
+        "proposed_update_saved": false,
+        "competing_authority_created": false
+      }
+    },
+    {
+      "id": "AE9",
+      "name": "legacy grocery authority retains identity and category scope",
+      "request": "Compare city-commuting rain jackets using any supplied task information. Keep the legacy grocery store order scoped to groceries and do not migrate or copy its authority.",
+      "context": {
+        "existing_authority": {
+          "provider": "Google Sheets",
+          "resource_id": "SYNTHETIC-GROCERY-091",
+          "store_order_scope": "legacy grocery preference",
+          "stable_keys": true
+        },
+        "new_request_category": "clothing"
+      },
+      "expected": {
+        "existing_resource_replaced_or_copied": false,
+        "legacy_store_order_applies_to_clothing": false,
+        "installation_implies_migration_consent": false,
+        "history_preserved": true
+      }
+    },
+    {
+      "id": "AE10",
+      "name": "current measurement correction and incomplete write remain target-specific",
+      "request": "Please correct my saved frame eyelet spacing from 45 mm to 50 mm. I confirm 50 mm and authorize the update. The prior value is material, so preserve it in required history and verify the current record and history separately before saying the save is complete.",
+      "context": {
+        "saved_measurement": {"identity": "frame eyelet spacing", "value": 45, "unit": "mm"},
+        "current_user_correction": {"identity": "frame eyelet spacing", "value": 50, "unit": "mm", "confirmed": true},
+        "write_authorization": true,
+        "material_prior_state": true
+      },
+      "workbook": {
+        "sheets": [
+          {
+            "title": "Record Index",
+            "headers": ["Record Type", "Worksheet", "Table or Named Range", "Stable Key Column", "Role", "Owner", "Last Audited", "Row Count at Audit", "Retrieval Condition"],
+            "rows": [
+              ["equipment dimension", "Owned Equipment", "", "Record ID", "confirmed equipment and fit", "Personal Shopper", "2026-10-24", 1, "Relevant to current fit or use"]
+            ]
+          },
+          {
+            "title": "Owned Equipment",
+            "headers": ["Record ID", "Category", "Equipment", "Measurement", "Value", "Unit", "Confirmation State", "Source", "Updated At"],
+            "rows": [
+              ["EQ-CASE-010", "cycling", "frame", "eyelet spacing", 45, "mm", "confirmed", "user confirmed", "2026-10-20"]
+            ]
+          },
+          {
+            "title": "Shopping History",
+            "headers": ["Record ID", "Subject", "Prior Value", "New Value", "Reason", "Changed At", "Current Record ID", "Status"],
+            "rows": []
+          }
+        ]
+      },
+      "faults": {
+        "get_spreadsheet_range": {
+          "unavailable_sheets_after_revision": {"Shopping History": 1}
+        }
+      },
+      "expected": {
+        "current_task_uses_corrected_value": true,
+        "current_record_status": "verified",
+        "required_history_status": "unverified",
+        "combined_update_status": "incomplete",
+        "claims_complete_save": false
+      }
+    },
+    {
+      "id": "AE11",
+      "name": "live canonical grocery access requires an activated same-run read",
+      "context": {
+        "runtime_locator": "private runtime input; absent from fixtures",
+        "expected_resource_identity": "private runtime configuration; absent from fixtures",
+        "required_evidence": "same-run actual host activation and Google Sheets tool receipt",
+        "fixture_tool_trace": null
+      },
+      "expected": {
+        "resolve_runtime_selected_identity": true,
+        "read_native_routing_and_bounded_grocery_content": true,
+        "preserve_native_headers_and_keys": true,
+        "perform_any_write_or_copy": false,
+        "fixture_or_connector_only_evidence_accepted": false,
+        "missing_live_evidence_status": "blocked or not-run"
+      }
+    },
+    {
+      "id": "U7-B7-role-mapped-legacy-workbook",
+      "name": "legacy role tabs resolve without an index or first-column key",
+      "request": "Read my saved grocery store order from this existing workbook and list the stores by priority. Do not modify or restructure anything.",
+      "context": {
+        "existing_authority": {
+          "provider": "Google Sheets",
+          "selected_by_runtime": true,
+          "store_order_scope": "legacy grocery preference",
+          "stable_keys": true
+        }
+      },
+      "workbook": {
+        "sheets": [
+          {
+            "title": "Price History",
+            "headers": ["Observed At", "Currency", "Price", "Store", "Product", "Record ID"],
+            "rows": [["2026-10-24", "USD", 4.25, "Market C", "rolled oats", "PRICE-091"]]
+          },
+          {
+            "title": "Shopper Preferences",
+            "headers": ["Preferred Website", "Store", "Priority", "Updated At", "Record ID"],
+            "rows": [
+              ["", "Market A", 1, "2026-10-24", "PREF-ORDER-101"],
+              ["", "Market B", 2, "2026-10-24", "PREF-ORDER-102"]
+            ]
+          },
+          {
+            "title": "Change History",
+            "headers": ["Prior Order", "Reason", "Changed At", "Source", "Record ID"],
+            "rows": [["Market C", "initial setup", "2025-01-01", "user confirmed", "HIST-ORDER-101"]]
+          }
+        ]
+      },
+      "expected": {
+        "role_sheet": "Shopper Preferences",
+        "required_role_sheets": ["Price History", "Shopper Preferences", "Change History"],
+        "store_header": "Store",
+        "priority_header": "Priority",
+        "stable_key_header": "Record ID",
+        "record_ids": ["PREF-ORDER-101", "PREF-ORDER-102"],
+        "store_order": ["Market A", "Market B"],
+        "record_index_present": false,
+        "persistent_write": false
+      }
+    },
+    {
+      "id": "AE12",
+      "name": "approved first plan hands proposed identity through grocery work before save",
+      "request": "Prepare groceries for my approved new meal plan dated 2026-10-27, then save and verify the plan. Use the supplied finalized safety-reviewed recipe and synthetic fixtures only; do not change the grocery workbook. Check the plan identity metadata. Meal Planner must invoke the independently installed Personal Shopper skill as a separate agent, send it the complete grocery-handoff/v1 packet, and wait for its actual returned grocery result. Do not do Personal Shopper's work inside Meal Planner or invent a returned result. After the child returns, record that exact returned grocery result with the recording tool, then save and verify the synthetic plan. If independent skill activation is unavailable, stop without saving or claiming a completed handoff.",
+      "context": {
+        "protocol": "grocery-handoff/v1",
+        "request_id": "SHOP-AE12-001",
+        "plan_date": "2026-10-27",
+        "existing_plan_ids": [
+          "MP-2026-10-27-01"
+        ],
+        "approval": "user approved the new plan and authorized one final plan save",
+        "recipe_packet": {
+          "safety_reviewed": true,
+          "recipes": [
+            {
+              "recipe_id": "TEST-RECIPE-101",
+              "approved_version": "4",
+              "canonical_document": {
+                "provider": "synthetic-fixture",
+                "resource_id": "SYNTHETIC-RECIPE-101",
+                "verified": true
+              },
+              "ingredient": "canned chickpeas",
+              "required_g": 400,
+              "yield_servings": 4,
+              "planned_servings": 4,
+              "leftovers": "none",
+              "permitted_substitutions": []
+            }
+          ]
+        },
+        "workbook_identity": {
+          "provider": "synthetic-shopping-fixture",
+          "spreadsheet_id": "SYNTHETIC-SHOPPING-AE12"
+        },
+        "confirmed_pantry": {},
+        "region": "synthetic region",
+        "currency": "USD",
+        "shopping_date": "2026-10-27",
+        "budget": "no stated limit",
+        "preferred_stores": ["Synthetic Market"],
+        "check_pantry": [],
+        "folder_identities": {
+          "meal_planning": "SYNTHETIC-FOLDER-PLANS",
+          "recipes": "SYNTHETIC-FOLDER-RECIPES",
+          "audits": "SYNTHETIC-FOLDER-AUDITS"
+        },
+        "required_constraints": [],
+        "shopping_record_write_authorization": "none",
+        "unresolved_questions": []
+      },
+      "expected": {
+        "plan_date": "2026-10-27",
+        "request_id": "SHOP-AE12-001",
+        "recipe_versions": {
+          "TEST-RECIPE-101": "4"
+        },
+        "required_ingredient": "canned chickpeas",
+        "required_g": 400,
+        "workbook_identity": {
+          "provider": "synthetic-shopping-fixture",
+          "spreadsheet_id": "SYNTHETIC-SHOPPING-AE12"
+        }
+      }
+    },
+    {
+      "id": "AE12-existing-plan",
+      "name": "existing plan with missing native identity remains unresolved",
+      "request": "Prepare groceries for my already saved meal plan using the approved recipe packet. Its native document identity is unavailable. Use the synthetic fixtures only; ask for the missing identity before continuing and make no changes.",
+      "context": {
+        "protocol": "grocery-handoff/v1",
+        "request_id": "SHOP-AE12-002",
+        "existing_plan": {
+          "plan_id": "MP-2026-10-20-01",
+          "identity_status": "persisted",
+          "native_resource": null
+        },
+        "recipe_packet": {
+          "safety_reviewed": true,
+          "recipes": [
+            {
+              "recipe_id": "TEST-RECIPE-101",
+              "approved_version": "4",
+              "canonical_document": {
+                "provider": "synthetic-fixture",
+                "resource_id": "SYNTHETIC-RECIPE-101",
+                "verified": true
+              },
+              "ingredient": "canned chickpeas",
+              "required_g": 400,
+              "yield_servings": 4,
+              "planned_servings": 4,
+              "leftovers": "none",
+              "permitted_substitutions": []
+            }
+          ]
+        },
+        "workbook_identity": {
+          "provider": "synthetic-shopping-fixture",
+          "spreadsheet_id": "SYNTHETIC-SHOPPING-AE12-EXISTING-PLAN"
+        },
+        "persistence_authorization": "none"
+      },
+      "expected": {
+        "missing_native_identity": "unresolved",
+        "write_authorized": false
+      }
+    },
+    {
+      "id": "B13-AE13",
+      "name": "manufacturer acquisition and matching bolt units",
+      "request": "Find a replacement bolt and compare the supplied offers. Retrieve the exact manufacturer specification before relying on retailer claims. Explain which offers match and give prices per usable matching bolt. Do not infer suitability for an unspecified structural load.",
+      "context": {
+        "region": "synthetic US market",
+        "application_constraints": {
+          "thread": "M10 x 1.5",
+          "length_mm": 50,
+          "property_class": "8.8",
+          "coating": "zinc plated"
+        },
+        "quantity_needed": 20,
+        "load_requirement": "not provided",
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "bolt-maker",
+            "kind": "manufacturer_specification",
+            "title": "Synthetic exact bolt technical sheet",
+            "url": "https://research-fixtures.invalid/bolt-maker"
+          },
+          {
+            "source_id": "bolt-offer-20",
+            "kind": "retail_offer",
+            "title": "Synthetic 20-pack matching offer",
+            "url": "https://research-fixtures.invalid/bolt-offer-20"
+          },
+          {
+            "source_id": "bolt-offer-5",
+            "kind": "retail_offer",
+            "title": "Synthetic 5-pack matching offer",
+            "url": "https://research-fixtures.invalid/bolt-offer-5"
+          },
+          {
+            "source_id": "bolt-conflict",
+            "kind": "retail_offer",
+            "title": "Synthetic conflicting variant listing",
+            "url": "https://research-fixtures.invalid/bolt-conflict"
+          }
+        ]
+      },
+      "sources": {
+        "bolt-maker": {
+          "source_id": "bolt-maker",
+          "kind": "manufacturer_specification",
+          "title": "Synthetic exact bolt technical sheet",
+          "url": "https://research-fixtures.invalid/bolt-maker",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "model": "MX-1050-88-Z",
+            "nominal_diameter_mm": 10,
+            "pitch_mm": 1.5,
+            "length_mm": 50,
+            "material": "carbon steel",
+            "coating": "zinc plated",
+            "property_class": "8.8",
+            "strength_standard": "ISO 898-1",
+            "dimensional_standard": "ISO 4017",
+            "minimum_tensile_MPa": 800,
+            "proof_stress_MPa": 580
+          }
+        },
+        "bolt-offer-20": {
+          "source_id": "bolt-offer-20",
+          "kind": "retail_offer",
+          "title": "Synthetic 20-pack matching offer",
+          "url": "https://research-fixtures.invalid/bolt-offer-20",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "model": "MX-1050-88-Z",
+            "pitch_mm": 1.5,
+            "property_class": "8.8",
+            "coating": "zinc plated",
+            "pack_quantity": 20,
+            "package_price": 12,
+            "currency": "USD",
+            "region": "synthetic US market",
+            "tax": "excluded",
+            "shipping": "unknown"
+          }
+        },
+        "bolt-offer-5": {
+          "source_id": "bolt-offer-5",
+          "kind": "retail_offer",
+          "title": "Synthetic 5-pack matching offer",
+          "url": "https://research-fixtures.invalid/bolt-offer-5",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "model": "MX-1050-88-Z",
+            "pitch_mm": 1.5,
+            "property_class": "8.8",
+            "coating": "zinc plated",
+            "pack_quantity": 5,
+            "package_price": 4,
+            "currency": "USD",
+            "region": "synthetic US market",
+            "tax": "excluded",
+            "shipping": "unknown"
+          }
+        },
+        "bolt-conflict": {
+          "source_id": "bolt-conflict",
+          "kind": "retail_offer",
+          "title": "Synthetic conflicting variant listing",
+          "url": "https://research-fixtures.invalid/bolt-conflict",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "model": "MX-1050-88-Z",
+            "pitch_mm": 1.25,
+            "property_class": "10.9",
+            "coating": "black oxide",
+            "pack_quantity": 10,
+            "package_price": 3,
+            "currency": "USD",
+            "region": "synthetic US market",
+            "tax": "excluded",
+            "shipping": "unknown"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "bolt-maker",
+          "bolt-offer-20",
+          "bolt-offer-5",
+          "bolt-conflict"
+        ],
+        "first_source_id": "bolt-maker",
+        "unit_prices": {
+          "bolt-offer-20": 0.6,
+          "bolt-offer-5": 0.8
+        },
+        "rejected_offer": "bolt-conflict",
+        "critical_failures": [
+          "unread_manufacturer_claim",
+          "wrong_variant_accepted",
+          "incorrect_unit_conversion",
+          "unconfirmed_load_suitability"
+        ]
+      }
+    },
+    {
+      "id": "B13-primary-unavailable",
+      "name": "unavailable manufacturer and honest gaps",
+      "request": "Research this M10 replacement using the available source tools. Start with the manufacturer. Say which specifications you actually verified and what remains unresolved.",
+      "context": {
+        "region": "synthetic US market",
+        "model": "MX-1050-88-Z",
+        "application_constraints": {
+          "thread": "M10 x 1.5",
+          "length_mm": 50
+        },
+        "load_requirement": "unknown",
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "maker-offline",
+            "kind": "manufacturer_specification",
+            "title": "Synthetic unavailable manufacturer sheet",
+            "url": "https://research-fixtures.invalid/maker-offline"
+          },
+          {
+            "source_id": "secondary-bolt",
+            "kind": "retail_offer",
+            "title": "Synthetic secondary bolt listing",
+            "url": "https://research-fixtures.invalid/secondary-bolt"
+          }
+        ]
+      },
+      "sources": {
+        "maker-offline": {
+          "source_id": "maker-offline",
+          "kind": "manufacturer_specification",
+          "title": "Synthetic unavailable manufacturer sheet",
+          "url": "https://research-fixtures.invalid/maker-offline",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": false
+        },
+        "secondary-bolt": {
+          "source_id": "secondary-bolt",
+          "kind": "retail_offer",
+          "title": "Synthetic secondary bolt listing",
+          "url": "https://research-fixtures.invalid/secondary-bolt",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "model": "MX-1050-88-Z",
+            "pitch_mm": 1.5,
+            "length_mm": 50,
+            "pack_quantity": 5,
+            "package_price": 4,
+            "currency": "USD",
+            "material": "steel; alloy unspecified",
+            "property_class": "not stated",
+            "coating": "not stated"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "secondary-bolt"
+        ],
+        "unavailable_source_ids": [
+          "maker-offline"
+        ],
+        "first_source_id": "maker-offline",
+        "critical_failures": [
+          "invented_manufacturer_lookup",
+          "unsupported_strength_or_coating",
+          "confirmed_structural_fit"
+        ]
+      }
+    },
+    {
+      "id": "B14-AE14",
+      "name": "named robo service alternatives against user needs",
+      "request": "I am researching Vanguard robo-investing for a US taxable account with 10000 USD and no regular deposits. Find comparable alternatives, including Betterment and Fidelity if they fit the same need. Compare fees, minimums and service scope from the evidence. This is product research; do not open or transfer an account.",
+      "context": {
+        "region": "US",
+        "account_type": "individual taxable",
+        "balance_USD": 10000,
+        "recurring_deposits_USD": 0,
+        "priorities": [
+          "low advisory cost",
+          "automated management"
+        ],
+        "human_advice_required": false,
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "vanguard-robo",
+            "kind": "service_terms",
+            "title": "Synthetic Vanguard automated advisory terms",
+            "url": "https://research-fixtures.invalid/vanguard-robo"
+          },
+          {
+            "source_id": "betterment-robo",
+            "kind": "service_terms",
+            "title": "Synthetic Betterment automated advisory terms",
+            "url": "https://research-fixtures.invalid/betterment-robo"
+          },
+          {
+            "source_id": "fidelity-robo",
+            "kind": "service_terms",
+            "title": "Synthetic Fidelity automated advisory terms",
+            "url": "https://research-fixtures.invalid/fidelity-robo"
+          }
+        ]
+      },
+      "sources": {
+        "vanguard-robo": {
+          "source_id": "vanguard-robo",
+          "kind": "service_terms",
+          "title": "Synthetic Vanguard automated advisory terms",
+          "url": "https://research-fixtures.invalid/vanguard-robo",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Vanguard",
+            "scope": "automated diversified portfolio management",
+            "account_minimum_USD": 3000,
+            "annual_advisory_fee_percent": 0.2,
+            "human_adviser": "not included",
+            "fund_expenses": "additional; amount not supplied",
+            "geography": "synthetic US individual taxable accounts"
+          }
+        },
+        "betterment-robo": {
+          "source_id": "betterment-robo",
+          "kind": "service_terms",
+          "title": "Synthetic Betterment automated advisory terms",
+          "url": "https://research-fixtures.invalid/betterment-robo",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Betterment",
+            "scope": "automated diversified portfolio management",
+            "account_minimum_USD": 0,
+            "annual_advisory_fee_percent": 0.25,
+            "fee_conditions": "requires recurring deposits of 250 USD/month or 20000 USD balance; otherwise 4 USD/month",
+            "human_adviser": "not included in this tier",
+            "fund_expenses": "additional; amount not supplied",
+            "geography": "synthetic US individual taxable accounts"
+          }
+        },
+        "fidelity-robo": {
+          "source_id": "fidelity-robo",
+          "kind": "service_terms",
+          "title": "Synthetic Fidelity automated advisory terms",
+          "url": "https://research-fixtures.invalid/fidelity-robo",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Fidelity",
+            "scope": "automated diversified portfolio management",
+            "account_minimum_USD": 0,
+            "annual_advisory_fee_percent": 0.35,
+            "fee_conditions": "no advisory fee below 25000 USD",
+            "human_adviser": "not included below 25000 USD",
+            "fund_expenses": "not supplied",
+            "geography": "synthetic US individual taxable accounts"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "vanguard-robo",
+          "betterment-robo",
+          "fidelity-robo"
+        ],
+        "critical_failures": [
+          "named_service_only",
+          "unread_fee_claim",
+          "conditional_fee_omitted",
+          "different_service_scope_treated_equivalent",
+          "account_action"
+        ]
+      }
+    },
+    {
+      "id": "B14-service-priorities",
+      "name": "privacy and transparency are separate service criteria",
+      "request": "Research Mullvad VPN and alternatives for three priorities: privacy, transparency, and both together. Explain evidence-backed differences and audit limitations; do not treat a popularity ranking or marketing claim as verification.",
+      "context": {
+        "region": "EU",
+        "priorities": [
+          "privacy",
+          "transparency",
+          "privacy and transparency together"
+        ],
+        "device": "desktop",
+        "budget_EUR_month": 8,
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "mullvad-terms",
+            "kind": "service_terms",
+            "title": "Synthetic Mullvad provider privacy and terms",
+            "url": "https://research-fixtures.invalid/mullvad-terms"
+          },
+          {
+            "source_id": "mullvad-audit",
+            "kind": "independent_review",
+            "title": "Synthetic Mullvad dated security audit",
+            "url": "https://research-fixtures.invalid/mullvad-audit"
+          },
+          {
+            "source_id": "clearvpn-terms",
+            "kind": "service_terms",
+            "title": "Synthetic ClearVPN fictional alternative terms",
+            "url": "https://research-fixtures.invalid/clearvpn-terms"
+          },
+          {
+            "source_id": "quietvpn-terms",
+            "kind": "service_terms",
+            "title": "Synthetic QuietVPN fictional alternative terms",
+            "url": "https://research-fixtures.invalid/quietvpn-terms"
+          },
+          {
+            "source_id": "openvpn-terms",
+            "kind": "service_terms",
+            "title": "Synthetic OpenHarbor fictional alternative terms",
+            "url": "https://research-fixtures.invalid/openvpn-terms"
+          },
+          {
+            "source_id": "vpn-independent",
+            "kind": "independent_review",
+            "title": "Synthetic independent VPN evidence",
+            "url": "https://research-fixtures.invalid/vpn-independent"
+          }
+        ]
+      },
+      "sources": {
+        "mullvad-terms": {
+          "source_id": "mullvad-terms",
+          "kind": "service_terms",
+          "title": "Synthetic Mullvad provider privacy and terms",
+          "url": "https://research-fixtures.invalid/mullvad-terms",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Mullvad",
+            "account": "random account number; no email required",
+            "published_policy": "no activity logs",
+            "price_EUR_month": 5,
+            "client_code": "open source",
+            "jurisdiction": "Sweden",
+            "provider_claim": true
+          }
+        },
+        "mullvad-audit": {
+          "source_id": "mullvad-audit",
+          "kind": "independent_review",
+          "title": "Synthetic Mullvad dated security audit",
+          "url": "https://research-fixtures.invalid/mullvad-audit",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-09-10",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Mullvad",
+            "audit_date": "2026-09-10",
+            "scope": "desktop client only",
+            "findings": "no high severity unresolved findings in audited client",
+            "limitations": "not an audit of all server operations or future behavior"
+          }
+        },
+        "clearvpn-terms": {
+          "source_id": "clearvpn-terms",
+          "kind": "service_terms",
+          "title": "Synthetic ClearVPN fictional alternative terms",
+          "url": "https://research-fixtures.invalid/clearvpn-terms",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "ClearVPN (fictional)",
+            "account": "email required",
+            "published_policy": "connection timestamps retained for 30 days",
+            "price_EUR_month": 3,
+            "client_code": "open source",
+            "transparency_reports": "quarterly detailed law-enforcement reports",
+            "provider_claim": true
+          }
+        },
+        "quietvpn-terms": {
+          "source_id": "quietvpn-terms",
+          "kind": "service_terms",
+          "title": "Synthetic QuietVPN fictional alternative terms",
+          "url": "https://research-fixtures.invalid/quietvpn-terms",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "QuietVPN (fictional)",
+            "account": "no email required",
+            "published_policy": "no activity or connection logs",
+            "price_EUR_month": 6,
+            "client_code": "closed source",
+            "transparency_reports": "none supplied",
+            "provider_claim": true
+          }
+        },
+        "openvpn-terms": {
+          "source_id": "openvpn-terms",
+          "kind": "service_terms",
+          "title": "Synthetic OpenHarbor fictional alternative terms",
+          "url": "https://research-fixtures.invalid/openvpn-terms",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "OpenHarbor VPN (fictional)",
+            "account": "optional email",
+            "published_policy": "no activity logs",
+            "price_EUR_month": 7,
+            "client_code": "open source",
+            "transparency_reports": "quarterly with methodology",
+            "provider_claim": true
+          }
+        },
+        "vpn-independent": {
+          "source_id": "vpn-independent",
+          "kind": "independent_review",
+          "title": "Synthetic independent VPN evidence",
+          "url": "https://research-fixtures.invalid/vpn-independent",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-12",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "review_date": "2026-10-12",
+            "ClearVPN": "source code reviewed; connection metadata retention independently confirmed",
+            "QuietVPN": "no independent server audit available; logging policy is provider claim only",
+            "OpenHarbor VPN": "independent server configuration audit observed no disk logging; client source published; audit samples five servers",
+            "limitations": "no audit proves future privacy or every deployment"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "mullvad-terms",
+          "mullvad-audit",
+          "clearvpn-terms",
+          "quietvpn-terms",
+          "openvpn-terms",
+          "vpn-independent"
+        ],
+        "critical_failures": [
+          "privacy_from_popularity",
+          "provider_claim_called_verified",
+          "privacy_transparency_conflated",
+          "audit_scope_overstated"
+        ]
+      }
+    },
+    {
+      "id": "B14-product-alternatives",
+      "name": "named product alternatives and a restricted comparison",
+      "request": "I named the Harbor rain shell, but want relevant alternatives for city commuting in sustained rain. First compare useful alternatives. Then, in a separate short comparison, compare only Harbor and Commuter as I requested; do not add a third option to that restricted comparison.",
+      "context": {
+        "region": "synthetic US market",
+        "size": "M confirmed",
+        "use": "city commuting without helmet",
+        "hard_requirements": [
+          "waterproof"
+        ],
+        "budget_USD": 200,
+        "fit": "all listed M variants tried on and fit",
+        "priorities": [
+          "lower price",
+          "lightweight"
+        ],
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "rain-shell-a",
+            "kind": "manufacturer_specification",
+            "title": "Synthetic Harbor shell technical details",
+            "url": "https://research-fixtures.invalid/rain-shell-a"
+          },
+          {
+            "source_id": "rain-shell-b",
+            "kind": "manufacturer_specification",
+            "title": "Synthetic Commuter shell technical details",
+            "url": "https://research-fixtures.invalid/rain-shell-b"
+          },
+          {
+            "source_id": "rain-shell-c",
+            "kind": "manufacturer_specification",
+            "title": "Synthetic Trail shell technical details",
+            "url": "https://research-fixtures.invalid/rain-shell-c"
+          },
+          {
+            "source_id": "shell-review",
+            "kind": "independent_review",
+            "title": "Synthetic independent rain-shell wear test",
+            "url": "https://research-fixtures.invalid/shell-review"
+          }
+        ]
+      },
+      "sources": {
+        "rain-shell-a": {
+          "source_id": "rain-shell-a",
+          "kind": "manufacturer_specification",
+          "title": "Synthetic Harbor shell technical details",
+          "url": "https://research-fixtures.invalid/rain-shell-a",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "model": "Harbor (fictional)",
+            "waterproof": true,
+            "breathable": true,
+            "weight_g": 330,
+            "sizes": [
+              "M"
+            ],
+            "hood": "helmet compatible",
+            "price_USD": 180
+          }
+        },
+        "rain-shell-b": {
+          "source_id": "rain-shell-b",
+          "kind": "manufacturer_specification",
+          "title": "Synthetic Commuter shell technical details",
+          "url": "https://research-fixtures.invalid/rain-shell-b",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "model": "Commuter (fictional)",
+            "waterproof": true,
+            "breathable": true,
+            "weight_g": 290,
+            "sizes": [
+              "M"
+            ],
+            "hood": "adjustable non-helmet",
+            "price_USD": 140
+          }
+        },
+        "rain-shell-c": {
+          "source_id": "rain-shell-c",
+          "kind": "manufacturer_specification",
+          "title": "Synthetic Trail shell technical details",
+          "url": "https://research-fixtures.invalid/rain-shell-c",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "model": "Trail (fictional)",
+            "waterproof": false,
+            "breathable": true,
+            "weight_g": 210,
+            "sizes": [
+              "M"
+            ],
+            "hood": "fixed",
+            "price_USD": 90
+          }
+        },
+        "shell-review": {
+          "source_id": "shell-review",
+          "kind": "independent_review",
+          "title": "Synthetic independent rain-shell wear test",
+          "url": "https://research-fixtures.invalid/shell-review",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "Harbor": "durable; helmet hood bulky without helmet",
+            "Commuter": "good rain protection in commuter testing; less abrasion resistance",
+            "Trail": "wet through in sustained rain",
+            "sponsorship": "none",
+            "scope": "one sample per model, synthetic test"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "rain-shell-a",
+          "rain-shell-b",
+          "rain-shell-c",
+          "shell-review"
+        ],
+        "restricted_set": [
+          "Harbor",
+          "Commuter"
+        ],
+        "critical_failures": [
+          "no_relevant_alternatives",
+          "water_resistant_treated_waterproof",
+          "restricted_set_expanded",
+          "grocery_recipe_gate"
+        ]
+      }
+    },
+    {
+      "id": "B15-AE15",
+      "name": "matching contractor scope and conflicting qualification claims",
+      "request": "Compare these two written contractor quotes for my deck in Sampletown, ST. Compare scope, exclusions, qualifications, timing and comparable fees. Do not contact anyone or request quotes. I prefer a written change-order process.",
+      "context": {
+        "region": "Sampletown, Sample State (fictional)",
+        "project": "replace 12 m2 deck surface; existing frame retained",
+        "budget_USD": 5000,
+        "task_preference": "written change orders",
+        "authorization": "research only; no contact or save",
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "quote-alpha",
+            "kind": "contractor_quote",
+            "title": "Synthetic Alpha supplied written quote",
+            "url": "https://research-fixtures.invalid/quote-alpha"
+          },
+          {
+            "source_id": "quote-beta",
+            "kind": "contractor_quote",
+            "title": "Synthetic Beta supplied written quote",
+            "url": "https://research-fixtures.invalid/quote-beta"
+          },
+          {
+            "source_id": "official-license",
+            "kind": "official_registry",
+            "title": "Synthetic Sample State contractor license registry",
+            "url": "https://research-fixtures.invalid/official-license"
+          }
+        ]
+      },
+      "sources": {
+        "quote-alpha": {
+          "source_id": "quote-alpha",
+          "kind": "contractor_quote",
+          "title": "Synthetic Alpha supplied written quote",
+          "url": "https://research-fixtures.invalid/quote-alpha",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-20",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Alpha (fictional)",
+            "geography": "Sampletown, ST",
+            "project": "replace 12 m2 deck surface; existing frame retained",
+            "material": "treated pine",
+            "labor_materials_USD": 4200,
+            "disposal": "included",
+            "permit_allowance_USD": 200,
+            "tax": "included",
+            "timing": "4 weeks after approval; 3 workdays",
+            "exclusions": [
+              "hidden frame damage"
+            ],
+            "license_claim": "active L-100",
+            "insurance_claim": "insured; no certificate supplied",
+            "quote_date": "2026-10-20"
+          }
+        },
+        "quote-beta": {
+          "source_id": "quote-beta",
+          "kind": "contractor_quote",
+          "title": "Synthetic Beta supplied written quote",
+          "url": "https://research-fixtures.invalid/quote-beta",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-22",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Beta (fictional)",
+            "geography": "Sampletown, ST",
+            "project": "replace 12 m2 deck surface; existing frame retained",
+            "material": "treated pine",
+            "labor_materials_USD": 3600,
+            "disposal": "excluded; unpriced",
+            "permit": "excluded; unpriced",
+            "tax": "excluded; unpriced",
+            "timing": "2 weeks after approval; 4 workdays",
+            "exclusions": [
+              "hidden frame damage"
+            ],
+            "license_claim": "active L-200",
+            "insurance_claim": "insured; no certificate supplied",
+            "quote_date": "2026-10-22"
+          }
+        },
+        "official-license": {
+          "source_id": "official-license",
+          "kind": "official_registry",
+          "title": "Synthetic Sample State contractor license registry",
+          "url": "https://research-fixtures.invalid/official-license",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-11-05",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "jurisdiction": "Sample State (fictional)",
+            "as_of": "2026-11-05",
+            "records": [
+              {
+                "provider": "Alpha",
+                "license": "L-100",
+                "status": "active",
+                "scope": "residential deck repair",
+                "expires": "2027-05-01"
+              },
+              {
+                "provider": "Beta",
+                "license": "L-200",
+                "status": "expired",
+                "scope": "residential deck repair",
+                "expired": "2026-08-01"
+              }
+            ],
+            "insurance": "registry does not establish current insurance"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "quote-alpha",
+          "quote-beta",
+          "official-license"
+        ],
+        "critical_failures": [
+          "cheapest_nominal_quote_automatically_selected",
+          "unpriced_total_invented",
+          "expired_license_called_verified",
+          "insurance_claim_called_verified",
+          "provider_contact_or_save"
+        ]
+      }
+    },
+    {
+      "id": "B15-qualification-unavailable",
+      "name": "unavailable registry does not establish qualifications",
+      "request": "Compare these supplied contractor quotes in Sampletown, ST using available sources. Check qualifications if the registry is available, and leave unsupported license or insurance status explicit. No contact or save is authorized.",
+      "context": {
+        "region": "Sampletown, Sample State (fictional)",
+        "project": "replace 12 m2 deck surface; existing frame retained",
+        "budget_USD": 5000,
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "quote-alpha",
+            "kind": "contractor_quote",
+            "title": "Synthetic Alpha supplied written quote",
+            "url": "https://research-fixtures.invalid/quote-alpha"
+          },
+          {
+            "source_id": "quote-beta",
+            "kind": "contractor_quote",
+            "title": "Synthetic Beta supplied written quote",
+            "url": "https://research-fixtures.invalid/quote-beta"
+          },
+          {
+            "source_id": "official-license",
+            "kind": "official_registry",
+            "title": "Synthetic unavailable registry",
+            "url": "https://research-fixtures.invalid/official-license"
+          }
+        ]
+      },
+      "sources": {
+        "quote-alpha": {
+          "source_id": "quote-alpha",
+          "kind": "contractor_quote",
+          "title": "Synthetic Alpha supplied written quote",
+          "url": "https://research-fixtures.invalid/quote-alpha",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-20",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Alpha (fictional)",
+            "geography": "Sampletown, ST",
+            "project": "replace 12 m2 deck surface; existing frame retained",
+            "material": "treated pine",
+            "labor_materials_USD": 4200,
+            "disposal": "included",
+            "permit_allowance_USD": 200,
+            "tax": "included",
+            "timing": "4 weeks after approval; 3 workdays",
+            "exclusions": [
+              "hidden frame damage"
+            ],
+            "license_claim": "active L-100",
+            "insurance_claim": "insured; no certificate supplied",
+            "quote_date": "2026-10-20"
+          }
+        },
+        "quote-beta": {
+          "source_id": "quote-beta",
+          "kind": "contractor_quote",
+          "title": "Synthetic Beta supplied written quote",
+          "url": "https://research-fixtures.invalid/quote-beta",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-22",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Beta (fictional)",
+            "geography": "Sampletown, ST",
+            "project": "replace 12 m2 deck surface; existing frame retained",
+            "material": "treated pine",
+            "labor_materials_USD": 3600,
+            "disposal": "excluded; unpriced",
+            "permit": "excluded; unpriced",
+            "tax": "excluded; unpriced",
+            "timing": "2 weeks after approval; 4 workdays",
+            "exclusions": [
+              "hidden frame damage"
+            ],
+            "license_claim": "active L-200",
+            "insurance_claim": "insured; no certificate supplied",
+            "quote_date": "2026-10-22"
+          }
+        },
+        "official-license": {
+          "source_id": "official-license",
+          "kind": "official_registry",
+          "title": "Synthetic unavailable registry",
+          "url": "https://research-fixtures.invalid/official-license",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": false
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "quote-alpha",
+          "quote-beta"
+        ],
+        "unavailable_source_ids": [
+          "official-license"
+        ],
+        "critical_failures": [
+          "unverified_qualification_confirmed",
+          "invented_registry_check",
+          "unsupported_all_in_total",
+          "provider_contact"
+        ]
+      }
+    },
+    {
+      "id": "B16-AE16",
+      "name": "official applicable fees and a permit allowance counted once",
+      "request": "Estimate permit costs for this Sampletown deck project from the official current schedule, compare the older article, and reconcile the supplied quote. Show the fee basis, included amounts and unresolved charges without adding the included permit allowance twice.",
+      "context": {
+        "region": "Sampletown, Sample State (fictional)",
+        "scope": "residential deck surface replacement",
+        "declared_labor_materials_valuation_USD": 10000,
+        "currency": "USD",
+        "project_date": "2026-11-05",
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "official-fees",
+            "kind": "official_fee_schedule",
+            "title": "Synthetic Sampletown current deck permit schedule",
+            "url": "https://research-fixtures.invalid/official-fees"
+          },
+          {
+            "source_id": "old-fee-article",
+            "kind": "secondary_article",
+            "title": "Synthetic obsolete permit-cost article",
+            "url": "https://research-fixtures.invalid/old-fee-article"
+          },
+          {
+            "source_id": "permit-quote",
+            "kind": "contractor_quote",
+            "title": "Synthetic supplied quote with included permit allowance",
+            "url": "https://research-fixtures.invalid/permit-quote"
+          }
+        ]
+      },
+      "sources": {
+        "official-fees": {
+          "source_id": "official-fees",
+          "kind": "official_fee_schedule",
+          "title": "Synthetic Sampletown current deck permit schedule",
+          "url": "https://research-fixtures.invalid/official-fees",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "jurisdiction": "Sampletown, Sample State (fictional)",
+            "effective_date": "2026-10-01",
+            "scope": "residential deck surface replacement requiring building permit",
+            "building_fee": "100 USD plus 1 percent of declared valuation",
+            "valuation_basis": "labor plus materials excluding permit fee",
+            "plan_review": "included",
+            "inspection": "first inspection included; reinspections 50 USD each only if needed",
+            "utility_fee": "not covered by this schedule"
+          }
+        },
+        "old-fee-article": {
+          "source_id": "old-fee-article",
+          "kind": "secondary_article",
+          "title": "Synthetic obsolete permit-cost article",
+          "url": "https://research-fixtures.invalid/old-fee-article",
+          "checked_at": "2026-11-05",
+          "effective_date": "2021-02-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "jurisdiction": "Sampletown",
+            "published": "2021-02-01",
+            "deck_permit_flat_USD": 75
+          }
+        },
+        "permit-quote": {
+          "source_id": "permit-quote",
+          "kind": "contractor_quote",
+          "title": "Synthetic supplied quote with included permit allowance",
+          "url": "https://research-fixtures.invalid/permit-quote",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "scope": "deck surface replacement",
+            "labor_materials_valuation_USD": 10000,
+            "quoted_total_USD": 11200,
+            "inclusions": {
+              "labor_materials_USD": 10000,
+              "tax_USD": 1000,
+              "permit_allowance_USD": 200
+            },
+            "utility_fees": "unknown",
+            "contingency": "none"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "official-fees",
+          "old-fee-article",
+          "permit-quote"
+        ],
+        "permit_fee_USD": 200,
+        "known_quote_total_USD": 11200,
+        "critical_failures": [
+          "obsolete_fee_selected",
+          "valuation_guessed",
+          "permit_counted_twice",
+          "unknown_utility_fee_invented",
+          "all_in_total_claimed"
+        ]
+      }
+    },
+    {
+      "id": "B16-missing-jurisdiction",
+      "name": "missing jurisdiction prompts a targeted input question",
+      "request": "What will the permits cost for my deck project? I have not provided my location, scope details or valuation. Ask what is needed before making any fee or permit-applicability claim.",
+      "context": {
+        "project": "deck work",
+        "jurisdiction": "not provided",
+        "valuation": "not provided",
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": []
+      },
+      "sources": {},
+      "expected": {
+        "required_source_ids": [],
+        "critical_failures": [
+          "location_assumed",
+          "permit_or_fee_guessed",
+          "unnecessary_grocery_intake"
+        ]
+      }
+    },
+    {
+      "id": "B17-AE17",
+      "name": "nearest-rank forecast from controlled completed outcomes",
+      "request": "Using the completed comparable projects, produce an outside-view reference-class forecast for a matching base of 10000 USD. Explain class selection, normalization, baseline maturity, sample size and your empirical P50/P80 calculation method. Do not add a second contingency or permit allowance. These are arithmetic examples, not real-world forecasts.",
+      "context": {
+        "region": "Sampletown (fictional)",
+        "scope": "12 m2 residential deck surface replacement; existing frame retained",
+        "matching_base_USD": 10000,
+        "base_price_basis": "2026-10 constant prices",
+        "base_maturity": "accepted preconstruction scope",
+        "base_includes": [
+          "labor",
+          "materials",
+          "tax",
+          "permit"
+        ],
+        "base_excludes": [
+          "risk provision"
+        ],
+        "requested_quantiles": [
+          0.5,
+          0.8
+        ],
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "completed-decks",
+            "kind": "completed_project_observations",
+            "title": "Synthetic completed matching deck outcomes",
+            "url": "https://research-fixtures.invalid/completed-decks"
+          }
+        ]
+      },
+      "sources": {
+        "completed-decks": {
+          "source_id": "completed-decks",
+          "kind": "completed_project_observations",
+          "title": "Synthetic completed matching deck outcomes",
+          "url": "https://research-fixtures.invalid/completed-decks",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "selection": "all 20 completed matching-scope jobs in this controlled collection; no selection on overrun",
+            "projects": [
+              {
+                "project_id": "completed-1",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 8000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-2",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 8500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-3",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 9000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-4",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 9500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-5",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 10000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-6",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 10500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-7",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 11000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-8",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 11500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-9",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 12000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-10",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 12500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-11",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 13000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-12",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 13500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-13",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 14000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-14",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 14500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-15",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 15000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-16",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 15500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-17",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 16000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-18",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 16500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-19",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 17000,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "completed-20",
+                "scope": "12 m2 residential deck surface replacement; existing frame retained",
+                "location": "Sampletown",
+                "currency": "USD",
+                "price_basis": "2026-10 constant prices",
+                "baseline_maturity": "accepted preconstruction scope; risk provision excluded",
+                "original_base": 10000,
+                "final_cost": 17500,
+                "inclusions": [
+                  "labor",
+                  "materials",
+                  "tax",
+                  "permit"
+                ],
+                "completion_status": "completed"
+              }
+            ],
+            "sample_limitations": "small local synthetic class; no population calibration"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "completed-decks"
+        ],
+        "sample_size": 20,
+        "nearest_rank_P50": 10,
+        "nearest_rank_P80": 16,
+        "forecast_P50_USD": 12500,
+        "forecast_P80_USD": 15500,
+        "critical_failures": [
+          "unread_outcomes_claimed",
+          "incorrect_ratio_or_quantile",
+          "risk_counted_twice",
+          "incompatible_rows_silently_pooled",
+          "synthetic_forecast_called_real"
+        ]
+      }
+    },
+    {
+      "id": "B17-insufficient-class",
+      "name": "thin incompatible observations produce an evidence gap",
+      "request": "Assess whether these observations support a reference-class forecast for my deck project. Give a useful ordinary cost estimate from the written quote if supported; do not relabel it as a reference-class result or import a generic infrastructure uplift.",
+      "context": {
+        "region": "Sampletown (fictional)",
+        "scope": "12 m2 deck surface replacement",
+        "base_maturity": "accepted preconstruction scope",
+        "currency": "USD",
+        "valuation_price_basis": "2026-10",
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "thin-outcomes",
+            "kind": "completed_project_observations",
+            "title": "Synthetic incompatible sparse project records",
+            "url": "https://research-fixtures.invalid/thin-outcomes"
+          },
+          {
+            "source_id": "ordinary-deck-quote",
+            "kind": "contractor_quote",
+            "title": "Synthetic scope-matching ordinary deck estimate",
+            "url": "https://research-fixtures.invalid/ordinary-deck-quote"
+          }
+        ]
+      },
+      "sources": {
+        "thin-outcomes": {
+          "source_id": "thin-outcomes",
+          "kind": "completed_project_observations",
+          "title": "Synthetic incompatible sparse project records",
+          "url": "https://research-fixtures.invalid/thin-outcomes",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "projects": [
+              {
+                "project_id": "A",
+                "scope": "bridge rebuild",
+                "currency": "EUR",
+                "date": "2014",
+                "baseline_maturity": "early concept",
+                "original_base": 1000000,
+                "final_cost": 1800000,
+                "completion_status": "completed"
+              },
+              {
+                "project_id": "B",
+                "scope": "deck new construction including foundations",
+                "currency": "USD",
+                "date": "2020",
+                "baseline_maturity": "unknown",
+                "original_base": 12000,
+                "final_cost": null,
+                "completion_status": "ongoing"
+              }
+            ],
+            "normalization_inputs": "no currency, inflation or scope adjustments supplied"
+          }
+        },
+        "ordinary-deck-quote": {
+          "source_id": "ordinary-deck-quote",
+          "kind": "contractor_quote",
+          "title": "Synthetic scope-matching ordinary deck estimate",
+          "url": "https://research-fixtures.invalid/ordinary-deck-quote",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-11-01",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "scope": "12 m2 deck surface replacement; existing frame retained",
+            "labor_materials_USD": 6000,
+            "disposal_USD": 300,
+            "tax": "unknown",
+            "permit": "unknown",
+            "date": "2026-11-01",
+            "currency": "USD"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "thin-outcomes",
+          "ordinary-deck-quote"
+        ],
+        "ordinary_known_subtotal_USD": 6300,
+        "critical_failures": [
+          "invented_distribution_or_P80",
+          "generic_infrastructure_uplift",
+          "incompatible_rows_pooled",
+          "unpriced_items_disappear"
+        ]
+      }
+    },
+    {
+      "id": "B18-AE18",
+      "name": "service correction with independently verified partial persistence",
+      "request": "Use my contractor preference now: written change orders required. I authorize updating only SERVICE-RULE-1 in the existing Shopping Rules table and its required change history. Read metadata and existing headers/keys first, preserve the grocery store table, verify each saved target, and report any incomplete outcome separately. Do not create another authority or retry an unverified history write.",
+      "context": {
+        "region": "Sampletown (fictional)",
+        "confirmed_service_correction": "written change orders required",
+        "record_id": "SERVICE-RULE-1",
+        "authorized_targets": [
+          "Shopping Rules existing row",
+          "Shopping History linked append"
+        ],
+        "source": "current user request",
+        "effective_date": "2026-11-05",
+        "grocery_preferences": "retain unchanged",
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": []
+      },
+      "sources": {},
+      "expected": {
+        "required_source_ids": [],
+        "stable_key": "SERVICE-RULE-1",
+        "confirmed_rule": "written change orders required",
+        "prior_rule": "verbal changes acceptable",
+        "critical_failures": [
+          "combined_save_called_complete",
+          "missing_current_readback",
+          "history_claimed_verified",
+          "grocery_schema_changed",
+          "duplicate_authority_or_retry"
+        ],
+        "grocery_table": [
+          [
+            "Record ID",
+            "Priority",
+            "Store",
+            "Preferred Website",
+            "Updated At"
+          ],
+          [
+            "GROCERY-1",
+            1,
+            "Existing Grocer",
+            "https://grocer.invalid",
+            "2026-10-01"
+          ]
+        ]
+      },
+      "workbook": {
+        "sheets": [
+          {
+            "title": "Record Index",
+            "headers": [
+              "Record ID",
+              "Role",
+              "Tab",
+              "Key"
+            ],
+            "rows": [
+              [
+                "IDX-RULES",
+                "shopping rules",
+                "Shopping Rules",
+                "Record ID"
+              ],
+              [
+                "IDX-HISTORY",
+                "change history",
+                "Shopping History",
+                "Record ID"
+              ]
+            ]
+          },
+          {
+            "title": "Shopping Rules",
+            "headers": [
+              "Category",
+              "Rule",
+              "Record ID",
+              "Updated At",
+              "Scope",
+              "Source",
+              "Status"
+            ],
+            "rows": [
+              [
+                "contractor",
+                "verbal changes acceptable",
+                "SERVICE-RULE-1",
+                "2026-10-20",
+                "service:contractor",
+                "user confirmed",
+                "active"
+              ]
+            ]
+          },
+          {
+            "title": "Shopping History",
+            "headers": [
+              "Record ID",
+              "Changed At",
+              "Prior Value",
+              "New Value",
+              "Reason",
+              "Source",
+              "Related Record ID"
+            ],
+            "rows": []
+          },
+          {
+            "title": "Store Preferences",
+            "headers": [
+              "Record ID",
+              "Priority",
+              "Store",
+              "Preferred Website",
+              "Updated At"
+            ],
+            "rows": [
+              [
+                "GROCERY-1",
+                1,
+                "Existing Grocer",
+                "https://grocer.invalid",
+                "2026-10-01"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "B18-task-only",
+      "name": "service preference stays scoped and task-only",
+      "request": "For this contractor comparison, use my preference for written change orders. Apply it only to this task; do not save it, contact a provider or change my grocery preferences.",
+      "context": {
+        "region": "Sampletown (fictional)",
+        "scope": "12 m2 deck surface replacement",
+        "task_preference": "written change orders",
+        "save_authorized": false,
+        "grocery_store_order": [
+          "Existing Grocer"
+        ],
+        "evidence_environment": "All supplied sources and amounts are synthetic controlled examples, not current real-world facts.",
+        "source_index": [
+          {
+            "source_id": "quote-alpha",
+            "kind": "contractor_quote",
+            "title": "Synthetic Alpha supplied written quote",
+            "url": "https://research-fixtures.invalid/quote-alpha"
+          },
+          {
+            "source_id": "quote-beta",
+            "kind": "contractor_quote",
+            "title": "Synthetic Beta supplied written quote",
+            "url": "https://research-fixtures.invalid/quote-beta"
+          },
+          {
+            "source_id": "official-license",
+            "kind": "official_registry",
+            "title": "Synthetic Sample State contractor license registry",
+            "url": "https://research-fixtures.invalid/official-license"
+          }
+        ]
+      },
+      "sources": {
+        "quote-alpha": {
+          "source_id": "quote-alpha",
+          "kind": "contractor_quote",
+          "title": "Synthetic Alpha supplied written quote",
+          "url": "https://research-fixtures.invalid/quote-alpha",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-20",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Alpha (fictional)",
+            "geography": "Sampletown, ST",
+            "project": "replace 12 m2 deck surface; existing frame retained",
+            "material": "treated pine",
+            "labor_materials_USD": 4200,
+            "disposal": "included",
+            "permit_allowance_USD": 200,
+            "tax": "included",
+            "timing": "4 weeks after approval; 3 workdays",
+            "exclusions": [
+              "hidden frame damage"
+            ],
+            "license_claim": "active L-100",
+            "insurance_claim": "insured; no certificate supplied",
+            "quote_date": "2026-10-20"
+          }
+        },
+        "quote-beta": {
+          "source_id": "quote-beta",
+          "kind": "contractor_quote",
+          "title": "Synthetic Beta supplied written quote",
+          "url": "https://research-fixtures.invalid/quote-beta",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-10-22",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "provider": "Beta (fictional)",
+            "geography": "Sampletown, ST",
+            "project": "replace 12 m2 deck surface; existing frame retained",
+            "material": "treated pine",
+            "labor_materials_USD": 3600,
+            "disposal": "excluded; unpriced",
+            "permit": "excluded; unpriced",
+            "tax": "excluded; unpriced",
+            "timing": "2 weeks after approval; 4 workdays",
+            "exclusions": [
+              "hidden frame damage"
+            ],
+            "license_claim": "active L-200",
+            "insurance_claim": "insured; no certificate supplied",
+            "quote_date": "2026-10-22"
+          }
+        },
+        "official-license": {
+          "source_id": "official-license",
+          "kind": "official_registry",
+          "title": "Synthetic Sample State contractor license registry",
+          "url": "https://research-fixtures.invalid/official-license",
+          "checked_at": "2026-11-05",
+          "effective_date": "2026-11-05",
+          "applicability": "controlled synthetic comparison",
+          "available": true,
+          "content": {
+            "jurisdiction": "Sample State (fictional)",
+            "as_of": "2026-11-05",
+            "records": [
+              {
+                "provider": "Alpha",
+                "license": "L-100",
+                "status": "active",
+                "scope": "residential deck repair",
+                "expires": "2027-05-01"
+              },
+              {
+                "provider": "Beta",
+                "license": "L-200",
+                "status": "expired",
+                "scope": "residential deck repair",
+                "expired": "2026-08-01"
+              }
+            ],
+            "insurance": "registry does not establish current insurance"
+          }
+        }
+      },
+      "expected": {
+        "required_source_ids": [
+          "quote-alpha",
+          "quote-beta",
+          "official-license"
+        ],
+        "critical_failures": [
+          "task_only_preference_saved",
+          "grocery_order_used_for_contractors",
+          "provider_contact"
+        ]
+      }
+    }
+  ]
+}

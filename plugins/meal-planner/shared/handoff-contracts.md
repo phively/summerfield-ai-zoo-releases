@@ -10,7 +10,7 @@ Use these canonical workbook titles and tabs. Recognize clearly equivalent exist
 | --- | --- | --- |
 | Meal Planner | `Household Preferences` | Workbook-local `Record Index`; `Household Profile`, `Safety Constraints`, `Planning Preferences`, optional `Pantry Inventory`, and `Household History` |
 | Personal Chef | `Meal Preferences` | Workbook-local `Record Index`; `Household Preferences`, `Household Preferences History`, `Ingredient Ratings`, `Ingredient Ratings History`, `Recipe Ratings`, `Recipe History`, and `Recipe Catalog` |
-| Personal Shopper | `Grocery Preferences` | Workbook-local `Record Index`; `Store Preferences`, `Store Preferences History`, and `Price Tracker` |
+| Personal Shopper | `Grocery Preferences` | Workbook-local `Record Index`; `Store Preferences`, `Store Preferences History`, and `Price Tracker`; read or limited fallback writes by Meal Planner only as defined in [the local grocery integration contract](grocery-integration.md) |
 
 Every handoff must preserve the exact workbook title and link or file identity by identifying the provider, immutable workbook resource ID or canonical link/file path, visible workbook title, exact worksheet, table or named range when present, stable key column and record ID or documented composite key, relevant columns, and any expected workbook structure that was unavailable. A workbook title, worksheet title, or row number alone is insufficient. Pass accessible shared records by identity; never create skill-local static copies.
 
@@ -24,7 +24,7 @@ Use native workbook routing. When present, read `Record Index` first and then re
 
 Every Drive handoff includes the designated Meal Planning, Recipes, and Audits folder IDs. Keep planning files inside Meal Planning, canonical recipe Docs inside Recipes, and audit, compaction, migration, staging, and recovery artifacts in a dated child folder under Audits. Preserve equivalent existing structure, resource IDs, and sharing. Follow [native artifact storage and formatting](artifact-formatting.md) for Drive-first creation, native formatting, and named verified links. During cleanup, follow [cleanup-migration.md](cleanup-migration.md): updates and additions may change data rows, but no populated source row may be deleted or silently merged. File-type or provider migration requires explicit user permission before a replacement is created for conversion, authority is transferred, the original is retired, or dependent links change.
 
-`personal-shopper` owns the `Grocery Preferences` workbook. All skills may read relevant current state and price evidence; only `personal-shopper` creates or updates these records.
+`personal-shopper` owns the `Grocery Preferences` workbook. All Meal Planner skills may read bounded task-relevant current state and price evidence. Only `personal-shopper` performs the full shopping workflow and ordinary record maintenance. `meal-planner` may perform only the exact grocery fallback writes defined in [the local grocery integration contract](grocery-integration.md); that exception does not authorize structural changes, general shopping records, or unrelated updates.
 
 Current records govern over history unless the user corrects them or requests historical reconstruction. Read history only under a targeted retrieval condition in [record-management.md](record-management.md). Never pass a complete archive, create a parallel authority, infer that a retrieval miss proves no history exists, or claim persistence after a partial write.
 
@@ -57,29 +57,33 @@ Do not infer feedback merely because a recipe appeared in a plan or a fixed inte
 
 ## Meal Planner to Personal Shopper
 
-Send a shopping packet only after recipe selection and safety review are complete. Include:
+Use `grocery-handoff/v1`. Invoke the independently installed `personal-shopper:personal-shopper` only when the active host can activate it. After the plan is approved and recipe selection and safety review are complete, send one shopping packet; do not ask again for facts already supplied. Include:
 
+- protocol version and unique request identity;
 - final recipe names, ingredient quantities, source yields, planned servings, and leftover uses;
-- canonical Recipe IDs, verified named Google Doc links, approved versions, and designated Meal Planning, Recipes, and Audits folder IDs;
+- canonical Recipe IDs, verified named Google Doc links, exact approved versions, and designated Meal Planning, Recipes, and Audits folder IDs;
 - confirmed pantry quantities plus separate `check pantry` items;
 - region, currency, shopping date, budget, and preferred stores in effective order;
 - required brands, products, labels, allergy constraints, medical constraints, and permitted substitutions;
 - exact `Grocery Preferences` workbook identity and available canonical tabs;
-- exact current meal-plan identity and plan identifier;
-- whether the user consented to persist or replace store preferences.
+- meal-plan identity with `identity_status`, stable `plan_id`, and native resource identity when persisted;
+- task-only corrections separately from saved record values;
+- exact targets and fields the user authorized for persistence, or explicit no-persistence status; and
+- unresolved questions and missing identities.
 
-The personal shopper must not select, redesign, or silently substitute recipes.
+For an existing saved plan, set `identity_status: persisted` and include its exact provider/resource and section identity. For an approved new plan not yet saved, allocate a collision-checked stable `MP-YYYY-MM-DD-NN` ID, set `identity_status: proposed`, and set `native_resource: not-yet-created`. This proposed state is not a missing identity, does not describe a current persisted plan, and is valid only for a new approved plan; an existing plan with missing native identity remains unresolved. Meal Planner persists the new plan after grocery work using the same `plan_id`.
+
+The personal shopper must not select, redesign, or silently substitute recipes. Return the same request ID, Recipe IDs and versions, meal-plan identity object and status, and workbook identity. A stale version, mismatch, or malformed packet requires targeted correction before use. Report capability and per-target persistence status; delegation grants no consent to write.
 
 ## Personal Shopper to Meal Planner
 
-Return a shopping packet containing:
+Return a `grocery-handoff/v1` shopping packet containing:
 
-- price basis, region, effective store order, sources used, date, currency, exclusions, confidence, and disclosed fallbacks;
-- grocery items grouped by store section with required quantity, purchase quantity or packages, price or range, meals using the item, and surplus notes;
-- `check pantry` items and their possible effect on checkout cost;
-- checkout spending, pantry contribution, unpriced items, and meal and per-serving cost allocations;
+- the request ID and capability (`full` or `fallback`);
+- the same Recipe IDs and exact approved versions, meal-plan identity object and status, and grocery-workbook identity received;
 - exact `Grocery Preferences` workbook identity and tabs read or changed, or their availability status;
-- exact current meal-plan identity and plan identifier used;
+- the exact meal-plan identity object and status used;
+- per-target persistence state based on canonical native readback, distinguishing task-only changes, proposed/unsaved changes, verified writes, and incomplete changes;
 - unresolved availability, label, substitution, or pricing questions.
 
-The meal planner reviews quantities and unresolved safety questions against the approved recipes without independently rebuilding a valid shopping result.
+For `capability: full`, include the price basis, region, effective store order, sources used, date, currency, exclusions, confidence, disclosed fallbacks, store-section list with required and purchase quantities, package assumptions, prices, surplus, `check pantry` effect, checkout spending, pantry contribution, unpriced items, and meal and per-serving allocations when supported. For `capability: fallback`, return only the basic list, exact matches and dated record evidence, unmatched or ambiguous ingredients, missing prices, persistence status, and omitted full-workflow fields defined in [the local grocery integration contract](grocery-integration.md). The meal planner reviews quantities and unresolved safety questions against approved recipes without independently rebuilding a valid full shopping result.

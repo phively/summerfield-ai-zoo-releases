@@ -1,0 +1,730 @@
+{
+  "suite": "dev-tools-regression",
+  "version": "1.0.0",
+  "cases": [
+    {
+      "id": "route-superb-skills",
+      "input": "Create a skill that reviews data-governance policies and test its triggers.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "intended_behavior": "Route package design to superb-skills and current skill conventions to skill-creator.",
+      "success_criteria": ["inspects supported conventions", "creates a concise skill architecture", "defines tests"],
+      "failure_criteria": ["invents manifest fields", "omits skill-creator", "produces no validation plan"]
+    },
+    {
+      "id": "route-review-instructions",
+      "input": "Review these project instructions for duplication, ambiguity, and content that belongs in a skill.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Review the supplied instructions and classify behavior by appropriate storage level.",
+      "success_criteria": ["identifies concrete defects", "preserves useful behavior", "explains material placement choices"],
+      "failure_criteria": ["rewrites stylistically without diagnosis", "adds unsupported requirements"]
+    },
+    {
+      "id": "instruction-hard-limit",
+      "input": "Create project instructions from these requirements. The complete copy-ready instructions must fit the 8,000-character project-instruction limit.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
+      "intended_behavior": "Draft a concise artifact, validate its complete character count, and revise it before delivery if it exceeds the hard limit.",
+      "success_criteria": ["copy-ready artifact is at most 8,000 characters", "working draft targets at most 7,600 characters", "reports a validated count separately", "preserves consequential requirements"],
+      "failure_criteria": ["delivers an over-limit artifact", "counts only body paragraphs", "places rationale inside the artifact", "drops a requirement silently"]
+    },
+    {
+      "id": "instruction-existing-skill-authority",
+      "input": "Write project instructions for a project that already has work-smarter installed. Include research and personal-context behavior where useful.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
+      "intended_behavior": "Keep project instructions specific to the project and preserve research-briefing and remember-me as separate authorities.",
+      "success_criteria": ["does not reproduce the research-scope checkpoint", "does not reproduce remember-me record management", "uses at most a narrow project-specific routing or override", "keeps explanations outside the artifact"],
+      "failure_criteria": ["copies research-briefing procedure", "copies remember-me retrieval or persistence rules", "adds fallback copies in case activation fails", "creates a competing authority"]
+    },
+    {
+      "id": "instruction-local-override",
+      "input": "Our project requires primary sources for every regulatory conclusion, even when the installed research skill would ordinarily allow strong secondary sources. Add only the necessary project instruction.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["instruction-design.md", "project-instructions-template.md"],
+      "intended_behavior": "Preserve the installed research workflow and encode only the explicit, narrow project-specific override.",
+      "success_criteria": ["states the primary-source override", "identifies its project scope", "does not summarize the research workflow", "does not weaken the user requirement"],
+      "failure_criteria": ["copies the complete research skill", "omits the override as duplicated behavior", "broadens the rule beyond regulatory conclusions"]
+    },
+    {
+      "id": "negative-route",
+      "input": "Rewrite this birthday invitation so it sounds warmer.",
+      "expected_skills": [],
+      "intended_behavior": "Do not activate either plugin skill for ordinary stylistic editing.",
+      "success_criteria": ["does not activate superb-skills", "does not activate research-briefing"],
+      "failure_criteria": ["treats ordinary writing as instruction-package design"]
+    },
+    {
+      "id": "research-handoff",
+      "input": "Build a plugin for current Illinois employment-law compliance and verify the governing rules.",
+      "expected_skills": ["superb-skills", "research-briefing", "skill-creator"],
+      "intended_behavior": "Use the bounded research handoff for current legal claims before encoding them.",
+      "success_criteria": ["identifies exact legal questions", "labels user-supplied facts", "passes only relevant context", "preserves citations and uncertainty"],
+      "failure_criteria": ["encodes recalled law as current", "passes unrelated history", "blurs evidence and design judgment"]
+    },
+    {
+      "id": "research-nontrigger",
+      "input": "Shorten this SKILL.md without changing any requirements or validating its factual claims.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Perform a supplied-text transformation without research.",
+      "success_criteria": ["does not invoke research-briefing", "preserves requirements"],
+      "failure_criteria": ["adds a research checkpoint", "silently drops behavior"]
+    },
+    {
+      "id": "research-confirmation",
+      "input": "Research the latest plugin manifest rules, then update this skill.",
+      "expected_skills": ["superb-skills", "research-briefing", "skill-creator"],
+      "intended_behavior": "Present the research scope and wait before current-source research.",
+      "success_criteria": ["shows check and do-not-check topics", "waits for confirmation", "does not treat handoff initiation as consent"],
+      "failure_criteria": ["searches before confirmation", "omits the checkpoint without a waiver"]
+    },
+    {
+      "id": "memory-no-file",
+      "input": "Improve this one-paragraph prompt for a one-time task.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Keep one-time requirements in the current prompt and create no durable memory.",
+      "success_criteria": ["working-memory gate fails", "no memory file is proposed"],
+      "failure_criteria": ["creates a briefing or archive by default"]
+    },
+    {
+      "id": "memory-single-file",
+      "input": "This three-phase project must preserve five active constraints across conversations; there is no meaningful superseded history.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Recommend one authoritative current-state briefing without a separate archive.",
+      "success_criteria": ["defines one current authority", "records active constraints exactly", "does not create an archive"],
+      "failure_criteria": ["creates unnecessary storage tiers", "duplicates active rules"]
+    },
+    {
+      "id": "memory-split",
+      "input": "Our recurring workflow has active rules plus several superseded policies whose rationale must remain auditable.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Split current state from meaningful history and define targeted retrieval.",
+      "success_criteria": ["working briefing is authoritative", "archive is subordinate", "uses semantic pointers", "defines update transaction"],
+      "failure_criteria": ["loads the archive by default", "allows history to override current state"]
+    },
+    {
+      "id": "memory-conflict",
+      "input": "The briefing says approval is required above $10,000; an older archived entry says $5,000.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Use the current briefing while preserving and labeling the superseded rule.",
+      "success_criteria": ["uses $10,000", "does not average or merge thresholds", "checks for contradictory active copies"],
+      "failure_criteria": ["uses $5,000 as current", "silently chooses based on recency alone"]
+    },
+    {
+      "id": "memory-missing",
+      "input": "Update our canonical working briefing, but the referenced file is inaccessible and two local copies have similar names.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Resolve authority before writing and do not create a competing replacement.",
+      "success_criteria": ["reports inaccessible authority", "asks a focused clarification if needed", "offers a labeled proposed update"],
+      "failure_criteria": ["guesses the canonical copy", "claims persistence", "creates a new authority"]
+    },
+    {
+      "id": "memory-recall-before-token-reduction",
+      "input": "The memory index has a concise project summary, but the linked current record contains an uncommon safety constraint relevant to today's decision. Reading it costs more tokens. Which context should the skill retrieve?",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Retrieve the linked relevant section because complete relevant recall outranks token reduction, while leaving unrelated topics and history unloaded.",
+      "success_criteria": ["reads the index first", "retrieves the relevant current section", "preserves the safety constraint", "does not load unrelated context"],
+      "failure_criteria": ["uses the summary alone to save tokens", "omits the safety constraint", "loads the complete archive"]
+    },
+    {
+      "id": "memory-token-reduction-before-speed",
+      "input": "Two designs recall the same complete current context. One uses a targeted lookup with fewer tokens but slightly more latency; the other preloads a large record and responds faster.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Prefer the targeted lower-token design because token reduction outranks retrieval speed once recall is equivalent.",
+      "success_criteria": ["confirms recall is equivalent", "chooses the lower-token design", "keeps the priority order explicit"],
+      "failure_criteria": ["chooses preload for speed", "treats all objectives as equal", "reduces tokens by dropping relevant context"]
+    },
+    {
+      "id": "memory-narrow-update-fallback",
+      "input": "Changing an approval threshold in the detailed current record also makes the index summary and one active pointer stale. Updating only the detail would use fewer tokens.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Widen the update transaction enough to keep current memory coherent, then limit edits to the affected fields and pointers.",
+      "success_criteria": ["updates the detailed authority", "updates the dependent index field", "repairs the active pointer", "avoids unrelated rewrites"],
+      "failure_criteria": ["leaves the index stale to save tokens", "creates contradictory current state", "rewrites the complete memory store"]
+    },
+    {
+      "id": "memory-maintenance-trigger",
+      "input": "Design a file-backed working memory whose index can grow over years, with a concrete rule for when maintenance is reviewed.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Define a measurable time or size review trigger, label unsupported numeric defaults as heuristics, and make the trigger initiate inspection rather than automatic deletion or splitting.",
+      "success_criteria": ["defines a measurable trigger", "labels design heuristics", "keeps lifecycle decisions evidence-based", "does not load full records merely to test file statistics"],
+      "failure_criteria": ["omits a trigger", "calls an arbitrary threshold scientifically proven", "deletes content based on age or size alone"]
+    },
+    {
+      "id": "memory-audit-success",
+      "input": "Compact and split this memory store while proving that its exact limits, provenance, identifiers, pointers, and useful history all survive.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Stage the proposed files, inventory and hash both states, map protected items bidirectionally, validate and inspect the diff, then replace only after every check passes.",
+      "success_criteria": ["keeps a recoverable snapshot", "validates complete before and after file inventories", "preserves exact protected values", "verifies written hashes after replacement"],
+      "failure_criteria": ["rewrites the canonical files before validation", "uses file size as proof of success", "claims hashes prove semantic equivalence"]
+    },
+    {
+      "id": "memory-audit-loss-failure",
+      "input": "The proposed compacted memory omits one uncommon safety constraint and leaves a broken history pointer. Finish the audit.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Fail the audit, leave the canonical state unchanged, identify the missing constraint and broken pointer, and require a corrected staged candidate.",
+      "success_criteria": ["detects both failures", "does not replace canonical memory", "keeps the snapshot", "reports the failed checks"],
+      "failure_criteria": ["accepts approximate retention", "silently drops the constraint", "repairs the live authority before the staged audit passes"]
+    },
+    {
+      "id": "memory-nonsize-audit-trigger",
+      "input": "A 3 KiB memory index has two conflicting current authorities and one broken permalink. Its last audit was 30 days ago. Is an audit due?",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Make an audit due from integrity and identity failures even though no size or age threshold is met.",
+      "success_criteria": ["identifies conflicting authority", "identifies the broken permalink", "makes review due independently of file size", "does not authorize an automatic rewrite"],
+      "failure_criteria": ["declines review because the file is under 8 KiB", "waits for 180 days", "silently chooses one authority"]
+    },
+    {
+      "id": "memory-context-vs-record-compaction",
+      "input": "The conversation context was compacted, but the persistent memory files are unchanged and have no due record trigger. What maintenance is required?",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Refresh the conversational current brief and recheck exact constraints without treating context compaction as an automatic persistent-record audit.",
+      "success_criteria": ["refreshes the current brief", "rechecks exact constraints", "distinguishes conversation from record compaction", "does not audit unchanged records automatically"],
+      "failure_criteria": ["automatically compacts persistent records", "skips constraint recheck", "treats both compaction types as identical"]
+    },
+    {
+      "id": "memory-conditional-toc",
+      "input": "A 12 KiB current record has descriptive headings and bounded search reliably retrieves the needed section, but it has no table of contents. Does the missing table of contents require restructuring?",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["working-memory.md"],
+      "intended_behavior": "Treat a table of contents as a conditional retrieval aid and avoid restructuring solely because it is absent.",
+      "success_criteria": ["notes that retrieval already succeeds", "does not make TOC absence an independent trigger", "keeps threshold review separate from lifecycle action"],
+      "failure_criteria": ["requires a table of contents for every record", "restructures solely from TOC absence", "ignores the separate 8 KiB review heuristic"]
+    },
+    {
+      "id": "contract-failure",
+      "input": "The research skill is unavailable. Finish the plugin that depends on a current API claim.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Continue only with reliable work and leave the API-dependent claim explicitly unverified.",
+      "success_criteria": ["identifies the blocked claim", "does not invent citations", "reports the limitation"],
+      "failure_criteria": ["claims research occurred", "encodes an unverified API as supported"]
+    },
+    {
+      "id": "ambiguous-platform",
+      "input": "Make this plugin manifest compatible with the platform.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "intended_behavior": "Clarify the target platform when supplied artifacts do not establish it.",
+      "success_criteria": ["asks one focused platform question", "does not invent fields"],
+      "failure_criteria": ["assumes an unsupported schema", "asks an unnecessary questionnaire"]
+    },
+    {
+      "id": "backward-compatibility",
+      "input": "Add working-memory guidance to this existing skill while keeping all current triggers and outputs stable.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "intended_behavior": "Make a minimal compatible extension and run affected regressions.",
+      "success_criteria": ["preserves triggers", "keeps output behavior", "adds conditional memory guidance", "reruns regressions"],
+      "failure_criteria": ["broadens activation", "forces memory files", "refactors unrelated behavior"]
+    },
+    {
+      "id": "archive-pointer",
+      "input": "Link the active compensation rule to its historical rationale for future revision work.",
+      "expected_skills": ["superb-skills"],
+      "intended_behavior": "Create a conditional semantic pointer to the canonical archived entry.",
+      "success_criteria": ["includes file identity", "includes stable entry id", "states subject and read condition"],
+      "failure_criteria": ["uses line numbers", "uses a filename alone", "links routine history without purpose"]
+    },
+    {
+      "id": "route-one-time-instruction-reference",
+      "input": "Improve this one-time prompt without turning it into a reusable system.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["instruction-design.md"],
+      "forbidden_references": ["plugin-architecture.md", "evaluation.md", "working-memory.md"],
+      "intended_behavior": "Load only the prompt and instruction workflow and preserve the task's narrow scope.",
+      "success_criteria": ["revises the prompt", "does not propose a plugin", "does not create durable memory"],
+      "failure_criteria": ["loads unrelated references", "invokes skill-creator", "expands the task into a system"]
+    },
+    {
+      "id": "route-plugin-reference",
+      "input": "Design a plugin with three coordinated skills and explicit handoff contracts.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "expected_references": ["plugin-architecture.md", "evaluation.md"],
+      "intended_behavior": "Use plugin architecture for coordination and skill-creator for each component skill.",
+      "success_criteria": ["defines distinct user goals", "uses one canonical contract", "plans routing evaluations"],
+      "failure_criteria": ["duplicates skill-creator procedures", "creates skills by noun alone", "omits handoff failure behavior"]
+    },
+    {
+      "id": "route-architecture-comparison",
+      "input": "Determine whether this broad skill should be split into three narrower skills based on performance.",
+      "expected_skills": ["superb-skills"],
+      "expected_references": ["evaluation.md"],
+      "intended_behavior": "Compare architectures using activation and workflow performance rather than modularity alone.",
+      "success_criteria": ["defines a common prompt set", "measures precision and recall", "accounts for handoff failures", "requires evidence before splitting"],
+      "failure_criteria": ["recommends symmetry-based decomposition", "uses file length alone", "does not establish a baseline"]
+    },
+    {
+      "id": "route-mixed-instructions-and-skill",
+      "input": "Separate these project instructions from a specialized repeatable workflow and implement the latter as a skill.",
+      "expected_skills": ["superb-skills", "skill-creator"],
+      "expected_references": ["instruction-design.md", "evaluation.md"],
+      "intended_behavior": "Separate persistent project behavior from the specialized workflow, then use skill-creator for implementation.",
+      "success_criteria": ["preserves one-time and project-level facts", "defines a recognizable skill goal", "tests activation boundaries"],
+      "failure_criteria": ["loads plugin architecture without a plugin need", "duplicates the same rule across levels", "omits skill-creator"]
+    },
+    {
+      "id": "remember-targeted-consultation",
+      "input": "Use superb-skills to revise my standard project instructions in the style I normally prefer.",
+      "expected_skills": ["superb-skills", "remember-me"],
+      "intended_behavior": "Consult only relevant stored collaboration or output preferences before making discretionary design choices.",
+      "success_criteria": ["reads the index first", "retrieves only relevant preference context", "preserves supported instruction conventions"],
+      "failure_criteria": ["loads the complete profile", "lets a stored preference override validation", "silently updates durable memory"]
+    },
+    {
+      "id": "coding-sql-save-preserves-python",
+      "input": "Save my explicit SQL preference: use uppercase keywords. Preserve my other coding preferences and return fresh evidence.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
+      "intended_behavior": "Update only the authorized SQL entry in the selected Markdown record, preserve unrelated entries, and verify the canonical result.",
+      "success_criteria": [
+        "records the exact SQL scope and value",
+        "preserves the Python entry and other unrelated content",
+        "reads back the same canonical identity and authorized value",
+        "does not claim future retrieval without a durable locator"
+      ],
+      "failure_criteria": [
+        "writes to a guessed destination",
+        "changes the Python entry",
+        "treats an acknowledgement as readback",
+        "edits a persistent pointer without separate authorization"
+      ]
+    },
+    {
+      "id": "coding-fresh-session-pointer",
+      "input": "Use my saved Python naming preference in this new repository and show how a fresh session can find it.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "record-management.md",
+        "coding-workflow.md"
+      ],
+      "intended_behavior": "Resolve only an existing verified pointer or selected discovery scope, apply the relevant value, and identify the locator that supports later retrieval.",
+      "success_criteria": [
+        "uses a verified current record",
+        "applies only the relevant Python entry",
+        "names the durable pointer or selected scope",
+        "keeps content-save and discovery status distinct"
+      ],
+      "failure_criteria": [
+        "relies on prior conversation memory",
+        "searches unrelated locations",
+        "claims a chat-only locator survives a fresh session"
+      ]
+    },
+    {
+      "id": "coding-repository-rule-wins",
+      "input": "My saved preference says camelCase for Python locals. Add a helper to this repo.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "coding-workflow.md"
+      ],
+      "intended_behavior": "Follow the applicable repository snake_case convention and surface the material conflict without changing configuration.",
+      "success_criteria": [
+        "reads the repository rule",
+        "uses snake_case in the requested helper",
+        "mentions the relevant preference conflict",
+        "leaves formatter and linter configuration unchanged"
+      ],
+      "failure_criteria": [
+        "lets the portable value override the repository rule",
+        "silently changes project configuration",
+        "reports an unverified preference"
+      ]
+    },
+    {
+      "id": "coding-explicit-override-surfaces-conflict",
+      "input": "For this function only, use camelCase names even though this repo normally uses snake_case.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "coding-workflow.md"
+      ],
+      "intended_behavior": "Honor the explicit task scope where permitted, identify the convention conflict, and avoid a persistent preference or config change.",
+      "success_criteria": [
+        "keeps the override scoped to this task",
+        "surfaces the repository conflict",
+        "does not modify formatter or linter configuration",
+        "does not save a durable preference"
+      ],
+      "failure_criteria": [
+        "silently broadens the override",
+        "refuses without explaining a concrete restriction",
+        "changes repository policy without authorization"
+      ]
+    },
+    {
+      "id": "coding-one-time-override",
+      "input": "Use uppercase SQL keywords for this query only; keep my saved default for later tasks.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "coding-workflow.md"
+      ],
+      "intended_behavior": "Apply the explicit one-time SQL override without changing the canonical preference.",
+      "success_criteria": [
+        "uses uppercase keywords in the current output",
+        "does not write the preference record",
+        "later work remains governed by the saved default"
+      ],
+      "failure_criteria": [
+        "persists the task override",
+        "ignores the explicit override",
+        "claims the canonical record changed"
+      ]
+    },
+    {
+      "id": "coding-unknown-destination-no-write",
+      "input": "Save my preference for two-space SQL indentation.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "record-management.md"
+      ],
+      "intended_behavior": "Ask only for the missing authority or destination and provide a proposed Markdown entry without writing to a guessed store.",
+      "success_criteria": [
+        "identifies the exact missing destination decision",
+        "keeps the proposal labeled and task-local",
+        "performs no record write"
+      ],
+      "failure_criteria": [
+        "chooses a default provider or path",
+        "searches the home directory",
+        "reports a save"
+      ]
+    },
+    {
+      "id": "coding-review-only-no-edit",
+      "input": "Review this change for correctness. Do not edit it.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "coding-workflow.md"
+      ],
+      "intended_behavior": "Return evidence-backed review findings without editing code or preference records.",
+      "success_criteria": [
+        "reports findings with impact and evidence",
+        "makes no file changes",
+        "does not save or offer unrelated preferences"
+      ],
+      "failure_criteria": [
+        "applies fixes without authorization",
+        "updates a preference record",
+        "presents unsupported concerns as defects"
+      ]
+    },
+    {
+      "id": "coding-explanation-only-no-tools",
+      "input": "Explain why this SQL query uses a window function. Do not run tools or change anything.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "coding-workflow.md"
+      ],
+      "intended_behavior": "Explain from supplied material only, with no file reads, commands, benchmarks, or writes.",
+      "success_criteria": [
+        "answers the question directly",
+        "uses no tools",
+        "makes no changes"
+      ],
+      "failure_criteria": [
+        "searches for preferences",
+        "runs a query or test",
+        "edits code or records"
+      ]
+    },
+    {
+      "id": "coding-no-tool-preserved",
+      "input": "No tools: suggest a concise comment for this function.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [],
+      "intended_behavior": "Use only supplied context and return the requested suggestion.",
+      "success_criteria": [
+        "uses no tools or record reads",
+        "returns a concise comment",
+        "makes no changes"
+      ],
+      "failure_criteria": [
+        "reads a repository file",
+        "searches persistent storage",
+        "runs a command"
+      ]
+    },
+    {
+      "id": "coding-inline-value-is-task-local",
+      "input": "Apply my saved coding preference; it says Python locals use camelCase.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "expected_references": [
+        "coding-workflow.md",
+        "record-management.md"
+      ],
+      "intended_behavior": "Treat the exact supplied value as an instruction for this task while keeping saved-record verification and persistence separate.",
+      "success_criteria": [
+        "applies the supplied value only within the current task",
+        "surfaces a material repository convention conflict",
+        "does not claim the canonical record was read or verified",
+        "does not persist the value without separate authorization"
+      ],
+      "failure_criteria": [
+        "ignores the exact current-task value because no record is available",
+        "claims the stored record was verified without evidence",
+        "writes the value as a durable preference"
+      ]
+    },
+    {
+      "id": "coding-writing-context-targeted",
+      "input": "Draft patch notes from this diff and use any relevant writing preferences I have saved.",
+      "expected_skills": [
+        "coding-preferences",
+        "remember-me"
+      ],
+      "expected_references": [
+        "coding-workflow.md",
+        "handoff-contracts.md"
+      ],
+      "intended_behavior": "Retrieve only relevant general writing context through the optional public handoff while keeping coding values and writing values with their respective owners.",
+      "success_criteria": [
+        "requests only the smallest relevant writing context",
+        "does not load a complete profile",
+        "does not copy writing values into the coding record",
+        "uses disclosed neutral defaults if the helper or source is unavailable"
+      ],
+      "failure_criteria": [
+        "starts a general writing-management workflow",
+        "copies or migrates writing values into the coding record",
+        "claims context retrieval without evidence"
+      ]
+    },
+    {
+      "id": "coding-remember-me-unknown-setup-neutral",
+      "input": "Use my usual style in these patch notes.",
+      "expected_skills": [
+        "coding-preferences",
+        "remember-me"
+      ],
+      "expected_references": [
+        "handoff-contracts.md"
+      ],
+      "intended_behavior": "With unknown Remember Me setup, do not retrieve personal topics or persist anything; produce reliable patch notes using a disclosed neutral default.",
+      "success_criteria": [
+        "checks only bounded setup metadata for implicit consultation",
+        "uses no personal-topic content when setup is unknown",
+        "does not bootstrap Remember Me or offer an unsolicited save",
+        "completes the prose task reliably"
+      ],
+      "failure_criteria": [
+        "reads personal topics before the setup gate",
+        "creates a Remember Me index or topic",
+        "claims to have used the user's style"
+      ]
+    },
+    {
+      "id": "coding-owner-transfer-verifies-before-reconcile",
+      "input": "I authorize transferring 'snake_case for Python local variables' from the identified Remember Me record in library-a to the destination selected for Coding Preferences. Verify the new authority before clearing the old current value and its routing information.",
+      "expected_skills": [
+        "coding-preferences",
+        "remember-me"
+      ],
+      "expected_references": [
+        "record-management.md",
+        "handoff-contracts.md"
+      ],
+      "intended_behavior": "Transfer only the authorized coding entry, verify the specialist-owned destination first, then reconcile the old value and pointer under their respective owners.",
+      "success_criteria": [
+        "preserves unrelated source and destination entries",
+        "reads back the new coding record before changing Remember Me",
+        "reconciles the old record and routing pointer only after destination verification",
+        "reports content, pointer, and ownership outcomes separately"
+      ],
+      "failure_criteria": [
+        "creates parallel current authorities",
+        "deletes the old value before destination verification",
+        "claims a complete transfer when any target is unverified",
+        "writes Remember Me records directly from the coding specialist"
+      ]
+    },
+    {
+      "id": "benchmark-critique-direct",
+      "input": "Critique this benchmark result for deciding whether to adopt the new cache: one aggregate run is 18% faster on one machine, with no repeated observations or quality measurements. Do not run it.",
+      "expected_skills": [
+        "superb-skills"
+      ],
+      "intended_behavior": "Give a bounded evidence critique, explain what the single aggregate supports, identify material gaps, and prioritize improvements without executing or publishing the benchmark.",
+      "success_criteria": [
+        "separates the observed timing from any inference",
+        "does not claim general superiority or statistical significance",
+        "prioritizes useful repeated and quality observations",
+        "does not run or publish the benchmark"
+      ],
+      "failure_criteria": [
+        "treats the aggregate as proof of broad improvement",
+        "invent observations or variance",
+        "executes the benchmark or writes a publication"
+      ]
+    },
+    {
+      "id": "benchmark-design-interview",
+      "input": "Help me design a benchmark to compare two search implementations. I do not know yet which workload or quality measure matters most.",
+      "expected_skills": [
+        "superb-skills"
+      ],
+      "intended_behavior": "Offer useful initial design suggestions, then ask focused questions that resolve material choices and return a provisional design with explicit unknowns.",
+      "success_criteria": [
+        "offers possible workloads and measures before asking questions",
+        "asks only questions that can change workload, measures, or interpretation",
+        "does not repeat supplied answers",
+        "stops with a useful provisional design and remaining assumptions"
+      ],
+      "failure_criteria": [
+        "chooses fixed folds or sample counts without a basis",
+        "keeps interviewing after a useful design can be stated",
+        "manufactures measurement results"
+      ]
+    },
+    {
+      "id": "benchmark-instruction-evaluation-single-owner",
+      "input": "Assess whether this benchmark-advisory mode avoids invented results and asks useful workload questions. Use the supplied instruction text and task examples; do not execute a benchmark.",
+      "expected_skills": [
+        "superb-skills"
+      ],
+      "intended_behavior": "Use the benchmark-advisory references for domain conclusions and the instruction-evaluation references for instruction-behavior claims, returning one evidence-bounded answer without a handoff.",
+      "success_criteria": [
+        "uses the applicable benchmark and instruction-evaluation guidance",
+        "ties each conclusion to the evidence that supports it",
+        "does not invent an evaluation result or run the benchmark",
+        "uses no external evaluator or benchmark runner"
+      ],
+      "failure_criteria": [
+        "mixes benchmark evidence with unsupported claims about instruction behavior",
+        "runs or publishes the benchmark"
+      ]
+    },
+    {
+      "id": "benchmark-mixed-instruction-evaluation",
+      "input": "Explain the limits in this benchmark table and assess whether the accompanying benchmark-advisory instructions handle those limits reliably.",
+      "expected_skills": [
+        "superb-skills"
+      ],
+      "intended_behavior": "Handle benchmark evidence and instruction reliability in one response from the single Superb Skills owner, with conclusions tied to the relevant evidence.",
+      "success_criteria": [
+        "explains table evidence and limitations",
+        "routes both parts through the single Superb Skills owner",
+        "returns one coherent answer that distinguishes benchmark evidence from instruction evaluation"
+      ],
+      "failure_criteria": [
+        "drops either material part of the request",
+        "treats benchmark evidence alone as proof of instruction reliability",
+        "conflates benchmark evidence with instruction-behavior evidence"
+      ]
+    },
+    {
+      "id": "quality-review-requested",
+      "input": "Review the supplied patch for correctness, module boundaries, focused scope, meaningful tests, and repository formatting. Report findings; do not edit it.",
+      "expected_skills": [
+        "code-quality-review"
+      ],
+      "intended_behavior": "Review the identified patch and return only supported findings bound to its target, with evidence, impact, bounded remedies, and observed check limits.",
+      "success_criteria": [
+        "identifies the reviewed target and scope",
+        "grounds each finding in a location and supplied or inspected evidence",
+        "distinguishes proposed checks from checks actually run",
+        "makes no source edits"
+      ],
+      "failure_criteria": [
+        "invents a defect from generic style taste",
+        "claims tests or independent review that did not occur",
+        "edits, commits, or ships the target"
+      ]
+    },
+    {
+      "id": "quality-review-preferences-only-when-unresolved",
+      "input": "Review this Python patch for a repository formatter convention. The repository guidance requires Ruff formatting, so use that rule unless a separate portable convention changes the review conclusion.",
+      "expected_skills": [
+        "code-quality-review"
+      ],
+      "intended_behavior": "Apply the verified repository formatter rule directly and consult Coding Preferences only if a specific material portable convention remains unresolved.",
+      "success_criteria": [
+        "follows the supplied repository rule",
+        "does not retrieve preferences for an already-settled convention",
+        "labels any proposed check separately from an observed check"
+      ],
+      "failure_criteria": [
+        "lets a portable preference override explicit repository guidance",
+        "requests unrelated personal context",
+        "calls style preference a correctness defect without evidence"
+      ]
+    },
+    {
+      "id": "quality-review-ordinary-coding-no-review",
+      "input": "Implement the requested parser fix and apply my already verified Python naming preference. Do not perform a separate code review.",
+      "expected_skills": [
+        "coding-preferences"
+      ],
+      "intended_behavior": "Complete ordinary implementation with the requested coding preference while leaving the optional quality reviewer inactive.",
+      "success_criteria": [
+        "uses the verified coding preference for implementation",
+        "does not invoke code-quality-review as a prerequisite",
+        "preserves the requested implementation task"
+      ],
+      "failure_criteria": [
+        "blocks implementation on a reviewer",
+        "adds an unsolicited review workflow",
+        "changes or stores the preference without authorization"
+      ]
+    },
+    {
+      "id": "quality-review-no-tool",
+      "input": "Review only this supplied code without tools, file access, retrieval, commands, or spawning: `def add(a, b): return a - b`.",
+      "expected_skills": [
+        "code-quality-review"
+      ],
+      "intended_behavior": "Perform a bounded no-tool review from supplied code alone; the no-tool constraint prohibits commands, retrieval, and reviewer spawning.",
+      "success_criteria": [
+        "identifies the likely arithmetic defect from supplied code",
+        "does not inspect files or run commands",
+        "does not retrieve preferences or external context",
+        "does not spawn an independent reviewer"
+      ],
+      "failure_criteria": [
+        "uses tools or saved context despite the constraint",
+        "reports the finding as independently verified",
+        "edits or runs the code"
+      ]
+    },
+    {
+      "id": "quality-review-preferences-unavailable",
+      "input": "Review this code for a portable naming convention, but Coding Preferences is unavailable and no project naming rule was supplied.",
+      "expected_skills": [
+        "code-quality-review"
+      ],
+      "intended_behavior": "Continue with a disclosed neutral default, keep the convention unresolved where material, and return any other supported findings without inventing a saved preference.",
+      "success_criteria": [
+        "states that the convention source was unavailable",
+        "does not claim a user preference was checked",
+        "keeps convention uncertainty separate from correctness findings"
+      ],
+      "failure_criteria": [
+        "invents a portable convention",
+        "treats a neutral default as a saved preference",
+        "marks the entire review clean because the receiver was unavailable"
+      ]
+    }
+  ]
+}

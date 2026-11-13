@@ -1,0 +1,31 @@
+{
+  "name": "personal-shopper",
+  "version": "1.1.0",
+  "description": "Compare products and services, research contractor qualifications and project costs, and build package-aware grocery lists with saved shopping context.",
+  "author": {
+    "name": "Paul Hively"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Personal Shopper",
+    "shortDescription": "Compare products, services, project costs and groceries",
+    "longDescription": "Compare products, services, and contractors against user needs, scope, qualifications, fit, and current evidence. Research applicable official permit fees and project costs, using comparable completed outcomes for reference-class forecasts when supported. Preserve scoped shopping records and the full approved meal-plan grocery workflow.",
+    "developerName": "Paul Hively",
+    "category": "Shopping",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Web"
+    ],
+    "brandColor": "#F05454",
+    "composerIcon": "./assets/icon.svg",
+    "logo": "./assets/logo.svg",
+    "defaultPrompt": [
+      "Compare products and relevant alternatives that fit my needs and existing equipment.",
+      "Continue Meal Planner's approved grocery-handoff/v1 packet to build a priced grocery list.",
+      "Compare service or contractor offers on scope, qualifications, exclusions, and fees.",
+      "Research official permit costs and evidence-based project forecasts.",
+      "Review or update my scoped shopping preferences."
+    ]
+  }
+}

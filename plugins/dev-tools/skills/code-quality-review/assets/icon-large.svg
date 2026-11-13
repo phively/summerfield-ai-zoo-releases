@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Code Quality Review</title>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#E8F0F3" />
+  <g fill="none" stroke="#315C73" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+    <path d="M15 11h21l9 9v15" />
+    <path d="M36 11v9h9M21 28h14M21 35h10" />
+    <circle cx="39" cy="42" r="7" fill="#fff" />
+    <path d="m44 47 7 7" />
+  </g>
+</svg>

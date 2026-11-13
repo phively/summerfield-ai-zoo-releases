@@ -132,7 +132,7 @@ def test_prompt_bundles_and_hashes_public_record_and_audit_instructions(tmp_path
         'plugins/work-smarter/skills/remember-me/SKILL.md',
         'plugins/work-smarter/skills/remember-me/references/record-management.md',
         'plugins/work-smarter/skills/remember-me/references/transcript-sources.md',
-        'plugins/work-smarter/skills/superb-skills/references/working-memory.md',
+        'plugins/work-smarter/shared/record-audits.md',
         'plugins/work-smarter/shared/handoff-contracts.md',
     }
 

@@ -6,12 +6,16 @@ import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+import yaml
+
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 MARKETPLACE_PATH = REPO_ROOT / ".agents" / "plugins" / "marketplace.json"
 EXPECTED_PLUGINS = (
     "meal-planner",
+    "personal-shopper",
     "work-smarter",
+    "dev-tools",
     "career-coach",
 )
 
@@ -76,6 +80,7 @@ def test_svg_asset_references_resolve_and_cover_every_svg() -> None:
         "logo": ("64", "64", "0 0 64 64"),
         "logoDark": ("64", "64", "0 0 64 64"),
     }
+    expected_dimensions["icon"] = ("24", "24", "0 0 24 24")
 
     for name in EXPECTED_PLUGINS:
         plugin_root = REPO_ROOT / "plugins" / name
@@ -188,7 +193,7 @@ def test_catalog_covers_marketplace_plugins_and_readme_links_them() -> None:
         plugin_root = REPO_ROOT / "plugins" / name
         manifest = json.loads(read(plugin_root / ".codex-plugin" / "plugin.json"))
         row_prefix = (
-            f"| {name} | plugin | [plugins/{name}](plugins/{name}) | "
+            f"| {name} | plugin | {manifest['version']} | [plugins/{name}](plugins/{name}) | "
             f"{manifest['description']}"
         )
         # README catalog refreshes are explicitly requested repository work. A
@@ -206,6 +211,19 @@ def test_catalog_covers_marketplace_plugins_and_readme_links_them() -> None:
                 f"{skill_short_description(skill_path)}"
             )
             assert bullet in readme
+
+
+def test_plugin_migration_guidance_covers_replacement_and_existing_records() -> None:
+    dev_tools = read(REPO_ROOT / "plugins" / "dev-tools" / "README.md")
+    work_smarter = read(REPO_ROOT / "plugins" / "work-smarter" / "README.md")
+
+    assert "dev-tools:superb-skills" in dev_tools
+    assert "dev-tools:coding-preferences" in dev_tools
+    assert "does not read, change, or migrate personal data" in dev_tools
+    assert "dev-tools:superb-skills" in work_smarter
+    assert "does not depend on Dev Tools" in work_smarter
+    assert "dev-tools:coding-preferences" in work_smarter
+    assert "does not move, copy, or delete user records" in work_smarter
 
 
 def test_catalog_and_readme_cover_standalone_research_briefing() -> None:
@@ -233,6 +251,55 @@ def test_catalog_and_readme_cover_standalone_research_briefing() -> None:
     # intentionally leave the last generated skill row in place.
     if f"| research-briefing | skill | {version.group(1)} |" in readme:
         assert current_row in readme
+
+
+def test_readme_catalog_rows_match_all_catalog_metadata() -> None:
+    catalog = yaml.safe_load(read(REPO_ROOT / "catalog.yaml"))
+    readme = read(REPO_ROOT / "README.md")
+    block = readme.split("<!-- catalog:start -->\n", 1)[1].split("<!-- catalog:end -->", 1)[0]
+    table_rows = [line for line in block.splitlines() if line.startswith("| ")][2:]
+    assert len(table_rows) == len(catalog["components"])
+
+    expected_rows = []
+    for component in catalog["components"]:
+        name, kind, path = (component[key] for key in ("name", "type", "path"))
+        component_root = REPO_ROOT / path
+        if kind == "plugin":
+            manifest = json.loads(read(component_root / ".codex-plugin" / "plugin.json"))
+            description = manifest["description"]
+            skill_bullets = []
+            for skill_path in sorted((component_root / "skills").glob("**/SKILL.md")):
+                frontmatter = re.search(r"(?ms)^---\n(.*?)\n---\n", read(skill_path))
+                assert frontmatter is not None
+                skill_name = yaml.safe_load(frontmatter.group(1))["name"]
+                relative = skill_path.relative_to(REPO_ROOT).as_posix()
+                skill_bullets.append(
+                    f"• [{skill_name}]({relative}) - {skill_short_description(skill_path)}"
+                )
+            if skill_bullets:
+                description += "<br><br>" + "<br>".join(skill_bullets)
+            version = manifest["version"]
+            link = f"[{path}]({path})"
+        else:
+            skill_path = component_root / "SKILL.md"
+            frontmatter = re.search(r"(?ms)^---\n(.*?)\n---\n", read(skill_path))
+            assert frontmatter is not None
+            metadata = yaml.safe_load(frontmatter.group(1))
+            version_match = re.search(r'(?m)^metadata:\n  version: "([^"]+)"$', frontmatter.group(1))
+            assert version_match is not None
+            description = metadata["description"]
+            version = version_match.group(1)
+            link = f"[{path}]({path}/SKILL.md)"
+
+        def cell(value: str) -> str:
+            return str(value).replace("\r\n", " ").replace("\n", " ").replace("\r", " ").replace("|", r"\|")
+
+        expected_rows.append(
+            "| " + " | ".join(cell(value) for value in (name, kind, version, link, description)) + " |"
+        )
+
+    assert table_rows == expected_rows
+    assert "plugins/meal-planner/skills/personal-shopper/SKILL.md" not in block
 
 
 def test_teach_me_has_bundled_and_standalone_copies() -> None:

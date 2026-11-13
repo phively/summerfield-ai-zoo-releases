@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0.0",
+  "fixture_id": "issue-30-synthetic-sources",
+  "description": "Synthetic benchmark and review inputs for issue 30 acceptance; contains no private or production data.",
+  "source_update_policy": "When a source changes, recompute its exact-byte hash, review affected criteria, update paired cases as needed, and rerun the affected cases. Preserve prior snapshots and outputs under ignored output/.",
+  "sources": [
+    {
+      "id": "benchmark-aggregate-report",
+      "path": "benchmark/aggregate-report.md",
+      "sha256": "sha256:9a8a4b9c992a542da0a7b45aad019341722e29bc51e57e67520dda3cd21a490b"
+    },
+    {
+      "id": "benchmark-search-design",
+      "path": "benchmark/search-design.md",
+      "sha256": "sha256:df5af0ba0ed651e74d938e5e9a0d3ef49d2e513ae5a5bbca4f714cec3068aea5"
+    },
+    {
+      "id": "benchmark-skill-example",
+      "path": "benchmark/skill-example.md",
+      "sha256": "sha256:9deb939653afc06363417c677e83bf24ce3ad43e1c0427e233d88017f2166386"
+    },
+    {
+      "id": "review-interface-store",
+      "path": "review/store.py",
+      "sha256": "sha256:7c04f22d5c3ead8f018bd1520dacb8b0ac44973db54ec3ad7aebd82374afc9a8"
+    },
+    {
+      "id": "review-interface-client",
+      "path": "review/client.py",
+      "sha256": "sha256:b1a2952135bb451939fd56e26eedebe0967742547b50e59f7f6fe3d95f18b9ae"
+    },
+    {
+      "id": "review-interface-test",
+      "path": "review/review_client_test_case.py",
+      "sha256": "sha256:fd83c5a9b7a28056ed3482716ddd1e31ff9132b19540061e32a69aff3b36cd8d"
+    },
+    {
+      "id": "review-captured-diff-a",
+      "path": "review/captured-diff-a.md",
+      "sha256": "sha256:956f184f680f3a3d53c6833c8e610495823028f0817b9d2ccb6af0521ce8aa0b"
+    },
+    {
+      "id": "review-current-diff-b",
+      "path": "review/current-diff-b.md",
+      "sha256": "sha256:6104643857b40dea1850f33adde085bad02f93446bbb967ef87fa702b4bac798"
+    },
+    {
+      "id": "review-clean-utility",
+      "path": "review/clean/normalize.py",
+      "sha256": "sha256:aab43f3f26f287447fdd1a98b1a03efcd99e2bb8fea22f894873adbc43d7ff83"
+    },
+    {
+      "id": "review-clean-test",
+      "path": "review/clean/normalize_test_case.py",
+      "sha256": "sha256:b28eaf08c7de73042f57b1b56dc0a66f1f5c63d8a3bde76b44bf5bcd0e70ffd3"
+    }
+  ]
+}

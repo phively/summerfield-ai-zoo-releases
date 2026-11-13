@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-"""Run one controller turn in an isolated Research Briefing fixture session."""
-
 from __future__ import annotations
 
 import argparse
@@ -92,10 +90,6 @@ def setting_args(server_script: Path, events_path: Path, case_id: str, candidate
     return [argument for key, value in settings for argument in ("--config", f"{key}={value}")]
 
 
-def terminate_process_group(process: subprocess.Popen[Any]) -> tuple[bytes | None, bytes | None]:
-    return platform_support.terminate_process_group(process)
-
-
 def invoke(command: list[str], prompt: str, cwd: Path, stdout_path: Path, stderr_path: Path) -> tuple[int, str | None, str | None]:
     environment, _ = isolated_codex_environment()
     try:
@@ -111,13 +105,13 @@ def invoke(command: list[str], prompt: str, cwd: Path, stdout_path: Path, stderr
             try:
                 process.communicate(prompt.encode("utf-8"), timeout=MAX_TURN_SECONDS)
             except subprocess.TimeoutExpired:
-                terminate_process_group(process)
+                platform_support.terminate_process_group(process)
                 return 124, None, None
             except KeyboardInterrupt:
-                terminate_process_group(process)
+                platform_support.terminate_process_group(process)
                 return 130, None, None
             except BaseException:
-                terminate_process_group(process)
+                platform_support.terminate_process_group(process)
                 raise
             finally:
                 platform_support.close_process(process)
@@ -319,15 +313,15 @@ def preflight(args: argparse.Namespace) -> int:
             stdout_bytes, stderr_bytes = process.communicate(timeout=120)
             status = process.returncode
         except subprocess.TimeoutExpired as timeout:
-            drained_stdout, drained_stderr = terminate_process_group(process)
+            drained_stdout, drained_stderr = platform_support.terminate_process_group(process)
             stdout_bytes = drained_stdout if drained_stdout is not None else timeout.stdout or b""
             stderr_bytes = drained_stderr if drained_stderr is not None else timeout.stderr or b""
             status = 124
         except KeyboardInterrupt:
-            stdout_bytes, stderr_bytes = terminate_process_group(process)
+            stdout_bytes, stderr_bytes = platform_support.terminate_process_group(process)
             status = 130
         except BaseException:
-            terminate_process_group(process)
+            platform_support.terminate_process_group(process)
             raise
         finally:
             platform_support.close_process(process)

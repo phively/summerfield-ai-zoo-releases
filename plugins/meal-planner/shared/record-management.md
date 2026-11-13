@@ -31,10 +31,14 @@ Preserve a clearly equivalent existing authority instead of renaming or copying 
 | Personal Chef | `Meal Preferences` workbook: `Ingredient Ratings` | `Ingredient Ratings History` | All Meal Planner skills, limited to task-relevant ingredient evidence | `personal-chef` only |
 | Personal Chef | `Meal Preferences` workbook: `Recipe Ratings` | `Recipe History` | All Meal Planner skills, limited to task-relevant recipe evidence | `personal-chef` only |
 | Personal Chef | `Meal Preferences`: `Recipe Catalog` and one canonical Google Doc per Recipe ID in the designated Recipes folder | Native Google Docs revision history; targeted preparation context in the Doc | All Meal Planner skills, current recipe first | `personal-chef` only |
-| Personal Shopper | `Grocery Preferences` workbook: `Store Preferences` | `Store Preferences History` | All Meal Planner skills, limited to task-relevant shopping context | `personal-shopper` only |
-| Personal Shopper | `Grocery Preferences` workbook: `Price Tracker` | The dated observations in the same tab are the record; do not add a duplicate archive | All Meal Planner skills, limited to relevant price evidence | `personal-shopper` only |
+| Personal Shopper | `Grocery Preferences` workbook: `Store Preferences` | `Store Preferences History` | All Meal Planner skills, limited to task-relevant shopping context | `personal-shopper`; `meal-planner` only under the explicit local fallback |
+| Personal Shopper | `Grocery Preferences` workbook: `Price Tracker` | The dated observations in the same tab are the record; do not add a duplicate archive | All Meal Planner skills, limited to relevant price evidence | `personal-shopper`; `meal-planner` only under the explicit local fallback |
 
-The owner may create or update its records only when the user authorizes persistence or an existing confirmed workflow already authorizes that bounded write. Other skills send update requests through the canonical handoff contract. Do not create skill-local copies, per-plan authorities, or parallel workbooks.
+The owner may create or update its records only when the user authorizes persistence or an existing confirmed workflow already authorizes that bounded write. Other skills send update requests through the canonical handoff contract, except for Meal Planner's specific local grocery fallback below. Do not create skill-local copies, per-plan authorities, or parallel workbooks.
+
+### Limited Meal Planner grocery fallback
+
+[The local grocery integration contract](grocery-integration.md) is the complete exception to Personal Shopper's ordinary write ownership. It applies only when Personal Shopper cannot be activated by the current host; inaccessible records within an activated shopper's run do not transfer the write to Meal Planner. Meal Planner may then read relevant existing grocery store-order, grocery-preference, and dated price-observation records and may update only those existing rows with exact user-backed authorization and supported native verification. It may make no structural or ownership changes and may not add general shopping context, create a workbook or worksheet, or persist task-only corrections. The fallback never authorizes a write when the exact target or any required history companion cannot be resolved and verified. Keep task-only values distinct from saved values and report every target's observed persistence state.
 
 Resolve the designated Meal Planning folder plus its `Recipes` and `Audits` subfolders by immutable provider IDs. Keep all planning records within Meal Planning, canonical recipes within Recipes, and audit, compaction, migration, and recovery artifacts within a dated child folder under Audits. Preserve equivalent existing names, combined tabs with clear status, and file identities. Read [cleanup-migration.md](cleanup-migration.md) before any cleanup or schema migration; preserve every populated source row. Recipe schemas and lifecycle are in [recipe storage](../skills/personal-chef/references/recipe-storage.md).
 
@@ -80,6 +84,8 @@ Keep one operationally complete most recently finalized plan. It must be underst
 - targeted historical pointers only when prior context could materially affect reuse or interpretation.
 
 Do not store drafts, rejected candidates, complete source recipes, copied preference tables, or a full grocery tracker in the current plan.
+
+For a new approved plan's grocery handoff, allocate a collision-checked stable `MP-YYYY-MM-DD-NN` ID before the native plan record is saved. Use `identity_status: proposed` and `native_resource: not-yet-created` only in that handoff, then persist the final plan under the same ID. Check current and relevant history identity metadata for collisions without loading unrelated history. Existing saved plans require their exact native resource and section identity; proposed status cannot stand in for a missing identity.
 
 ### Meal-plan history
 
